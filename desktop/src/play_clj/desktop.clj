@@ -10,7 +10,7 @@
         width (or width 800)
         height (or height 600)]
     `(do
-       (def ~name (create-game ~options))
+       (defgameobj ~name ~options)
        (defn ~'-main
          []
          (LwjglApplication. ~name ~title ~width ~height true)
