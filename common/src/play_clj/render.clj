@@ -57,9 +57,9 @@
 (defmethod sprite-batch BatchTiledMapRenderer [screen]
   (.getSpriteBatch (:renderer screen)))
 
-(defn draw-entities!
+(defn draw!
   ([screen]
-    (draw-entities! screen (:entities screen)))
+    (draw! screen (:entities screen)))
   ([screen entities]
     (let [batch (sprite-batch screen)]
       (.begin batch)
