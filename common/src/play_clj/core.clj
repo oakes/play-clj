@@ -35,7 +35,7 @@
     (proxy [Screen] []
       (show []
         (swap! screen assoc
-               :renderer (when renderer (renderer))
+               :renderer (create-renderer renderer)
                :camera (create-camera camera)
                :total-time 0)
         (on-show @screen))

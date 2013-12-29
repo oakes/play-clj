@@ -2,38 +2,36 @@
 
 (in-ns 'play-clj.core)
 
-; tiled map renderers
+; renderers
 
-(defmulti create-tiled-map-renderer :type :default :orthogonal)
-
-(defmethod create-tiled-map-renderer :orthogonal [options]
-  (OrthogonalTiledMapRenderer. (:map options) (:unit-scale options)))
-
-(defmethod create-tiled-map-renderer :isometric [options]
-  (IsometricTiledMapRenderer. (:map options) (:unit-scale options)))
-
-(defmethod create-tiled-map-renderer :isometric-staggered [options]
-  (IsometricStaggeredTiledMapRenderer. (:map options) (:unit-scale options)))
-
-(defmethod create-tiled-map-renderer :hexagonal [options]
-  (HexagonalTiledMapRenderer. (:map options) (:unit-scale options)))
-
-(defn tiled-map
-  [& {:keys [file tile-size type] :as options}]
+(defn load-tiled-map
+  [{:keys [file]}]
   (assert (string? file))
+  (.load (TmxMapLoader.) file))
+
+(defn unit-scale
+  [{:keys [tile-size]}]
   (assert (number? tile-size))
-  (fn []
-    (let [tiled-map (.load (TmxMapLoader.) file)
-          unit-scale (float (/ 1 tile-size))
-          options (assoc options
-                         :map tiled-map
-                         :unit-scale unit-scale)]
-      (create-tiled-map-renderer options))))
+  (float (/ 1 tile-size)))
 
 (defn render-tiled-map!
   [{:keys [^BatchTiledMapRenderer renderer ^OrthographicCamera camera]}]
   (.setView renderer camera)
   (.render renderer))
+
+(defmulti create-renderer :type :default :orthogonal-tiled-map)
+
+(defmethod create-renderer :orthogonal-tiled-map [opts]
+  (OrthogonalTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
+
+(defmethod create-renderer :isometric-tiled-map [opts]
+  (IsometricTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
+
+(defmethod create-renderer :isometric-staggered-tiled-map [opts]
+  (IsometricStaggeredTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
+
+(defmethod create-renderer :hexagonal-tiled-map [opts]
+  (HexagonalTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
 
 ; cameras
 
