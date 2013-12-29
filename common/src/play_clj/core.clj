@@ -36,10 +36,13 @@
                      (->> entity
                           (conj (:entities @screen))
                           (swap! screen assoc :entities)))
-        del-entity (fn [entity]
+        rem-entity (fn [entity]
                      (->> (:entities @screen)
                           (remove #(= % entity))
-                          (swap! screen assoc :entities)))]
+                          (swap! screen assoc :entities)))
+        upd-entity (fn [entity args]
+                     (rem-entity entity)
+                     (add-entity (apply assoc entity args)))]
     (proxy [Screen] []
       (show []
         (swap! screen assoc
@@ -48,7 +51,8 @@
                :total-time 0
                :entities []
                :add-entity add-entity
-               :del-entity del-entity)
+               :rem-entity rem-entity
+               :upd-entity upd-entity)
         (on-show @screen))
       (render [delta-time]
         (swap! screen assoc :total-time (+ (:total-time @screen) delta-time))
@@ -68,8 +72,12 @@
   (add-entity e))
 
 (defn remove-entity!
-  [{:keys [del-entity]} e]
-  (del-entity e))
+  [{:keys [rem-entity]} e]
+  (rem-entity e))
+
+(defn update-entity!
+  [{:keys [upd-entity]} e & args]
+  (upd-entity e args))
 
 (defn set-screen!
   [^Game game ^Screen screen]

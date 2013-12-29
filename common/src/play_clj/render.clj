@@ -65,6 +65,6 @@
       (.begin batch)
       (doseq [{:keys [image x y width height]} entities]
         (when (and image x y width height)
-          (.draw batch image x y width height)))
+          (.draw batch image (float x) (float y) (float width) (float height))))
       (.end batch)
       batch)))
