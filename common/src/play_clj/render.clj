@@ -49,7 +49,7 @@
 
 ; draw entities
 
-(defmulti sprite-batch (fn [screen] (class (:renderer screen))) :default nil)
+(defmulti sprite-batch #(-> % :renderer class) :default nil)
 
 (defmethod sprite-batch nil [screen]
   (SpriteBatch.))
@@ -58,10 +58,13 @@
   (.getSpriteBatch (:renderer screen)))
 
 (defn draw-entities!
-  [screen entities]
-  (let [batch (sprite-batch screen)]
-    (.begin batch)
-    (doseq [{:keys [image x y width height]} entities]
-      (when (and image x y width height)
-        (.draw batch image x y width height)))
-    (.end batch)))
+  ([screen]
+    (draw-entities! screen (-> screen :entities)))
+  ([screen entities]
+    (let [batch (sprite-batch screen)]
+      (.begin batch)
+      (doseq [{:keys [image x y width height]} entities]
+        (when (and image x y width height)
+          (.draw batch image x y width height)))
+      (.end batch)
+      batch)))

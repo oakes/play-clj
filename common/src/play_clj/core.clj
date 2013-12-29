@@ -37,7 +37,16 @@
         (swap! screen assoc
                :renderer (create-renderer renderer)
                :camera (create-camera camera)
-               :total-time 0)
+               :total-time 0
+               :entities []
+               :add-entity (fn [entity]
+                             (->> entity
+                                  (conj (:entities @screen))
+                                  (swap! screen assoc :entities)))
+               :del-entity (fn [entity]
+                             (->> (:entities @screen)
+                                  (remove #(= % entity))
+                                  (swap! screen assoc :entities))))
         (on-show @screen))
       (render [delta-time]
         (swap! screen assoc :total-time (+ (:total-time @screen) delta-time))
@@ -51,6 +60,14 @@
 (defmacro defscreen
   [name & {:keys [] :as options}]
   `(def ~name (defscreen* ~options)))
+
+(defn add-entity!
+  [{:keys [add-entity]} e]
+  (add-entity e))
+
+(defn remove-entity!
+  [{:keys [del-entity]} e]
+  (del-entity e))
 
 (defn set-screen!
   [^Game game ^Screen screen]
