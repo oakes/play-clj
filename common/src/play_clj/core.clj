@@ -67,15 +67,15 @@
   [name & {:keys [] :as options}]
   `(def ~name (defscreen* ~options)))
 
-(defn add-entity!
+(defn add!
   [{:keys [add-entity]} e]
   (add-entity e))
 
-(defn remove-entity!
+(defn remove!
   [{:keys [rem-entity]} e]
   (rem-entity e))
 
-(defn update-entity!
+(defn update!
   [{:keys [upd-entity]} e & args]
   (upd-entity e args))
 
