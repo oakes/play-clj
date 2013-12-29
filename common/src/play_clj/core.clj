@@ -31,7 +31,15 @@
         on-hide (or on-hide (fn [s]))
         on-pause (or on-pause (fn [s]))
         on-resize (or on-resize (fn [s w h]))
-        on-resume (or on-resume (fn [s]))]
+        on-resume (or on-resume (fn [s]))
+        add-entity (fn [entity]
+                     (->> entity
+                          (conj (:entities @screen))
+                          (swap! screen assoc :entities)))
+        del-entity (fn [entity]
+                     (->> (:entities @screen)
+                          (remove #(= % entity))
+                          (swap! screen assoc :entities)))]
     (proxy [Screen] []
       (show []
         (swap! screen assoc
@@ -39,14 +47,8 @@
                :camera (create-camera camera)
                :total-time 0
                :entities []
-               :add-entity (fn [entity]
-                             (->> entity
-                                  (conj (:entities @screen))
-                                  (swap! screen assoc :entities)))
-               :del-entity (fn [entity]
-                             (->> (:entities @screen)
-                                  (remove #(= % entity))
-                                  (swap! screen assoc :entities))))
+               :add-entity add-entity
+               :del-entity del-entity)
         (on-show @screen))
       (render [delta-time]
         (swap! screen assoc :total-time (+ (:total-time @screen) delta-time))

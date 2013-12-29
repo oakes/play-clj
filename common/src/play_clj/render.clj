@@ -59,7 +59,7 @@
 
 (defn draw-entities!
   ([screen]
-    (draw-entities! screen (-> screen :entities)))
+    (draw-entities! screen (:entities screen)))
   ([screen entities]
     (let [batch (sprite-batch screen)]
       (.begin batch)
