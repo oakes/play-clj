@@ -1,4 +1,5 @@
 (ns play-clj.core
+  (:require [play-clj.utils :as utils])
   (:import [com.badlogic.gdx Game Gdx Input$Keys Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture]
@@ -11,9 +12,9 @@
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]))
 
-(load "2d")
-(load "global")
-(load "render")
+(load "core_2d")
+(load "core_global")
+(load "core_render")
 
 (defn find-pos
   [val coll]

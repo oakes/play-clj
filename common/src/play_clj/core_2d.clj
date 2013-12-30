@@ -25,18 +25,27 @@
 ; textures
 
 (defn image
-  [^String internal-path]
-  (-> internal-path Texture. TextureRegion.))
+  [val]
+  (if (string? val)
+    (-> val Texture. TextureRegion.)
+    (TextureRegion. val)))
 
 (defn split-image
-  ([^String internal-path size]
-    (split-image internal-path size size))
-  ([^String internal-path width height]
-    (-> internal-path image (.split width height))))
+  ([val size]
+    (split-image val size size))
+  ([val width height]
+    (-> val image (.split width height))))
+
+(defn flip-image
+  [val x? y?]
+  (doto (image val) (.flip x? y?)))
 
 (defmacro animation
-  [& args]
-  `(Animation. ~@args))
+  [duration images & args]
+  `(Animation. ~duration
+               (utils/into-gdx-array ~images)
+               (utils/static-field :graphics :g2d :Animation
+                                   ~(or (first args) :normal))))
 
 (defn get-animation-frame
   ([screen ^Animation animation]
