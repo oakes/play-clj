@@ -15,6 +15,7 @@
     :width `(.getWidth (Gdx/graphics))
     :height `(.getHeight (Gdx/graphics))
     :is-fullscreen? `(.isFullscreen (Gdx/graphics))
+    :is-touched? `(.isTouched (Gdx/input))
     :x `(.getX (Gdx/input))
     :y `(.getY (Gdx/input))
     nil))
@@ -36,21 +37,6 @@
       nil)
     key))
 
-(defn resolve-touch
-  [key]
-  (case key
-    :down `(> (game :y) (* (game :height) (/ 2 3)))
-    :up `(< (game :y) (/ (game :height) 3))
-    :left `(< (game :x) (/ (game :width) 3))
-    :right `(> (game :x) (* (game :width) (/ 2 3)))
-    false))
-
 (defmacro is-pressed?
   [key]
   `(.isKeyPressed (Gdx/input) ~(resolve-key key)))
-
-(defmacro is-touched?
-  ([]
-    `(.isTouched (Gdx/input)))
-  ([key]
-    `(and (is-touched?) ~(resolve-touch key))))
