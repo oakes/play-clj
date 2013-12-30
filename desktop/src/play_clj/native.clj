@@ -1,4 +1,4 @@
-(ns play-clj.desktop
+(ns play-clj.native
   (:require [play-clj.core :refer :all])
   (:import [com.badlogic.gdx.backends.lwjgl LwjglApplication]
            [org.lwjgl.input Keyboard]))
@@ -10,7 +10,7 @@
         width (or width 800)
         height (or height 600)]
     `(do
-       (defgameobj ~name ~options)
+       (def ~name (create-game ~options))
        (defn ~'-main
          []
          (LwjglApplication. ~name ~title ~width ~height true)

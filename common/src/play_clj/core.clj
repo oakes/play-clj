@@ -90,11 +90,7 @@
   [^Game game ^Screen screen]
   (.setScreen game screen))
 
-(defn defgameobj*
+(defn create-game
   [{:keys [start-screen]}]
   (proxy [Game] []
     (create [] (when start-screen (set-screen! this start-screen)))))
-
-(defmacro defgameobj
-  [name options]
-  `(def ~name (defgameobj* ~options)))
