@@ -26,7 +26,7 @@
 
 (defn defscreen*
   [{:keys [on-show on-render on-dispose on-hide on-pause on-resize on-resume
-           renderer camera]
+           state renderer camera]
     :as options}]
   (let [screen (atom {})
         on-show (or on-show (fn [s]))
@@ -60,6 +60,7 @@
                :add-entity add-entity
                :rem-entity rem-entity
                :upd-entity upd-entity)
+        (when state (swap! screen assoc :state state))
         (on-show @screen))
       (render [delta-time]
         (swap! screen assoc :total-time (+ (:total-time @screen) delta-time))
