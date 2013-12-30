@@ -1,5 +1,3 @@
-(ns play-clj.render)
-
 (in-ns 'play-clj.core)
 
 ; renderers
@@ -46,25 +44,3 @@
 (defn resize-camera!
   [{:keys [^Camera camera]} width height]
   (.setToOrtho camera false width height))
-
-; draw entities
-
-(defmulti sprite-batch #(-> % :renderer class) :default nil)
-
-(defmethod sprite-batch nil [screen]
-  (SpriteBatch.))
-
-(defmethod sprite-batch BatchTiledMapRenderer [screen]
-  (.getSpriteBatch (:renderer screen)))
-
-(defn draw!
-  ([screen]
-    (draw! screen (:entities screen)))
-  ([screen entities]
-    (let [batch (sprite-batch screen)]
-      (.begin batch)
-      (doseq [{:keys [image x y width height]} entities]
-        (when (and image x y width height)
-          (.draw batch image (float x) (float y) (float width) (float height))))
-      (.end batch)
-      batch)))

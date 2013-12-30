@@ -1,8 +1,8 @@
 (ns play-clj.core
-  (:import [com.badlogic.gdx Game Gdx Screen]
-           [com.badlogic.gdx.graphics.g2d SpriteBatch]
-           [com.badlogic.gdx.graphics
-            Camera Color GL20 OrthographicCamera PerspectiveCamera]
+  (:import [com.badlogic.gdx Game Gdx Input$Keys Screen]
+           [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
+            PerspectiveCamera Texture]
+           [com.badlogic.gdx.graphics.g2d Animation SpriteBatch TextureRegion]
            [com.badlogic.gdx.maps.tiled TmxMapLoader]
            [com.badlogic.gdx.maps.tiled.renderers
             BatchTiledMapRenderer
@@ -11,14 +11,18 @@
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]))
 
+(load "2d")
+(load "global")
 (load "render")
 
-(defn clear!
-  ([] (clear! 0 0 0 0))
-  ([r g b a]
-    (doto (Gdx/gl)
-      (.glClearColor r g b a)
-      (.glClear GL20/GL_COLOR_BUFFER_BIT))))
+(defn find-pos
+  [val coll]
+  (let [pos (if (number? val)
+              val
+              (.indexOf coll val))]
+    (if (and (>= pos 0) (< pos (count coll)))
+      pos
+      nil)))
 
 (defn defscreen*
   [{:keys [on-show on-render on-dispose on-hide on-pause on-resize on-resume
@@ -37,12 +41,15 @@
                           (conj (:entities @screen))
                           (swap! screen assoc :entities)))
         rem-entity (fn [entity]
-                     (->> (:entities @screen)
-                          (remove #(= % entity))
-                          (swap! screen assoc :entities)))
+                     (when-let [pos (find-pos entity (:entities @screen))]
+                       (->> (subvec (:entities @screen) (inc pos))
+                            (concat (subvec (:entities @screen) 0 pos))
+                            vec
+                            (swap! screen assoc :entities))))
         upd-entity (fn [entity args]
-                     (rem-entity entity)
-                     (add-entity (apply assoc entity args)))]
+                     (when-let [pos (find-pos entity (:entities @screen))]
+                       (swap! screen assoc-in
+                              [:entities pos] (apply assoc entity args))))]
     (proxy [Screen] []
       (show []
         (swap! screen assoc
