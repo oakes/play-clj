@@ -12,31 +12,27 @@
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]))
 
-(defmulti execute-entity :command :default :draw)
-
-(defmethod execute-entity :set-screen [{:keys [^Game game ^Screen screen]}]
-  (.setScreen game screen))
-
 (load "core_2d")
 (load "core_global")
 (load "core_render")
 
-(defn expand-entity
-  [entity]
-  (if (keyword? entity)
-    {:command entity}
+(defn wrap-entity
+  [screen entity]
+  (if (map? entity)
+    (draw screen entity)
     entity))
 
 (defn transform-entities
-  [entities]
-  (->> entities list flatten (remove nil?) (map expand-entity)))
+  [screen entities]
+  (->> entities list flatten (remove nil?)))
 
 (defn execute-entities
   [screen entities]
   (->> entities
-       (map #(assoc % :screen-map screen))
-       (map execute-entity)
-       (remove #(not (:persistent? %)))
+       (transform-entities screen)
+       (map #(wrap-entity screen %))
+       (map #(%))
+       (remove nil?)
        doall))
 
 (defn defscreen*
@@ -45,35 +41,52 @@
     :as options}]
   (let [screen (atom {})
         entities (atom '())
-        on-show (or on-show (fn [s]))
-        on-render (or on-render (fn [s d]))
-        on-hide (or on-hide (fn [s]))
-        on-pause (or on-pause (fn [s]))
-        on-resize (or on-resize (fn [s w h]))
-        on-resume (or on-resume (fn [s]))]
+        dummy-fn (fn [s e])
+        on-show (or on-show dummy-fn)
+        on-render (or on-render dummy-fn)
+        on-hide (or on-hide dummy-fn)
+        on-pause (or on-pause dummy-fn)
+        on-resize (or on-resize dummy-fn)
+        on-resume (or on-resume dummy-fn)]
     (proxy [Screen] []
       (show []
-        (->> (swap! screen assoc
-                    :renderer (create-renderer renderer)
-                    :camera (create-camera camera)
-                    :total-time 0
-                    :delta-time 0)
-             on-show
-             transform-entities
-             (reset! entities)))
+        (let [screen-map (swap! screen assoc
+                                :renderer (create-renderer renderer)
+                                :camera (create-camera camera)
+                                :width (game :width)
+                                :height (game :height)
+                                :total-time 0
+                                :delta-time 0)]
+          (->> (on-show screen-map @entities)
+               (transform-entities screen-map)
+               (reset! entities))))
       (render [delta-time]
         (let [total-time (+ (:total-time @screen) delta-time)
               screen-map (swap! screen assoc
                                 :total-time total-time
                                 :delta-time delta-time)]
           (->> (on-render screen-map @entities)
-               transform-entities
                (execute-entities screen-map)
                (reset! entities))))
-      (hide [] (on-hide @screen))
-      (pause [] (on-pause @screen))
-      (resize [w h] (on-resize @screen w h))
-      (resume [] (on-resume @screen)))))
+      (hide []
+        (->> (on-hide @screen @entities)
+             (execute-entities @screen)
+             (reset! entities)))
+      (pause []
+        (->> (on-pause @screen @entities)
+             (execute-entities @screen)
+             (reset! entities)))
+      (resize [w h]
+        (let [screen-map (swap! screen assoc
+                                :width w
+                                :height h)]
+          (->> (on-resize screen-map @entities)
+               (execute-entities screen-map)
+               (reset! entities))))
+      (resume []
+        (->> (on-resume @screen @entities)
+             (execute-entities @screen)
+             (reset! entities))))))
 
 (defmacro defscreen
   [name & {:keys [] :as options}]
@@ -83,10 +96,14 @@
   [{:keys [on-create]}]
   (proxy [Game] []
     (create []
-      (->> (on-create this)
-           transform-entities
-           (execute-entities nil)))))
+      (execute-entities nil (on-create this)))))
 
 (defmacro defgame
   [name & {:keys [] :as options}]
   `(def ~name (defgame* ~options)))
+
+(defn set-screen
+  [^Game game ^Screen screen]
+  (fn []
+    (.setScreen game screen)
+    nil))

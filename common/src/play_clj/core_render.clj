@@ -12,11 +12,13 @@
   (assert (number? tile-size))
   (float (/ 1 tile-size)))
 
-(defmethod execute-entity :render-tiled-map [{:keys [screen-map] :as entity}]
-  (doto (:renderer screen-map)
-    (.setView (:camera screen-map))
-    .render)
-  entity)
+(defn render-tiled-map
+  [{:keys [^BatchTiledMapRenderer renderer ^Camera camera]}]
+  (fn []
+    (doto renderer
+      (.setView camera)
+      .render)
+    nil))
 
 (defn tiled-map-layer
   [{:keys [^BatchTiledMapRenderer renderer]} layer]
@@ -53,12 +55,16 @@
 (defmethod create-camera :perspective [_]
   (PerspectiveCamera.))
 
-(defn resize-camera!
+(defn resize-camera
   [{:keys [^Camera camera]} width height]
-  (.setToOrtho camera false width height))
+  (fn []
+    (.setToOrtho camera false width height)
+    nil))
 
-(defn move-camera!
+(defn move-camera
   [{:keys [^Camera camera]} x y]
-  (when x (set! (. camera x) x))
-  (when y (set! (. camera y) y))
-  (.update camera))
+  (fn []
+    (when x (set! (. camera x) x))
+    (when y (set! (. camera y) y))
+    (.update camera)
+    nil))
