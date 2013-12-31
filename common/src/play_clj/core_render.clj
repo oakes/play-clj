@@ -64,7 +64,7 @@
 (defn move-camera
   [{:keys [^Camera camera]} x y]
   (fn []
-    (when x (set! (. camera x) x))
-    (when y (set! (. camera y) y))
+    (when x (set! (. (. camera position) x) x))
+    (when y (set! (. (. camera position) y) y))
     (.update camera)
     nil))
