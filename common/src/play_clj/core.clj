@@ -16,6 +16,10 @@
 (load "core_global")
 (load "core_render")
 
+(defn transform
+  [l]
+  (->> l list flatten (remove nil?)))
+
 (defn defscreen*
   [{:keys [on-show on-render on-dispose on-hide on-pause on-resize on-resume
            state renderer camera]
@@ -36,8 +40,7 @@
                     :total-time 0
                     :delta-time 0)
              on-show
-             vec
-             flatten
+             transform
              (reset! entities)))
       (render [delta-time]
         (let [total-time (+ (:total-time @screen) delta-time)
@@ -45,9 +48,7 @@
                                 :total-time total-time
                                 :delta-time delta-time)]
           (->> (on-render screen-map @entities)
-               (remove nil?)
-               vec
-               flatten
+               transform
                (reset! entities)
                (draw! screen-map))))
       (hide [] (on-hide @screen))
