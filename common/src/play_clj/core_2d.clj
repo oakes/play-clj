@@ -11,16 +11,14 @@
   (.getSpriteBatch (:renderer screen)))
 
 (defn draw!
-  ([screen]
-    (draw! screen (:entities screen)))
-  ([screen entities]
-    (let [batch (sprite-batch screen)]
-      (.begin batch)
-      (doseq [{:keys [image x y width height]} entities]
-        (when (and image x y width height)
-          (.draw batch image (float x) (float y) (float width) (float height))))
-      (.end batch)
-      batch)))
+  [screen entities]
+  (let [batch (sprite-batch screen)]
+    (.begin batch)
+    (doseq [{:keys [image x y width height]} entities]
+      (when (and image x y width height)
+        (.draw batch image (float x) (float y) (float width) (float height))))
+    (.end batch)
+    batch))
 
 ; textures
 

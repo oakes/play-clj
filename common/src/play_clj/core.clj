@@ -16,57 +16,35 @@
 (load "core_global")
 (load "core_render")
 
-(defn find-pos
-  [val coll]
-  (let [pos (if (number? val)
-              val
-              (.indexOf coll val))]
-    (if (and (>= pos 0) (< pos (count coll)))
-      pos
-      nil)))
-
 (defn defscreen*
   [{:keys [on-show on-render on-dispose on-hide on-pause on-resize on-resume
            state renderer camera]
     :as options}]
   (let [screen (atom {})
+        entities (atom [])
         on-show (or on-show (fn [s]))
         on-render (or on-render (fn [s d]))
-        on-dispose (or on-dispose (fn [s]))
         on-hide (or on-hide (fn [s]))
         on-pause (or on-pause (fn [s]))
         on-resize (or on-resize (fn [s w h]))
-        on-resume (or on-resume (fn [s]))
-        add-entity (fn [entity]
-                     (->> entity
-                          (conj (:entities @screen))
-                          (swap! screen assoc :entities)))
-        rem-entity (fn [entity]
-                     (when-let [pos (find-pos entity (:entities @screen))]
-                       (->> (subvec (:entities @screen) (inc pos))
-                            (concat (subvec (:entities @screen) 0 pos))
-                            vec
-                            (swap! screen assoc :entities))))
-        upd-entity (fn [entity args]
-                     (when-let [pos (find-pos entity (:entities @screen))]
-                       (swap! screen assoc-in
-                              [:entities pos] (apply assoc entity args))))]
+        on-resume (or on-resume (fn [s]))]
     (proxy [Screen] []
       (show []
-        (swap! screen assoc
-               :renderer (create-renderer renderer)
-               :camera (create-camera camera)
-               :total-time 0
-               :entities []
-               :add-entity add-entity
-               :rem-entity rem-entity
-               :upd-entity upd-entity)
-        (when state (swap! screen assoc :state state))
-        (on-show @screen))
+        (->> (swap! screen assoc
+                    :renderer (create-renderer renderer)
+                    :camera (create-camera camera)
+                    :total-time 0
+                    :delta-time 0)
+             on-show
+             (reset! entities)))
       (render [delta-time]
-        (swap! screen assoc :total-time (+ (:total-time @screen) delta-time))
-        (on-render @screen delta-time))
-      (dispose [] (on-dispose @screen))
+        (let [total-time (+ (:total-time @screen) delta-time)
+              screen-map (swap! screen assoc
+                                :total-time total-time
+                                :delta-time delta-time)]
+          (->> (on-render screen-map @entities)
+               (reset! entities)
+               (draw! screen-map))))
       (hide [] (on-hide @screen))
       (pause [] (on-pause @screen))
       (resize [w h] (on-resize @screen w h))
@@ -75,18 +53,6 @@
 (defmacro defscreen
   [name & {:keys [] :as options}]
   `(def ~name (defscreen* ~options)))
-
-(defn add!
-  [{:keys [add-entity]} e]
-  (add-entity e))
-
-(defn remove!
-  [{:keys [rem-entity]} e]
-  (rem-entity e))
-
-(defn update!
-  [{:keys [upd-entity]} e & args]
-  (upd-entity e args))
 
 (defn set-screen!
   [^Game game ^Screen screen]
