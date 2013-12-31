@@ -2,12 +2,11 @@
 
 ; graphics
 
-(defn clear!
-  ([] (clear! 0 0 0 0))
-  ([r g b a]
-    (doto (Gdx/gl)
-      (.glClearColor r g b a)
-      (.glClear GL20/GL_COLOR_BUFFER_BIT))))
+(defmethod execute-entity :clear [{:keys [r g b a] :as entity}]
+  (doto (Gdx/gl)
+    (.glClearColor (or r 0) (or g 0) (or b 0) (or a 0))
+    (.glClear GL20/GL_COLOR_BUFFER_BIT))
+  entity)
 
 (defn game*
   [key]

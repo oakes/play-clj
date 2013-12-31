@@ -12,10 +12,22 @@
   (assert (number? tile-size))
   (float (/ 1 tile-size)))
 
-(defn render-tiled-map!
-  [{:keys [^BatchTiledMapRenderer renderer ^OrthographicCamera camera]}]
-  (.setView renderer camera)
-  (.render renderer))
+(defmethod execute-entity :render-tiled-map [{:keys [screen] :as entity}]
+  (doto (:renderer screen)
+    (.setView (:camera screen))
+    .render)
+  entity)
+
+(defn tiled-map-layer
+  [{:keys [^BatchTiledMapRenderer renderer]} layer]
+  (-> renderer .getMap .getLayers (.get layer)))
+
+(defn tiled-map-cell
+  [{:keys [^BatchTiledMapRenderer renderer] :as screen} layer x y]
+  (-> (if (or (string? layer) (number? layer))
+        (tiled-map-layer screen layer)
+        layer)
+      (.getCell x y)))
 
 (defmulti create-renderer :type :default :orthogonal-tiled-map)
 
@@ -44,3 +56,9 @@
 (defn resize-camera!
   [{:keys [^Camera camera]} width height]
   (.setToOrtho camera false width height))
+
+(defn move-camera!
+  [{:keys [^Camera camera]} x y]
+  (when x (set! (. camera x) x))
+  (when y (set! (. camera y) y))
+  (.update camera))

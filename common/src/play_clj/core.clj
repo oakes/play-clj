@@ -12,20 +12,36 @@
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]))
 
+(defmulti execute-entity :command :default :draw)
+
 (load "core_2d")
 (load "core_global")
 (load "core_render")
 
-(defn transform
-  [l]
-  (->> l list flatten (remove nil?)))
+(defn expand-entity
+  [entity]
+  (if (keyword? entity)
+    {:command entity}
+    entity))
+
+(defn transform-entities
+  [entities]
+  (->> entities list flatten (remove nil?) (map expand-entity)))
+
+(defn execute-entities
+  [screen entities]
+  (->> entities
+       (map #(assoc % :screen screen))
+       (map execute-entity)
+       (remove #(not (:persistent? %)))
+       doall))
 
 (defn defscreen*
   [{:keys [on-show on-render on-dispose on-hide on-pause on-resize on-resume
            state renderer camera]
     :as options}]
   (let [screen (atom {})
-        entities (atom [])
+        entities (atom '())
         on-show (or on-show (fn [s]))
         on-render (or on-render (fn [s d]))
         on-hide (or on-hide (fn [s]))
@@ -40,7 +56,7 @@
                     :total-time 0
                     :delta-time 0)
              on-show
-             transform
+             transform-entities
              (reset! entities)))
       (render [delta-time]
         (let [total-time (+ (:total-time @screen) delta-time)
@@ -48,9 +64,9 @@
                                 :total-time total-time
                                 :delta-time delta-time)]
           (->> (on-render screen-map @entities)
-               transform
-               (reset! entities)
-               (draw! screen-map))))
+               transform-entities
+               (execute-entities screen-map)
+               (reset! entities))))
       (hide [] (on-hide @screen))
       (pause [] (on-pause @screen))
       (resize [w h] (on-resize @screen w h))
