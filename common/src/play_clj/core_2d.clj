@@ -45,8 +45,8 @@
                (utils/static-field :graphics :g2d :Animation
                                    ~(or (first args) :normal))))
 
-(defn get-animation-frame
+(defn get-key-frame
   ([screen ^Animation animation]
-    (get-animation-frame screen animation true))
+    (get-key-frame screen animation true))
   ([screen ^Animation animation is-looping?]
     (.getKeyFrame animation (:total-time screen) is-looping?)))

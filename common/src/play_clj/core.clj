@@ -36,6 +36,7 @@
                     :total-time 0
                     :delta-time 0)
              on-show
+             vec
              (reset! entities)))
       (render [delta-time]
         (let [total-time (+ (:total-time @screen) delta-time)
@@ -43,6 +44,8 @@
                                 :total-time total-time
                                 :delta-time delta-time)]
           (->> (on-render screen-map @entities)
+               (remove nil?)
+               vec
                (reset! entities)
                (draw! screen-map))))
       (hide [] (on-hide @screen))
