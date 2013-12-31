@@ -14,6 +14,9 @@
 
 (defmulti execute-entity :command :default :draw)
 
+(defmethod execute-entity :set-screen [{:keys [^Game game ^Screen screen]}]
+  (.setScreen game screen))
+
 (load "core_2d")
 (load "core_global")
 (load "core_render")
@@ -31,7 +34,7 @@
 (defn execute-entities
   [screen entities]
   (->> entities
-       (map #(assoc % :screen screen))
+       (map #(assoc % :screen-map screen))
        (map execute-entity)
        (remove #(not (:persistent? %)))
        doall))
@@ -76,14 +79,13 @@
   [name & {:keys [] :as options}]
   `(def ~name (defscreen* ~options)))
 
-(defn set-screen!
-  [^Game game ^Screen screen]
-  (.setScreen game screen))
-
 (defn defgame*
-  [{:keys [start-screen]}]
+  [{:keys [on-create]}]
   (proxy [Game] []
-    (create [] (when start-screen (set-screen! this start-screen)))))
+    (create []
+      (->> (on-create this)
+           transform-entities
+           (execute-entities nil)))))
 
 (defmacro defgame
   [name & {:keys [] :as options}]

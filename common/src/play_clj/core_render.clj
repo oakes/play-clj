@@ -12,9 +12,9 @@
   (assert (number? tile-size))
   (float (/ 1 tile-size)))
 
-(defmethod execute-entity :render-tiled-map [{:keys [screen] :as entity}]
-  (doto (:renderer screen)
-    (.setView (:camera screen))
+(defmethod execute-entity :render-tiled-map [{:keys [screen-map] :as entity}]
+  (doto (:renderer screen-map)
+    (.setView (:camera screen-map))
     .render)
   entity)
 
