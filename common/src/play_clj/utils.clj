@@ -10,7 +10,7 @@
   [keys]
   (->> keys (map name) (s/join ".") (str "com.badlogic.gdx.")))
 
-(defn static-field*
+(defn gdx-static-field*
   [args]
   (->> (last args)
        split-keys
@@ -19,10 +19,10 @@
        (str (join-keys (butlast args)) "/")
        symbol))
 
-(defmacro static-field
+(defmacro gdx-static-field
   [& args]
-  `~(static-field* args))
+  `~(gdx-static-field* args))
 
-(defn into-gdx-array
+(defn gdx-into-array
   [a]
   (-> a into-array Array.))

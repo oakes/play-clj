@@ -41,9 +41,9 @@
 (defmacro animation
   [duration images & args]
   `(Animation. ~duration
-               (utils/into-gdx-array ~images)
-               (utils/static-field :graphics :g2d :Animation
-                                   ~(or (first args) :normal))))
+               (utils/gdx-into-array ~images)
+               (utils/gdx-static-field :graphics :g2d :Animation
+                                       ~(or (first args) :normal))))
 
 (defn get-key-frame
   ([screen ^Animation animation]
