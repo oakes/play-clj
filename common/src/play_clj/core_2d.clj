@@ -47,6 +47,6 @@
 
 (defn get-key-frame
   ([screen ^Animation animation]
-    (get-key-frame screen animation true))
+    (.getKeyFrame animation (:total-time screen) true))
   ([screen ^Animation animation is-looping?]
     (.getKeyFrame animation (:total-time screen) is-looping?)))
