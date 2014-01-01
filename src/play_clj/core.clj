@@ -18,7 +18,7 @@
 (load "core_render")
 
 (defn defscreen*
-  [{:keys [on-show on-render on-dispose on-hide on-pause on-resize on-resume]
+  [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
     :as options}]
   (let [screen (atom {})
         dummy-fn (fn [s])
@@ -51,16 +51,16 @@
 
 (defmacro defscreen
   [name & {:keys [] :as options}]
-  `(def ~name (defscreen* ~options)))
+  `(defonce ~name (defscreen* ~options)))
 
 (defn defgame*
   [{:keys [on-create]}]
   (proxy [Game] []
-    (create [] (on-create this))))
+    (create [] (when on-create (on-create this)))))
 
 (defmacro defgame
   [name & {:keys [] :as options}]
-  `(def ~name (defgame* ~options)))
+  `(defonce ~name (defgame* ~options)))
 
 (defn set-screen!
   [^Game game ^Screen screen]

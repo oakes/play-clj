@@ -7,7 +7,7 @@
     (clear! 0 0 0 0))
   ([r g b a]
     (doto (Gdx/gl)
-      (.glClearColor r g b a)
+      (.glClearColor (float r) (float g) (float b) (float a))
       (.glClear GL20/GL_COLOR_BUFFER_BIT))))
 
 (defn game*
