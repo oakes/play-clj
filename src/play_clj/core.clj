@@ -17,17 +17,14 @@
 (load "core_global")
 (load "core_render")
 
+(defn- dummy [_])
+
 (defn defscreen*
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
+    :or {on-show dummy on-render dummy on-hide dummy
+         on-pause dummy on-resize dummy on-resume dummy}
     :as options}]
-  (let [screen (atom {})
-        dummy-fn (fn [s])
-        on-show (or on-show dummy-fn)
-        on-render (or on-render dummy-fn)
-        on-hide (or on-hide dummy-fn)
-        on-pause (or on-pause dummy-fn)
-        on-resize (or on-resize dummy-fn)
-        on-resume (or on-resume dummy-fn)]
+  (let [screen (atom {})]
     (proxy [Screen] []
       (show []
         (on-show (swap! screen assoc
