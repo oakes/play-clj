@@ -11,12 +11,17 @@
   (assert renderer)
   (.getSpriteBatch renderer))
 
-(defn draw! [screen entities]
-  (let [batch (sprite-batch screen)]
+(defn draw! [{:keys [renderer]} entities]
+  (assert renderer)
+  (let [batch (.getSpriteBatch renderer)]
     (.begin batch)
-    (doseq [{:keys [image x y width height]} entities]
-      (when (and image x y width height)
-        (.draw batch image (float x) (float y) (float width) (float height))))
+    (doseq [e entities]
+      (cond
+        (map? e)
+        (let [{:keys [image x y width height]} e]
+          (.draw batch image (float x) (float y) (float width) (float height)))
+        (isa? (type e) Actor)
+        (.draw e batch 1)))
     (.end batch))
   entities)
 

@@ -10,15 +10,15 @@
             HexagonalTiledMapRenderer
             IsometricStaggeredTiledMapRenderer
             IsometricTiledMapRenderer
-            OrthogonalTiledMapRenderer]))
+            OrthogonalTiledMapRenderer]
+           [com.badlogic.gdx.scenes.scene2d Actor Stage]))
 
 (load "core_2d")
 (load "core_global")
 (load "core_render")
 
 (defn defscreen*
-  [{:keys [on-show on-render on-dispose on-hide on-pause on-resize on-resume
-           state renderer camera]
+  [{:keys [on-show on-render on-dispose on-hide on-pause on-resize on-resume]
     :as options}]
   (let [screen (atom {})
         dummy-fn (fn [s])
@@ -31,13 +31,15 @@
     (proxy [Screen] []
       (show []
         (on-show (swap! screen assoc
-                        :renderer (create-renderer renderer)
-                        :camera (create-camera camera)
                         :width (game :width)
                         :height (game :height)
                         :total-time 0
                         :delta-time 0
-                        :save #(swap! screen assoc :entities %))))
+                        :set-entities #(swap! screen assoc :entities %)
+                        :create-renderer #(swap! screen assoc
+                                                 :renderer (renderer %))
+                        :create-camera #(swap! screen assoc
+                                               :camera (camera %)))))
       (render [delta-time]
         (on-render (swap! screen assoc
                           :total-time (+ (:total-time @screen) delta-time)
@@ -64,7 +66,18 @@
   [^Game game ^Screen screen]
   (.setScreen game screen))
 
-(defn save!
-  [{:keys [save]} entities]
-  (save entities)
+(defn set-entities!
+  [{:keys [set-entities]} entities]
+  (:entities (set-entities entities)))
+
+(defn get-entities
+  [{:keys [entities]}]
   entities)
+
+(defn create-renderer!
+  [{:keys [create-renderer]} & {:keys [] :as args}]
+  (:renderer (create-renderer args)))
+
+(defn create-camera!
+  [{:keys [create-camera]} & {:keys [] :as args}]
+  (:camera (create-camera args)))

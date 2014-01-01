@@ -12,12 +12,17 @@
   (assert (number? tile-size))
   (float (/ 1 tile-size)))
 
-(defn render-tiled-map!
-  [{:keys [^BatchTiledMapRenderer renderer ^Camera camera]}]
-  (assert (and renderer camera))
-  (doto renderer
-    (.setView camera)
-    .render))
+(defn render!
+  [{:keys [renderer ^Camera camera]}]
+  (assert renderer)
+  (cond
+    (isa? (type renderer) BatchTiledMapRenderer)
+    (doto renderer
+      (.setView camera)
+      .render)
+    (isa? (type renderer) Stage)
+    (.draw renderer)
+    :else nil))
 
 (defn tiled-map-layer
   [{:keys [^BatchTiledMapRenderer renderer]} layer]
@@ -32,28 +37,33 @@
         layer)
       (.getCell x y)))
 
-(defmulti create-renderer :type :default :orthogonal-tiled-map)
+(defmulti renderer :type :default nil)
 
-(defmethod create-renderer :orthogonal-tiled-map [opts]
+(defmethod renderer nil [opts])
+
+(defmethod renderer :orthogonal-tiled-map [opts]
   (OrthogonalTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
 
-(defmethod create-renderer :isometric-tiled-map [opts]
+(defmethod renderer :isometric-tiled-map [opts]
   (IsometricTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
 
-(defmethod create-renderer :isometric-staggered-tiled-map [opts]
+(defmethod renderer :isometric-staggered-tiled-map [opts]
   (IsometricStaggeredTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
 
-(defmethod create-renderer :hexagonal-tiled-map [opts]
+(defmethod renderer :hexagonal-tiled-map [opts]
   (HexagonalTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
+
+(defmethod renderer :stage [_]
+  (Stage.))
 
 ; cameras
 
-(defmulti create-camera identity :default :orthographic)
+(defmulti camera identity :default :orthographic)
 
-(defmethod create-camera :orthographic [_]
+(defmethod camera :orthographic [_]
   (OrthographicCamera.))
 
-(defmethod create-camera :perspective [_]
+(defmethod camera :perspective [_]
   (PerspectiveCamera.))
 
 (defn resize-camera!
