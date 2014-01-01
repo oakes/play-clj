@@ -35,7 +35,7 @@
         (swap! screen assoc
                :total-time 0
                :delta-time 0
-               :create-renderer #(swap! screen assoc  :renderer (renderer %))
+               :create-renderer #(swap! screen assoc :renderer (renderer %))
                :create-camera #(swap! screen assoc :camera (camera %)))
         (execute on-show))
       (render [delta-time]
