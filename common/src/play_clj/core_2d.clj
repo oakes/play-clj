@@ -10,14 +10,14 @@
 (defmethod sprite-batch BatchTiledMapRenderer [screen]
   (.getSpriteBatch (:renderer screen)))
 
-(defn draw [screen {:keys [image x y width height] :as entity}]
-  (fn []
-    (let [batch (sprite-batch screen)]
-      (.begin batch)
+(defn draw! [screen entities]
+  (let [batch (sprite-batch screen)]
+    (.begin batch)
+    (doseq [{:keys [image x y width height]} entities]
       (when (and image x y width height)
-        (.draw batch image (float x) (float y) (float width) (float height)))
-      (.end batch))
-    entity))
+        (.draw batch image (float x) (float y) (float width) (float height))))
+    (.end batch))
+  entities)
 
 ; textures
 

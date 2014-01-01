@@ -2,15 +2,13 @@
 
 ; graphics
 
-(defn clear
+(defn clear!
   ([]
-    (clear 0 0 0 0))
+    (clear! 0 0 0 0))
   ([r g b a]
-    (fn []
-      (doto (Gdx/gl)
-        (.glClearColor r g b a)
-        (.glClear GL20/GL_COLOR_BUFFER_BIT))
-      nil)))
+    (doto (Gdx/gl)
+      (.glClearColor r g b a)
+      (.glClear GL20/GL_COLOR_BUFFER_BIT))))
 
 (defn game*
   [key]
