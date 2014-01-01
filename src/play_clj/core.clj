@@ -51,9 +51,10 @@
   `(defonce ~name (defscreen* ~options)))
 
 (defn defgame*
-  [{:keys [on-create]}]
+  [{:keys [on-create]
+    :or {on-create dummy}}]
   (proxy [Game] []
-    (create [] (when on-create (on-create this)))))
+    (create [] (on-create this))))
 
 (defmacro defgame
   [name & {:keys [] :as options}]
