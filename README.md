@@ -6,3 +6,6 @@ A Clojure library that provides a wrapper for [LibGDX](http://libgdx.badlogicgam
 
 The recommended way to start using play-clj is to create a Clojure game project with [Nightcode](https://nightcode.info/). It will automatically generate three separate Leiningen projects for desktop, Android, and iOS, all pointing to the same source code and resources directories. You can build the projects with Nightcode itself or with Leiningen on the command line (if you choose the latter, you will need to set up [lein-droid](https://github.com/clojure-android/lein-droid) and [lein-fruit](https://github.com/oakes/lein-fruit) to build the Android and iOS projects respectively).
 
+## Licensing
+
+All source files that originate from this project are dedicated to the public domain. I would love pull requests, and will assume that they are also dedicated to the public domain.
