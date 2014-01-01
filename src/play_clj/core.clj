@@ -23,25 +23,30 @@
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
     :or {on-show dummy on-render dummy on-hide dummy
          on-pause dummy on-resize dummy on-resume dummy}}]
-  (let [screen (atom {})]
+  (let [screen (atom {})
+        entities (atom '())
+        execute (fn [func]
+                  (some->> (func @screen @entities)
+                           list
+                           flatten
+                           (reset! entities)))]
     (proxy [Screen] []
       (show []
-        (on-show (swap! screen assoc
-                        :total-time 0
-                        :delta-time 0
-                        :set-entities #(swap! screen assoc :entities %)
-                        :create-renderer #(swap! screen assoc
-                                                 :renderer (renderer %))
-                        :create-camera #(swap! screen assoc
-                                               :camera (camera %)))))
+        (swap! screen assoc
+               :total-time 0
+               :delta-time 0
+               :create-renderer #(swap! screen assoc  :renderer (renderer %))
+               :create-camera #(swap! screen assoc :camera (camera %)))
+        (execute on-show))
       (render [delta-time]
-        (on-render (swap! screen assoc
-                          :total-time (+ (:total-time @screen) delta-time)
-                          :delta-time delta-time)))
-      (hide [] (on-hide @screen))
-      (pause [] (on-pause @screen))
-      (resize [w h] (on-resize @screen))
-      (resume [] (on-resume @screen)))))
+        (swap! screen assoc
+               :total-time (+ (:total-time @screen) delta-time)
+               :delta-time delta-time)
+        (execute on-render))
+      (hide [] (execute on-hide))
+      (pause [] (execute on-pause))
+      (resize [w h] (execute on-resize))
+      (resume [] (execute on-resume)))))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
@@ -64,14 +69,6 @@
 (defn set-screen!
   [^Game game ^Screen screen]
   (.setScreen game screen))
-
-(defn set-entities!
-  [{:keys [set-entities]} entities]
-  (:entities (set-entities entities)))
-
-(defn get-entities
-  [{:keys [entities]}]
-  entities)
 
 (defn create-renderer!
   [{:keys [create-renderer]} & {:keys [] :as args}]
