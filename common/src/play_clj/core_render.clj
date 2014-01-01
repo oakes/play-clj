@@ -14,16 +14,19 @@
 
 (defn render-tiled-map!
   [{:keys [^BatchTiledMapRenderer renderer ^Camera camera]}]
+  (assert (and renderer camera))
   (doto renderer
     (.setView camera)
     .render))
 
 (defn tiled-map-layer
   [{:keys [^BatchTiledMapRenderer renderer]} layer]
+  (assert renderer)
   (-> renderer .getMap .getLayers (.get layer)))
 
 (defn tiled-map-cell
   [{:keys [^BatchTiledMapRenderer renderer] :as screen} layer x y]
+  (assert renderer)
   (-> (if (or (string? layer) (number? layer))
         (tiled-map-layer screen layer)
         layer)
@@ -55,10 +58,12 @@
 
 (defn resize-camera!
   [{:keys [^Camera camera]} width height]
+  (assert camera)
   (.setToOrtho camera false width height))
 
 (defn move-camera!
   [{:keys [^Camera camera]} x y]
+  (assert camera)
   (when x (set! (. (. camera position) x) x))
   (when y (set! (. (. camera position) y) y))
   (.update camera))

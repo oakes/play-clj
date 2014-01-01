@@ -7,8 +7,9 @@
 (defmethod sprite-batch nil [screen]
   (SpriteBatch.))
 
-(defmethod sprite-batch BatchTiledMapRenderer [screen]
-  (.getSpriteBatch (:renderer screen)))
+(defmethod sprite-batch BatchTiledMapRenderer [{:keys [renderer]}]
+  (assert renderer)
+  (.getSpriteBatch renderer))
 
 (defn draw! [screen entities]
   (let [batch (sprite-batch screen)]
