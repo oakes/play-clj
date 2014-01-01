@@ -17,7 +17,7 @@
 (load "core_global")
 (load "core_render")
 
-(defn- dummy [_])
+(defn- dummy [& args])
 
 (defn defscreen*
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
@@ -44,8 +44,13 @@
       (resume [] (on-resume @screen)))))
 
 (defmacro defscreen
-  [name & {:keys [] :as options}]
-  `(defonce ~name (defscreen* ~options)))
+  [n & {:keys [] :as options}]
+  `(->> (for [[k# v#] ~options]
+          [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
+        flatten
+        (apply hash-map)
+        defscreen*
+        (def ~n)))
 
 (defn defgame*
   [{:keys [on-create] :or {on-create dummy}}]
