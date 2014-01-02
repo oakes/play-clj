@@ -2,15 +2,6 @@
 
 ; drawing
 
-(defmulti sprite-batch #(-> % :renderer class) :default nil)
-
-(defmethod sprite-batch nil [screen]
-  (SpriteBatch.))
-
-(defmethod sprite-batch BatchTiledMapRenderer [{:keys [renderer]}]
-  (assert renderer)
-  (.getSpriteBatch renderer))
-
 (defn draw! [{:keys [renderer]} entities]
   (assert renderer)
   (let [batch (.getSpriteBatch renderer)]

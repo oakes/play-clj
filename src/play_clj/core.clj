@@ -29,6 +29,7 @@
                   (some->> (func @screen @entities)
                            list
                            flatten
+                           (remove nil?)
                            (reset! entities)))]
     (proxy [Screen] []
       (show []
