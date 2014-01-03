@@ -24,7 +24,7 @@
     (.draw ^Stage renderer)))
 
 (defn tiled-map-layer
-  [{:keys [^BatchTiledMapRenderer renderer]} layer]
+  [{:keys [^BatchTiledMapRenderer renderer]} ^String layer]
   (assert renderer)
   (-> renderer .getMap .getLayers (.get layer)))
 
