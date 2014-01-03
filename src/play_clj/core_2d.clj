@@ -41,14 +41,14 @@
 (defn image-width
   ([^TextureRegion img]
     (.getRegionWidth img))
-  ([^TextureRegion img val]
-    (.setRegionWidth img val)))
+  ([img val]
+    (doto ^TextureRegion (image img) (.setRegionWidth val))))
 
 (defn image-height
   ([^TextureRegion img]
     (.getRegionHeight img))
-  ([^TextureRegion img val]
-    (.setRegionHeight img val)))
+  ([img val]
+    (doto ^TextureRegion (image img) (.setRegionHeight val))))
 
 (defn split-image
   ([val size]
