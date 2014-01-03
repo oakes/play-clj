@@ -33,22 +33,25 @@
 ; textures
 
 (defn image
-  [val]
-  (if (string? val)
-    (-> ^String val Texture. TextureRegion.)
-    (TextureRegion. ^TextureRegion val)))
+  [val & {:keys [] :as options}]
+  (let [^TextureRegion
+        img (if (string? val)
+              (-> ^String val Texture. TextureRegion.)
+              (TextureRegion. ^TextureRegion val))]
+    (doseq [[k v] options]
+      (case k
+        :width (.setRegionWidth img v)
+        :height (.setRegionHeight img v)
+        nil))
+    img))
 
 (defn image-width
-  ([^TextureRegion img]
-    (.getRegionWidth img))
-  ([img val]
-    (doto ^TextureRegion (image img) (.setRegionWidth val))))
+  [^TextureRegion img]
+  (.getRegionWidth img))
 
 (defn image-height
-  ([^TextureRegion img]
-    (.getRegionHeight img))
-  ([img val]
-    (doto ^TextureRegion (image img) (.setRegionHeight val))))
+  [^TextureRegion img]
+  (.getRegionHeight img))
 
 (defn split-image
   ([val size]
