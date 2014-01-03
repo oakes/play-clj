@@ -4,7 +4,8 @@
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture]
            [com.badlogic.gdx.graphics.g2d Animation SpriteBatch TextureRegion]
-           [com.badlogic.gdx.maps.tiled TmxMapLoader]
+           [com.badlogic.gdx.maps MapLayers]
+           [com.badlogic.gdx.maps.tiled TiledMap TiledMapTileLayer TmxMapLoader]
            [com.badlogic.gdx.maps.tiled.renderers
             BatchTiledMapRenderer
             HexagonalTiledMapRenderer

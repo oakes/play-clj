@@ -17,12 +17,11 @@
   (assert renderer)
   (cond
     (isa? (type renderer) BatchTiledMapRenderer)
-    (doto renderer
+    (doto ^BatchTiledMapRenderer renderer
       (.setView camera)
       .render)
     (isa? (type renderer) Stage)
-    (.draw renderer)
-    :else nil))
+    (.draw ^Stage renderer)))
 
 (defn tiled-map-layer
   [{:keys [^BatchTiledMapRenderer renderer]} layer]
@@ -33,8 +32,8 @@
   [{:keys [^BatchTiledMapRenderer renderer] :as screen} layer x y]
   (assert renderer)
   (-> (if (or (string? layer) (number? layer))
-        (tiled-map-layer screen layer)
-        layer)
+        ^TiledMapTileLayer (tiled-map-layer screen layer)
+        ^TiledMapTileLayer layer)
       (.getCell x y)))
 
 (defmulti renderer :type :default nil)
@@ -42,16 +41,20 @@
 (defmethod renderer nil [opts])
 
 (defmethod renderer :orthogonal-tiled-map [opts]
-  (OrthogonalTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
+  (OrthogonalTiledMapRenderer. ^TiledMap (load-tiled-map opts)
+                               ^double (unit-scale opts)))
 
 (defmethod renderer :isometric-tiled-map [opts]
-  (IsometricTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
+  (IsometricTiledMapRenderer. ^TiledMap (load-tiled-map opts)
+                              ^double (unit-scale opts)))
 
 (defmethod renderer :isometric-staggered-tiled-map [opts]
-  (IsometricStaggeredTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
+  (IsometricStaggeredTiledMapRenderer. ^TiledMap (load-tiled-map opts)
+                                       ^double (unit-scale opts)))
 
 (defmethod renderer :hexagonal-tiled-map [opts]
-  (HexagonalTiledMapRenderer. (load-tiled-map opts) (unit-scale opts)))
+  (HexagonalTiledMapRenderer. ^TiledMap (load-tiled-map opts)
+                              ^double (unit-scale opts)))
 
 (defmethod renderer :stage [_]
   (Stage.))
@@ -67,7 +70,7 @@
   (PerspectiveCamera.))
 
 (defn resize-camera!
-  [{:keys [^Camera camera]} width height]
+  [{:keys [^OrthographicCamera camera]} width height]
   (assert camera)
   (.setToOrtho camera false width height))
 

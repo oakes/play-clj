@@ -2,17 +2,31 @@
 
 ; drawing
 
-(defn draw! [{:keys [renderer]} entities]
+(defmulti sprite-batch #(-> % :renderer class) :default nil)
+
+(defmethod sprite-batch nil
+  [screen]
+  (SpriteBatch.))
+
+(defmethod sprite-batch BatchTiledMapRenderer
+  [{:keys [^BatchTiledMapRenderer renderer]}]
+  (.getSpriteBatch renderer))
+
+(defmethod sprite-batch Stage
+  [{:keys [^Stage renderer]}]
+  (.getSpriteBatch renderer))
+
+(defn draw! [{:keys [renderer] :as screen} entities]
   (assert renderer)
-  (let [batch (.getSpriteBatch renderer)]
+  (let [^SpriteBatch batch (sprite-batch screen)]
     (.begin batch)
     (doseq [e entities]
       (cond
         (map? e)
-        (let [{:keys [image x y width height]} e]
+        (let [{:keys [^TextureRegion image x y width height]} e]
           (.draw batch image (float x) (float y) (float width) (float height)))
         (isa? (type e) Actor)
-        (.draw e batch 1)))
+        (.draw ^Actor e batch 1)))
     (.end batch))
   entities)
 
@@ -21,18 +35,18 @@
 (defn image
   [val]
   (if (string? val)
-    (-> val Texture. TextureRegion.)
-    (TextureRegion. val)))
+    (-> ^String val Texture. TextureRegion.)
+    (TextureRegion. ^TextureRegion val)))
 
 (defn split-image
   ([val size]
     (split-image val size size))
   ([val width height]
-    (-> val image (.split width height))))
+    (-> val ^TextureRegion image (.split width height))))
 
 (defn flip-image
   [val x? y?]
-  (doto (image val) (.flip x? y?)))
+  (doto ^TextureRegion (image val) (.flip x? y?)))
 
 (defmacro animation
   [duration images & args]
