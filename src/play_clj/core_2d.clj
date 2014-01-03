@@ -38,6 +38,18 @@
     (-> ^String val Texture. TextureRegion.)
     (TextureRegion. ^TextureRegion val)))
 
+(defn image-width
+  ([^TextureRegion img]
+    (.getRegionWidth img))
+  ([^TextureRegion img val]
+    (.setRegionWidth img val)))
+
+(defn image-height
+  ([^TextureRegion img]
+    (.getRegionHeight img))
+  ([^TextureRegion img val]
+    (.setRegionHeight img val)))
+
 (defn split-image
   ([val size]
     (split-image val size size))
