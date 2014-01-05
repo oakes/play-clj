@@ -15,6 +15,7 @@
   (case key
     :width `(.getWidth (Gdx/graphics))
     :height `(.getHeight (Gdx/graphics))
+    :fps `(.getFramesPerSecond (Gdx/graphics))
     :is-fullscreen? `(.isFullscreen (Gdx/graphics))
     :is-touched? `(.isTouched (Gdx/input))
     :x `(.getX (Gdx/input))
