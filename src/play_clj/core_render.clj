@@ -28,7 +28,7 @@
   (assert renderer)
   (if (isa? (type layer) MapLayer)
     layer
-    (-> renderer .getMap .getLayers (.get layer))))
+    (-> renderer .getMap .getLayers (.get ^String layer))))
 
 (defn tiled-map-layers
   [{:keys [^BatchTiledMapRenderer renderer]}]
