@@ -40,8 +40,13 @@
               (TextureRegion. ^TextureRegion val))]
     (doseq [[k v] options]
       (case k
+        :x (.setRegionX img v)
+        :y (.setRegionY img v)
         :width (.setRegionWidth img v)
         :height (.setRegionHeight img v)
+        :region (.setRegion img
+                  ^long (nth v 0) ^long (nth v 1)
+                  ^long (nth v 2) ^long (nth v 3))
         nil))
     img))
 
