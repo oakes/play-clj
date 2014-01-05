@@ -34,7 +34,7 @@
   [{:keys [^BatchTiledMapRenderer renderer]}]
   (assert renderer)
   (let [layers (-> renderer .getMap .getLayers)]
-    (for [i (range (.getCount layers))]
+    (for [^long i (range (.getCount layers))]
       (.get layers i))))
 
 (defn tiled-map-layer-name
