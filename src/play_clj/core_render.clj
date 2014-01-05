@@ -24,17 +24,31 @@
     (.draw ^Stage renderer)))
 
 (defn tiled-map-layer
-  [{:keys [^BatchTiledMapRenderer renderer]} ^String layer]
+  [{:keys [^BatchTiledMapRenderer renderer]} layer]
   (assert renderer)
-  (-> renderer .getMap .getLayers (.get layer)))
+  (if (isa? (type layer) MapLayer)
+    layer
+    (-> renderer .getMap .getLayers (.get layer))))
+
+(defn tiled-map-layers
+  [{:keys [^BatchTiledMapRenderer renderer]}]
+  (assert renderer)
+  (let [layers (-> renderer .getMap .getLayers)]
+    (for [i (range (.getCount layers))]
+      (.get layers i))))
+
+(defn tiled-map-layer-name
+  [screen layer]
+  (.getName ^MapLayer (tiled-map-layer screen layer)))
+
+(defn tiled-map-layer-names
+  [screen]
+  (for [layer (tiled-map-layers screen)]
+    (tiled-map-layer-name screen layer)))
 
 (defn tiled-map-cell
-  [{:keys [^BatchTiledMapRenderer renderer] :as screen} layer x y]
-  (assert renderer)
-  (-> (if (or (string? layer) (number? layer))
-        ^TiledMapTileLayer (tiled-map-layer screen layer)
-        ^TiledMapTileLayer layer)
-      (.getCell x y)))
+  [screen layer x y]
+  (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y))
 
 (defmulti renderer :type :default nil)
 
