@@ -26,12 +26,12 @@
          on-pause dummy on-resize dummy on-resume dummy}}]
   (let [screen (atom {})
         entities (atom '())
-        execute (fn [func screen-map]
-                  (some->> (func screen-map @entities)
-                           list
-                           flatten
-                           (remove nil?)
-                           (reset! entities)))
+        execute-fn! (fn [func screen-map]
+                      (some->> (func screen-map @entities)
+                               list
+                               flatten
+                               (remove nil?)
+                               (reset! entities)))
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         create-camera-fn! #(swap! screen assoc :camera (camera %))]
     (proxy [Screen] []
@@ -41,17 +41,17 @@
                     :delta-time 0
                     :create-renderer create-renderer-fn!
                     :create-camera create-camera-fn!)
-             (execute on-show)))
+             (execute-fn! on-show)))
       (render [delta-time]
         (->> (swap! screen (fn [val]
                              (assoc val
                                     :total-time (+ (:total-time val) delta-time)
                                     :delta-time delta-time)))
-             (execute on-render)))
-      (hide [] (execute on-hide @screen))
-      (pause [] (execute on-pause @screen))
-      (resize [w h] (execute on-resize @screen))
-      (resume [] (execute on-resume @screen)))))
+             (execute-fn! on-render)))
+      (hide [] (execute-fn! on-hide @screen))
+      (pause [] (execute-fn! on-pause @screen))
+      (resize [w h] (execute-fn! on-resize @screen))
+      (resume [] (execute-fn! on-resume @screen)))))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
