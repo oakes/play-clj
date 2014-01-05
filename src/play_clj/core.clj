@@ -26,29 +26,32 @@
          on-pause dummy on-resize dummy on-resume dummy}}]
   (let [screen (atom {})
         entities (atom '())
-        execute (fn [func]
-                  (some->> (func @screen @entities)
+        execute (fn [func screen-map]
+                  (some->> (func screen-map @entities)
                            list
                            flatten
                            (remove nil?)
-                           (reset! entities)))]
+                           (reset! entities)))
+        create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
+        create-camera-fn! #(swap! screen assoc :camera (camera %))]
     (proxy [Screen] []
       (show []
-        (swap! screen assoc
-               :total-time 0
-               :delta-time 0
-               :create-renderer #(swap! screen assoc :renderer (renderer %))
-               :create-camera #(swap! screen assoc :camera (camera %)))
-        (execute on-show))
+        (->> (swap! screen assoc
+                    :total-time 0
+                    :delta-time 0
+                    :create-renderer create-renderer-fn!
+                    :create-camera create-camera-fn!)
+             (execute on-show)))
       (render [delta-time]
-        (swap! screen assoc
-               :total-time (+ (:total-time @screen) delta-time)
-               :delta-time delta-time)
-        (execute on-render))
-      (hide [] (execute on-hide))
-      (pause [] (execute on-pause))
-      (resize [w h] (execute on-resize))
-      (resume [] (execute on-resume)))))
+        (->> (swap! screen (fn [val]
+                             (assoc val
+                                    :total-time (+ (:total-time val) delta-time)
+                                    :delta-time delta-time)))
+             (execute on-render)))
+      (hide [] (execute on-hide @screen))
+      (pause [] (execute on-pause @screen))
+      (resize [w h] (execute on-resize @screen))
+      (resume [] (execute on-resume @screen)))))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
