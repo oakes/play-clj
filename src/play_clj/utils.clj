@@ -25,4 +25,4 @@
 
 (defn gdx-into-array
   [a]
-  (-> a into-array Array.))
+  (Array. true (into-array a) 1 (count a)))
