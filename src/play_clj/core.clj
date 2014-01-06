@@ -21,15 +21,11 @@
 
 (defmethod create-entity TextureRegion
   [obj]
-  {:type :image :object obj :x 0 :y 0})
+  {:type :image :object obj})
 
 (defmethod create-entity Actor
   [obj]
-  {:type :actor :object obj :x 0 :y 0})
-
-(defn replace-entity
-  [old-entity new-entity]
-  (assoc old-entity :object (:object new-entity)))
+  {:type :actor :object obj})
 
 (load "core_2d")
 (load "core_global")
