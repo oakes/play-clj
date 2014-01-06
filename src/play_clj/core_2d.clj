@@ -15,22 +15,23 @@
   (.getSpriteBatch renderer))
 
 (defn draw-actor!
-  [^SpriteBatch batch {:keys [^Actor actor] :as entity}]
-  (.draw ^Actor actor batch 1))
+  [^SpriteBatch batch {:keys [^Actor object] :as entity}]
+  (.draw ^Actor object batch 1))
 
 (defn draw-image!
-  [^SpriteBatch batch {:keys [^TextureRegion image x y width height]}]
-  (.draw batch image (float x) (float y) (float width) (float height)))
+  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
+  (.draw batch object (float x) (float y) (float width) (float height)))
 
 (defn draw-entity!
   [^SpriteBatch batch entity]
-  (cond
-    (isa? (type entity) Actor)
-    (draw-actor! batch {:actor entity})
-    (:actor entity)
-    (draw-actor! batch entity)
-    (:image entity)
-    (draw-image! batch entity)))
+  (if (not (map? entity))
+    (draw-entity! batch (create-entity entity))
+    (case (:type entity)
+      :actor
+      (draw-actor! batch entity)
+      :image
+      (draw-image! batch entity)
+      nil)))
 
 (defn draw! [{:keys [renderer] :as screen} entities]
   (assert renderer)
@@ -48,21 +49,23 @@
   (cond
     (string? img)
     (-> ^String img Texture. TextureRegion.)
+    (map? img)
+    (TextureRegion. ^TextureRegion (:object img))
     :else
-    (TextureRegion. ^TextureRegion img)))
+    img))
 
 (defmacro image
   [img & options]
-  `(utils/calls! ^TextureRegion (image* ~img) ~@options))
+  `(create-entity (utils/calls! ^TextureRegion (image* ~img) ~@options)))
 
 (defmacro image!
   [img k & options]
-  `(utils/call! ^TextureRegion ~img ~k ~@options))
+  `(utils/call! ^TextureRegion (:object ~img) ~k ~@options))
 
 (defmacro animation
   [duration images & args]
   `(Animation. ~duration
-               (utils/gdx-into-array ~images)
+               (utils/gdx-into-array (map :object ~images))
                (utils/gdx-static-field :graphics :g2d :Animation
                                        ~(or (first args) :normal))))
 

@@ -17,6 +17,20 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.ui Label Label$LabelStyle]))
 
+(defmulti create-entity class)
+
+(defmethod create-entity TextureRegion
+  [obj]
+  {:type :image :object obj :x 0 :y 0})
+
+(defmethod create-entity Actor
+  [obj]
+  {:type :actor :object obj :x 0 :y 0})
+
+(defn replace-entity
+  [old-entity new-entity]
+  (assoc old-entity :object (:object new-entity)))
+
 (load "core_2d")
 (load "core_global")
 (load "core_render")
