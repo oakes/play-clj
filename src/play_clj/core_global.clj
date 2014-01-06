@@ -10,6 +10,12 @@
       (.glClearColor (float r) (float g) (float b) (float a))
       (.glClear GL20/GL_COLOR_BUFFER_BIT))))
 
+(defmacro color
+  [& args]
+  `~(if (keyword? (first args))
+      `(Color. ^Color (utils/gdx-static-field :graphics :Color ~(first args)))
+      `(Color. ~@args)))
+
 (defn game*
   [key]
   (case key

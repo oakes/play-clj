@@ -1,5 +1,6 @@
 (ns play-clj.core
-  (:require [play-clj.utils :as utils])
+  (:require [clojure.set :as set]
+            [play-clj.utils :as utils])
   (:import [com.badlogic.gdx Game Gdx Input$Keys Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture]
@@ -19,7 +20,6 @@
 (load "core_2d")
 (load "core_global")
 (load "core_render")
-(load "core_ui")
 
 (defn- dummy [& args])
 

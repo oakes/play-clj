@@ -16,14 +16,6 @@
 
 (defn draw-actor!
   [^SpriteBatch batch {:keys [^Actor actor] :as entity}]
-  (doseq [[k v] entity]
-    (case k
-      :x (.setX actor (float v))
-      :y (.setY actor (float v))
-      :width (.setWidth actor (float v))
-      :height (.setHeight actor (float v))
-      :text (.setText actor (str v))
-      nil))
   (.draw ^Actor actor batch 1))
 
 (defn draw-image!
@@ -33,12 +25,12 @@
 (defn draw-entity!
   [^SpriteBatch batch entity]
   (cond
+    (isa? (type entity) Actor)
+    (draw-actor! batch {:actor entity})
     (:actor entity)
     (draw-actor! batch entity)
     (:image entity)
-    (draw-image! batch entity)
-    (isa? (type entity) Actor)
-    (draw-actor! batch {:actor entity})))
+    (draw-image! batch entity)))
 
 (defn draw! [{:keys [renderer] :as screen} entities]
   (assert renderer)
@@ -51,38 +43,23 @@
 
 ; textures
 
-(defn image
-  [val & {:keys [] :as options}]
-  (let [^TextureRegion
-        img (if (string? val)
-              (-> ^String val Texture. TextureRegion.)
-              (TextureRegion. ^TextureRegion val))]
-    (doseq [[k v] options]
-      (case k
-        :x (.setRegionX img v)
-        :y (.setRegionY img v)
-        :width (.setRegionWidth img v)
-        :height (.setRegionHeight img v)
-        :region (.setRegion img
-                  ^long (nth v 0) ^long (nth v 1)
-                  ^long (nth v 2) ^long (nth v 3))
-        :flip (.flip img (nth v 0) (nth v 1))
-        nil))
+(defn create-image*
+  [img]
+  (cond
+    (string? img)
+    (-> ^String img Texture. TextureRegion.)
+    (isa? img TextureRegion)
+    (TextureRegion. ^TextureRegion img)
+    :else
     img))
 
-(defn image-width
-  [^TextureRegion img]
-  (.getRegionWidth img))
+(defmacro create-image
+  [img & options]
+  `(utils/calls! ^TextureRegion (create-image* ~img) ~@options))
 
-(defn image-height
-  [^TextureRegion img]
-  (.getRegionHeight img))
-
-(defn split-image
-  ([val size]
-    (split-image val size size))
-  ([val width height]
-    (-> val ^TextureRegion image (.split width height))))
+(defmacro image
+  [img k & options]
+  `(utils/call! ^TextureRegion ~img ~k ~@options))
 
 (defmacro animation
   [duration images & args]

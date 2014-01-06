@@ -26,3 +26,25 @@
 (defn gdx-into-array
   [a]
   (Array. true (into-array a) 1 (count a)))
+
+(defn key->method
+  [k]
+  (let [parts (split-key k)]
+    (->> (rest parts)
+         (map s/capitalize)
+         (cons (first parts))
+         (s/join "")
+         (str ".")
+         symbol)))
+
+(defmacro call!
+  [obj k & args]
+  `(~(key->method k) ~obj ~@(flatten args)))
+
+(defn calls!*
+  [[k v]]
+  (flatten (list (key->method k) v)))
+
+(defmacro calls!
+  [obj & {:keys [] :as args}]
+  `(doto ~obj ~@(map calls!* args)))
