@@ -36,18 +36,22 @@
                                (remove nil?)
                                (reset! entities)))
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
-        create-camera-fn! #(swap! screen assoc :camera (camera %))]
+        create-camera-fn! #(swap! screen assoc :camera (camera %))
+        update-fn! #(swap! screen assoc
+                           :renderer (renderer (:renderer %))
+                           :camera (camera (:camera %)))]
     {:show (fn []
              (->> (swap! screen assoc
                          :total-time 0
                          :delta-time 0
-                         :create-renderer create-renderer-fn!
-                         :create-camera create-camera-fn!)
+                         :create-renderer-fn! create-renderer-fn!
+                         :create-camera-fn! create-camera-fn!
+                         :update-fn! update-fn!)
                   (execute-fn! on-show)))
      :render (fn [delta-time]
-               (->> (fn [val]
-                      (assoc val
-                             :total-time (+ (:total-time val) delta-time)
+               (->> (fn [screen-map]
+                      (assoc screen-map
+                             :total-time (+ (:total-time screen-map) delta-time)
                              :delta-time delta-time))
                     (swap! screen)
                     (execute-fn! on-render)))
@@ -71,14 +75,14 @@
     (create [] (on-create this))))
 
 (defmacro defgame
-  [name & {:keys [] :as options}]
-  `(defonce ~name (defgame* ~options)))
+  [n & {:keys [] :as options}]
+  `(defonce ~n (defgame* ~options)))
 
 (defn set-screen!
   [^Game game & screens]
-  (let [run-fn! (fn [key & args]
+  (let [run-fn! (fn [k & args]
                   (doseq [screen screens]
-                    (apply (get screen key) args)))]
+                    (apply (get screen k) args)))]
     (.setScreen game (proxy [Screen] []
                        (show [] (run-fn! :show))
                        (render [delta-time] (run-fn! :render delta-time))
@@ -87,10 +91,14 @@
                        (resize [w h] (run-fn! :resize))
                        (resume [] (run-fn! :resume))))))
 
+(defn update!
+  [{:keys [update-fn!]} & {:keys [] :as args}]
+  (update-fn! args))
+
 (defn create-renderer!
-  [{:keys [create-renderer]} & {:keys [] :as args}]
-  (:renderer (create-renderer args)))
+  [{:keys [create-renderer-fn!]} & {:keys [] :as args}]
+  (:renderer (create-renderer-fn! args)))
 
 (defn create-camera!
-  [{:keys [create-camera]} & {:keys [] :as args}]
-  (:camera (create-camera args)))
+  [{:keys [create-camera-fn!]} & {:keys [] :as args}]
+  (:camera (create-camera-fn! args)))
