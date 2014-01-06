@@ -43,7 +43,7 @@
 
 ; textures
 
-(defn create-image*
+(defn image*
   [img]
   (cond
     (string? img)
@@ -51,11 +51,11 @@
     :else
     (TextureRegion. ^TextureRegion img)))
 
-(defmacro create-image
-  [img & options]
-  `(utils/calls! ^TextureRegion (create-image* ~img) ~@options))
-
 (defmacro image
+  [img & options]
+  `(utils/calls! ^TextureRegion (image* ~img) ~@options))
+
+(defmacro image!
   [img k & options]
   `(utils/call! ^TextureRegion ~img ~k ~@options))
 
