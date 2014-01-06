@@ -2,7 +2,7 @@
   (:require [clojure.string :as s])
   (:import [com.badlogic.gdx.utils Array]))
 
-(defn- split-keys
+(defn- split-key
   [key]
   (-> key name (s/split #"-")))
 
@@ -13,7 +13,7 @@
 (defn gdx-static-field*
   [args]
   (->> (last args)
-       split-keys
+       split-key
        (map s/upper-case)
        (s/join "_")
        (str (join-keys (butlast args)) "/")

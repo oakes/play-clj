@@ -12,4 +12,6 @@
 
 (defn label
   [text color]
-  (create-actor (Label. text (Label$LabelStyle. (BitmapFont.) color))))
+  (->> (Label$LabelStyle. (BitmapFont.) color)
+       (Label. text)
+       create-actor))

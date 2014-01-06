@@ -4,9 +4,7 @@
 
 (defmulti sprite-batch #(-> % :renderer class) :default nil)
 
-(defmethod sprite-batch nil
-  [screen]
-  (SpriteBatch.))
+(defmethod sprite-batch nil [_])
 
 (defmethod sprite-batch BatchTiledMapRenderer
   [{:keys [^BatchTiledMapRenderer renderer]}]
@@ -20,10 +18,11 @@
   [^SpriteBatch batch {:keys [^Actor actor] :as entity}]
   (doseq [[k v] entity]
     (case k
-      :x (.setX actor v)
-      :y (.setY actor v)
-      :width (.setWidth actor v)
-      :height (.setHeight actor v)
+      :x (.setX actor (float v))
+      :y (.setY actor (float v))
+      :width (.setWidth actor (float v))
+      :height (.setHeight actor (float v))
+      :text (.setText actor (str v))
       nil))
   (.draw ^Actor actor batch 1))
 
@@ -67,6 +66,7 @@
         :region (.setRegion img
                   ^long (nth v 0) ^long (nth v 1)
                   ^long (nth v 2) ^long (nth v 3))
+        :flip (.flip img (nth v 0) (nth v 1))
         nil))
     img))
 
@@ -83,10 +83,6 @@
     (split-image val size size))
   ([val width height]
     (-> val ^TextureRegion image (.split width height))))
-
-(defn flip-image
-  [val x? y?]
-  (doto ^TextureRegion (image val) (.flip x? y?)))
 
 (defmacro animation
   [duration images & args]
