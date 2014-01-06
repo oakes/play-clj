@@ -48,10 +48,8 @@
   (cond
     (string? img)
     (-> ^String img Texture. TextureRegion.)
-    (isa? img TextureRegion)
-    (TextureRegion. ^TextureRegion img)
     :else
-    img))
+    (TextureRegion. ^TextureRegion img)))
 
 (defmacro create-image
   [img & options]
