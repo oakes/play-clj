@@ -69,8 +69,8 @@
                (utils/gdx-static-field :graphics :g2d :Animation
                                        ~(or (first args) :normal))))
 
-(defn get-key-frame
+(defn animation-image
   ([screen ^Animation animation]
-    (.getKeyFrame animation (:total-time screen) true))
+    (create-entity (.getKeyFrame animation (:total-time screen) true)))
   ([screen ^Animation animation is-looping?]
-    (.getKeyFrame animation (:total-time screen) is-looping?)))
+    (create-entity (.getKeyFrame animation (:total-time screen) is-looping?))))
