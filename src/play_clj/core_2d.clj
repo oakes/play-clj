@@ -16,17 +16,37 @@
   [{:keys [^Stage renderer]}]
   (.getSpriteBatch renderer))
 
+(defn draw-actor!
+  [^SpriteBatch batch {:keys [^Actor actor] :as entity}]
+  (doseq [[k v] entity]
+    (case k
+      :x (.setX actor v)
+      :y (.setY actor v)
+      :width (.setWidth actor v)
+      :height (.setHeight actor v)
+      nil))
+  (.draw ^Actor actor batch 1))
+
+(defn draw-image!
+  [^SpriteBatch batch {:keys [^TextureRegion image x y width height]}]
+  (.draw batch image (float x) (float y) (float width) (float height)))
+
+(defn draw-entity!
+  [^SpriteBatch batch entity]
+  (cond
+    (:actor entity)
+    (draw-actor! batch entity)
+    (:image entity)
+    (draw-image! batch entity)
+    (isa? (type entity) Actor)
+    (draw-actor! batch {:actor entity})))
+
 (defn draw! [{:keys [renderer] :as screen} entities]
   (assert renderer)
   (let [^SpriteBatch batch (sprite-batch screen)]
     (.begin batch)
-    (doseq [e entities]
-      (cond
-        (map? e)
-        (let [{:keys [^TextureRegion image x y width height]} e]
-          (.draw batch image (float x) (float y) (float width) (float height)))
-        (isa? (type e) Actor)
-        (.draw ^Actor e batch 1)))
+    (doseq [entity entities]
+      (draw-entity! batch entity))
     (.end batch))
   entities)
 
