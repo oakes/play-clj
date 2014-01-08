@@ -2,13 +2,15 @@
   (:require [clojure.string :as s])
   (:import [com.badlogic.gdx.utils Array]))
 
+(def ^:const gdx-package "com.badlogic.gdx.")
+
 (defn- split-key
   [key]
   (-> key name (s/split #"-")))
 
 (defn- join-keys
   [keys]
-  (->> keys (map name) (s/join ".") (str "com.badlogic.gdx.")))
+  (->> keys (map name) (s/join ".") (str gdx-package)))
 
 (defn gdx-static-field*
   [args]
@@ -26,6 +28,13 @@
 (defn gdx-into-array
   [a]
   (Array. true (into-array a) 1 (count a)))
+
+(defn key->class
+  [k]
+  (->> (split-key k)
+       (map s/capitalize)
+       (s/join "")
+       symbol))
 
 (defn key->method
   [k]

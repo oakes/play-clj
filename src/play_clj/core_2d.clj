@@ -58,10 +58,6 @@
   [img & options]
   `(create-entity (utils/calls! ^TextureRegion (image* ~img) ~@options)))
 
-(defmacro image!
-  [img k & options]
-  `(utils/call! ^TextureRegion (:object ~img) ~k ~@options))
-
 (defmacro animation
   [duration images & args]
   `(Animation. ~duration

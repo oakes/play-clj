@@ -15,7 +15,8 @@
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
-           [com.badlogic.gdx.scenes.scene2d.ui Label Label$LabelStyle]))
+           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
+            ImageButton ImageTextButton Label TextButton TextField]))
 
 (defmulti create-entity class)
 
@@ -30,7 +31,9 @@
 (load "core_2d")
 (load "core_deprecated")
 (load "core_global")
+(load "core_interop")
 (load "core_render")
+(load "core_ui")
 
 (defn- dummy [& args])
 
