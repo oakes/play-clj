@@ -31,7 +31,7 @@ There are currently no tutorials or generated docs, because play-clj is changing
   (fn [screen entities]
     ; update the screen map to hold a tiled map renderer and a camera
     (update! screen
-             :renderer (orthogonal-tiled-map "level1.tmx" 8)
+             :renderer (orthogonal-tiled-map "level1.tmx" (/ 1 8))
              :camera (orthographic-camera))
     (let [; load a sprite sheet from your resources dir
           sheet (image "tiles.png")
