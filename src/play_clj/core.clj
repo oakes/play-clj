@@ -28,6 +28,7 @@
   {:type :actor :object obj})
 
 (load "core_2d")
+(load "core_deprecated")
 (load "core_global")
 (load "core_render")
 
@@ -46,16 +47,12 @@
                                (remove nil?)
                                (reset! entities)))
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
-        create-camera-fn! #(swap! screen assoc :camera (camera %))
-        update-fn! #(swap! screen assoc
-                           :renderer (renderer (:renderer %))
-                           :camera (camera (:camera %)))]
+        update-fn! #(swap! screen merge %)]
     {:show (fn []
              (->> (swap! screen assoc
                          :total-time 0
                          :delta-time 0
                          :create-renderer-fn! create-renderer-fn!
-                         :create-camera-fn! create-camera-fn!
                          :update-fn! update-fn!)
                   (execute-fn! on-show)))
      :render (fn [delta-time]
@@ -104,11 +101,3 @@
 (defn update!
   [{:keys [update-fn!]} & {:keys [] :as args}]
   (update-fn! args))
-
-(defn create-renderer!
-  [{:keys [create-renderer-fn!]} & {:keys [] :as args}]
-  (:renderer (create-renderer-fn! args)))
-
-(defn create-camera!
-  [{:keys [create-camera-fn!]} & {:keys [] :as args}]
-  (:camera (create-camera-fn! args)))

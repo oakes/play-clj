@@ -1,16 +1,6 @@
 (in-ns 'play-clj.core)
 
-; renderers
-
-(defn load-tiled-map
-  [{:keys [file]}]
-  (assert (string? file))
-  (.load (TmxMapLoader.) file))
-
-(defn unit-scale
-  [{:keys [tile-size]}]
-  (assert (number? tile-size))
-  (float (/ 1 tile-size)))
+; rendering
 
 (defn render!
   [{:keys [renderer ^Camera camera]}]
@@ -50,37 +40,41 @@
   [screen layer x y]
   (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y))
 
-(defmulti renderer :type :default nil)
+; renderers
 
-(defmethod renderer nil [opts])
+(defn tiled-map
+  [s]
+  (if (string? s)
+    (.load (TmxMapLoader.) s)
+    s))
 
-(defmethod renderer :orthogonal-tiled-map [opts]
-  (OrthogonalTiledMapRenderer. ^TiledMap (load-tiled-map opts)
-                               ^double (unit-scale opts)))
+(defn tiled-map-renderer
+  [renderer-type path pixels-per-tile]
+  (let [^TiledMap tmap (tiled-map path)
+        ^double unit-scale (/ 1 pixels-per-tile)]
+    (case renderer-type
+      :orthogonal
+      (OrthogonalTiledMapRenderer. tmap unit-scale)
+      :isometric
+      (IsometricTiledMapRenderer. tmap unit-scale)
+      :isometric-staggered
+      (IsometricStaggeredTiledMapRenderer. tmap unit-scale)
+      :hexagonal
+      (IsometricTiledMapRenderer. tmap unit-scale)
+      nil)))
 
-(defmethod renderer :isometric-tiled-map [opts]
-  (IsometricTiledMapRenderer. ^TiledMap (load-tiled-map opts)
-                              ^double (unit-scale opts)))
-
-(defmethod renderer :isometric-staggered-tiled-map [opts]
-  (IsometricStaggeredTiledMapRenderer. ^TiledMap (load-tiled-map opts)
-                                       ^double (unit-scale opts)))
-
-(defmethod renderer :hexagonal-tiled-map [opts]
-  (HexagonalTiledMapRenderer. ^TiledMap (load-tiled-map opts)
-                              ^double (unit-scale opts)))
-
-(defmethod renderer :stage [_]
+(defn stage
+  []
   (Stage.))
 
 ; cameras
 
-(defmulti camera identity :default :orthographic)
-
-(defmethod camera :orthographic [_]
+(defn orthographic-camera
+  []
   (OrthographicCamera.))
 
-(defmethod camera :perspective [_]
+(defn perspective-camera
+  []
   (PerspectiveCamera.))
 
 (defn resize-camera!
