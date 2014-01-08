@@ -60,7 +60,7 @@ There are currently no tutorials or generated docs, because play-clj is changing
   (fn [screen entities]
     ; make the camera 20 tiles high, and adjust the width appropriately
     (let [height 20
-          width (* 20 (/ (game :width) (game :height)))]
+          width (* height (/ (game :width) (game :height)))]
       (resize-camera! screen width height))
     ; return the entities list unmodified
     entities))
