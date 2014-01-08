@@ -4,7 +4,7 @@ A Clojure library that provides a wrapper for [LibGDX](http://libgdx.badlogicgam
 
 ## Justification
 
-There is a lot of talk in the games industry about two particular things: concurrency and functional programming. Concurrency is important due to the proliferation of multi-core gaming hardware, while functional programming is important due to the unmaintainability of modern object-oriented game codebases.
+There is a lot of talk in the game industry about two particular things: concurrency and functional programming. Concurrency is important due to the proliferation of multi-core gaming hardware, while functional programming is important due to the unmaintainability of modern object-oriented game codebases.
 
 ## Installation
 
@@ -18,7 +18,7 @@ There are currently no tutorials or generated docs, because play-clj is changing
 (ns game-test.core
   (:require [play-clj.core :refer :all]))
 
-; defines a screen, where all the action takes place
+; define a screen, where all the action takes place
 (defscreen main-screen
   ; all the screen functions get a map called "screen" containing various
   ; important values, and a list called "entities" for storing game objects
@@ -29,16 +29,16 @@ There are currently no tutorials or generated docs, because play-clj is changing
   ; this function runs only once, when the screen is first shown
   :on-show
   (fn [screen entities]
-    ; updates the screen map to hold a tiled map renderer and a camera
+    ; update the screen map to hold a tiled map renderer and a camera
     (update! screen
              :renderer (orthogonal-tiled-map "level1.tmx" 8)
              :camera (orthographic-camera))
-    (let [; loads a sprite sheet from your resources dir
+    (let [; load a sprite sheet from your resources dir
           sheet (image "tiles.png")
-          ; splits the sheet into 16x16 tiles
-          ; the "image!" function lets you call TextureRegion methods directly
+          ; split the sheet into 16x16 tiles
+          ; (the "image!" function lets you call TextureRegion methods directly)
           tiles (image! sheet :split 16 16)
-          ; gets the tile at row 6, col 0
+          ; get the tile at row 6, col 0
           player-image (image (aget tiles 6 0))
           ; add position and size to the player-image map so it can be drawn
           player-image (assoc player-image :x 0 :y 0 :width 2 :height 2)]
@@ -65,7 +65,7 @@ There are currently no tutorials or generated docs, because play-clj is changing
     ; return the entities list unmodified
     entities))
 
-; defines the game itself, and immediately hands off to the screen
+; define the game itself, and immediately hand off to the screen
 (defgame game-test
   :on-create
   (fn [this]
