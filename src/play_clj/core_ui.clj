@@ -1,9 +1,5 @@
 (in-ns 'play-clj.core)
 
-(defmacro bitmap-font
-  [& options]
-  `(BitmapFont. ~@options))
-
 (defmacro style
   [type & options]
   `(~(symbol (str utils/gdx-package "scenes.scene2d.ui."

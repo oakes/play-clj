@@ -48,7 +48,7 @@
 
 (defmacro call!
   [obj k & args]
-  `(~(key->method k) ~obj ~@(flatten args)))
+  `(~(key->method k) ~obj ~@args))
 
 (defn calls!*
   [[k v]]

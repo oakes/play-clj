@@ -26,3 +26,30 @@
 
 ; ui
 
+(defmacro check-box!
+  [entity k & options]
+  `(utils/call! ^Checkbox (:object ~entity) ~k ~@options))
+
+(defmacro image-button!
+  [entity k & options]
+  `(utils/call! ^ImageButton (:object ~entity) ~k ~@options))
+
+(defmacro image-text-button!
+  [entity k & options]
+  `(utils/call! ^ImageTextButton (:object ~entity) ~k ~@options))
+
+(defmacro label!
+  [entity k & options]
+  `(utils/call! ^Label (:object ~entity) ~k ~@options))
+
+(defmacro text-button!
+  [entity k & options]
+  `(utils/call! ^TextButton (:object ~entity) ~k ~@options))
+
+(defmacro text-field!
+  [entity k & options]
+  `(utils/call! ^TextField (:object ~entity) ~k ~@options))
+
+(defmacro dialog!
+  [entity k & options]
+  `(utils/call! ^Dialog (:object ~entity) ~k ~@options))
