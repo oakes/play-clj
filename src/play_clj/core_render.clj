@@ -49,21 +49,20 @@
     s))
 
 (defn orthogonal-tiled-map
-  [path ppt]
-  (OrthogonalTiledMapRenderer. ^TiledMap (tiled-map path) ^double (/ 1 ppt)))
+  [path unit]
+  (OrthogonalTiledMapRenderer. ^TiledMap (tiled-map path) ^double unit))
 
 (defn isometric-tiled-map
-  [path ppt]
-  (IsometricTiledMapRenderer. ^TiledMap (tiled-map path) ^double (/ 1 ppt)))
+  [path unit]
+  (IsometricTiledMapRenderer. ^TiledMap (tiled-map path) ^double unit))
 
 (defn isometric-staggered-tiled-map
-  [path ppt]
-  (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map path)
-                                       ^double (/ 1 ppt)))
+  [path unit]
+  (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map path) ^double unit))
 
 (defn hexagonal-tiled-map
-  [path ppt]
-  (HexagonalTiledMapRenderer. ^TiledMap (tiled-map path) ^double (/ 1 ppt)))
+  [path unit]
+  (HexagonalTiledMapRenderer. ^TiledMap (tiled-map path) ^double unit))
 
 (defn stage
   []
