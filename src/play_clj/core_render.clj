@@ -48,20 +48,22 @@
     (.load (TmxMapLoader.) s)
     s))
 
-(defn tiled-map-renderer
-  [renderer-type path pixels-per-tile]
-  (let [^TiledMap tmap (tiled-map path)
-        ^double unit-scale (/ 1 pixels-per-tile)]
-    (case renderer-type
-      :orthogonal
-      (OrthogonalTiledMapRenderer. tmap unit-scale)
-      :isometric
-      (IsometricTiledMapRenderer. tmap unit-scale)
-      :isometric-staggered
-      (IsometricStaggeredTiledMapRenderer. tmap unit-scale)
-      :hexagonal
-      (IsometricTiledMapRenderer. tmap unit-scale)
-      nil)))
+(defn orthogonal-tiled-map
+  [path ppt]
+  (OrthogonalTiledMapRenderer. ^TiledMap (tiled-map path) ^double (/ 1 ppt)))
+
+(defn isometric-tiled-map
+  [path ppt]
+  (IsometricTiledMapRenderer. ^TiledMap (tiled-map path) ^double (/ 1 ppt)))
+
+(defn isometric-staggered-tiled-map
+  [path ppt]
+  (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map path)
+                                       ^double (/ 1 ppt)))
+
+(defn hexagonal-tiled-map
+  [path ppt]
+  (HexagonalTiledMapRenderer. ^TiledMap (tiled-map path) ^double (/ 1 ppt)))
 
 (defn stage
   []

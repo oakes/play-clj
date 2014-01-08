@@ -16,10 +16,12 @@
 
 (defn draw-actor!
   [^SpriteBatch batch {:keys [^Actor object] :as entity}]
+  (assert object)
   (.draw ^Actor object batch 1))
 
 (defn draw-image!
   [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
+  (assert (and object x y width height))
   (.draw batch object (float x) (float y) (float width) (float height)))
 
 (defn draw-entity!

@@ -8,9 +8,21 @@
 
 ; render
 
-(defmacro tiled-map-renderer!
+(defmacro orthogonal-tiled-map!
   [{:keys [renderer]} k & options]
-  `(utils/call! ^BatchTiledMapRenderer ~renderer ~k ~@options))
+  `(utils/call! ^OrthogonalTiledMapRenderer ~renderer ~k ~@options))
+
+(defmacro isometric-tiled-map!
+  [{:keys [renderer]} k & options]
+  `(utils/call! ^IsometricTiledMapRenderer ~renderer ~k ~@options))
+
+(defmacro isometric-staggered-tiled-map!
+  [{:keys [renderer]} k & options]
+  `(utils/call! ^IsometricStaggeredTiledMapRenderer ~renderer ~k ~@options))
+
+(defmacro hexagonal-tiled-map!
+  [{:keys [renderer]} k & options]
+  `(utils/call! ^HexagonalTiledMapRenderer ~renderer ~k ~@options))
 
 (defmacro stage!
   [{:keys [renderer]} k & options]
