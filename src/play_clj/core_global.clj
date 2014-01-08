@@ -16,21 +16,21 @@
       `(Color. ^Color (utils/gdx-static-field :graphics :Color ~(first args)))
       `(Color. ~@args)))
 
-(defn game*
+(defmacro bitmap-font
+  [& options]
+  `(BitmapFont. ~@options))
+
+(defn game
   [key]
   (case key
-    :width `(.getWidth (Gdx/graphics))
-    :height `(.getHeight (Gdx/graphics))
-    :fps `(.getFramesPerSecond (Gdx/graphics))
-    :is-fullscreen? `(.isFullscreen (Gdx/graphics))
-    :is-touched? `(.isTouched (Gdx/input))
-    :x `(.getX (Gdx/input))
-    :y `(.getY (Gdx/input))
+    :width (.getWidth (Gdx/graphics))
+    :height (.getHeight (Gdx/graphics))
+    :fps (.getFramesPerSecond (Gdx/graphics))
+    :is-fullscreen? (.isFullscreen (Gdx/graphics))
+    :is-touched? (.isTouched (Gdx/input))
+    :x (.getX (Gdx/input))
+    :y (.getY (Gdx/input))
     nil))
-
-(defmacro game
-  [key]
-  `~(game* key))
 
 ; input
 
