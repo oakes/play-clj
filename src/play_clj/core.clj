@@ -51,7 +51,9 @@
                                (reset! entities)))
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
-    {:show (fn []
+    {:screen screen
+     :entities entities
+     :show (fn []
              (->> (swap! screen assoc
                          :total-time 0
                          :delta-time 0
@@ -72,12 +74,11 @@
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
-  `(->> (for [[k# v#] ~options]
-          [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
-        flatten
-        (apply hash-map)
-        defscreen*
-        (def ~n)))
+  `(let [fns# (->> (for [[k# v#] ~options]
+                     [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
+                   flatten
+                   (apply hash-map))]
+     (defonce ~n (defscreen* fns#))))
 
 (defn defgame*
   [{:keys [on-create] :or {on-create dummy}}]
