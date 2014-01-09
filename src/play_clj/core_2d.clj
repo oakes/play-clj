@@ -17,7 +17,14 @@
 (defn draw-actor!
   [^SpriteBatch batch {:keys [^Actor object] :as entity}]
   (assert object)
-  (.draw ^Actor object batch 1))
+  (doseq [[k v] entity]
+    (case k
+      :x (.setX object v)
+      :y (.setY object v)
+      :width (.setWidth object v)
+      :height (.setHeight object v)
+      nil))
+  (.draw object batch 1))
 
 (defn draw-image!
   [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
