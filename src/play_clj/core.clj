@@ -44,11 +44,12 @@
   (let [screen (atom {})
         entities (atom '())
         execute-fn! (fn [func screen-map]
-                      (some->> (func screen-map @entities)
-                               list
-                               flatten
-                               (remove nil?)
-                               (reset! entities)))
+                      (let [entities-list @entities]
+                        (some->> (func screen-map entities-list)
+                                 list
+                                 flatten
+                                 (remove nil?)
+                                 (compare-and-set! entities entities-list))))
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
     {:screen screen
