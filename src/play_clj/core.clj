@@ -2,7 +2,7 @@
   (:require [clojure.set :as set]
             [play-clj.utils :as utils])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
-            InputProcessor Net Screen]
+            InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont SpriteBatch

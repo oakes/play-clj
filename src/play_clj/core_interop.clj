@@ -62,6 +62,10 @@
   [k & options]
   `(utils/call! ^Input (Gdx/input) ~k ~@options))
 
+(defmacro input-multi!
+  [obj k & options]
+  `(utils/call! ^InputMultiplexer ~obj ~k ~@options))
+
 (defmacro net!
   [k & options]
   `(utils/call! ^Net (Gdx/net) ~k ~@options))
