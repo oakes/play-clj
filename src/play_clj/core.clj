@@ -47,43 +47,32 @@
     :as options}]
   (let [screen (atom {})
         entities (atom '())
-        execute-fn! (fn [func screen-map]
+        execute-fn! (fn [func & {:keys [] :as options}]
                       (let [entities-list @entities]
-                        (some->> (func screen-map entities-list)
+                        (some->> (func (merge @screen options) entities-list)
                                  list
                                  flatten
                                  (remove nil?)
                                  (compare-and-set! entities entities-list))))
-        execute-priority-fn! (fn [func options]
-                               (some->> (func (merge @screen options) @entities)
-                                        list
-                                        flatten
-                                        (remove nil?)
-                                        (reset! entities)))
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
     {:screen screen
      :entities entities
      :show (fn []
-             (->> (swap! screen assoc
-                         :total-time 0
-                         :delta-time 0
-                         :create-renderer-fn! create-renderer-fn!
-                         :update-fn! update-fn!)
-                  (execute-fn! on-show)))
-     :render (fn [delta-time]
-               (->> (fn [screen-map]
-                      (assoc screen-map
-                             :total-time (+ (:total-time screen-map) delta-time)
-                             :delta-time delta-time))
-                    (swap! screen)
-                    (execute-fn! on-render)))
-     :hide #(execute-fn! on-hide @screen)
-     :pause #(execute-fn! on-pause @screen)
-     :resize #(execute-fn! on-resize @screen)
-     :resume #(execute-fn! on-resume @screen)
-     :input (input* options execute-priority-fn!)
-     :gesture (gesture* options execute-priority-fn!)}))
+             (swap! screen assoc
+                    :total-time 0
+                    :create-renderer-fn! create-renderer-fn!
+                    :update-fn! update-fn!)
+             (execute-fn! on-show))
+     :render (fn [d]
+               (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
+               (execute-fn! on-render :delta-time d))
+     :hide #(execute-fn! on-hide)
+     :pause #(execute-fn! on-pause)
+     :resize #(execute-fn! on-resize)
+     :resume #(execute-fn! on-resume)
+     :input (input* options execute-fn!)
+     :gesture (gesture* options execute-fn!)}))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
