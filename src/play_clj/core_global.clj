@@ -25,13 +25,13 @@
 (defn game
   [key]
   (case key
-    :width (.getWidth (Gdx/graphics))
-    :height (.getHeight (Gdx/graphics))
-    :fps (.getFramesPerSecond (Gdx/graphics))
-    :is-fullscreen? (.isFullscreen (Gdx/graphics))
-    :is-touched? (.isTouched (Gdx/input))
-    :x (.getX (Gdx/input))
-    :y (.getY (Gdx/input))
+    :width (.getWidth ^Graphics (Gdx/graphics))
+    :height (.getHeight ^Graphics (Gdx/graphics))
+    :fps (.getFramesPerSecond ^Graphics (Gdx/graphics))
+    :is-fullscreen? (.isFullscreen ^Graphics (Gdx/graphics))
+    :is-touched? (.isTouched ^Input (Gdx/input))
+    :x (.getX ^Input (Gdx/input))
+    :y (.getY ^Input (Gdx/input))
     nil))
 
 (defmacro input-key
