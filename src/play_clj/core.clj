@@ -31,8 +31,6 @@
   [obj]
   {:type :actor :object obj})
 
-(defn- dummy [& args])
-
 (load "core_2d")
 (load "core_deprecated")
 (load "core_global")
@@ -42,18 +40,17 @@
 
 (defn defscreen*
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
-    :or {on-show dummy on-render dummy on-hide dummy
-         on-pause dummy on-resize dummy on-resume dummy}
     :as options}]
   (let [screen (atom {})
         entities (atom '())
         execute-fn! (fn [func & {:keys [] :as options}]
-                      (let [entities-list @entities]
-                        (some->> (func (merge @screen options) entities-list)
-                                 list
-                                 flatten
-                                 (remove nil?)
-                                 (compare-and-set! entities entities-list))))
+                      (when func
+                        (let [entities-list @entities]
+                          (some->> (func (merge @screen options) entities-list)
+                                   list
+                                   flatten
+                                   (remove nil?)
+                                   (compare-and-set! entities entities-list)))))
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
     {:screen screen
@@ -83,10 +80,10 @@
      (defonce ~n (defscreen* fns#))))
 
 (defn defgame*
-  [{:keys [on-create] :or {on-create dummy}}]
+  [{:keys [on-create]}]
   (proxy [Game] []
     (create []
-      (on-create this))))
+      (when on-create (on-create this)))))
 
 (defmacro defgame
   [n & {:keys [] :as options}]

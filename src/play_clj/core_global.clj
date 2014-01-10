@@ -45,11 +45,7 @@
 
 (defn- input-processor
   [{:keys [on-key-down on-key-typed on-key-up on-mouse-moved
-           on-scrolled on-touch-down on-touch-dragged on-touch-up]
-    :or {on-key-down dummy on-key-typed dummy
-         on-key-up dummy on-mouse-moved dummy
-         on-scrolled dummy on-touch-down dummy
-         on-touch-dragged dummy on-touch-up dummy}}
+           on-scrolled on-touch-down on-touch-dragged on-touch-up]}
    execute-fn!]
   (reify InputProcessor
     (keyDown [this k]
@@ -78,9 +74,7 @@
       false)))
 
 (defn- gesture-detector
-  [{:keys [on-fling on-long-press on-pan on-pan-stop on-pinch on-tap on-zoom]
-    :or {on-fling dummy on-long-press dummy on-pan dummy on-pan-stop dummy
-         on-pinch dummy on-tap dummy on-zoom dummy}}
+  [{:keys [on-fling on-long-press on-pan on-pan-stop on-pinch on-tap on-zoom]}
    execute-fn!]
   (let [listener
         (reify GestureDetector$GestureListener
