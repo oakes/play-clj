@@ -97,7 +97,6 @@
   [{:keys [on-create] :or {on-create dummy}}]
   (proxy [Game] []
     (create []
-      (input! :setInputProcessor (InputMultiplexer.))
       (on-create this))))
 
 (defmacro defgame
@@ -107,6 +106,7 @@
 (defn set-screen!
   [^Game game & screens]
   (let [add-inputs! (fn []
+                      (input! :setInputProcessor (InputMultiplexer.))
                       (doseq [screen screens]
                         (add-input! (:input screen))
                         (add-input! (:gesture screen))))
