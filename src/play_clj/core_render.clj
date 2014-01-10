@@ -25,7 +25,7 @@
   (if (isa? (type layer) MapLayer)
     layer
     (->> (tiled-map-layers screen)
-         (filter #(= layer (.getName ^MapLayer %)))
+         (drop-while #(not= layer (.getName ^MapLayer %)))
          first)))
 
 (defn tiled-map-layer-name
