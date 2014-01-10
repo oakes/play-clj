@@ -36,6 +36,36 @@
   [{:keys [camera]} k & options]
   `(utils/call! ^PerspectiveCamera ~camera ~k ~@options))
 
+; global
+
+(defmacro app!
+  [k & options]
+  `(utils/call! ^Application (Gdx/app) ~k ~@options))
+
+(defmacro audio!
+  [k & options]
+  `(utils/call! ^Audio (Gdx/audio) ~k ~@options))
+
+(defmacro files!
+  [k & options]
+  `(utils/call! ^Files (Gdx/files) ~k ~@options))
+
+(defmacro gl!
+  [k & options]
+  `(utils/call! ^GL20 (Gdx/gl20) ~k ~@options))
+
+(defmacro graphics!
+  [k & options]
+  `(utils/call! ^Graphics (Gdx/graphics) ~k ~@options))
+
+(defmacro input!
+  [k & options]
+  `(utils/call! ^Input (Gdx/input) ~k ~@options))
+
+(defmacro net!
+  [k & options]
+  `(utils/call! ^Net (Gdx/net) ~k ~@options))
+
 ; ui
 
 (defmacro check-box!

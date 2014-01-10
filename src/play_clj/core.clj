@@ -1,7 +1,8 @@
 (ns play-clj.core
   (:require [clojure.set :as set]
             [play-clj.utils :as utils])
-  (:import [com.badlogic.gdx Game Gdx Screen]
+  (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
+            InputProcessor Net Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont SpriteBatch
@@ -28,14 +29,14 @@
   [obj]
   {:type :actor :object obj})
 
+(defn- dummy [& args])
+
 (load "core_2d")
 (load "core_deprecated")
 (load "core_global")
 (load "core_interop")
 (load "core_render")
 (load "core_ui")
-
-(defn- dummy [& args])
 
 (defn defscreen*
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
@@ -95,13 +96,14 @@
   (let [run-fn! (fn [k & args]
                   (doseq [screen screens]
                     (apply (get screen k) args)))]
-    (.setScreen game (proxy [Screen] []
-                       (show [] (run-fn! :show))
-                       (render [delta-time] (run-fn! :render delta-time))
-                       (hide [] (run-fn! :hide))
-                       (pause [] (run-fn! :pause))
-                       (resize [w h] (run-fn! :resize))
-                       (resume [] (run-fn! :resume))))))
+    (.setScreen game (reify Screen
+                       (show [this] (run-fn! :show))
+                       (render [this delta-time] (run-fn! :render delta-time))
+                       (hide [this] (run-fn! :hide))
+                       (pause [this] (run-fn! :pause))
+                       (resize [this w h] (run-fn! :resize))
+                       (resume [this] (run-fn! :resume))
+                       (dispose [this])))))
 
 (defn update!
   [{:keys [update-fn!]} & {:keys [] :as args}]
