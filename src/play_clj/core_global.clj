@@ -77,7 +77,7 @@
 
 (defmacro input
   [& args]
-  `(input* ~args (fn [func# options#] (func# options#))))
+  `(input* ~args (fn [func# & options#] (func# options#))))
 
 (defn gesture*
   [{:keys [fling long-press pan pan-stop pinch tap zoom]
@@ -115,7 +115,7 @@
 
 (defmacro gesture
   [& args]
-  `(gesture* ~args (fn [func# options#] (func# options#))))
+  `(gesture* ~args (fn [func# & options#] (func# options#))))
 
 (defn add-input!
   [^InputProcessor p]
