@@ -71,8 +71,8 @@
      :pause #(execute-fn! on-pause)
      :resize #(execute-fn! on-resize)
      :resume #(execute-fn! on-resume)
-     :input (input* options execute-fn!)
-     :gesture (gesture* options execute-fn!)}))
+     :input-processor (input-processor options execute-fn!)
+     :gesture-detector (gesture-detector options execute-fn!)}))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
@@ -97,8 +97,8 @@
   (let [add-inputs! (fn []
                       (input! :setInputProcessor (InputMultiplexer.))
                       (doseq [screen screens]
-                        (add-input! (:input screen))
-                        (add-input! (:gesture screen))))
+                        (add-input! (:input-processor screen))
+                        (add-input! (:gesture-detector screen))))
         run-fn! (fn [k & args]
                   (doseq [screen screens]
                     (apply (get screen k) args)))]
