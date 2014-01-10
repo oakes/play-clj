@@ -2,7 +2,7 @@
   (:require [clojure.string :as s])
   (:import [com.badlogic.gdx.utils Array]))
 
-(def ^:const gdx-package "com.badlogic.gdx.")
+(def ^:const gdx-package "com.badlogic.gdx")
 
 (defn- split-key
   [key]
@@ -10,14 +10,35 @@
 
 (defn- join-keys
   [keys]
-  (->> keys (map name) (s/join ".") (str gdx-package)))
+  (->> keys (map name) (s/join ".") (str gdx-package ".")))
+
+(defn key->static-field
+  [key]
+  (->> (split-key key)
+       (map s/upper-case)
+       (s/join "_")
+       symbol))
+
+(defn key->class
+  [key]
+  (->> (split-key key)
+       (map s/capitalize)
+       (s/join "")
+       symbol))
+
+(defn key->method
+  [key]
+  (let [parts (split-key key)]
+    (->> (rest parts)
+         (map s/capitalize)
+         (cons (first parts))
+         (s/join "")
+         (str ".")
+         symbol)))
 
 (defn gdx-static-field*
   [args]
-  (->> (last args)
-       split-key
-       (map s/upper-case)
-       (s/join "_")
+  (->> (key->static-field (last args))
        (str (join-keys (butlast args)) "/")
        symbol))
 
@@ -28,23 +49,6 @@
 (defn gdx-into-array
   [a]
   (Array. true (into-array a) 1 (count a)))
-
-(defn key->class
-  [k]
-  (->> (split-key k)
-       (map s/capitalize)
-       (s/join "")
-       symbol))
-
-(defn key->method
-  [k]
-  (let [parts (split-key k)]
-    (->> (rest parts)
-         (map s/capitalize)
-         (cons (first parts))
-         (s/join "")
-         (str ".")
-         symbol)))
 
 (defmacro call!
   [obj k & args]

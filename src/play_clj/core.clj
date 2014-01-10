@@ -1,7 +1,7 @@
 (ns play-clj.core
   (:require [clojure.set :as set]
             [play-clj.utils :as utils])
-  (:import [com.badlogic.gdx Game Gdx Input$Keys Screen]
+  (:import [com.badlogic.gdx Game Gdx Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont SpriteBatch

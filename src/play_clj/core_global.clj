@@ -20,6 +20,8 @@
   [& options]
   `(BitmapFont. ~@options))
 
+; input/output
+
 (defn game
   [key]
   (case key
@@ -32,19 +34,8 @@
     :y (.getY (Gdx/input))
     nil))
 
-; input
-
-(defn resolve-key
-  [key]
-  (if (keyword? key)
-    (case key
-      :up Input$Keys/DPAD_UP
-      :down Input$Keys/DPAD_DOWN
-      :left Input$Keys/DPAD_LEFT
-      :right Input$Keys/DPAD_RIGHT
-      nil)
-    key))
-
 (defmacro is-pressed?
   [key]
-  `(.isKeyPressed (Gdx/input) ~(resolve-key key)))
+  `(.isKeyPressed (Gdx/input)
+     ~(symbol (str utils/gdx-package ".Input$Keys/"
+                   (utils/key->static-field key)))))

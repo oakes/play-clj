@@ -2,7 +2,7 @@
 
 (defmacro style
   [type & options]
-  `(~(symbol (str utils/gdx-package "scenes.scene2d.ui."
+  `(~(symbol (str utils/gdx-package ".scenes.scene2d.ui."
                   (utils/key->class type) "$"
                   (utils/key->class type) "Style."))
      ~@options))
