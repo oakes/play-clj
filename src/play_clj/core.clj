@@ -7,6 +7,8 @@
             PerspectiveCamera Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont SpriteBatch
             TextureRegion]
+           [com.badlogic.gdx.input GestureDetector
+            GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers]
            [com.badlogic.gdx.maps.tiled TiledMap TiledMapTileLayer TmxMapLoader]
            [com.badlogic.gdx.maps.tiled.renderers
@@ -80,7 +82,8 @@
      :pause #(execute-fn! on-pause @screen)
      :resize #(execute-fn! on-resize @screen)
      :resume #(execute-fn! on-resume @screen)
-     :input (input* options execute-priority-fn!)}))
+     :input (input* options execute-priority-fn!)
+     :gesture (gesture* options execute-priority-fn!)}))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
@@ -94,7 +97,7 @@
   [{:keys [on-create] :or {on-create dummy}}]
   (proxy [Game] []
     (create []
-      (set-input! (InputMultiplexer.))
+      (input! :setInputProcessor (InputMultiplexer.))
       (on-create this))))
 
 (defmacro defgame
@@ -105,7 +108,8 @@
   [^Game game & screens]
   (let [add-inputs! (fn []
                       (doseq [screen screens]
-                        (add-input! (:input screen))))
+                        (add-input! (:input screen))
+                        (add-input! (:gesture screen))))
         run-fn! (fn [k & args]
                   (doseq [screen screens]
                     (apply (get screen k) args)))]
