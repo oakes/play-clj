@@ -13,19 +13,20 @@
     (isa? (type renderer) Stage)
     (.draw ^Stage renderer)))
 
-(defn tiled-map-layer
-  [{:keys [^BatchTiledMapRenderer renderer]} layer]
-  (assert renderer)
-  (if (isa? (type layer) MapLayer)
-    layer
-    (-> renderer .getMap .getLayers (.get ^String layer))))
-
 (defn tiled-map-layers
   [{:keys [^BatchTiledMapRenderer renderer]}]
   (assert renderer)
   (let [layers (-> renderer .getMap .getLayers)]
     (for [^long i (range (.getCount layers))]
       (.get layers i))))
+
+(defn tiled-map-layer
+  [screen layer]
+  (if (isa? (type layer) MapLayer)
+    layer
+    (->> (tiled-map-layers screen)
+         (filter #(= layer (.getName ^MapLayer %)))
+         first)))
 
 (defn tiled-map-layer-name
   [screen layer]
