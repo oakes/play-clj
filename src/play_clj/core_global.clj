@@ -43,34 +43,44 @@
   [key]
   `(.isKeyPressed ^Input (Gdx/input) (get-keycode ~key)))
 
-(defn input
-  [& {:keys [key-down key-typed key-up mouse-moved
-             scrolled touch-down touch-dragged touch-up]
-      :or {key-down dummy key-typed dummy key-up dummy mouse-moved dummy
-           scrolled dummy touch-down dummy touch-dragged dummy touch-up dummy}}]
-  (let [return-fn (fn [return-val]
-                    (some #(not (nil? %)) [return-val false]))]
-    (reify InputProcessor
-      (keyDown [this keycode]
-        (return-fn (key-down keycode)))
-      (keyTyped [this character]
-        (return-fn (key-typed character)))
-      (keyUp [this keycode]
-        (return-fn (key-up keycode)))
-      (mouseMoved [this screen-x screen-y]
-        (return-fn (mouse-moved screen-x screen-y)))
-      (scrolled [this amount]
-        (return-fn (scrolled amount)))
-      (touchDown [this screen-x screen-y pointer button]
-        (return-fn (touch-down screen-x screen-y pointer button)))
-      (touchDragged [this screen-x screen-y pointer]
-        (return-fn (touch-dragged screen-x screen-y pointer)))
-      (touchUp [this screen-x screen-y pointer button]
-        (return-fn (touch-up screen-x screen-y pointer button))))))
+(defn input*
+  [{:keys [key-down key-typed key-up mouse-moved
+           scrolled touch-down touch-dragged touch-up]
+    :or {key-down dummy key-typed dummy key-up dummy mouse-moved dummy
+         scrolled dummy touch-down dummy touch-dragged dummy touch-up dummy}}
+   execute-fn!]
+  (reify InputProcessor
+    (keyDown [this keycode]
+      (execute-fn! key-down {:keycode keycode})
+      false)
+    (keyTyped [this character]
+      (execute-fn! key-typed {:character character})
+      false)
+    (keyUp [this keycode]
+      (execute-fn! key-up {:keycode keycode})
+      false)
+    (mouseMoved [this screen-x screen-y]
+      (execute-fn! mouse-moved {:screen-x screen-x :screen-y screen-y})
+      false)
+    (scrolled [this amount]
+      (execute-fn! scrolled {:amount amount})
+      false)
+    (touchDown [this screen-x screen-y pointer button]
+      (execute-fn! touch-down {:screen-x screen-x :screen-y screen-y
+                               :pointer pointer :button button})
+      false)
+    (touchDragged [this screen-x screen-y pointer]
+      (execute-fn! touch-dragged
+                   {:screen-x screen-x :screen-y screen-y :pointer pointer})
+      false)
+    (touchUp [this screen-x screen-y pointer button]
+      (execute-fn! touch-up {:screen-x screen-x :screen-y screen-y
+                             :pointer pointer :button button})
+      false)))
 
-(defmacro input-multi
+(defmacro input
   [& args]
-  `(InputMultiplexer. ~@args))
+  `(input* ~args (fn [func# options#] (func# options#))))
 
 (defn set-input!
   [^InputProcessor p]

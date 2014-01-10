@@ -41,7 +41,8 @@
 (defn defscreen*
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
     :or {on-show dummy on-render dummy on-hide dummy
-         on-pause dummy on-resize dummy on-resume dummy}}]
+         on-pause dummy on-resize dummy on-resume dummy}
+    :as options}]
   (let [screen (atom {})
         entities (atom '())
         execute-fn! (fn [func screen-map]
@@ -51,6 +52,12 @@
                                  flatten
                                  (remove nil?)
                                  (compare-and-set! entities entities-list))))
+        execute-priority-fn! (fn [func options]
+                               (some->> (func (merge @screen options) @entities)
+                                        list
+                                        flatten
+                                        (remove nil?)
+                                        (reset! entities)))
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
     {:screen screen
@@ -72,7 +79,8 @@
      :hide #(execute-fn! on-hide @screen)
      :pause #(execute-fn! on-pause @screen)
      :resize #(execute-fn! on-resize @screen)
-     :resume #(execute-fn! on-resume @screen)}))
+     :resume #(execute-fn! on-resume @screen)
+     :input (input* options execute-priority-fn!)}))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
@@ -85,7 +93,9 @@
 (defn defgame*
   [{:keys [on-create] :or {on-create dummy}}]
   (proxy [Game] []
-    (create [] (on-create this))))
+    (create []
+      (set-input! (InputMultiplexer.))
+      (on-create this))))
 
 (defmacro defgame
   [n & {:keys [] :as options}]
@@ -93,11 +103,14 @@
 
 (defn set-screen!
   [^Game game & screens]
-  (let [run-fn! (fn [k & args]
+  (let [add-inputs! (fn []
+                      (doseq [screen screens]
+                        (add-input! (:input screen))))
+        run-fn! (fn [k & args]
                   (doseq [screen screens]
                     (apply (get screen k) args)))]
     (.setScreen game (reify Screen
-                       (show [this] (run-fn! :show))
+                       (show [this] (add-inputs!) (run-fn! :show))
                        (render [this delta-time] (run-fn! :render delta-time))
                        (hide [this] (run-fn! :hide))
                        (pause [this] (run-fn! :pause))
