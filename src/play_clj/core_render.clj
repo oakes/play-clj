@@ -44,6 +44,21 @@
   [screen layer x y]
   (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y))
 
+(defn ^:private refresh-renderer!
+  [{:keys [renderer ui-listeners]} entities]
+  (when (isa? (type renderer) Stage)
+    (doseq [^Actor a (.getActors ^Stage renderer)]
+      (.remove a))
+    (doseq [{:keys [object]} entities]
+      (when (isa? (type object) Actor)
+        (.addActor ^Stage renderer object)
+        (.clearListeners ^Actor object)
+        (doseq [listener ui-listeners]
+          (.addListener ^Actor object listener))))
+    (remove-input! renderer)
+    (add-input! renderer))
+  entities)
+
 ; renderers
 
 (defn tiled-map

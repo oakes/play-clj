@@ -24,19 +24,28 @@
 (load "core_global")
 (load "core_render")
 
+(defn ^:private reset-if-changed!
+  [e-atom e-old e-new]
+  (when (not= e-old e-new)
+    (compare-and-set! e-atom e-old e-new)))
+
 (defn defscreen*
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
     :as options}]
   (let [screen (atom {})
         entities (atom '())
+        watcher (add-watch entities
+                           :changed
+                           (fn [_ _ _ new-entities]
+                             (refresh-renderer! @screen new-entities)))
         execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
-                        (let [entities-list @entities]
-                          (some->> (func (merge @screen options) entities-list)
+                        (let [old-entities @entities]
+                          (some->> (func (merge @screen options) old-entities)
                                    list
                                    flatten
                                    (remove nil?)
-                                   (compare-and-set! entities entities-list)))))
+                                   (reset-if-changed! entities old-entities)))))
         listeners [(input-processor options execute-fn!)
                    (gesture-detector options execute-fn!)]
         ui-listeners (ui/listeners options execute-fn!)
@@ -100,15 +109,3 @@
 (defn update!
   [{:keys [update-fn!]} & {:keys [] :as args}]
   (update-fn! args))
-
-(defn listen!
-  [{:keys [renderer ui-listeners] :as screen} entities]
-  (assert (isa? (type renderer) Stage))
-  (add-input! renderer)
-  (stage! screen :clear)
-  (doseq [{:keys [object]} entities]
-    (when (isa? (type object) Actor)
-      (stage! screen :add-actor object)
-      (doseq [listener ui-listeners]
-        (.addListener ^Actor object listener))))
-  entities)
