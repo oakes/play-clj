@@ -34,14 +34,14 @@
     :y (.getY ^Input (Gdx/input))
     nil))
 
-(defmacro keycode
+(defmacro key-code
   [key]
   `~(symbol
       (str utils/gdx-package ".Input$Keys/" (utils/key->static-field key))))
 
 (defmacro is-pressed?
   [key]
-  `(.isKeyPressed ^Input (Gdx/input) (keycode ~key)))
+  `(.isKeyPressed ^Input (Gdx/input) (key-code ~key)))
 
 (defn- input-processor
   [{:keys [on-key-down on-key-typed on-key-up on-mouse-moved
