@@ -105,10 +105,6 @@
             false))]
     (proxy [GestureDetector] [listener])))
 
-(defn add-input!
+(defn- add-input!
   [^InputProcessor p]
   (.addProcessor ^InputMultiplexer (.getInputProcessor (Gdx/input)) p))
-
-(defn remove-input!
-  [^InputProcessor p]
-  (.removeProcessor ^InputMultiplexer (.getInputProcessor (Gdx/input)) p))
