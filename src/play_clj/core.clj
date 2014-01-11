@@ -34,10 +34,10 @@
     :as options}]
   (let [screen (atom {})
         entities (atom '())
-        watcher (add-watch entities
-                           :changed
-                           (fn [_ _ _ new-entities]
-                             (refresh-renderer! @screen new-entities)))
+        _ (add-watch entities
+                     :changed
+                     (fn [_ _ _ new-entities]
+                       (refresh-renderer! @screen new-entities)))
         execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
                         (let [old-entities @entities]
