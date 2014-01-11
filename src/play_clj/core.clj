@@ -66,7 +66,7 @@
                (execute-fn! on-render :delta-time d))
      :hide #(execute-fn! on-hide)
      :pause #(execute-fn! on-pause)
-     :resize #(execute-fn! on-resize)
+     :resize #(execute-fn! on-resize :width %1 :height %2)
      :resume #(execute-fn! on-resume)
      :input-processor (input-processor options execute-fn!)
      :gesture-detector (gesture-detector options execute-fn!)}))
@@ -101,10 +101,10 @@
                     (apply (get screen k) args)))]
     (.setScreen game (reify Screen
                        (show [this] (add-inputs!) (run-fn! :show))
-                       (render [this delta-time] (run-fn! :render delta-time))
+                       (render [this d] (run-fn! :render d))
                        (hide [this] (run-fn! :hide))
                        (pause [this] (run-fn! :pause))
-                       (resize [this w h] (run-fn! :resize))
+                       (resize [this w h] (run-fn! :resize w h))
                        (resume [this] (run-fn! :resume))
                        (dispose [this])))))
 
