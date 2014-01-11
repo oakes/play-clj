@@ -2,17 +2,19 @@
 
 ; rendering
 
-(defn render!
-  [{:keys [renderer ^Camera camera delta-time]}]
-  (assert renderer)
-  (cond
-    (isa? (type renderer) BatchTiledMapRenderer)
-    (doto ^BatchTiledMapRenderer renderer
-      (.setView camera)
-      .render)
-    (isa? (type renderer) Stage)
-    (doto ^Stage renderer
-      .draw)))
+(defmulti render! #(-> % :renderer type) :default nil)
+
+(defmethod render! nil [screen])
+
+(defmethod render! BatchTiledMapRenderer
+  [{:keys [^BatchTiledMapRenderer renderer ^Camera camera]}]
+  (when camera (.setView renderer camera))
+  (.render renderer))
+
+(defmethod render! Stage
+  [{:keys [^Stage renderer ^Camera camera]}]
+  (when camera (.setCamera renderer camera))
+  (.draw renderer))
 
 (defn tiled-map-layers
   [{:keys [^BatchTiledMapRenderer renderer]}]
