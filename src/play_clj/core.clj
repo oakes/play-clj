@@ -101,7 +101,7 @@
 (defn set-screen!
   [^Game game & screens]
   (let [add-inputs! (fn []
-                      (input! :setInputProcessor (InputMultiplexer.))
+                      (input! :set-input-processor (InputMultiplexer.))
                       (doseq [screen screens]
                         (add-input! (:input-processor screen))
                         (add-input! (:gesture-detector screen))))
