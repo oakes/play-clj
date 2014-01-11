@@ -54,6 +54,8 @@
                                    flatten
                                    (remove nil?)
                                    (compare-and-set! entities entities-list)))))
+        listeners [(input-processor options execute-fn!)
+                   (gesture-detector options execute-fn!)]
         ui-listeners [(ui-gesture-listener options execute-fn!)
                       (ui-change-listener options execute-fn!)
                       (ui-click-listener options execute-fn!)
@@ -77,8 +79,7 @@
      :pause #(execute-fn! on-pause)
      :resize #(execute-fn! on-resize :width %1 :height %2)
      :resume #(execute-fn! on-resume)
-     :input-processor (input-processor options execute-fn!)
-     :gesture-detector (gesture-detector options execute-fn!)}))
+     :listeners listeners}))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
@@ -102,9 +103,9 @@
   [^Game game & screens]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
-                      (doseq [screen screens]
-                        (add-input! (:input-processor screen))
-                        (add-input! (:gesture-detector screen))))
+                      (doseq [{:keys [listeners]} screens]
+                        (doseq [listener listeners]
+                          (add-input! listener))))
         run-fn! (fn [k & args]
                   (doseq [screen screens]
                     (apply (get screen k) args)))]

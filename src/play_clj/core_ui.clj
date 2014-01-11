@@ -90,15 +90,16 @@
 
 ; listeners
 
-(defn listen!
+(defn ui-listen!
   [{:keys [renderer ui-listeners] :as screen} entities]
   (assert (isa? (type renderer) Stage))
   (add-input! renderer)
   (stage! screen :clear)
   (doseq [{:keys [object]} entities]
-    (stage! screen :add-actor object)
-    (doseq [listener ui-listeners]
-      (.addListener ^Actor object listener)))
+    (when (isa? (type object) Actor)
+      (stage! screen :add-actor object)
+      (doseq [listener ui-listeners]
+        (.addListener ^Actor object listener))))
   entities)
 
 (defn- ui-gesture-listener
