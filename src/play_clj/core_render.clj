@@ -56,8 +56,7 @@
         (doseq [listener ui-listeners]
           (.addListener ^Actor object listener))))
     (remove-input! renderer)
-    (add-input! renderer))
-  entities)
+    (add-input! renderer)))
 
 ; renderers
 
