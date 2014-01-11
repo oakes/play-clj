@@ -36,12 +36,12 @@ There are currently no tutorials or generated docs, because play-clj is changing
              :renderer (orthogonal-tiled-map "level1.tmx" (/ 1 8))
              :camera (orthographic-camera))
     (let [; load a sprite sheet from your resources dir
-          sheet (image "tiles.png")
+          sheet (texture "tiles.png")
           ; split the sheet into 16x16 tiles
-          ; (the "image!" function lets you call TextureRegion methods directly)
-          tiles (image! sheet :split 16 16)
+          ; (the "texture!" function lets you call TextureRegion methods directly)
+          tiles (texture! sheet :split 16 16)
           ; get the tile at row 6, col 0
-          player-image (image (aget tiles 6 0))
+          player-image (texture (aget tiles 6 0))
           ; add position and size to the player-image map so it can be drawn
           player-image (assoc player-image :x 0 :y 0 :width 2 :height 2)]
       ; return a new entities list with player-image inside of it
