@@ -134,4 +134,5 @@
 
 (defn ^:private add-input!
   [^InputProcessor p]
-  (.addProcessor ^InputMultiplexer (input! :get-input-processor) p))
+  (let [^InputMultiplexer multi (input! :get-input-processor)]
+    (.addProcessor multi p)))

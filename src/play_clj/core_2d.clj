@@ -74,7 +74,7 @@
                (u/gdx-static-field :graphics :g2d :Animation
                                    ~(or (first args) :normal))))
 
-(defn animation-texture
+(defn animation->texture
   ([{:keys [total-time]} ^Animation animation]
     (u/create-entity (.getKeyFrame animation total-time true)))
   ([{:keys [total-time]} ^Animation animation is-looping?]

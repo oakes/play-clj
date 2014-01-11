@@ -48,7 +48,7 @@
     (map? arg)
     (Image. ^TextureRegion (:object arg))
     (string? arg)
-    (Image. (Texture. arg))
+    (Image. (Texture. ^String arg))
     :else
     (Image. arg)))
 
