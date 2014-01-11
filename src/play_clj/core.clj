@@ -20,8 +20,9 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
             ImageButton ImageTextButton Label Skin Slider TextButton TextField]
-           [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
-            SpriteDrawable TextureRegionDrawable TiledDrawable]))
+           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
+            ChangeListener ClickListener DragListener FocusListener
+            NinePatchDrawable SpriteDrawable TextureRegionDrawable TiledDrawable]))
 
 (defmulti create-entity class)
 
@@ -53,6 +54,11 @@
                                    flatten
                                    (remove nil?)
                                    (compare-and-set! entities entities-list)))))
+        ui-listeners [(ui-gesture-listener options execute-fn!)
+                      (ui-change-listener options execute-fn!)
+                      (ui-click-listener options execute-fn!)
+                      (ui-drag-listener options execute-fn!)
+                      (ui-focus-listener options execute-fn!)]
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
     {:screen screen
@@ -61,7 +67,8 @@
              (swap! screen assoc
                     :total-time 0
                     :create-renderer-fn! create-renderer-fn!
-                    :update-fn! update-fn!)
+                    :update-fn! update-fn!
+                    :ui-listeners ui-listeners)
              (execute-fn! on-show))
      :render (fn [d]
                (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
