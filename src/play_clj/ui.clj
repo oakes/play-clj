@@ -4,8 +4,9 @@
            [com.badlogic.gdx.graphics Color Texture]
            [com.badlogic.gdx.graphics.g2d BitmapFont TextureRegion]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
-           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog Image
-            ImageButton ImageTextButton Label Skin Slider TextButton TextField]
+           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
+            HorizontalGroup Image ImageButton ImageTextButton Label Skin Slider
+            TextButton TextField VerticalGroup WidgetGroup]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
@@ -115,6 +116,33 @@
 (defmacro dialog
   [text arg & options]
   `(u/create-entity (u/calls! ^Dialog (dialog* ~text ~arg) ~@options)))
+
+; groups
+
+(defn add-children
+  [^WidgetGroup group children]
+  (doseq [{:keys [object]} children]
+    (assert (isa? (type object) Actor))
+    (.addActor group ^Actor object))
+  group)
+
+(defn horizontal*
+  [children]
+  (add-children (HorizontalGroup.) children))
+
+(defmacro horizontal
+  [children & options]
+  `(u/create-entity (u/calls! ^HorizontalGroup (horizontal* ~children)
+                              ~@options)))
+
+(defn vertical*
+  [children]
+  (add-children (VerticalGroup.) children))
+
+(defmacro vertical
+  [children & options]
+  `(u/create-entity (u/calls! ^VerticalGroup (vertical* ~children)
+                              ~@options)))
 
 ; listeners
 
