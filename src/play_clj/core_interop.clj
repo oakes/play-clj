@@ -9,32 +9,33 @@
 ; render
 
 (defmacro orthogonal-tiled-map!
-  [{:keys [renderer]} k & options]
-  `(utils/call! ^OrthogonalTiledMapRenderer ~renderer ~k ~@options))
+  [screen k & options]
+  `(utils/call! ^OrthogonalTiledMapRenderer (:renderer ~screen) ~k ~@options))
 
 (defmacro isometric-tiled-map!
-  [{:keys [renderer]} k & options]
-  `(utils/call! ^IsometricTiledMapRenderer ~renderer ~k ~@options))
+  [screen k & options]
+  `(utils/call! ^IsometricTiledMapRenderer (:renderer ~screen) ~k ~@options))
 
 (defmacro isometric-staggered-tiled-map!
-  [{:keys [renderer]} k & options]
-  `(utils/call! ^IsometricStaggeredTiledMapRenderer ~renderer ~k ~@options))
+  [screen k & options]
+  `(utils/call! ^IsometricStaggeredTiledMapRenderer (:renderer ~screen)
+                ~k ~@options))
 
 (defmacro hexagonal-tiled-map!
-  [{:keys [renderer]} k & options]
-  `(utils/call! ^HexagonalTiledMapRenderer ~renderer ~k ~@options))
+  [screen k & options]
+  `(utils/call! ^HexagonalTiledMapRenderer (:renderer ~screen) ~k ~@options))
 
 (defmacro stage!
-  [{:keys [renderer]} k & options]
-  `(utils/call! ^Stage ~renderer ~k ~@options))
+  [screen k & options]
+  `(utils/call! ^Stage (:renderer ~screen) ~k ~@options))
 
 (defmacro orthographic-camera!
-  [{:keys [camera]} k & options]
-  `(utils/call! ^OrthographicCamera ~camera ~k ~@options))
+  [screen k & options]
+  `(utils/call! ^OrthographicCamera (:camera ~screen) ~k ~@options))
 
 (defmacro perspective-camera!
-  [{:keys [camera]} k & options]
-  `(utils/call! ^PerspectiveCamera ~camera ~k ~@options))
+  [screen k & options]
+  `(utils/call! ^PerspectiveCamera (:camera ~screen) ~k ~@options))
 
 ; global
 
@@ -83,6 +84,10 @@
 (defmacro label!
   [entity k & options]
   `(utils/call! ^Label (:object ~entity) ~k ~@options))
+
+(defmacro slider!
+  [entity k & options]
+  `(utils/call! ^Slider (:object ~entity) ~k ~@options))
 
 (defmacro text-button!
   [entity k & options]

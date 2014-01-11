@@ -73,37 +73,39 @@
       (execute-fn! on-touch-up :screen-x sx :screen-y sy :pointer p :button b)
       false)))
 
-(defn- gesture-detector
+(defn- gesture-listener
   [{:keys [on-fling on-long-press on-pan on-pan-stop on-pinch on-tap on-zoom]}
    execute-fn!]
-  (let [listener
-        (reify GestureDetector$GestureListener
-          (fling [this vx vy b]
-            (execute-fn! on-fling :velocity-x vx :velocity-y vy :button b)
-            false)
-          (longPress [this x y]
-            (execute-fn! on-long-press :x x :y y)
-            false)
-          (pan [this x y dx dy]
-            (execute-fn! on-pan :x x :y y :delta-x dx :delta-y dy)
-            false)
-          (panStop [this x y p b]
-            (execute-fn! on-pan-stop :x x :y y :pointer p :button b)
-            false)
-          (pinch [this ip1 ip2 p1 p2]
-            (execute-fn! on-pinch
-                         :initial-pointer-1 ip1 :initial-pointer-2 ip2
-                         :pointer1 p1 :pointer2 p2)
-            false)
-          (tap [this x y c b]
-            (execute-fn! on-tap :x x :y y :count c :button b)
-            false)
-          (touchDown [this x y p b]
-            false)
-          (zoom [this id d]
-            (execute-fn! on-zoom :initial-distance id :distance d)
-            false))]
-    (proxy [GestureDetector] [listener])))
+  (reify GestureDetector$GestureListener
+    (fling [this vx vy b]
+      (execute-fn! on-fling :velocity-x vx :velocity-y vy :button b)
+      false)
+    (longPress [this x y]
+      (execute-fn! on-long-press :x x :y y)
+      false)
+    (pan [this x y dx dy]
+      (execute-fn! on-pan :x x :y y :delta-x dx :delta-y dy)
+      false)
+    (panStop [this x y p b]
+      (execute-fn! on-pan-stop :x x :y y :pointer p :button b)
+      false)
+    (pinch [this ip1 ip2 p1 p2]
+      (execute-fn! on-pinch
+                   :initial-pointer-1 ip1 :initial-pointer-2 ip2
+                   :pointer1 p1 :pointer2 p2)
+      false)
+    (tap [this x y c b]
+      (execute-fn! on-tap :x x :y y :count c :button b)
+      false)
+    (touchDown [this x y p b]
+      false)
+    (zoom [this id d]
+      (execute-fn! on-zoom :initial-distance id :distance d)
+      false)))
+
+(defn- gesture-detector
+  [options execute-fn!]
+  (proxy [GestureDetector] [(gesture-listener options execute-fn!)]))
 
 (defn- add-input!
   [^InputProcessor p]

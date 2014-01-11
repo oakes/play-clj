@@ -7,6 +7,18 @@
                   (utils/key->class type) "Style."))
      ~@options))
 
+(defmacro drawable
+  [type & options]
+  `(~(symbol (str utils/gdx-package ".scenes.scene2d.utils."
+                  (utils/key->class type) "Drawable."))
+     ~@options))
+
+(defmacro skin
+  [path & options]
+  `(utils/calls! ^Skin (Skin. (files! :internal ~path)) ~@options))
+
+; widgets
+
 (defn check-box*
   [^String text arg]
   (CheckBox. text arg))
@@ -41,6 +53,15 @@
 (defmacro label
   [text arg & options]
   `(create-entity (utils/calls! ^Label (label* ~text ~arg) ~@options)))
+
+(defn slider*
+  [min max step is-vert? arg]
+  (Slider. (float min) (float max) (float step) is-vert? arg))
+
+(defmacro slider
+  [min max step is-vert? arg & options]
+  `(create-entity
+     (utils/calls! ^Slider (slider* ~min ~max ~step ~is-vert? ~arg) ~@options)))
 
 (defn text-button*
   [^String text arg]

@@ -3,7 +3,7 @@
 ; rendering
 
 (defn render!
-  [{:keys [renderer ^Camera camera]}]
+  [{:keys [renderer ^Camera camera delta-time]}]
   (assert renderer)
   (cond
     (isa? (type renderer) BatchTiledMapRenderer)
@@ -11,7 +11,9 @@
       (.setView camera)
       .render)
     (isa? (type renderer) Stage)
-    (.draw ^Stage renderer)))
+    (doto ^Stage renderer
+      (.act delta-time)
+      .draw)))
 
 (defn tiled-map-layers
   [{:keys [^BatchTiledMapRenderer renderer]}]

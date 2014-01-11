@@ -19,7 +19,9 @@
             OrthogonalTiledMapRenderer]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
-            ImageButton ImageTextButton Label TextButton TextField]))
+            ImageButton ImageTextButton Label Skin Slider TextButton TextField]
+           [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
+            SpriteDrawable TextureRegionDrawable TiledDrawable]))
 
 (defmulti create-entity class)
 
