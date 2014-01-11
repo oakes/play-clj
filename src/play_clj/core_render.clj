@@ -12,7 +12,6 @@
       .render)
     (isa? (type renderer) Stage)
     (doto ^Stage renderer
-      (.act delta-time)
       .draw)))
 
 (defn tiled-map-layers
