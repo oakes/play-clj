@@ -26,7 +26,7 @@
       nil))
   (.draw object batch 1))
 
-(defn draw-image!
+(defn draw-texture!
   [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
   (assert (and object x y width height))
   (.draw batch object (float x) (float y) (float width) (float height)))
@@ -34,12 +34,12 @@
 (defn draw-entity!
   [^SpriteBatch batch entity]
   (if (not (map? entity))
-    (draw-entity! batch (create-entity entity))
+    (draw-entity! batch (u/create-entity entity))
     (case (:type entity)
       :actor
       (draw-actor! batch entity)
-      :image
-      (draw-image! batch entity)
+      :texture
+      (draw-texture! batch entity)
       nil)))
 
 (defn draw! [{:keys [renderer] :as screen} entities]
@@ -53,7 +53,7 @@
 
 ; textures
 
-(defn image*
+(defn texture*
   [img]
   (cond
     (string? img)
@@ -63,19 +63,25 @@
     :else
     img))
 
-(defmacro image
+(defmacro texture
   [img & options]
-  `(create-entity (utils/calls! ^TextureRegion (image* ~img) ~@options)))
+  `(u/create-entity (u/calls! ^TextureRegion (texture* ~img) ~@options)))
 
 (defmacro animation
-  [duration images & args]
+  [duration textures & args]
   `(Animation. ~duration
-               (utils/gdx-into-array (map :object ~images))
-               (utils/gdx-static-field :graphics :g2d :Animation
-                                       ~(or (first args) :normal))))
+               (u/gdx-into-array (map :object ~textures))
+               (u/gdx-static-field :graphics :g2d :Animation
+                                   ~(or (first args) :normal))))
 
-(defn animation-image
-  ([screen ^Animation animation]
-    (create-entity (.getKeyFrame animation (:total-time screen) true)))
-  ([screen ^Animation animation is-looping?]
-    (create-entity (.getKeyFrame animation (:total-time screen) is-looping?))))
+(defn animation-texture
+  ([{:keys [total-time]} ^Animation animation]
+    (u/create-entity (.getKeyFrame animation total-time true)))
+  ([{:keys [total-time]} ^Animation animation is-looping?]
+    (u/create-entity (.getKeyFrame animation total-time is-looping?))))
+
+; interop
+
+(defmacro texture!
+  [entity k & options]
+  `(u/call! ^TextureRegion (:object ~entity) ~k ~@options))

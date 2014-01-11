@@ -1,14 +1,16 @@
 (ns play-clj.utils
   (:require [clojure.string :as s])
-  (:import [com.badlogic.gdx.utils Array]))
+  (:import [com.badlogic.gdx.graphics.g2d TextureRegion]
+           [com.badlogic.gdx.utils Array]
+           [com.badlogic.gdx.scenes.scene2d Actor]))
 
 (def ^:const gdx-package "com.badlogic.gdx")
 
-(defn- split-key
+(defn ^:private split-key
   [key]
   (-> key name (s/split #"-")))
 
-(defn- join-keys
+(defn ^:private join-keys
   [keys]
   (->> keys (map name) (s/join ".") (str gdx-package ".")))
 
@@ -61,3 +63,13 @@
 (defmacro calls!
   [obj & {:keys [] :as args}]
   `(doto ~obj ~@(map calls!* args)))
+
+(defmulti create-entity class)
+
+(defmethod create-entity TextureRegion
+  [obj]
+  {:type :texture :object obj})
+
+(defmethod create-entity Actor
+  [obj]
+  {:type :actor :object obj})

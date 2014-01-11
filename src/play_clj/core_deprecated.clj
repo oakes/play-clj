@@ -10,3 +10,7 @@
 
 (defmethod renderer :stage [_]
   (Stage.))
+
+(defmacro label
+  [& args]
+  `(ui/label ~@args))

@@ -1,21 +1,36 @@
-(in-ns 'play-clj.core)
-
-(defmacro style
-  [type & options]
-  `(~(symbol (str utils/gdx-package ".scenes.scene2d.ui."
-                  (utils/key->class type) "$"
-                  (utils/key->class type) "Style."))
-     ~@options))
+(ns play-clj.ui
+  (:require [play-clj.utils :as u])
+  (:import [com.badlogic.gdx Files Gdx]
+           [com.badlogic.gdx.graphics Color Texture]
+           [com.badlogic.gdx.graphics.g2d BitmapFont TextureRegion]
+           [com.badlogic.gdx.scenes.scene2d Actor Stage]
+           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog Image
+            ImageButton ImageTextButton Label Skin Slider TextButton TextField]
+           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
+            ChangeListener ClickListener DragListener FocusListener
+            NinePatchDrawable SpriteDrawable TextureRegionDrawable
+            TiledDrawable]))
 
 (defmacro drawable
   [type & options]
-  `(~(symbol (str utils/gdx-package ".scenes.scene2d.utils."
-                  (utils/key->class type) "Drawable."))
+  `(~(symbol (str u/gdx-package ".scenes.scene2d.u."
+                  (u/key->class type) "Drawable."))
+     ~@options))
+
+(defmacro bitmap-font
+  [& options]
+  `(BitmapFont. ~@options))
+
+(defmacro style
+  [type & options]
+  `(~(symbol (str u/gdx-package ".scenes.scene2d.ui."
+                  (u/key->class type) "$"
+                  (u/key->class type) "Style."))
      ~@options))
 
 (defmacro skin
   [path & options]
-  `(utils/calls! ^Skin (Skin. (files! :internal ~path)) ~@options))
+  `(u/calls! ^Skin (Skin. (.internal ^Files (Gdx/files) ~path)) ~@options))
 
 ; widgets
 
@@ -25,7 +40,21 @@
 
 (defmacro check-box
   [text arg & options]
-  `(create-entity (utils/calls! ^CheckBox (check-box* ~text ~arg) ~@options)))
+  `(u/create-entity (u/calls! ^CheckBox (check-box* ~text ~arg) ~@options)))
+
+(defn image*
+  [arg]
+  (cond
+    (map? arg)
+    (Image. ^TextureRegion (:object arg))
+    (string? arg)
+    (Image. (Texture. arg))
+    :else
+    (Image. arg)))
+
+(defmacro image
+  [arg & options]
+  `(u/create-entity (u/calls! ^Image (image* ~arg) ~@options)))
 
 (defn image-button*
   [arg]
@@ -33,7 +62,7 @@
 
 (defmacro image-button
   [arg & options]
-  `(create-entity (utils/calls! ^ImageButton (image-button* ~arg) ~@options)))
+  `(u/create-entity (u/calls! ^ImageButton (image-button* ~arg) ~@options)))
 
 (defn image-text-button*
   [^String text arg]
@@ -41,8 +70,8 @@
 
 (defmacro image-text-button
   [text arg & options]
-  `(create-entity
-     (utils/calls! ^ImageTextButton (image-text-button* ~text ~arg) ~@options)))
+  `(u/create-entity (u/calls! ^ImageTextButton (image-text-button* ~text ~arg)
+                              ~@options)))
 
 (defn label*
   [^String text arg]
@@ -52,7 +81,7 @@
 
 (defmacro label
   [text arg & options]
-  `(create-entity (utils/calls! ^Label (label* ~text ~arg) ~@options)))
+  `(u/create-entity (u/calls! ^Label (label* ~text ~arg) ~@options)))
 
 (defn slider*
   [min max step is-vert? arg]
@@ -60,8 +89,8 @@
 
 (defmacro slider
   [min max step is-vert? arg & options]
-  `(create-entity
-     (utils/calls! ^Slider (slider* ~min ~max ~step ~is-vert? ~arg) ~@options)))
+  `(u/create-entity (u/calls! ^Slider (slider* ~min ~max ~step ~is-vert? ~arg)
+                              ~@options)))
 
 (defn text-button*
   [^String text arg]
@@ -69,8 +98,7 @@
 
 (defmacro text-button
   [text arg & options]
-  `(create-entity
-     (utils/calls! ^TextButton (text-button* ~text ~arg) ~@options)))
+  `(u/create-entity (u/calls! ^TextButton (text-button* ~text ~arg) ~@options)))
 
 (defn text-field*
   [^String text arg]
@@ -78,7 +106,7 @@
 
 (defmacro text-field
   [text arg & options]
-  `(create-entity (utils/calls! ^TextField (text-field* ~text ~arg) ~@options)))
+  `(u/create-entity (u/calls! ^TextField (text-field* ~text ~arg) ~@options)))
 
 (defn dialog*
   [text arg]
@@ -86,23 +114,11 @@
 
 (defmacro dialog
   [text arg & options]
-  `(create-entity (utils/calls! ^Dialog (dialog* ~text ~arg) ~@options)))
+  `(u/create-entity (u/calls! ^Dialog (dialog* ~text ~arg) ~@options)))
 
 ; listeners
 
-(defn ui-listen!
-  [{:keys [renderer ui-listeners] :as screen} entities]
-  (assert (isa? (type renderer) Stage))
-  (add-input! renderer)
-  (stage! screen :clear)
-  (doseq [{:keys [object]} entities]
-    (when (isa? (type object) Actor)
-      (stage! screen :add-actor object)
-      (doseq [listener ui-listeners]
-        (.addListener ^Actor object listener))))
-  entities)
-
-(defn- ui-gesture-listener
+(defn ^:private gesture-listener
   [{:keys [on-ui-fling on-ui-long-press on-ui-pan on-ui-pinch
            on-ui-tap on-ui-touch-down on-ui-touch-up on-ui-zoom]}
    execute-fn!]
@@ -128,13 +144,13 @@
     (zoom [e id d]
       (execute-fn! on-ui-zoom :event e :initial-distance id :distance d))))
 
-(defn- ui-change-listener
+(defn ^:private change-listener
   [{:keys [on-ui-changed]} execute-fn!]
   (proxy [ChangeListener] []
     (changed [e a]
       (execute-fn! on-ui-changed :event e :actor a))))
 
-(defn- ui-click-listener
+(defn ^:private click-listener
   [{:keys [on-ui-clicked on-ui-enter on-ui-exit
            on-ui-touch-down on-ui-touch-dragged on-ui-touch-up]}
    execute-fn!]
@@ -153,7 +169,7 @@
     (touchUp [e x y p b]
       (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))))
 
-(defn- ui-drag-listener
+(defn ^:private drag-listener
   [{:keys [on-ui-drag on-ui-drag-start on-ui-drag-stop
            on-ui-touch-down on-ui-touch-dragged on-ui-touch-up]}
    execute-fn!]
@@ -172,7 +188,7 @@
     (dragStop [e x y p]
       (execute-fn! on-ui-drag-stop :event e :x x :y y :pointer p))))
 
-(defn- ui-focus-listener
+(defn ^:private focus-listener
   [{:keys [on-ui-keyboard-focus-changed on-ui-scroll-focus-changed]}
    execute-fn!]
   (proxy [FocusListener] []
@@ -180,3 +196,45 @@
       (execute-fn! on-ui-keyboard-focus-changed :event e :actor a :focused? f))
     (scrollFocusChanged [e a f]
       (execute-fn! on-ui-scroll-focus-changed :event e :actor a :focused? f))))
+
+(defn listeners
+  [options execute-fn!]
+  [(gesture-listener options execute-fn!)
+   (change-listener options execute-fn!)
+   (click-listener options execute-fn!)
+   (drag-listener options execute-fn!)
+   (focus-listener options execute-fn!)])
+
+; interop
+
+(defmacro check-box!
+  [entity k & options]
+  `(u/call! ^Checkbox (:object ~entity) ~k ~@options))
+
+(defmacro image-button!
+  [entity k & options]
+  `(u/call! ^ImageButton (:object ~entity) ~k ~@options))
+
+(defmacro image-text-button!
+  [entity k & options]
+  `(u/call! ^ImageTextButton (:object ~entity) ~k ~@options))
+
+(defmacro label!
+  [entity k & options]
+  `(u/call! ^Label (:object ~entity) ~k ~@options))
+
+(defmacro slider!
+  [entity k & options]
+  `(u/call! ^Slider (:object ~entity) ~k ~@options))
+
+(defmacro text-button!
+  [entity k & options]
+  `(u/call! ^TextButton (:object ~entity) ~k ~@options))
+
+(defmacro text-field!
+  [entity k & options]
+  `(u/call! ^TextField (:object ~entity) ~k ~@options))
+
+(defmacro dialog!
+  [entity k & options]
+  `(u/call! ^Dialog (:object ~entity) ~k ~@options))

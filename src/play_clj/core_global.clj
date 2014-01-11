@@ -13,37 +13,62 @@
 (defmacro color
   [& args]
   `~(if (keyword? (first args))
-      `(Color. ^Color (utils/gdx-static-field :graphics :Color ~(first args)))
+      `(Color. ^Color (u/gdx-static-field :graphics :Color ~(first args)))
       `(Color. ~@args)))
 
-(defmacro bitmap-font
-  [& options]
-  `(BitmapFont. ~@options))
+; interop
+
+(defmacro app!
+  [k & options]
+  `(u/call! ^Application (Gdx/app) ~k ~@options))
+
+(defmacro audio!
+  [k & options]
+  `(u/call! ^Audio (Gdx/audio) ~k ~@options))
+
+(defmacro files!
+  [k & options]
+  `(u/call! ^Files (Gdx/files) ~k ~@options))
+
+(defmacro gl!
+  [k & options]
+  `(u/call! ^GL20 (Gdx/gl20) ~k ~@options))
+
+(defmacro graphics!
+  [k & options]
+  `(u/call! ^Graphics (Gdx/graphics) ~k ~@options))
+
+(defmacro input!
+  [k & options]
+  `(u/call! ^Input (Gdx/input) ~k ~@options))
+
+(defmacro net!
+  [k & options]
+  `(u/call! ^Net (Gdx/net) ~k ~@options))
 
 ; input/output
 
 (defn game
   [key]
   (case key
-    :width (.getWidth ^Graphics (Gdx/graphics))
-    :height (.getHeight ^Graphics (Gdx/graphics))
-    :fps (.getFramesPerSecond ^Graphics (Gdx/graphics))
-    :is-fullscreen? (.isFullscreen ^Graphics (Gdx/graphics))
-    :is-touched? (.isTouched ^Input (Gdx/input))
-    :x (.getX ^Input (Gdx/input))
-    :y (.getY ^Input (Gdx/input))
+    :width (graphics! :get-width)
+    :height (graphics! :get-height)
+    :fps (graphics! :get-frames-per-second)
+    :is-fullscreen? (graphics! :is-fullscreen)
+    :is-touched? (input! :is-touched)
+    :x (input! :get-x)
+    :y (input! :get-y)
     nil))
 
 (defmacro key-code
   [key]
-  `~(symbol
-      (str utils/gdx-package ".Input$Keys/" (utils/key->static-field key))))
+  `~(symbol (str u/gdx-package ".Input$Keys/" (u/key->static-field key))))
 
 (defmacro is-pressed?
   [key]
-  `(.isKeyPressed ^Input (Gdx/input) (key-code ~key)))
+  `(input! :is-key-pressed (key-code ~key)))
 
-(defn- input-processor
+(defn ^:private input-processor
   [{:keys [on-key-down on-key-typed on-key-up on-mouse-moved
            on-scrolled on-touch-down on-touch-dragged on-touch-up]}
    execute-fn!]
@@ -73,7 +98,7 @@
       (execute-fn! on-touch-up :screen-x sx :screen-y sy :pointer p :button b)
       false)))
 
-(defn- gesture-listener
+(defn ^:private gesture-listener
   [{:keys [on-fling on-long-press on-pan on-pan-stop on-pinch on-tap on-zoom]}
    execute-fn!]
   (reify GestureDetector$GestureListener
@@ -103,10 +128,10 @@
       (execute-fn! on-zoom :initial-distance id :distance d)
       false)))
 
-(defn- gesture-detector
+(defn ^:private gesture-detector
   [options execute-fn!]
   (proxy [GestureDetector] [(gesture-listener options execute-fn!)]))
 
-(defn- add-input!
+(defn ^:private add-input!
   [^InputProcessor p]
-  (.addProcessor ^InputMultiplexer (.getInputProcessor (Gdx/input)) p))
+  (.addProcessor ^InputMultiplexer (input! :get-input-processor) p))

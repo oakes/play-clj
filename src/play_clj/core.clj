@@ -1,12 +1,12 @@
 (ns play-clj.core
   (:require [clojure.set :as set]
-            [play-clj.utils :as utils])
+            [play-clj.ui :as ui]
+            [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture]
-           [com.badlogic.gdx.graphics.g2d Animation BitmapFont SpriteBatch
-            TextureRegion]
+           [com.badlogic.gdx.graphics.g2d Animation SpriteBatch TextureRegion]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers]
@@ -17,29 +17,12 @@
             IsometricStaggeredTiledMapRenderer
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]
-           [com.badlogic.gdx.scenes.scene2d Actor Stage]
-           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
-            ImageButton ImageTextButton Label Skin Slider TextButton TextField]
-           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
-            ChangeListener ClickListener DragListener FocusListener
-            NinePatchDrawable SpriteDrawable TextureRegionDrawable TiledDrawable]))
-
-(defmulti create-entity class)
-
-(defmethod create-entity TextureRegion
-  [obj]
-  {:type :image :object obj})
-
-(defmethod create-entity Actor
-  [obj]
-  {:type :actor :object obj})
+           [com.badlogic.gdx.scenes.scene2d Actor Stage]))
 
 (load "core_2d")
 (load "core_deprecated")
 (load "core_global")
-(load "core_interop")
 (load "core_render")
-(load "core_ui")
 
 (defn defscreen*
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
@@ -56,11 +39,7 @@
                                    (compare-and-set! entities entities-list)))))
         listeners [(input-processor options execute-fn!)
                    (gesture-detector options execute-fn!)]
-        ui-listeners [(ui-gesture-listener options execute-fn!)
-                      (ui-change-listener options execute-fn!)
-                      (ui-click-listener options execute-fn!)
-                      (ui-drag-listener options execute-fn!)
-                      (ui-focus-listener options execute-fn!)]
+        ui-listeners (ui/listeners options execute-fn!)
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
     {:screen screen
@@ -121,3 +100,15 @@
 (defn update!
   [{:keys [update-fn!]} & {:keys [] :as args}]
   (update-fn! args))
+
+(defn listen!
+  [{:keys [renderer ui-listeners] :as screen} entities]
+  (assert (isa? (type renderer) Stage))
+  (add-input! renderer)
+  (stage! screen :clear)
+  (doseq [{:keys [object]} entities]
+    (when (isa? (type object) Actor)
+      (stage! screen :add-actor object)
+      (doseq [listener ui-listeners]
+        (.addListener ^Actor object listener))))
+  entities)

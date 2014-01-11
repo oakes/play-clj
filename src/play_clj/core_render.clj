@@ -91,3 +91,34 @@
   (when x (set! (. (. camera position) x) x))
   (when y (set! (. (. camera position) y) y))
   (.update camera))
+
+; interop
+
+(defmacro orthogonal-tiled-map!
+  [screen k & options]
+  `(u/call! ^OrthogonalTiledMapRenderer (:renderer ~screen) ~k ~@options))
+
+(defmacro isometric-tiled-map!
+  [screen k & options]
+  `(u/call! ^IsometricTiledMapRenderer (:renderer ~screen) ~k ~@options))
+
+(defmacro isometric-staggered-tiled-map!
+  [screen k & options]
+  `(u/call! ^IsometricStaggeredTiledMapRenderer (:renderer ~screen)
+                ~k ~@options))
+
+(defmacro hexagonal-tiled-map!
+  [screen k & options]
+  `(u/call! ^HexagonalTiledMapRenderer (:renderer ~screen) ~k ~@options))
+
+(defmacro stage!
+  [screen k & options]
+  `(u/call! ^Stage (:renderer ~screen) ~k ~@options))
+
+(defmacro orthographic-camera!
+  [screen k & options]
+  `(u/call! ^OrthographicCamera (:camera ~screen) ~k ~@options))
+
+(defmacro perspective-camera!
+  [screen k & options]
+  `(u/call! ^PerspectiveCamera (:camera ~screen) ~k ~@options))
