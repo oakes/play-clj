@@ -10,7 +10,8 @@
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
-            TiledDrawable]))
+            TiledDrawable]
+           [com.esotericsoftware.tablelayout Cell]))
 
 (defmacro drawable
   [type & options]
@@ -37,27 +38,74 @@
   [key]
   `(u/static-field-lower :scenes :scene2d :utils :Align ~key))
 
+(defn cell!
+  [^Cell cell & args]
+  (let [method-name (first args)
+        [[a1 a2 a3 a4] rest-args] (split-with #(not (keyword? %)) (rest args))]
+    (when method-name
+      (case method-name
+        :width (.width cell ^double a1)
+        :height (.height cell ^double a1)
+        :size (.size cell ^double a1 ^double a2)
+        :min-width (.minWidth cell ^double a1)
+        :min-height (.minHeight cell ^double a1)
+        :min-size (.minSize cell ^double a1 ^double a2)
+        :max-width (.maxWidth cell ^double a1)
+        :max-height (.maxHeight cell ^double a1)
+        :max-size (.minSize cell ^double a1 ^double a2)
+        :space (.space cell ^double a1 ^double a2 ^double a3 ^double a4)
+        :space-top (.spaceTop cell ^double a1)
+        :space-left (.spaceLeft cell ^double a1)
+        :space-bottom (.spaceBottom cell ^double a1)
+        :space-right (.spaceRight cell ^double a1)
+        :pad (.pad cell ^double a1 ^double a2 ^double a3 ^double a4)
+        :pad-top (.padTop cell ^double a1)
+        :pad-left (.padLeft cell ^double a1)
+        :pad-bottom (.padBottom cell ^double a1)
+        :pad-right (.padRight cell ^double a1)
+        :fill (.fill cell ^boolean a1 ^boolean a2)
+        :fill-x (.fillX cell)
+        :fill-y (.fillY cell)
+        :center (.center cell)
+        :top (.top cell)
+        :left (.left cell)
+        :bottom (.bottom cell)
+        :right (.right cell)
+        :expand (.expand cell ^boolean a1 ^boolean a2)
+        :expand-x (.expandX cell)
+        :expand-y (.expandY cell)
+        :ignore (.ignore cell ^boolean a1)
+        :colspan (.colspan cell (int a1))
+        :uniform (.uniform cell ^boolean a1 ^boolean a2)
+        :uniform-x (.uniformX cell)
+        :uniform-y (.uniformY cell)
+        :row (.row cell)
+        nil)
+      (apply cell! cell rest-args))
+    cell))
+
 (defmulti add-to-group! #(-> % first :object type) :default WidgetGroup)
 
 (defmethod add-to-group! WidgetGroup
-  [[{:keys [^WidgetGroup object]} children]]
-  (doseq [child children]
-    (.addActor object ^Actor (:object child))))
+  [[parent child]]
+  (.addActor ^WidgetGroup (:object parent) ^Actor (:object child)))
 
 (defmethod add-to-group! Table
-  [[{:keys [^Table object]} children]]
-  (doseq [child children]
-    (cond
-      (map? child)
-      (.add object ^Actor (:object child))
-      (keyword? child)
-      (case child
-        :row (.row object)
-        nil))))
+  [[parent child]]
+  (cond
+    (map? child)
+    (.add ^Table (:object parent) ^Actor (:object child))
+    (vector? child)
+    (apply cell! (add-to-group! [parent (first child)]) (rest child))
+    (keyword? child)
+    (case child
+      :row (.row ^Table (:object parent))
+      nil)))
 
 (defn add!
   [group children]
-  (add-to-group! [group children])
+  (doseq [child children]
+    (add-to-group! [group child]))
   group)
 
 (defn ^:private create-group
