@@ -62,7 +62,7 @@
 
 (defmacro key-code
   [key]
-  `~(symbol (str u/main-package ".Input$Keys/" (u/key->static-field key true))))
+  `~(symbol (str u/main-package ".Input$Keys/" (u/key->upper key))))
 
 (defmacro is-pressed?
   [key]

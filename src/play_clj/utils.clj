@@ -14,43 +14,43 @@
   [keys]
   (->> keys (map name) (s/join ".") (str main-package ".")))
 
-(defn key->static-field
-  [key upper?]
+(defn key->upper
+  [key]
   (->> (split-key key)
-       (map (if upper? s/upper-case s/lower-case))
-       (s/join "_")
-       symbol))
+       (map s/upper-case)
+       (s/join "_")))
 
-(defn key->class
+(defn key->pascal
   [key]
   (->> (split-key key)
        (map s/capitalize)
-       (s/join "")
-       symbol))
+       (s/join "")))
 
-(defn key->method
+(defn key->camel
   [key]
   (let [parts (split-key key)]
     (->> (rest parts)
          (map s/capitalize)
          (cons (first parts))
-         (s/join "")
-         (str ".")
-         symbol)))
+         (s/join ""))))
+
+(defn key->method
+  [key]
+  (symbol (str "." (key->camel key))))
 
 (defn ^:private static-field
-  [args upper?]
-  (->> (key->static-field (last args) upper?)
+  [args transform-fn]
+  (->> (transform-fn (last args))
        (str (join-keys (butlast args)) "/")
        symbol))
 
 (defmacro static-field-lower
   [& args]
-  `~(static-field args false))
+  `~(static-field args key->camel))
 
 (defmacro static-field-upper
   [& args]
-  `~(static-field args true))
+  `~(static-field args key->upper))
 
 (defn convert-array
   [a]

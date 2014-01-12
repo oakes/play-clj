@@ -86,3 +86,7 @@
     (texture* (.getKeyFrame animation total-time true)))
   ([{:keys [total-time]} ^Animation animation is-looping?]
     (texture* (.getKeyFrame animation total-time is-looping?))))
+
+(defmacro scaling
+  [key]
+  `(u/static-field-lower :utils :Scaling ~key))

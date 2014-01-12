@@ -15,7 +15,7 @@
 (defmacro drawable
   [type & options]
   `(~(symbol (str u/main-package ".scenes.scene2d.u."
-                  (u/key->class type) "Drawable."))
+                  (u/key->pascal type) "Drawable."))
      ~@options))
 
 (defmacro bitmap-font
@@ -25,8 +25,8 @@
 (defmacro style
   [type & options]
   `(~(symbol (str u/main-package ".scenes.scene2d.ui."
-                  (u/key->class type) "$"
-                  (u/key->class type) "Style."))
+                  (u/key->pascal type) "$"
+                  (u/key->pascal type) "Style."))
      ~@options))
 
 (defmacro skin
@@ -47,7 +47,13 @@
 (defmethod add-to-group! Table
   [[{:keys [^Table object]} children]]
   (doseq [child children]
-    (.add object ^Actor (:object child))))
+    (cond
+      (map? child)
+      (.add object ^Actor (:object child))
+      (keyword? child)
+      (case child
+        :row (.row object)
+        nil))))
 
 (defn add!
   [group children]
