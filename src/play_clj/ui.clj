@@ -104,16 +104,14 @@
       nil)))
 
 (defn add!
-  [group children]
+  [group & children]
   (doseq [child children]
     (add-to-group! [group child]))
   group)
 
 (defn ^:private create-group
   [^WidgetGroup group children]
-  (-> group
-      u/create-entity
-      (add! children)))
+  (apply add! (u/create-entity group) children))
 
 ; widgets
 
