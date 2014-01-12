@@ -4,7 +4,7 @@
            [com.badlogic.gdx.utils Array]
            [com.badlogic.gdx.scenes.scene2d Actor]))
 
-(def ^:const gdx-package "com.badlogic.gdx")
+(def ^:const main-package "com.badlogic.gdx")
 
 (defn ^:private split-key
   [key]
@@ -12,12 +12,12 @@
 
 (defn ^:private join-keys
   [keys]
-  (->> keys (map name) (s/join ".") (str gdx-package ".")))
+  (->> keys (map name) (s/join ".") (str main-package ".")))
 
 (defn key->static-field
-  [key]
+  [key upper?]
   (->> (split-key key)
-       (map s/upper-case)
+       (map (if upper? s/upper-case s/lower-case))
        (s/join "_")
        symbol))
 
@@ -38,17 +38,21 @@
          (str ".")
          symbol)))
 
-(defn gdx-static-field*
-  [args]
-  (->> (key->static-field (last args))
+(defn ^:private static-field
+  [args upper?]
+  (->> (key->static-field (last args) upper?)
        (str (join-keys (butlast args)) "/")
        symbol))
 
-(defmacro gdx-static-field
+(defmacro static-field-lower
   [& args]
-  `~(gdx-static-field* args))
+  `~(static-field args false))
 
-(defn gdx-into-array
+(defmacro static-field-upper
+  [& args]
+  `~(static-field args true))
+
+(defn convert-array
   [a]
   (Array. true (into-array a) 1 (count a)))
 

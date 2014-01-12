@@ -6,7 +6,7 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
             HorizontalGroup Image ImageButton ImageTextButton Label Skin Slider
-            TextButton TextField VerticalGroup WidgetGroup]
+            Table TextButton TextField VerticalGroup WidgetGroup]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
@@ -14,7 +14,7 @@
 
 (defmacro drawable
   [type & options]
-  `(~(symbol (str u/gdx-package ".scenes.scene2d.u."
+  `(~(symbol (str u/main-package ".scenes.scene2d.u."
                   (u/key->class type) "Drawable."))
      ~@options))
 
@@ -24,7 +24,7 @@
 
 (defmacro style
   [type & options]
-  `(~(symbol (str u/gdx-package ".scenes.scene2d.ui."
+  `(~(symbol (str u/main-package ".scenes.scene2d.ui."
                   (u/key->class type) "$"
                   (u/key->class type) "Style."))
      ~@options))
@@ -119,30 +119,43 @@
 
 ; groups
 
-(defn add-children
-  [^WidgetGroup group children]
-  (doseq [{:keys [object]} children]
-    (assert (isa? (type object) Actor))
-    (.addActor group ^Actor object))
-  group)
+(defmulti add-to-group! #(-> % first :object type) :default WidgetGroup)
 
-(defn horizontal*
-  [children]
-  (add-children (HorizontalGroup.) children))
+(defmethod add-to-group! WidgetGroup
+  [[{:keys [^WidgetGroup object]} children]]
+  (doseq [child children]
+    (.addActor object ^Actor (:object child))))
+
+(defmethod add-to-group! Table
+  [[{:keys [^Table object]} children]]
+  (doseq [child children]
+    (.add object ^Actor (:object child))))
+
+(defn add!
+  [group children]
+  (add-to-group! [group children])
+  group)
 
 (defmacro horizontal
   [children & options]
-  `(u/create-entity (u/calls! ^HorizontalGroup (horizontal* ~children)
-                              ~@options)))
-
-(defn vertical*
-  [children]
-  (add-children (VerticalGroup.) children))
+  `(-> (u/calls! ^HorizontalGroup (HorizontalGroup.) ~@options)
+       (doto (.setFillParent true))
+       u/create-entity
+       (add! ~children)))
 
 (defmacro vertical
   [children & options]
-  `(u/create-entity (u/calls! ^VerticalGroup (vertical* ~children)
-                              ~@options)))
+  `(-> (u/calls! ^VerticalGroup (VerticalGroup.) ~@options)
+       (doto (.setFillParent true))
+       u/create-entity
+       (add! ~children)))
+
+(defmacro table
+  [children & options]
+  `(-> (u/calls! ^Table (Table.) ~@options)
+       (doto (.setFillParent true))
+       u/create-entity
+       (add! ~children)))
 
 ; listeners
 
@@ -266,3 +279,15 @@
 (defmacro dialog!
   [entity k & options]
   `(u/call! ^Dialog (:object ~entity) ~k ~@options))
+
+(defmacro horizontal!
+  [entity k & options]
+  `(u/call! ^HorizontalGroup (:object ~entity) ~k ~@options))
+
+(defmacro vertical!
+  [entity k & options]
+  `(u/call! ^VerticalGroup (:object ~entity) ~k ~@options))
+
+(defmacro table!
+  [entity k & options]
+  `(u/call! ^Table (:object ~entity) ~k ~@options))

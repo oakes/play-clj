@@ -13,7 +13,7 @@
 (defmacro color
   [& args]
   `~(if (keyword? (first args))
-      `(Color. ^Color (u/gdx-static-field :graphics :Color ~(first args)))
+      `(Color. ^Color (u/static-field-upper :graphics :Color ~(first args)))
       `(Color. ~@args)))
 
 ; interop
@@ -62,7 +62,7 @@
 
 (defmacro key-code
   [key]
-  `~(symbol (str u/gdx-package ".Input$Keys/" (u/key->static-field key))))
+  `~(symbol (str u/main-package ".Input$Keys/" (u/key->static-field key true))))
 
 (defmacro is-pressed?
   [key]
