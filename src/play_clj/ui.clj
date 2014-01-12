@@ -161,7 +161,7 @@
   (add-to-group! [group children])
   group)
 
-(defn ^:private init-group
+(defn ^:private create-group
   [^WidgetGroup group children]
   (-> (doto group
         (.setFillParent true))
@@ -170,15 +170,15 @@
 
 (defn horizontal*
   [children]
-  (init-group (HorizontalGroup.) children))
+  (create-group (HorizontalGroup.) children))
 
 (defn vertical*
   [children]
-  (init-group (VerticalGroup.) children))
+  (create-group (VerticalGroup.) children))
 
 (defn table*
   [children]
-  (init-group (Table.) children))
+  (create-group (Table.) children))
 
 (defmacro horizontal
   [children & options]
