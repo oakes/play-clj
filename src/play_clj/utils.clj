@@ -62,7 +62,7 @@
 
 (defn calls!*
   [[k v]]
-  (flatten (list (key->method k) v)))
+  (flatten (list (key->method k) (eval v))))
 
 (defmacro calls!
   [obj & {:keys [] :as args}]
