@@ -56,18 +56,22 @@
   [a]
   (Array. true (into-array a) 1 (count a)))
 
-(defn create-method-call
-  [[k v]]
-  (flatten (list (key->method k) (try (eval v)
-                                   (catch Exception _ v)))))
-
 (defmacro call!
   [obj k & args]
   `(~(key->method k) ~obj ~@args))
 
+(defn create-method-calls
+  [calls args]
+  (let [method-name (first args)
+        [my-args rest-args] (split-with #(not (keyword? %)) (rest args))]
+    (if method-name
+      (create-method-calls (conj calls `(~(key->method method-name) ~@my-args))
+                           rest-args)
+      calls)))
+
 (defmacro calls!
-  [obj & {:keys [] :as args}]
-  `(doto ~obj ~@(map create-method-call args)))
+  [obj & args]
+  `(doto ~obj ~@(create-method-calls [] args)))
 
 (defmulti create-entity class)
 
