@@ -66,6 +66,7 @@
         :fill (.fill cell ^boolean a1 ^boolean a2)
         :fill-x (.fillX cell)
         :fill-y (.fillY cell)
+        :align (.align cell (int a1))
         :center (.center cell)
         :top (.top cell)
         :left (.left cell)
