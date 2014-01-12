@@ -7,7 +7,7 @@
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
             HorizontalGroup Image ImageButton ImageTextButton Label ScrollPane
             SelectBox Skin Slider Table TextButton TextField VerticalGroup
-            WidgetGroup]
+            WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
@@ -324,6 +324,20 @@
 (defmacro vertical!
   [entity k & options]
   `(u/call! ^VerticalGroup (:object ~entity) ~k ~@options))
+
+(defn window*
+  [^String title arg children]
+  (create-group (Window. title arg) children))
+
+(defmacro window
+  [title arg children & options]
+  `(let [entity# (window* ~title ~arg ~children)]
+     (u/calls! ^Window (:object entity#) ~@options)
+     entity#))
+
+(defmacro window!
+  [entity k & options]
+  `(u/call! ^Window (:object ~entity) ~k ~@options))
 
 ; listeners
 
