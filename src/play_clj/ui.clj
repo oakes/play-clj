@@ -271,10 +271,10 @@
                    :pointer1 p1 :pointer2 p2))
     (tap [e x y p b]
       (execute-fn! on-ui-tap :event e :x x :y y :pointer p :button b))
-    ;(touchDown [e x y p b]
-    ;  (execute-fn! on-ui-touch-down :event e :x x :y y :pointer p :button b))
-    ;(touchUp [e x y p b]
-    ;  (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))
+    (touchDown [e x y p b]
+      (execute-fn! on-ui-touch-down :event e :x x :y y :pointer p :button b))
+    (touchUp [e x y p b]
+      (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))
     (zoom [e id d]
       (execute-fn! on-ui-zoom :event e :initial-distance id :distance d))))
 
@@ -297,7 +297,7 @@
       (execute-fn! on-ui-exit :event e :x x :y y :pointer p :to-actor a))
     (touchDown [e x y p b]
       (execute-fn! on-ui-touch-down :event e :x x :y y :pointer p :button b)
-      true)
+      false)
     (touchDragged [e x y p]
       (execute-fn! on-ui-touch-dragged :event e :x x :y y :pointer p))
     (touchUp [e x y p b]
@@ -308,13 +308,13 @@
            on-ui-touch-down on-ui-touch-dragged on-ui-touch-up]}
    execute-fn!]
   (proxy [DragListener] []
-    ;(touchDown [e x y p b]
-    ;  (execute-fn! on-ui-touch-down :event e :x x :y y :pointer p :button b)
-    ;  true)
-    ;(touchDragged [e x y p]
-    ;  (execute-fn! on-ui-touch-dragged :event e :x x :y y :pointer p))
-    ;(touchUp [e x y p b]
-    ;  (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))
+    (touchDown [e x y p b]
+      (execute-fn! on-ui-touch-down :event e :x x :y y :pointer p :button b)
+      false)
+    (touchDragged [e x y p]
+      (execute-fn! on-ui-touch-dragged :event e :x x :y y :pointer p))
+    (touchUp [e x y p b]
+      (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))
     (drag [e x y p]
       (execute-fn! on-ui-drag :event e :x x :y y :pointer p))
     (dragStart [e x y p]
@@ -331,7 +331,7 @@
     (scrollFocusChanged [e a f]
       (execute-fn! on-ui-scroll-focus-changed :event e :actor a :focused? f))))
 
-(defn listeners
+(defn create-listeners
   [options execute-fn!]
   [(gesture-listener options execute-fn!)
    (change-listener options execute-fn!)

@@ -52,7 +52,6 @@
     (doseq [{:keys [object]} entities]
       (when (isa? (type object) Actor)
         (.addActor ^Stage renderer object)
-        (.clearListeners ^Actor object)
         (doseq [listener ui-listeners]
           (.addListener ^Actor object listener))))
     (remove-input! renderer)

@@ -48,7 +48,7 @@
                                    (reset-if-changed! entities old-entities)))))
         listeners [(input-processor options execute-fn!)
                    (gesture-detector options execute-fn!)]
-        ui-listeners (ui/listeners options execute-fn!)
+        ui-listeners (ui/create-listeners options execute-fn!)
         create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
     {:screen screen
