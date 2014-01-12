@@ -5,8 +5,9 @@
            [com.badlogic.gdx.graphics.g2d BitmapFont TextureRegion]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
-            HorizontalGroup Image ImageButton ImageTextButton Label SelectBox
-            Skin Slider Table TextButton TextField VerticalGroup WidgetGroup]
+            HorizontalGroup Image ImageButton ImageTextButton Label ScrollPane
+            SelectBox Skin Slider Table TextButton TextField VerticalGroup
+            WidgetGroup]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
@@ -222,6 +223,20 @@
 (defmacro label!
   [entity k & options]
   `(u/call! ^Label (:object ~entity) ~k ~@options))
+
+(defn scroll-pane*
+  [child arg]
+  (u/create-entity (ScrollPane. (:object child) arg)))
+
+(defmacro scroll-pane
+  [child arg & options]
+  `(let [entity# (scroll-pane* ~child ~arg)]
+     (u/calls! ^ScrollPane (:object entity#) ~@options)
+     entity#))
+
+(defmacro scroll-pane!
+  [entity k & options]
+  `(u/call! ^ScrollPane (:object ~entity) ~k ~@options))
 
 (defn select-box*
   [items arg]
