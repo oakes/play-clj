@@ -70,6 +70,10 @@
      (u/calls! ^TextureRegion (:object entity#) ~@options)
      entity#))
 
+(defmacro texture!
+  [entity k & options]
+  `(u/call! ^TextureRegion (:object ~entity) ~k ~@options))
+
 (defmacro animation
   [duration textures & args]
   `(Animation. ~duration
@@ -82,9 +86,3 @@
     (texture* (.getKeyFrame animation total-time true)))
   ([{:keys [total-time]} ^Animation animation is-looping?]
     (texture* (.getKeyFrame animation total-time is-looping?))))
-
-; interop
-
-(defmacro texture!
-  [entity k & options]
-  `(u/call! ^TextureRegion (:object ~entity) ~k ~@options))
