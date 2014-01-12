@@ -13,7 +13,9 @@
 
 (defmethod render! Stage
   [{:keys [^Stage renderer ^Camera camera]}]
-  (when camera (.setCamera renderer camera))
+  (when camera
+    (.setCamera renderer camera)
+    (.setViewport renderer (. camera viewportWidth) (. camera viewportHeight)))
   (.draw renderer))
 
 (defn tiled-map-layers
