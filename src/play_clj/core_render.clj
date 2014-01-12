@@ -103,12 +103,12 @@
   (.setToOrtho camera false width height))
 
 (defn height!
-  [{:keys [width height] :as screen} new-height]
-  (size! screen (* new-height (/ width height)) new-height))
+  [screen new-height]
+  (size! screen (* new-height (/ (game :width) (game :height))) new-height))
 
 (defn width!
-  [{:keys [width height] :as screen} new-width]
-  (size! screen new-width (* new-width (/ height width))))
+  [screen new-width]
+  (size! screen new-width (* new-width (/ (game :height) (game :width)))))
 
 (defn move!
   [{:keys [^Camera camera]} x y]
