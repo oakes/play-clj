@@ -85,13 +85,14 @@
   `(u/create-entity (u/calls! ^Label (label* ~text ~arg) ~@options)))
 
 (defn slider*
-  [min max step is-vert? arg]
-  (Slider. (float min) (float max) (float step) is-vert? arg))
+  [{:keys [min max step vertical?]
+    :or {min 0 max 10 step 1 vertical? false}}
+   arg]
+  (Slider. (float min) (float max) (float step) vertical? arg))
 
 (defmacro slider
-  [min max step is-vert? arg & options]
-  `(u/create-entity (u/calls! ^Slider (slider* ~min ~max ~step ~is-vert? ~arg)
-                              ~@options)))
+  [attrs arg & options]
+  `(u/create-entity (u/calls! ^Slider (slider* ~attrs ~arg) ~@options)))
 
 (defn text-button*
   [^String text arg]
