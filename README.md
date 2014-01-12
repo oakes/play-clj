@@ -60,12 +60,10 @@ There are currently no tutorials or generated docs, because play-clj is changing
   ; this function runs when the screen dimensions change
   :on-resize
   (fn [screen entities]
-    ; make the camera 20 tiles high, and adjust the width appropriately
-    (let [height 20
-          width (* height (/ (game :width) (game :height)))]
-      (resize-camera! screen width height))
-    ; return the entities list unmodified
-    entities))
+    ; make the camera 20 tiles high, while maintaining the aspect ratio
+    (height! screen 20)
+    ; you can return nil if you didn't change any entities
+    nil))
 
 ; define the game itself, and immediately hand off to the screen
 (defgame game-test
