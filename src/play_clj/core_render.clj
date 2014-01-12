@@ -97,12 +97,20 @@
   []
   (PerspectiveCamera.))
 
-(defn resize-camera!
+(defn size!
   [{:keys [^OrthographicCamera camera]} width height]
   (assert camera)
   (.setToOrtho camera false width height))
 
-(defn move-camera!
+(defn height!
+  [{:keys [width height] :as screen} new-height]
+  (size! screen (* new-height (/ width height)) new-height))
+
+(defn width!
+  [{:keys [width height] :as screen} new-width]
+  (size! screen new-width (* new-width (/ height width))))
+
+(defn move!
   [{:keys [^Camera camera]} x y]
   (assert camera)
   (when x (set! (. (. camera position) x) x))
