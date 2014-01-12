@@ -111,8 +111,7 @@
 
 (defn ^:private create-group
   [^WidgetGroup group children]
-  (-> (doto group
-        (.setFillParent true))
+  (-> group
       u/create-entity
       (add! children)))
 
