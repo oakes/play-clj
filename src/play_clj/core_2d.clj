@@ -54,18 +54,21 @@
 ; textures
 
 (defn texture*
-  [img]
-  (cond
-    (string? img)
-    (-> ^String img Texture. TextureRegion.)
-    (map? img)
-    (TextureRegion. ^TextureRegion (:object img))
-    :else
-    img))
+  [arg]
+  (u/create-entity
+    (cond
+      (string? arg)
+      (-> ^String arg Texture. TextureRegion.)
+      (map? arg)
+      (TextureRegion. ^TextureRegion (:object arg))
+      :else
+      arg)))
 
 (defmacro texture
-  [img & options]
-  `(u/create-entity (u/calls! ^TextureRegion (texture* ~img) ~@options)))
+  [arg & options]
+  `(let [entity# (texture* ~arg)]
+     (u/calls! ^TextureRegion (:object entity#) ~@options)
+     entity#))
 
 (defmacro animation
   [duration textures & args]
@@ -76,9 +79,9 @@
 
 (defn animation->texture
   ([{:keys [total-time]} ^Animation animation]
-    (u/create-entity (.getKeyFrame animation total-time true)))
+    (texture* (.getKeyFrame animation total-time true)))
   ([{:keys [total-time]} ^Animation animation is-looping?]
-    (u/create-entity (.getKeyFrame animation total-time is-looping?))))
+    (texture* (.getKeyFrame animation total-time is-looping?))))
 
 ; interop
 

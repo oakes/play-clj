@@ -7,7 +7,7 @@
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
             HorizontalGroup Image ImageButton ImageTextButton Label Skin Slider
             Table TextButton TextField VerticalGroup WidgetGroup]
-           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
+           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
             TiledDrawable]))
@@ -33,90 +33,114 @@
   [path & options]
   `(u/calls! ^Skin (Skin. (.internal ^Files (Gdx/files) ~path)) ~@options))
 
+(defmacro align
+  [key]
+  `(u/static-field-lower :scenes :scene2d :utils :Align ~key))
+
 ; widgets
 
 (defn check-box*
   [^String text arg]
-  (CheckBox. text arg))
+  (u/create-entity (CheckBox. text arg)))
 
 (defmacro check-box
   [text arg & options]
-  `(u/create-entity (u/calls! ^CheckBox (check-box* ~text ~arg) ~@options)))
+  `(let [entity# (check-box* ~text ~arg)]
+     (u/calls! ^CheckBox (:object entity#) ~@options)
+     entity#))
 
 (defn image*
   [arg]
-  (cond
-    (map? arg)
-    (Image. ^TextureRegion (:object arg))
-    (string? arg)
-    (Image. (Texture. ^String arg))
-    :else
-    (Image. arg)))
+  (u/create-entity
+    (cond
+      (map? arg)
+      (Image. ^TextureRegion (:object arg))
+      (string? arg)
+      (Image. (Texture. ^String arg))
+      :else
+      (Image. arg))))
 
 (defmacro image
   [arg & options]
-  `(u/create-entity (u/calls! ^Image (image* ~arg) ~@options)))
+  `(let [entity# (image* ~arg)]
+     (u/calls! ^Image (:object entity#) ~@options)
+     entity#))
 
 (defn image-button*
   [arg]
-  (ImageButton. arg))
+  (u/create-entity (ImageButton. arg)))
 
 (defmacro image-button
   [arg & options]
-  `(u/create-entity (u/calls! ^ImageButton (image-button* ~arg) ~@options)))
+  `(let [entity# (image-button* ~arg)]
+     (u/calls! ^ImageButton (:object entity#) ~@options)
+     entity#))
 
 (defn image-text-button*
   [^String text arg]
-  (ImageTextButton. text arg))
+  (u/create-entity (ImageTextButton. text arg)))
 
 (defmacro image-text-button
   [text arg & options]
-  `(u/create-entity (u/calls! ^ImageTextButton (image-text-button* ~text ~arg)
-                              ~@options)))
+  `(let [entity# (image-text-button* ~text ~arg)]
+     (u/calls! ^ImageTextButton (:object entity#) ~@options)
+     entity#))
 
 (defn label*
   [^String text arg]
-  (if (isa? (type arg) Color)
-    (Label. text (style :label (bitmap-font) arg))
-    (Label. text arg)))
+  (u/create-entity
+    (if (isa? (type arg) Color)
+      (Label. text (style :label (bitmap-font) arg))
+      (Label. text arg))))
 
 (defmacro label
   [text arg & options]
-  `(u/create-entity (u/calls! ^Label (label* ~text ~arg) ~@options)))
+  `(let [entity# (label* ~text ~arg)]
+     (u/calls! ^Label (:object entity#) ~@options)
+     entity#))
 
 (defn slider*
   [{:keys [min max step vertical?]
     :or {min 0 max 10 step 1 vertical? false}}
    arg]
-  (Slider. (float min) (float max) (float step) vertical? arg))
+  (u/create-entity
+    (Slider. (float min) (float max) (float step) vertical? arg)))
 
 (defmacro slider
   [attrs arg & options]
-  `(u/create-entity (u/calls! ^Slider (slider* ~attrs ~arg) ~@options)))
+  `(let [entity# (slider* ~attrs ~arg)]
+     (u/calls! ^Slider (:object entity#) ~@options)
+     entity#))
 
 (defn text-button*
   [^String text arg]
-  (TextButton. text arg))
+  (u/create-entity (TextButton. text arg)))
 
 (defmacro text-button
   [text arg & options]
-  `(u/create-entity (u/calls! ^TextButton (text-button* ~text ~arg) ~@options)))
+  `(let [entity# (text-button* ~text ~arg)]
+     (u/calls! ^TextButton (:object entity#) ~@options)
+     entity#))
 
 (defn text-field*
   [^String text arg]
-  (TextField. text arg))
+  (u/create-entity (TextField. text arg)))
 
 (defmacro text-field
   [text arg & options]
-  `(u/create-entity (u/calls! ^TextField (text-field* ~text ~arg) ~@options)))
+  `(let [entity# (text-field* ~text ~arg)]
+     (u/calls! ^TextField (:object entity#) ~@options)
+     entity#))
 
 (defn dialog*
   [text arg]
-  (Dialog. text arg))
+  (u/create-entity (Dialog. text arg)))
 
 (defmacro dialog
   [text arg & options]
-  `(u/create-entity (u/calls! ^Dialog (dialog* ~text ~arg) ~@options)))
+  `(let [entity# (dialog* ~text ~arg)]
+     (u/calls! ^Dialog (:object entity#) ~@options)
+     entity#))
 
 ; groups
 
@@ -137,26 +161,42 @@
   (add-to-group! [group children])
   group)
 
+(defn ^:private init-group
+  [^WidgetGroup group children]
+  (-> (doto group
+        (.setFillParent true))
+      u/create-entity
+      (add! children)))
+
+(defn horizontal*
+  [children]
+  (init-group (HorizontalGroup.) children))
+
+(defn vertical*
+  [children]
+  (init-group (VerticalGroup.) children))
+
+(defn table*
+  [children]
+  (init-group (Table.) children))
+
 (defmacro horizontal
   [children & options]
-  `(-> (u/calls! ^HorizontalGroup (HorizontalGroup.) ~@options)
-       (doto (.setFillParent true))
-       u/create-entity
-       (add! ~children)))
+  `(let [entity# (horizontal* ~children)]
+     (u/calls! ^HorizontalGroup (:object entity#) ~@options)
+     entity#))
 
 (defmacro vertical
   [children & options]
-  `(-> (u/calls! ^VerticalGroup (VerticalGroup.) ~@options)
-       (doto (.setFillParent true))
-       u/create-entity
-       (add! ~children)))
+  `(let [entity# (vertical* ~children)]
+     (u/calls! ^VerticalGroup (:object entity#) ~@options)
+     entity#))
 
 (defmacro table
   [children & options]
-  `(-> (u/calls! ^Table (Table.) ~@options)
-       (doto (.setFillParent true))
-       u/create-entity
-       (add! ~children)))
+  `(let [entity# (table* ~children)]
+     (u/calls! ^Table (:object entity#) ~@options)
+     entity#))
 
 ; listeners
 
