@@ -14,7 +14,9 @@ The recommended way to start using play-clj is to create a Clojure game project 
 
 ## Documentation
 
-There are currently no tutorials or generated docs, because play-clj is changing rapidly. This will be resolved in the near future. For now, consider this commented example:
+There are currently no tutorials or generated docs, because play-clj is changing rapidly. This will be resolved in the near future.
+
+For now, check out the [example projects](https://github.com/oakes/play-clj-examples). For a quick taste, consider this commented example:
 
 ```clojure
 (ns game-test.core
