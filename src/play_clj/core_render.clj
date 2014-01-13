@@ -29,7 +29,7 @@
 
 (defmacro tiled-map-layer!
   [layer k & options]
-  `(u/call! ^TiledMapTileLayer ~layer ~k ~@options))
+  `(u/call! ^TiledMapTileLayer (cast TiledMapTileLayer ~layer) ~k ~@options))
 
 (defn tiled-map-cell
   [screen layer x y]
