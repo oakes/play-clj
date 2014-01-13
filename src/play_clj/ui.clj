@@ -6,8 +6,8 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
             HorizontalGroup Image ImageButton ImageTextButton Label ScrollPane
-            SelectBox Skin Slider Table TextButton TextField VerticalGroup
-            WidgetGroup Window]
+            SelectBox Skin Slider Table TextButton TextField Tree Tree$Node
+            VerticalGroup WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
@@ -97,12 +97,43 @@
   (cond
     (map? child)
     (.add ^Table (:object parent) ^Actor (:object child))
-    (vector? child)
+    (coll? child)
     (apply cell! (add-to-group! [parent (first child)]) (rest child))
     (keyword? child)
     (case child
       :row (.row ^Table (:object parent))
       nil)))
+
+(defn ^:private create-tree-node
+  [child]
+  {:object (Tree$Node. ^Actor (:object child))})
+
+(defn ^:private add-tree-nodes
+  [parent children]
+  (when-let [node (add-to-group! [parent (first children)])]
+    (doseq [child (rest children)]
+      (add-to-group! [node child]))
+    node))
+
+(defmethod add-to-group! Tree
+  [[parent child]]
+  (cond
+    (map? child)
+    (let [node (create-tree-node child)]
+      (.add ^Tree (:object parent) ^Tree$Node (:object node))
+      node)
+    (coll? child)
+    (add-tree-nodes parent child)))
+
+(defmethod add-to-group! Tree$Node
+  [[parent child]]
+  (cond
+    (map? child)
+    (let [node (create-tree-node child)]
+      (.add ^Tree$Node (:object parent) ^Tree$Node (:object node))
+      node)
+    (coll? child)
+    (add-tree-nodes parent child)))
 
 (defn add!
   [group & children]
@@ -311,6 +342,20 @@
   [entity k & options]
   `(u/call! ^TextField (:object ~entity) ~k ~@options))
 
+(defn tree*
+  [children arg]
+  (create-group (Tree. arg) children))
+
+(defmacro tree
+  [children arg & options]
+  `(let [entity# (tree* ~children ~arg)]
+     (u/calls! ^Tree (:object entity#) ~@options)
+     entity#))
+
+(defmacro tree!
+  [entity k & options]
+  `(u/call! ^Tree (:object ~entity) ~k ~@options))
+
 (defn vertical*
   [children]
   (create-group (VerticalGroup.) children))
@@ -326,12 +371,12 @@
   `(u/call! ^VerticalGroup (:object ~entity) ~k ~@options))
 
 (defn window*
-  [^String title arg children]
+  [children ^String title arg]
   (create-group (Window. title arg) children))
 
 (defmacro window
-  [title arg children & options]
-  `(let [entity# (window* ~title ~arg ~children)]
+  [children title arg & options]
+  `(let [entity# (window* ~children ~title ~arg)]
      (u/calls! ^Window (:object entity#) ~@options)
      entity#))
 
