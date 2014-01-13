@@ -10,7 +10,8 @@
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers]
-           [com.badlogic.gdx.maps.tiled TiledMap TiledMapTileLayer TmxMapLoader]
+           [com.badlogic.gdx.maps.tiled TiledMap TiledMapTileLayer
+            TiledMapTileLayer$Cell TmxMapLoader]
            [com.badlogic.gdx.maps.tiled.renderers
             BatchTiledMapRenderer
             HexagonalTiledMapRenderer
