@@ -142,19 +142,19 @@
   [screen new-width]
   (size! screen new-width (* new-width (/ (game :height) (game :width)))))
 
-(defn move-x!
+(defn x!
   [{:keys [^Camera camera]} x]
   (assert camera)
   (when x (set! (. (. camera position) x) x))
   (.update camera))
 
-(defn move-y!
+(defn y!
   [{:keys [^Camera camera]} y]
   (assert camera)
   (when y (set! (. (. camera position) y) y))
   (.update camera))
 
-(defn move!
+(defn position!
   [screen x y]
-  (move-x! screen x)
-  (move-y! screen y))
+  (x! screen x)
+  (y! screen y))
