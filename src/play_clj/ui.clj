@@ -6,8 +6,8 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
             HorizontalGroup Image ImageButton ImageTextButton Label ScrollPane
-            SelectBox Skin Slider Table TextButton TextField Tree Tree$Node
-            VerticalGroup WidgetGroup Window]
+            SelectBox Skin Slider Stack Table TextButton TextField Tree
+            Tree$Node VerticalGroup WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
@@ -299,6 +299,20 @@
 (defmacro slider!
   [entity k & options]
   `(u/call! ^Slider (:object ~entity) ~k ~@options))
+
+(defn stack*
+  [children]
+  (create-group (Stack.) children))
+
+(defmacro stack
+  [children & options]
+  `(let [entity# (stack* ~children)]
+     (u/calls! ^Stack (:object entity#) ~@options)
+     entity#))
+
+(defmacro stack!
+  [entity k & options]
+  `(u/call! ^Stack (:object ~entity) ~k ~@options))
 
 (defn table*
   [children]
