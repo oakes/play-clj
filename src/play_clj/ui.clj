@@ -41,10 +41,10 @@
 
 (defn cell!
   [^Cell cell & args]
-  (let [method-name (first args)
+  (let [method (first args)
         [[a1 a2 a3 a4] rest-args] (split-with #(not (keyword? %)) (rest args))]
-    (when method-name
-      (case method-name
+    (when method
+      (case method
         :width (.width cell ^double a1)
         :height (.height cell ^double a1)
         :size (.size cell ^double a1 ^double a2)
@@ -82,7 +82,7 @@
         :uniform-x (.uniformX cell)
         :uniform-y (.uniformY cell)
         :row (.row cell)
-        nil)
+        (throw (Exception. (str "The keyword " method " is not supported."))))
       (apply cell! cell rest-args))
     cell))
 
@@ -102,7 +102,7 @@
     (keyword? child)
     (case child
       :row (.row ^Table (:object parent))
-      nil)))
+      (throw (Exception. (str "The keyword " child " is not supported."))))))
 
 (defn ^:private create-tree-node
   [child]
