@@ -28,18 +28,16 @@
          first)))
 
 (defmacro tiled-map-layer!
-  [screen layer-name k & options]
-  `(u/call! ^TiledMapTileLayer (tiled-map-layer ~screen ~layer-name)
-            ~k ~@options))
+  [layer k & options]
+  `(u/call! ^TiledMapTileLayer ~layer ~k ~@options))
 
 (defn tiled-map-cell
   [screen layer x y]
   (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y))
 
 (defmacro tiled-map-cell!
-  [screen layer x y k & options]
-  `(u/call! ^TiledMapTileLayer$Cell (tiled-map-cell ~screen ~layer ~x ~y)
-            ~k ~@options))
+  [cell k & options]
+  `(u/call! ^TiledMapTileLayer$Cell ~cell ~k ~@options))
 
 (defn ^:private refresh-renderer!
   [{:keys [renderer ui-listeners]} entities]
