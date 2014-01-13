@@ -110,12 +110,22 @@
   [screen new-width]
   (size! screen new-width (* new-width (/ (game :height) (game :width)))))
 
-(defn move!
-  [{:keys [^Camera camera]} x y]
+(defn move-x!
+  [{:keys [^Camera camera]} x]
   (assert camera)
   (when x (set! (. (. camera position) x) x))
+  (.update camera))
+
+(defn move-y!
+  [{:keys [^Camera camera]} y]
+  (assert camera)
   (when y (set! (. (. camera position) y) y))
   (.update camera))
+
+(defn move!
+  [screen x y]
+  (move-x! screen x)
+  (move-y! screen y))
 
 ; interop
 
