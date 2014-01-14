@@ -21,7 +21,6 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]))
 
 (load "core_2d")
-(load "core_deprecated")
 (load "core_global")
 (load "core_render")
 
@@ -50,14 +49,12 @@
         listeners [(input-processor options execute-fn!)
                    (gesture-detector options execute-fn!)]
         ui-listeners (ui/create-listeners options execute-fn!)
-        create-renderer-fn! #(swap! screen assoc :renderer (renderer %))
         update-fn! #(swap! screen merge %)]
     {:screen screen
      :entities entities
      :show (fn []
              (swap! screen assoc
                     :total-time 0
-                    :create-renderer-fn! create-renderer-fn!
                     :update-fn! update-fn!
                     :ui-listeners ui-listeners)
              (execute-fn! on-show))
