@@ -1,8 +1,10 @@
 (ns play-clj.utils
   (:require [clojure.string :as s])
   (:import [com.badlogic.gdx.graphics.g2d TextureRegion]
-           [com.badlogic.gdx.utils Array]
-           [com.badlogic.gdx.scenes.scene2d Actor]))
+           [com.badlogic.gdx.scenes.scene2d Actor]
+           [com.badlogic.gdx.utils Array ArrayMap]))
+
+; converting keys
 
 (def ^:const main-package "com.badlogic.gdx")
 
@@ -52,9 +54,20 @@
   [& args]
   `~(static-field args key->upper))
 
-(defn convert-array
-  [a]
-  (Array. true (into-array a) 1 (count a)))
+; data structures
+
+(defn gdx-array
+  [arr]
+  (Array. true (into-array arr) 1 (count arr)))
+
+(defn gdx-array-map
+ [hmap]
+ (let [amap (ArrayMap.)]
+   (doseq [[k v] hmap]
+     (.put amap k v))
+   amap))
+
+; java interop
 
 (defmacro call!
   [obj k & args]
@@ -72,6 +85,8 @@
 (defmacro calls!
   [obj & args]
   `(doto ~obj ~@(create-method-calls [] args)))
+
+; entities
 
 (defmulti create-entity class)
 

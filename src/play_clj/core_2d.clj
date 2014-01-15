@@ -77,7 +77,7 @@
 (defmacro animation
   [duration textures & args]
   `(Animation. ~duration
-               (u/convert-array (map :object ~textures))
+               (u/gdx-array (map :object ~textures))
                (u/static-field-upper :graphics :g2d :Animation
                                      ~(or (first args) :normal))))
 
