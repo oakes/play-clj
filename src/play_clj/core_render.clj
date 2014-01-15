@@ -2,11 +2,17 @@
 
 ; tiled maps
 
-(defn tiled-map
+(defn tiled-map*
   [s]
   (if (string? s)
     (.load (TmxMapLoader.) s)
     s))
+
+(defmacro tiled-map
+  [s & options]
+  `(let [object# (tiled-map* ~s)]
+     (u/calls! ^TiledMap object# ~@options)
+     object#))
 
 (defmacro tiled-map!
   [{:keys [^BatchTiledMapRenderer renderer]} k & options]
@@ -19,7 +25,7 @@
     (for [^long i (range (.getCount layers))]
       (.get layers i))))
 
-(defn tiled-map-layer
+(defn tiled-map-layer*
   [screen layer]
   (if (isa? (type layer) MapLayer)
     layer
@@ -27,13 +33,25 @@
          (drop-while #(not= layer (.getName ^MapLayer %)))
          first)))
 
+(defmacro tiled-map-layer
+  [screen layer & options]
+  `(let [object# (tiled-map-layer* ~screen ~layer)]
+     (u/calls! ^TiledMapTileLayer object# ~@options)
+     object#))
+
 (defmacro tiled-map-layer!
   [layer k & options]
   `(u/call! ^TiledMapTileLayer (cast TiledMapTileLayer ~layer) ~k ~@options))
 
-(defn tiled-map-cell
+(defn tiled-map-cell*
   [screen layer x y]
   (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y))
+
+(defmacro tiled-map-cell
+  [screen layer x y & options]
+  `(let [object# (tiled-map-cell* ~screen ~layer ~x ~y)]
+     (u/calls! ^TiledMapTileLayer$Cell object# ~@options)
+     object#))
 
 (defmacro tiled-map-cell!
   [cell k & options]
@@ -54,42 +72,72 @@
 
 ; renderers
 
-(defn orthogonal-tiled-map
+(defn orthogonal-tiled-map*
   [path unit]
-  (OrthogonalTiledMapRenderer. ^TiledMap (tiled-map path) ^double unit))
+  (OrthogonalTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
+
+(defmacro orthogonal-tiled-map
+  [path unit & options]
+  `(let [object# (orthogonal-tiled-map* ~path ~unit)]
+     (u/calls! ^OrthogonalTiledMapRenderer object# ~@options)
+     object#))
 
 (defmacro orthogonal-tiled-map!
   [screen k & options]
   `(u/call! ^OrthogonalTiledMapRenderer (:renderer ~screen) ~k ~@options))
 
-(defn isometric-tiled-map
+(defn isometric-tiled-map*
   [path unit]
-  (IsometricTiledMapRenderer. ^TiledMap (tiled-map path) ^double unit))
+  (IsometricTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
+
+(defmacro isometric-tiled-map
+  [path unit & options]
+  `(let [object# (isometric-tiled-map* ~path ~unit)]
+     (u/calls! ^IsometricTiledMapRenderer object# ~@options)
+     object#))
 
 (defmacro isometric-tiled-map!
   [screen k & options]
   `(u/call! ^IsometricTiledMapRenderer (:renderer ~screen) ~k ~@options))
 
-(defn isometric-staggered-tiled-map
+(defn isometric-staggered-tiled-map*
   [path unit]
-  (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map path) ^double unit))
+  (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
+
+(defmacro isometric-staggered-tiled-map
+  [path unit & options]
+  `(let [object# (isometric-staggered-tiled-map* ~path ~unit)]
+     (u/calls! ^IsometricStaggeredTiledMapRenderer object# ~@options)
+     object#))
 
 (defmacro isometric-staggered-tiled-map!
   [screen k & options]
   `(u/call! ^IsometricStaggeredTiledMapRenderer (:renderer ~screen)
                 ~k ~@options))
 
-(defn hexagonal-tiled-map
+(defn hexagonal-tiled-map*
   [path unit]
-  (HexagonalTiledMapRenderer. ^TiledMap (tiled-map path) ^double unit))
+  (HexagonalTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
+
+(defmacro hexagonal-tiled-map
+  [path unit & options]
+  `(let [object# (hexagonal-tiled-map* ~path ~unit)]
+     (u/calls! ^HexagonalTiledMapRenderer object# ~@options)
+     object#))
 
 (defmacro hexagonal-tiled-map!
   [screen k & options]
   `(u/call! ^HexagonalTiledMapRenderer (:renderer ~screen) ~k ~@options))
 
-(defn stage
+(defn stage*
   []
   (Stage.))
+
+(defmacro stage
+  [& options]
+  `(let [object# (stage*)]
+     (u/calls! ^Stage object# ~@options)
+     object#))
 
 (defmacro stage!
   [screen k & options]
@@ -113,9 +161,15 @@
 
 ; cameras
 
-(defn orthographic-camera
+(defn orthographic-camera*
   []
   (OrthographicCamera.))
+
+(defmacro orthographic-camera
+  [& options]
+  `(let [object# (orthographic-camera*)]
+     (u/calls! ^OrthographicCamera object# ~@options)
+     object#))
 
 (defmacro orthographic-camera!
   [screen k & options]
@@ -124,6 +178,12 @@
 (defn perspective-camera
   []
   (PerspectiveCamera.))
+
+(defmacro perspective-camera
+  [& options]
+  `(let [object# (perspective-camera*)]
+     (u/calls! ^PerspectiveCamera object# ~@options)
+     object#))
 
 (defmacro perspective-camera!
   [screen k & options]
