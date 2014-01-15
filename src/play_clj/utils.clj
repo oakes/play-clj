@@ -1,6 +1,7 @@
 (ns play-clj.utils
   (:require [clojure.string :as s])
   (:import [com.badlogic.gdx.graphics.g2d TextureRegion]
+           [com.badlogic.gdx.math Vector2 Vector3]
            [com.badlogic.gdx.scenes.scene2d Actor]
            [com.badlogic.gdx.utils Array ArrayMap]))
 
@@ -66,6 +67,12 @@
    (doseq [[k v] hmap]
      (.put amap k v))
    amap))
+
+(defn gdx-vector
+  ([x y]
+    (Vector2. x y))
+  ([x y z]
+    (Vector3. x y z)))
 
 ; java interop
 
