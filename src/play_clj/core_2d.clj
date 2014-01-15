@@ -74,19 +74,26 @@
   [entity k & options]
   `(u/call! ^TextureRegion (:object ~entity) ~k ~@options))
 
+(defmacro play-mode
+  [key]
+  `(u/static-field-upper :graphics :g2d :Animation ~key))
+
+(defn animation*
+  [duration textures]
+  (Animation. duration
+              (u/gdx-array (map :object textures))
+              (play-mode :normal)))
+
 (defmacro animation
-  [duration textures & args]
-  `(Animation. ~duration
-               (u/gdx-array (map :object ~textures))
-               (u/static-field-upper :graphics :g2d :Animation
-                                     ~(or (first args) :normal))))
+  [duration textures & options]
+  `(u/calls! ^Animation (animation* ~duration ~textures) ~@options))
+
+(defmacro animation!
+  [object k & options]
+  `(u/call! ^Animation ~object ~k ~@options))
 
 (defn animation->texture
   ([{:keys [total-time]} ^Animation animation]
     (texture* (.getKeyFrame animation total-time true)))
   ([{:keys [total-time]} ^Animation animation is-looping?]
     (texture* (.getKeyFrame animation total-time is-looping?))))
-
-(defmacro scaling
-  [key]
-  `(u/static-field-lower :utils :Scaling ~key))

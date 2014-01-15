@@ -1,5 +1,6 @@
 (ns play-clj.physics
-  (:require [play-clj.utils :as u])
+  (:require [play-clj.math :as m]
+            [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d World]))
 
 (defn world*
@@ -8,7 +9,7 @@
   ([gravity-x gravity-y]
     (world* gravity-x gravity-y true))
   ([gravity-x gravity-y sleep?]
-    (World. (u/gdx-vector gravity-x gravity-y) sleep?)))
+    (World. (m/vector gravity-x gravity-y) sleep?)))
 
 (defmacro world
   [gravity-x gravity-y & options]

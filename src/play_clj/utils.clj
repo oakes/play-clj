@@ -1,7 +1,6 @@
 (ns play-clj.utils
   (:require [clojure.string :as s])
   (:import [com.badlogic.gdx.graphics.g2d TextureRegion]
-           [com.badlogic.gdx.math Vector2 Vector3]
            [com.badlogic.gdx.scenes.scene2d Actor]
            [com.badlogic.gdx.utils Array ArrayMap]))
 
@@ -41,6 +40,8 @@
   [key]
   (symbol (str "." (key->camel key))))
 
+; static fields
+
 (defn ^:private static-field
   [args transform-fn]
   (->> (transform-fn (last args))
@@ -55,24 +56,9 @@
   [& args]
   `~(static-field args key->upper))
 
-; data structures
-
-(defn gdx-array
-  [arr]
-  (Array. true (into-array arr) 1 (count arr)))
-
-(defn gdx-array-map
- [hmap]
- (let [amap (ArrayMap.)]
-   (doseq [[k v] hmap]
-     (.put amap k v))
-   amap))
-
-(defn gdx-vector
-  ([x y]
-    (Vector2. x y))
-  ([x y z]
-    (Vector3. x y z)))
+(defmacro scaling
+  [key]
+  `(static-field-lower :utils :Scaling ~key))
 
 ; java interop
 
@@ -92,6 +78,35 @@
 (defmacro calls!
   [obj & args]
   `(doto ~obj ~@(create-method-calls [] args)))
+
+; data structures
+
+(defn gdx-array*
+  [clj-arr]
+  (Array. true (into-array clj-arr) 1 (count clj-arr)))
+
+(defmacro gdx-array
+  [clj-arr & options]
+  `(calls! ^Array (gdx-array* ~clj-arr) ~@options))
+
+(defmacro gdx-array!
+  [object k & options]
+  `(call! ^Array ~object ~k ~@options))
+
+(defn gdx-array-map*
+ [clj-map]
+ (let [gdx-map (ArrayMap.)]
+   (doseq [[k v] clj-map]
+     (.put gdx-map k v))
+   gdx-map))
+
+(defmacro gdx-array-map
+  [clj-map & options]
+  `(calls! ^ArrayMap (gdx-array-map* ~clj-map) ~@options))
+
+(defmacro gdx-array-map!
+  [object k & options]
+  `(call! ^ArrayMap ~object ~k ~@options))
 
 ; entities
 

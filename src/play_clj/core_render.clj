@@ -36,8 +36,8 @@
   `(u/calls! ^TiledMapTileLayer (tiled-map-layer* ~screen ~layer) ~@options))
 
 (defmacro tiled-map-layer!
-  [layer k & options]
-  `(u/call! ^TiledMapTileLayer (cast TiledMapTileLayer ~layer) ~k ~@options))
+  [object k & options]
+  `(u/call! ^TiledMapTileLayer (cast TiledMapTileLayer ~object) ~k ~@options))
 
 (defn tiled-map-cell*
   [screen layer x y]
@@ -49,8 +49,8 @@
              ~@options))
 
 (defmacro tiled-map-cell!
-  [cell k & options]
-  `(u/call! ^TiledMapTileLayer$Cell ~cell ~k ~@options))
+  [object k & options]
+  `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
 
 (defn ^:private refresh-renderer!
   [{:keys [renderer ui-listeners]} entities]
