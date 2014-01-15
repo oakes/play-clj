@@ -9,7 +9,7 @@
   ([gravity-x gravity-y]
     (world* gravity-x gravity-y true))
   ([gravity-x gravity-y sleep?]
-    (World. (m/vector gravity-x gravity-y) sleep?)))
+    (World. (m/vector-2 gravity-x gravity-y) sleep?)))
 
 (defmacro world
   [gravity-x gravity-y & options]
