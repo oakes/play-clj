@@ -10,9 +10,7 @@
 
 (defmacro tiled-map
   [s & options]
-  `(let [object# (tiled-map* ~s)]
-     (u/calls! ^TiledMap object# ~@options)
-     object#))
+  `(u/calls! ^TiledMap (tiled-map* ~s) ~@options))
 
 (defmacro tiled-map!
   [{:keys [^BatchTiledMapRenderer renderer]} k & options]
@@ -35,9 +33,7 @@
 
 (defmacro tiled-map-layer
   [screen layer & options]
-  `(let [object# (tiled-map-layer* ~screen ~layer)]
-     (u/calls! ^TiledMapTileLayer object# ~@options)
-     object#))
+  `(u/calls! ^TiledMapTileLayer (tiled-map-layer* ~screen ~layer) ~@options))
 
 (defmacro tiled-map-layer!
   [layer k & options]
@@ -49,9 +45,8 @@
 
 (defmacro tiled-map-cell
   [screen layer x y & options]
-  `(let [object# (tiled-map-cell* ~screen ~layer ~x ~y)]
-     (u/calls! ^TiledMapTileLayer$Cell object# ~@options)
-     object#))
+  `(u/calls! ^TiledMapTileLayer$Cell (tiled-map-cell* ~screen ~layer ~x ~y)
+             ~@options))
 
 (defmacro tiled-map-cell!
   [cell k & options]
@@ -78,9 +73,8 @@
 
 (defmacro orthogonal-tiled-map
   [path unit & options]
-  `(let [object# (orthogonal-tiled-map* ~path ~unit)]
-     (u/calls! ^OrthogonalTiledMapRenderer object# ~@options)
-     object#))
+  `(u/calls! ^OrthogonalTiledMapRenderer (orthogonal-tiled-map* ~path ~unit)
+             ~@options))
 
 (defmacro orthogonal-tiled-map!
   [screen k & options]
@@ -92,9 +86,8 @@
 
 (defmacro isometric-tiled-map
   [path unit & options]
-  `(let [object# (isometric-tiled-map* ~path ~unit)]
-     (u/calls! ^IsometricTiledMapRenderer object# ~@options)
-     object#))
+  `(u/calls! ^IsometricTiledMapRenderer (isometric-tiled-map* ~path ~unit)
+             ~@options))
 
 (defmacro isometric-tiled-map!
   [screen k & options]
@@ -106,9 +99,9 @@
 
 (defmacro isometric-staggered-tiled-map
   [path unit & options]
-  `(let [object# (isometric-staggered-tiled-map* ~path ~unit)]
-     (u/calls! ^IsometricStaggeredTiledMapRenderer object# ~@options)
-     object#))
+  `(u/calls! ^IsometricStaggeredTiledMapRenderer
+             (isometric-staggered-tiled-map* ~path ~unit)
+             ~@options))
 
 (defmacro isometric-staggered-tiled-map!
   [screen k & options]
@@ -121,9 +114,8 @@
 
 (defmacro hexagonal-tiled-map
   [path unit & options]
-  `(let [object# (hexagonal-tiled-map* ~path ~unit)]
-     (u/calls! ^HexagonalTiledMapRenderer object# ~@options)
-     object#))
+  `(u/calls! ^HexagonalTiledMapRenderer (hexagonal-tiled-map* ~path ~unit)
+             ~@options))
 
 (defmacro hexagonal-tiled-map!
   [screen k & options]
@@ -135,9 +127,7 @@
 
 (defmacro stage
   [& options]
-  `(let [object# (stage*)]
-     (u/calls! ^Stage object# ~@options)
-     object#))
+  `(u/calls! ^Stage (stage*) ~@options))
 
 (defmacro stage!
   [screen k & options]
@@ -167,9 +157,7 @@
 
 (defmacro orthographic-camera
   [& options]
-  `(let [object# (orthographic-camera*)]
-     (u/calls! ^OrthographicCamera object# ~@options)
-     object#))
+  `(u/calls! ^OrthographicCamera (orthographic-camera*) ~@options))
 
 (defmacro orthographic-camera!
   [screen k & options]
@@ -181,9 +169,7 @@
 
 (defmacro perspective-camera
   [& options]
-  `(let [object# (perspective-camera*)]
-     (u/calls! ^PerspectiveCamera object# ~@options)
-     object#))
+  `(u/calls! ^PerspectiveCamera (perspective-camera*) ~@options))
 
 (defmacro perspective-camera!
   [screen k & options]
