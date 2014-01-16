@@ -1,4 +1,9 @@
-(in-ns 'play-clj.core)
+(ns play-clj.g2d
+  (:require [play-clj.utils :as u])
+  (:import [com.badlogic.gdx.graphics Texture]
+           [com.badlogic.gdx.graphics.g2d Animation SpriteBatch TextureRegion]
+           [com.badlogic.gdx.maps.tiled.renderers BatchTiledMapRenderer]
+           [com.badlogic.gdx.scenes.scene2d Actor Stage]))
 
 ; drawing
 

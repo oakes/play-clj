@@ -52,19 +52,6 @@
   [object k & options]
   `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
 
-(defn ^:private refresh-renderer!
-  [{:keys [renderer ui-listeners]} entities]
-  (when (isa? (type renderer) Stage)
-    (doseq [^Actor a (.getActors ^Stage renderer)]
-      (.remove a))
-    (doseq [{:keys [object]} entities]
-      (when (isa? (type object) Actor)
-        (.addActor ^Stage renderer object)
-        (doseq [listener ui-listeners]
-          (.addListener ^Actor object listener))))
-    (remove-input! renderer)
-    (add-input! renderer)))
-
 ; renderers
 
 (defn orthogonal-tiled-map*
@@ -124,6 +111,19 @@
 (defn stage*
   []
   (Stage.))
+
+(defn ^:private refresh-renderer!
+  [{:keys [renderer ui-listeners]} entities]
+  (when (isa? (type renderer) Stage)
+    (doseq [^Actor a (.getActors ^Stage renderer)]
+      (.remove a))
+    (doseq [{:keys [object]} entities]
+      (when (isa? (type object) Actor)
+        (.addActor ^Stage renderer object)
+        (doseq [listener ui-listeners]
+          (.addListener ^Actor object listener))))
+    (remove-input! renderer)
+    (add-input! renderer)))
 
 (defmacro stage
   [& options]

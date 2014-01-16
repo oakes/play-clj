@@ -5,8 +5,7 @@
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
-            PerspectiveCamera Texture]
-           [com.badlogic.gdx.graphics.g2d Animation SpriteBatch TextureRegion]
+            PerspectiveCamera]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers]
@@ -20,9 +19,8 @@
             OrthogonalTiledMapRenderer]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]))
 
-(load "core_2d")
 (load "core_global")
-(load "core_render")
+(load "core_graphics")
 
 (defn ^:private reset-if-changed!
   [e-atom e-old e-new]

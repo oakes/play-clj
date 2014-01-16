@@ -1,5 +1,6 @@
 (ns play-clj.ui
-  (:require [play-clj.utils :as u])
+  (:require [play-clj.g2d :as g2d]
+            [play-clj.utils :as u])
   (:import [com.badlogic.gdx Files Gdx]
            [com.badlogic.gdx.graphics Color Texture]
            [com.badlogic.gdx.graphics.g2d BitmapFont TextureRegion]
@@ -13,6 +14,9 @@
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
             TiledDrawable]
            [com.esotericsoftware.tablelayout Cell]))
+
+; temporary inclusion to prevent breaking the template
+(defonce draw! g2d/draw!)
 
 (defmacro drawable
   [type & options]
