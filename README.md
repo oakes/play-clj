@@ -20,7 +20,8 @@ For now, check out the [example projects](https://github.com/oakes/play-clj-exam
 
 ```clojure
 (ns game-test.core
-  (:require [play-clj.core :refer :all]))
+  (:require [play-clj.core :refer :all]
+            [play-clj.g2d :refer :all]))
 
 ; define a screen, where all the action takes place
 (defscreen main-screen
