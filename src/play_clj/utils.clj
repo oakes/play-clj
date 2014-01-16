@@ -17,32 +17,32 @@
   (->> keys (map name) (s/join ".") (str main-package ".")))
 
 (defn key->upper
-  [key]
-  (->> (split-key key)
+  [k]
+  (->> (split-key k)
        (map s/upper-case)
        (s/join "_")))
 
 (defn key->pascal
-  [key]
-  (->> (split-key key)
+  [k]
+  (->> (split-key k)
        (map s/capitalize)
        (s/join "")))
 
 (defn key->camel
-  [key]
-  (let [parts (split-key key)]
+  [k]
+  (let [parts (split-key k)]
     (->> (rest parts)
          (map s/capitalize)
          (cons (first parts))
          (s/join ""))))
 
 (defn key->method
-  [key]
-  (symbol (str "." (key->camel key))))
+  [k]
+  (symbol (str "." (key->camel k))))
 
-; static fields
+; static methods/fields
 
-(defn ^:private static-field
+(defn static-symbol
   [args transform-fn]
   (->> (transform-fn (last args))
        (str (join-keys (butlast args)) "/")
@@ -50,15 +50,15 @@
 
 (defmacro static-field-lower
   [& args]
-  `~(static-field args key->camel))
+  `~(static-symbol args key->camel))
 
 (defmacro static-field-upper
   [& args]
-  `~(static-field args key->upper))
+  `~(static-symbol args key->upper))
 
 (defmacro scaling
-  [key]
-  `(static-field-lower :utils :Scaling ~key))
+  [k]
+  `(static-field-lower :utils :Scaling ~k))
 
 ; java interop
 

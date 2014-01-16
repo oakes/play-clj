@@ -2,7 +2,31 @@
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.math Bezier Bresenham2 BSpline CatmullRomSpline
             Circle ConvexHull DelaunayTriangulator EarClippingTriangulator
-            Ellipse FloatCounter Frustum Vector2 Vector3]))
+            Ellipse FloatCounter Frustum GridPoint2 GridPoint3 Matrix3 Matrix4
+            Plane Polygon Polyline Quaternion Rectangle Vector2 Vector3
+            WindowedMean]))
+
+; static methods/fields
+
+(defmacro geometry!
+  [k & options]
+  `(~(u/static-symbol [:math :GeometryUtils k] u/key->camel) ~@options))
+
+(defmacro interpolation
+  [k]
+  `~(symbol (str u/main-package ".math.Interpolation$" (u/key->pascal k))))
+
+(defmacro intersector!
+  [k & options]
+  `(~(u/static-symbol [:math :Intersector k] u/key->camel) ~@options))
+
+(defmacro math!
+  [k & options]
+  `(~(u/static-symbol [:math :MathUtils k] u/key->camel) ~@options))
+
+(defmacro plane-side
+  [k]
+  `~(symbol (str u/main-package ".math.Plane$PlaneSide/" (u/key->pascal k))))
 
 ; bezier
 
@@ -168,6 +192,144 @@
   [object k & options]
   `(u/call! ^Frustum ~object ~k ~@options))
 
+; grid-point-2
+
+(defn grid-point-2*
+  [x y]
+  (GridPoint2. x y))
+
+(defmacro grid-point-2
+  [x y & options]
+  `(u/calls! ^GridPoint2 (grid-point-2* ~x ~y) ~@options))
+
+(defmacro grid-point-2!
+  [object k & options]
+  `(u/call! ^GridPoint2 ~object ~k ~@options))
+
+; grid-point-3
+
+(defn grid-point-3*
+  [x y z]
+  (GridPoint3. x y z))
+
+(defmacro grid-point-3
+  [x y z & options]
+  `(u/calls! ^GridPoint3 (grid-point-3* ~x ~y ~z) ~@options))
+
+(defmacro grid-point-3!
+  [object k & options]
+  `(u/call! ^GridPoint3 ~object ~k ~@options))
+
+; matrix-3
+
+(defn matrix-3*
+  ([]
+    (Matrix3.))
+  ([values]
+    (Matrix3. values)))
+
+(defmacro matrix-3
+  [values & options]
+  `(u/calls! ^Matrix3 (matrix-3* ~values) ~@options))
+
+(defmacro matrix-3!
+  [object k & options]
+  `(u/call! ^Matrix3 ~object ~k ~@options))
+
+; matrix-4
+
+(defn matrix-4*
+  ([]
+    (Matrix4.))
+  ([values]
+    (Matrix4. values)))
+
+(defmacro matrix-4
+  [values & options]
+  `(u/calls! ^Matrix4 (matrix-4* ~values) ~@options))
+
+(defmacro matrix-4!
+  [object k & options]
+  `(u/call! ^Matrix4 ~object ~k ~@options))
+
+; plane
+
+(defn plane*
+  [normal ^double d]
+  (Plane. normal d))
+
+(defmacro plane
+  [normal d & options]
+  `(u/calls! ^Plane (plane* ~normal ~d) ~@options))
+
+(defmacro plane!
+  [object k & options]
+  `(u/call! ^Plane ~object ~k ~@options))
+
+; polygon
+
+(defn polygon*
+  ([]
+    (Polygon.))
+  ([vertices]
+    (Polygon. vertices)))
+
+(defmacro polygon
+  [vertices & options]
+  `(u/calls! ^Polygon (polygon* ~vertices) ~@options))
+
+(defmacro polygon!
+  [object k & options]
+  `(u/call! ^Polygon ~object ~k ~@options))
+
+; polyline
+
+(defn polyline*
+  ([]
+    (Polyline.))
+  ([vertices]
+    (Polyline. vertices)))
+
+(defmacro polyline
+  [vertices & options]
+  `(u/calls! ^Polyline (polyline* ~vertices) ~@options))
+
+(defmacro polyline!
+  [object k & options]
+  `(u/call! ^Polyline ~object ~k ~@options))
+
+; quaternion
+
+(defn quaternion*
+  ([]
+    (Quaternion.))
+  ([w x y z]
+    (Quaternion. w x y z)))
+
+(defmacro quaternion
+  [w x y z & options]
+  `(u/calls! ^Quaternion (quaternion* ~w ~x ~y ~z) ~@options))
+
+(defmacro quaternion!
+  [object k & options]
+  `(u/call! ^Quaternion ~object ~k ~@options))
+
+; rectangle
+
+(defn rectangle*
+  ([]
+    (Rectangle.))
+  ([x y width height]
+    (Rectangle. x y width height)))
+
+(defmacro rectangle
+  [x y width height & options]
+  `(u/calls! ^Rectangle (rectangle* ~x ~y ~width ~height) ~@options))
+
+(defmacro rectangle!
+  [object k & options]
+  `(u/call! ^Rectangle ~object ~k ~@options))
+
 ; vector-2
 
 (defn vector-2*
@@ -199,3 +361,17 @@
 (defmacro vector-3!
   [object k & options]
   `(u/call! ^Vector3 ~object ~k ~@options))
+
+; windowed-mean
+
+(defn windowed-mean*
+  [window-size]
+  (WindowedMean. window-size))
+
+(defmacro windowed-mean
+  [window-size & options]
+  `(u/calls! ^WindowedMean (windowed-mean* ~window-size) ~@options))
+
+(defmacro windowed-mean!
+  [object k & options]
+  `(u/call! ^WindowedMean ~object ~k ~@options))

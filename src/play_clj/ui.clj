@@ -16,7 +16,7 @@
 
 (defmacro drawable
   [type & options]
-  `(~(symbol (str u/main-package ".scenes.scene2d.u."
+  `(~(symbol (str u/main-package ".scenes.scene2d.ui."
                   (u/key->pascal type) "Drawable."))
      ~@options))
 
