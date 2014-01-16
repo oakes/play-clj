@@ -241,7 +241,7 @@
 (defn matrix-4*
   ([]
     (Matrix4.))
-  ([values]
+  ([^floats values]
     (Matrix4. values)))
 
 (defmacro matrix-4
@@ -255,7 +255,7 @@
 ; plane
 
 (defn plane*
-  [normal ^double d]
+  [^Vector3 normal ^double d]
   (Plane. normal d))
 
 (defmacro plane

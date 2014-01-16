@@ -1,4 +1,4 @@
-(ns play-clj.physics
+(ns play-clj.g2d-physics
   (:require [play-clj.math :as m]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d World]))
