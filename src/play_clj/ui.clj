@@ -3,7 +3,7 @@
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx Files Gdx]
            [com.badlogic.gdx.graphics Color Texture]
-           [com.badlogic.gdx.graphics.g2d BitmapFont TextureRegion]
+           [com.badlogic.gdx.graphics.g2d TextureRegion]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
             HorizontalGroup Image ImageButton ImageTextButton Label ScrollPane
@@ -15,18 +15,11 @@
             TiledDrawable]
            [com.esotericsoftware.tablelayout Cell]))
 
-; temporary inclusion to prevent breaking the template
-(defonce draw! g2d/draw!)
-
 (defmacro drawable
   [type & options]
   `(~(symbol (str u/main-package ".scenes.scene2d.ui."
                   (u/key->pascal type) "Drawable."))
      ~@options))
-
-(defmacro bitmap-font
-  [& options]
-  `(BitmapFont. ~@options))
 
 (defmacro style
   [type & options]
@@ -246,7 +239,7 @@
   [^String text arg]
   (u/create-entity
     (if (isa? (type arg) Color)
-      (Label. text (style :label (bitmap-font) arg))
+      (Label. text (style :label (g2d/bitmap-font) arg))
       (Label. text arg))))
 
 (defmacro label

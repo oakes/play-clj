@@ -6,6 +6,7 @@
             InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera]
+           [com.badlogic.gdx.graphics.g2d SpriteBatch TextureRegion]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers]

@@ -1,62 +1,11 @@
 (ns play-clj.g2d
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Texture]
-           [com.badlogic.gdx.graphics.g2d Animation SpriteBatch TextureRegion]
-           [com.badlogic.gdx.maps.tiled.renderers BatchTiledMapRenderer]
-           [com.badlogic.gdx.scenes.scene2d Actor Stage]))
+           [com.badlogic.gdx.graphics.g2d Animation BitmapFont TextureRegion]))
 
-; drawing
-
-(defmulti sprite-batch #(-> % :renderer class) :default nil)
-
-(defmethod sprite-batch nil [_])
-
-(defmethod sprite-batch BatchTiledMapRenderer
-  [{:keys [^BatchTiledMapRenderer renderer]}]
-  (.getSpriteBatch renderer))
-
-(defmethod sprite-batch Stage
-  [{:keys [^Stage renderer]}]
-  (.getSpriteBatch renderer))
-
-(defn draw-actor!
-  [^SpriteBatch batch {:keys [^Actor object] :as entity}]
-  (assert object)
-  (doseq [[k v] entity]
-    (case k
-      :x (.setX object v)
-      :y (.setY object v)
-      :width (.setWidth object v)
-      :height (.setHeight object v)
-      nil))
-  (.draw object batch 1))
-
-(defn draw-texture!
-  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
-  (assert (and object x y width height))
-  (.draw batch object (float x) (float y) (float width) (float height)))
-
-(defn draw-entity!
-  [^SpriteBatch batch entity]
-  (if (not (map? entity))
-    (draw-entity! batch (u/create-entity entity))
-    (case (:type entity)
-      :actor
-      (draw-actor! batch entity)
-      :texture
-      (draw-texture! batch entity)
-      nil)))
-
-(defn draw! [{:keys [renderer] :as screen} entities]
-  (assert renderer)
-  (let [^SpriteBatch batch (sprite-batch screen)]
-    (.begin batch)
-    (doseq [entity entities]
-      (draw-entity! batch entity))
-    (.end batch))
-  entities)
-
-; textures
+(defmacro bitmap-font
+  [& options]
+  `(BitmapFont. ~@options))
 
 (defn texture*
   [arg]

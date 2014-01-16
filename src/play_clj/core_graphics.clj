@@ -112,6 +112,91 @@
   []
   (Stage.))
 
+(defmacro stage
+  [& options]
+  `(u/calls! ^Stage (stage*) ~@options))
+
+(defmacro stage!
+  [screen k & options]
+  `(u/call! ^Stage (:renderer ~screen) ~k ~@options))
+
+; batch
+
+(defmulti batch #(-> % :renderer class))
+
+(defmethod batch BatchTiledMapRenderer
+  [{:keys [^BatchTiledMapRenderer renderer]}]
+  (.getSpriteBatch renderer))
+
+(defmethod batch Stage
+  [{:keys [^Stage renderer]}]
+  (.getSpriteBatch renderer))
+
+(defmulti batch-begin! type)
+
+(defmethod batch-begin! SpriteBatch
+  [^SpriteBatch batch]
+  (.begin batch))
+
+(defmulti batch-end! type)
+
+(defmethod batch-end! SpriteBatch
+  [^SpriteBatch batch]
+  (.end batch))
+
+; rendering
+
+(defmulti draw-entity! #(-> % second :type))
+
+(defmethod draw-entity! :actor
+  [[^SpriteBatch batch {:keys [^Actor object] :as entity}]]
+  (assert object)
+  (doseq [[k v] entity]
+    (case k
+      :x (.setX object v)
+      :y (.setY object v)
+      :width (.setWidth object v)
+      :height (.setHeight object v)
+      nil))
+  (.draw object batch 1))
+
+(defmethod draw-entity! :texture
+  [[^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]]
+  (assert (and object x y width height))
+  (.draw batch object (float x) (float y) (float width) (float height)))
+
+(defn draw! [{:keys [renderer] :as screen} entities]
+  (assert renderer)
+  (let [^SpriteBatch batch (batch screen)]
+    (batch-begin! batch)
+    (doseq [entity entities]
+      (draw-entity! [batch entity]))
+    (batch-end! batch))
+  entities)
+
+(defn ^:private render-map!
+  [{:keys [^BatchTiledMapRenderer renderer ^Camera camera]}]
+  (when camera (.setView renderer camera))
+  (.render renderer))
+
+(defn ^:private render-stage!
+  [{:keys [^Stage renderer ^Camera camera]}]
+  (when camera
+    (.setCamera renderer camera)
+    (.setViewport renderer (. camera viewportWidth) (. camera viewportHeight)))
+  (.draw renderer))
+
+(defn render!
+  ([{:keys [renderer] :as screen}]
+    (cond
+      (isa? (type renderer) BatchTiledMapRenderer)
+      (render-map! screen)
+      (isa? (type renderer) Stage)
+      (render-stage! screen)))
+  ([screen entities]
+    (render! screen)
+    (draw! screen entities)))
+
 (defn ^:private refresh-renderer!
   [{:keys [renderer ui-listeners]} entities]
   (when (isa? (type renderer) Stage)
@@ -124,30 +209,6 @@
           (.addListener ^Actor object listener))))
     (remove-input! renderer)
     (add-input! renderer)))
-
-(defmacro stage
-  [& options]
-  `(u/calls! ^Stage (stage*) ~@options))
-
-(defmacro stage!
-  [screen k & options]
-  `(u/call! ^Stage (:renderer ~screen) ~k ~@options))
-
-(defmulti render! #(-> % :renderer type) :default nil)
-
-(defmethod render! nil [screen])
-
-(defmethod render! BatchTiledMapRenderer
-  [{:keys [^BatchTiledMapRenderer renderer ^Camera camera]}]
-  (when camera (.setView renderer camera))
-  (.render renderer))
-
-(defmethod render! Stage
-  [{:keys [^Stage renderer ^Camera camera]}]
-  (when camera
-    (.setCamera renderer camera)
-    (.setViewport renderer (. camera viewportWidth) (. camera viewportHeight)))
-  (.draw renderer))
 
 ; cameras
 
