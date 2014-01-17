@@ -252,16 +252,25 @@
 (defn x!
   [{:keys [^Camera camera]} x]
   (assert camera)
-  (when x (set! (. (. camera position) x) x))
+  (set! (. (. camera position) x) x)
   (.update camera))
 
 (defn y!
   [{:keys [^Camera camera]} y]
   (assert camera)
-  (when y (set! (. (. camera position) y) y))
+  (set! (. (. camera position) y) y)
+  (.update camera))
+
+(defn z!
+  [{:keys [^Camera camera]} z]
+  (assert camera)
+  (set! (. (. camera position) z) z)
   (.update camera))
 
 (defn position!
-  [screen x y]
-  (x! screen x)
-  (y! screen y))
+  ([screen x y]
+    (position! screen x y nil))
+  ([screen x y z]
+    (when x (x! screen x))
+    (when y (y! screen y))
+    (when z (z! screen z))))
