@@ -1,7 +1,9 @@
 (ns play-clj.g2d-physics
   (:require [play-clj.math :as m]
             [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.physics.box2d ContactListener World]))
+  (:import [com.badlogic.gdx.physics.box2d Body BodyDef ContactListener World]))
+
+; world
 
 (defn box-2d*
   ([]
@@ -20,6 +22,37 @@
 (defmacro box-2d!
   [screen k & options]
   `(u/call! ^World (:world ~screen) ~k ~@options))
+
+; body
+
+(defmacro body-type
+  [k]
+  `~(symbol (str u/main-package ".physics.box2d.BodyDef$BodyType/"
+                 (u/key->pascal k) "Body")))
+
+(defn body-def*
+  [type-symbol]
+  (let [bdef (BodyDef.)]
+    (set! (. bdef type) type-symbol)
+    bdef))
+
+(defmacro body-def
+  [type-name]
+  `(body-def* (body-type ~type-name)))
+
+(defn body*
+  [screen entity bdef]
+  (assoc entity :body (box-2d! screen :create-body bdef)))
+
+(defmacro body
+  [screen entity type-name & options]
+  `(let [entity# (body* ~screen ~entity (body-def ~type-name))]
+     (u/calls! ^Body (:body entity#) ~@options)
+     entity#))
+
+(defmacro body!
+  [entity k & options]
+  `(u/call! ^Body (:body ~entity) ~k ~@options))
 
 (defn contact-listener
   [{:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]} execute-fn!]
