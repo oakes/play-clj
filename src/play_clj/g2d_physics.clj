@@ -3,20 +3,20 @@
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d World]))
 
-(defn world*
+(defn box2d*
   ([]
-    (world* 0 0 true))
+    (box2d* 0 0 true))
   ([gravity-x gravity-y]
-    (world* gravity-x gravity-y true))
+    (box2d* gravity-x gravity-y true))
   ([gravity-x gravity-y sleep?]
     (World. (m/vector-2 gravity-x gravity-y) sleep?)))
 
-(defmacro world
+(defmacro box2d
   [gravity-x gravity-y & options]
-  `(let [object# (world* ~gravity-x ~gravity-y)]
+  `(let [object# (box2d* ~gravity-x ~gravity-y)]
      (u/calls! ^World object# ~@options)
      object#))
 
-(defmacro world!
+(defmacro box2d!
   [{:keys [^World world]} k & options]
   `(u/call! ^World ~world ~k ~@options))

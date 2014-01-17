@@ -37,7 +37,7 @@ For now, check out the [example projects](https://github.com/oakes/play-clj-exam
     ; update the screen map to hold a tiled map renderer and a camera
     (update! screen
              :renderer (orthogonal-tiled-map "level1.tmx" (/ 1 8))
-             :camera (orthographic-camera))
+             :camera (orthographic))
     (let [; load a sprite sheet from your resources dir
           sheet (texture "tiles.png")
           ; split the sheet into 16x16 tiles

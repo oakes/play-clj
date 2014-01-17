@@ -212,27 +212,27 @@
 
 ; cameras
 
-(defn orthographic-camera*
+(defn orthographic*
   []
   (OrthographicCamera.))
 
-(defmacro orthographic-camera
+(defmacro orthographic
   [& options]
-  `(u/calls! ^OrthographicCamera (orthographic-camera*) ~@options))
+  `(u/calls! ^OrthographicCamera (orthographic*) ~@options))
 
-(defmacro orthographic-camera!
+(defmacro orthographic!
   [screen k & options]
   `(u/call! ^OrthographicCamera (:camera ~screen) ~k ~@options))
 
-(defn perspective-camera
+(defn perspective
   []
   (PerspectiveCamera.))
 
-(defmacro perspective-camera
+(defmacro perspective
   [& options]
-  `(u/calls! ^PerspectiveCamera (perspective-camera*) ~@options))
+  `(u/calls! ^PerspectiveCamera (perspective*) ~@options))
 
-(defmacro perspective-camera!
+(defmacro perspective!
   [screen k & options]
   `(u/call! ^PerspectiveCamera (:camera ~screen) ~k ~@options))
 
