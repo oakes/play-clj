@@ -55,10 +55,8 @@ For now, check out the [example projects](https://github.com/oakes/play-clj-exam
   (fn [screen entities]
     ; make the screen completely black
     (clear!)
-    ; render the tiled map
-    (render! screen)
-    ; draw the entities and return them
-    (draw! screen entities))
+    ; render the tiled map, draw the entities and return them
+    (render! screen entities))
   
   ; this function runs when the screen dimensions change
   :on-resize
