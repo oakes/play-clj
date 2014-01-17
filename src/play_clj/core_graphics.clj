@@ -1,5 +1,21 @@
 (in-ns 'play-clj.core)
 
+(defn ^:private update-screen!
+  ([{:keys [world g2dp-listener]}]
+    (when (isa? (type world) World)
+      (.setContactListener ^World world g2dp-listener)))
+  ([{:keys [renderer ui-listeners]} entities]
+    (when (isa? (type renderer) Stage)
+      (doseq [^Actor a (.getActors ^Stage renderer)]
+        (.remove a))
+      (doseq [{:keys [object]} entities]
+        (when (isa? (type object) Actor)
+          (.addActor ^Stage renderer object)
+          (doseq [listener ui-listeners]
+            (.addListener ^Actor object listener))))
+      (remove-input! renderer)
+      (add-input! renderer))))
+
 ; tiled maps
 
 (defn tiled-map*
@@ -196,19 +212,6 @@
   ([screen entities]
     (render! screen)
     (draw! screen entities)))
-
-(defn ^:private refresh-renderer!
-  [{:keys [renderer ui-listeners]} entities]
-  (when (isa? (type renderer) Stage)
-    (doseq [^Actor a (.getActors ^Stage renderer)]
-      (.remove a))
-    (doseq [{:keys [object]} entities]
-      (when (isa? (type object) Actor)
-        (.addActor ^Stage renderer object)
-        (doseq [listener ui-listeners]
-          (.addListener ^Actor object listener))))
-    (remove-input! renderer)
-    (add-input! renderer)))
 
 ; cameras
 

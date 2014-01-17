@@ -1,5 +1,6 @@
 (ns play-clj.core
   (:require [clojure.set :as set]
+            [play-clj.g2d-physics :as g2dp]
             [play-clj.ui :as ui]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
@@ -18,12 +19,13 @@
             IsometricStaggeredTiledMapRenderer
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]
+           [com.badlogic.gdx.physics.box2d World]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]))
 
 (load "core_global")
 (load "core_graphics")
 
-(defn ^:private reset-if-changed!
+(defn ^:private reset-changed!
   [e-atom e-old e-new]
   (when (not= e-old e-new)
     (compare-and-set! e-atom e-old e-new)))
@@ -33,10 +35,6 @@
     :as options}]
   (let [screen (atom {})
         entities (atom '())
-        _ (add-watch entities
-                     :changed
-                     (fn [_ _ _ new-entities]
-                       (refresh-renderer! @screen new-entities)))
         execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
                         (let [old-entities @entities]
@@ -44,18 +42,21 @@
                                    list
                                    flatten
                                    (remove nil?)
-                                   (reset-if-changed! entities old-entities)))))
-        listeners [(input-processor options execute-fn!)
-                   (gesture-detector options execute-fn!)]
-        ui-listeners (ui/create-listeners options execute-fn!)
-        update-fn! #(swap! screen merge %)]
+                                   (reset-changed! entities old-entities)))))]
+    ; update screen when either the screen or entities are changed
+    (add-watch screen :changed (fn [_ _ _ new-screen]
+                                 (update-screen! new-screen)))
+    (add-watch entities :changed (fn [_ _ _ new-entities]
+                                   (update-screen! @screen new-entities)))
+    ; return a map with all values related to the screen
     {:screen screen
      :entities entities
      :show (fn []
              (swap! screen assoc
                     :total-time 0
-                    :update-fn! update-fn!
-                    :ui-listeners ui-listeners)
+                    :update-fn! #(swap! screen merge %)
+                    :ui-listeners (ui/ui-listeners options execute-fn!)
+                    :g2dp-listener (g2dp/contact-listener options execute-fn!))
              (execute-fn! on-show))
      :render (fn [d]
                (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
@@ -64,7 +65,8 @@
      :pause #(execute-fn! on-pause)
      :resize #(execute-fn! on-resize :width %1 :height %2)
      :resume #(execute-fn! on-resume)
-     :listeners listeners}))
+     :input-listeners [(input-processor options execute-fn!)
+                       (gesture-detector options execute-fn!)]}))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]
@@ -88,8 +90,8 @@
   [^Game game & screens]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
-                      (doseq [{:keys [listeners]} screens]
-                        (doseq [listener listeners]
+                      (doseq [{:keys [input-listeners]} screens]
+                        (doseq [listener input-listeners]
                           (add-input! listener))))
         run-fn! (fn [k & args]
                   (doseq [screen screens]

@@ -476,7 +476,7 @@
     (scrollFocusChanged [e a f]
       (execute-fn! on-ui-scroll-focus-changed :event e :actor a :focused? f))))
 
-(defn create-listeners
+(defn ui-listeners
   [options execute-fn!]
   [(gesture-listener options execute-fn!)
    (change-listener options execute-fn!)
