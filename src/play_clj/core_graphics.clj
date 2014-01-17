@@ -1,20 +1,25 @@
 (in-ns 'play-clj.core)
 
+(defn ^:private update-stage!
+  [{:keys [^Stage renderer ui-listeners]} entities]
+  (doseq [^Actor a (.getActors renderer)]
+    (.remove a))
+  (doseq [{:keys [object]} entities]
+    (when (isa? (type object) Actor)
+      (.addActor renderer object)
+      (doseq [listener ui-listeners]
+        (.addListener ^Actor object listener))))
+  (remove-input! renderer)
+  (add-input! renderer))
+
 (defn ^:private update-screen!
   ([{:keys [world g2dp-listener]}]
     (when (isa? (type world) World)
       (.setContactListener ^World world g2dp-listener)))
-  ([{:keys [renderer ui-listeners]} entities]
-    (when (isa? (type renderer) Stage)
-      (doseq [^Actor a (.getActors ^Stage renderer)]
-        (.remove a))
-      (doseq [{:keys [object]} entities]
-        (when (isa? (type object) Actor)
-          (.addActor ^Stage renderer object)
-          (doseq [listener ui-listeners]
-            (.addListener ^Actor object listener))))
-      (remove-input! renderer)
-      (add-input! renderer))))
+  ([{:keys [renderer] :as screen} entities]
+    (cond
+      (isa? (type renderer) Stage)
+      (update-stage! screen entities))))
 
 ; tiled maps
 
@@ -212,6 +217,16 @@
   ([screen entities]
     (render! screen)
     (draw! screen entities)))
+
+(defn step!
+  [{:keys [world time-step velocity-iterations position-iterations]
+    :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}}
+   entities]
+  (assert world)
+  (cond
+    (isa? (type world) World)
+    (.step ^World world time-step velocity-iterations position-iterations))
+  entities)
 
 ; cameras
 

@@ -18,8 +18,8 @@
      object#))
 
 (defmacro box-2d!
-  [{:keys [^World world]} k & options]
-  `(u/call! ^World ~world ~k ~@options))
+  [screen k & options]
+  `(u/call! ^World (:world ~screen) ~k ~@options))
 
 (defn contact-listener
   [{:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]} execute-fn!]
