@@ -182,8 +182,9 @@
   (.draw object batch 1))
 
 (defmethod draw-entity! :texture
-  [[^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]]
-  (assert (and object x y width height))
+  [[^SpriteBatch batch {:keys [^TextureRegion object x y width height]
+                        :or {x 0 y 0 width 0 height 0}}]]
+  (assert object)
   (.draw batch object (float x) (float y) (float width) (float height)))
 
 (defn draw! [{:keys [renderer] :as screen} entities]
@@ -218,15 +219,18 @@
     (render! screen)
     (draw! screen entities)))
 
+; physics
+
 (defn step!
-  [{:keys [world time-step velocity-iterations position-iterations]
-    :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}}
-   entities]
-  (assert world)
-  (cond
-    (isa? (type world) World)
-    (.step ^World world time-step velocity-iterations position-iterations))
-  entities)
+  ([{:keys [world time-step velocity-iterations position-iterations]
+     :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}}]
+    (assert world)
+    (cond
+      (isa? (type world) World)
+      (.step ^World world time-step velocity-iterations position-iterations)))
+  ([screen entities]
+    (step! screen)
+    entities))
 
 ; cameras
 
