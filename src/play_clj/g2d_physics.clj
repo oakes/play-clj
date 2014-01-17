@@ -1,7 +1,8 @@
 (ns play-clj.g2d-physics
   (:require [play-clj.math :as m]
             [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.physics.box2d Body BodyDef ContactListener World]))
+  (:import [com.badlogic.gdx.physics.box2d Body BodyDef ContactListener
+            FixtureDef World]))
 
 ; world
 
@@ -23,36 +24,51 @@
   [screen k & options]
   `(u/call! ^World (:world ~screen) ~k ~@options))
 
-; body
+; bodies
 
 (defmacro body-type
   [k]
   `~(symbol (str u/main-package ".physics.box2d.BodyDef$BodyType/"
                  (u/key->pascal k) "Body")))
 
-(defn body-def*
-  [type-symbol]
-  (let [bdef (BodyDef.)]
-    (set! (. bdef type) type-symbol)
-    bdef))
-
-(defmacro body-def
-  [type-name]
-  `(body-def* (body-type ~type-name)))
-
-(defn body*
-  [screen entity bdef]
-  (assoc entity :body (box-2d! screen :create-body bdef)))
-
-(defmacro body
-  [screen entity type-name & options]
-  `(let [entity# (body* ~screen ~entity (body-def ~type-name))]
-     (u/calls! ^Body (:body entity#) ~@options)
-     entity#))
+(defn body
+  [& {:keys [] :as options}]
+  (let [body-def (BodyDef.)]
+    (doseq [[k v] options]
+      (case k
+        :type (set! (. body-def type) v)
+        (u/throw-key-not-found k)))
+    body-def))
 
 (defmacro body!
   [entity k & options]
-  `(u/call! ^Body (:body ~entity) ~k ~@options))
+  `(u/call! ^Body (or (:body ~entity) ~entity) ~k ~@options))
+
+(defn create-body!*
+  [screen body-def]
+  (box-2d! screen :create-body body-def))
+
+(defmacro create-body!
+  [screen type-name & options]
+  `(let [object# (create-body!* ~screen (body :type (body-type ~type-name)))]
+     (u/calls! ^Body object# ~@options)
+     object#))
+
+; fixtures
+
+(defn fixture
+  [& {:keys [] :as options}]
+  (let [fixture-def (FixtureDef.)]
+    (doseq [[k v] options]
+      (case k
+        :density (set! (. fixture-def density) v)
+        :friction (set! (. fixture-def friction) v)
+        :is-sensor? (set! (. fixture-def isSensor) v)
+        :restitution (set! (. fixture-def restitution) v)
+        :shape (set! (. fixture-def shape) v)))
+    fixture-def))
+
+; listeners
 
 (defn contact-listener
   [{:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]} execute-fn!]

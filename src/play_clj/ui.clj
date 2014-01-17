@@ -79,7 +79,7 @@
         :uniform-x (.uniformX cell)
         :uniform-y (.uniformY cell)
         :row (.row cell)
-        (throw (Exception. (str "The keyword " method " is not supported."))))
+        (u/throw-key-not-found method))
       (apply cell! cell rest-args))
     cell))
 
@@ -99,7 +99,7 @@
     (keyword? child)
     (case child
       :row (.row ^Table (:object parent))
-      (throw (Exception. (str "The keyword " child " is not supported."))))))
+      (u/throw-key-not-found child))))
 
 (defn ^:private create-tree-node
   [child]

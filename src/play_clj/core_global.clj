@@ -49,8 +49,8 @@
 ; input/output
 
 (defn game
-  [key]
-  (case key
+  [k]
+  (case k
     :width (graphics! :get-width)
     :height (graphics! :get-height)
     :fps (graphics! :get-frames-per-second)
@@ -58,15 +58,15 @@
     :is-touched? (input! :is-touched)
     :x (input! :get-x)
     :y (input! :get-y)
-    nil))
+    (u/throw-key-not-found k)))
 
 (defmacro key-code
-  [key]
-  `~(symbol (str u/main-package ".Input$Keys/" (u/key->upper key))))
+  [k]
+  `~(symbol (str u/main-package ".Input$Keys/" (u/key->upper k))))
 
 (defmacro is-pressed?
-  [key]
-  `(input! :is-key-pressed (key-code ~key)))
+  [k]
+  `(input! :is-key-pressed (key-code ~k)))
 
 (defn ^:private input-processor
   [{:keys [on-key-down on-key-typed on-key-up on-mouse-moved

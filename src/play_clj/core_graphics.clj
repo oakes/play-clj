@@ -86,7 +86,8 @@
 
 (defmacro orthogonal-tiled-map!
   [screen k & options]
-  `(u/call! ^OrthogonalTiledMapRenderer (:renderer ~screen) ~k ~@options))
+  `(u/call! ^OrthogonalTiledMapRenderer (or (:renderer ~screen) ~screen)
+            ~k ~@options))
 
 (defn isometric-tiled-map*
   [path unit]
@@ -99,11 +100,13 @@
 
 (defmacro isometric-tiled-map!
   [screen k & options]
-  `(u/call! ^IsometricTiledMapRenderer (:renderer ~screen) ~k ~@options))
+  `(u/call! ^IsometricTiledMapRenderer (or (:renderer ~screen) ~screen)
+            ~k ~@options))
 
 (defn isometric-staggered-tiled-map*
   [path unit]
-  (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
+  (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map* path)
+                                       ^double unit))
 
 (defmacro isometric-staggered-tiled-map
   [path unit & options]
@@ -113,7 +116,7 @@
 
 (defmacro isometric-staggered-tiled-map!
   [screen k & options]
-  `(u/call! ^IsometricStaggeredTiledMapRenderer (:renderer ~screen)
+  `(u/call! ^IsometricStaggeredTiledMapRenderer (or (:renderer ~screen) ~screen)
                 ~k ~@options))
 
 (defn hexagonal-tiled-map*
@@ -127,7 +130,8 @@
 
 (defmacro hexagonal-tiled-map!
   [screen k & options]
-  `(u/call! ^HexagonalTiledMapRenderer (:renderer ~screen) ~k ~@options))
+  `(u/call! ^HexagonalTiledMapRenderer (or (:renderer ~screen) ~screen)
+            ~k ~@options))
 
 (defn stage*
   []
@@ -139,7 +143,7 @@
 
 (defmacro stage!
   [screen k & options]
-  `(u/call! ^Stage (:renderer ~screen) ~k ~@options))
+  `(u/call! ^Stage (or (:renderer ~screen) ~screen) ~k ~@options))
 
 ; batch
 
@@ -244,7 +248,7 @@
 
 (defmacro orthographic!
   [screen k & options]
-  `(u/call! ^OrthographicCamera (:camera ~screen) ~k ~@options))
+  `(u/call! ^OrthographicCamera (or (:camera ~screen) ~screen) ~k ~@options))
 
 (defn perspective
   []
@@ -256,7 +260,7 @@
 
 (defmacro perspective!
   [screen k & options]
-  `(u/call! ^PerspectiveCamera (:camera ~screen) ~k ~@options))
+  `(u/call! ^PerspectiveCamera (or (:camera ~screen) ~screen) ~k ~@options))
 
 (defn size!
   [{:keys [^OrthographicCamera camera]} width height]

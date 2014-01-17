@@ -4,17 +4,23 @@
            [com.badlogic.gdx.scenes.scene2d Actor]
            [com.badlogic.gdx.utils Array ArrayMap]))
 
+; exceptions
+
+(defn throw-key-not-found
+  [k]
+  (throw (Exception. (str "The keyword " k " is not supported."))))
+
 ; converting keys
 
 (def ^:const main-package "com.badlogic.gdx")
 
 (defn ^:private split-key
-  [key]
-  (-> key name (s/split #"-")))
+  [k]
+  (-> k name (s/split #"-")))
 
 (defn ^:private join-keys
-  [keys]
-  (->> keys (map name) (s/join ".") (str main-package ".")))
+  [k-list]
+  (->> k-list (map name) (s/join ".") (str main-package ".")))
 
 (defn key->upper
   [k]
