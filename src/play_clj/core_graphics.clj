@@ -169,12 +169,12 @@
 
 ; rendering
 
-(defmulti draw-entity! #(-> % second :type))
+(defmulti draw-entity! (fn [_ entity] (:type entity)))
 
-(defmethod draw-entity! nil [_])
+(defmethod draw-entity! nil [_ _])
 
 (defmethod draw-entity! :actor
-  [[^SpriteBatch batch {:keys [^Actor object] :as entity}]]
+  [^SpriteBatch batch {:keys [^Actor object] :as entity}]
   (assert object)
   (doseq [[k v] entity]
     (case k
@@ -186,8 +186,8 @@
   (.draw object batch 1))
 
 (defmethod draw-entity! :texture
-  [[^SpriteBatch batch {:keys [^TextureRegion object x y width height]
-                        :or {x 0 y 0 width 0 height 0}}]]
+  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]
+                       :or {x 0 y 0 width 0 height 0}}]
   (assert object)
   (.draw batch object (float x) (float y) (float width) (float height)))
 
@@ -196,7 +196,7 @@
   (let [^SpriteBatch batch (batch screen)]
     (.begin batch)
     (doseq [entity entities]
-      (draw-entity! [batch entity]))
+      (draw-entity! batch entity))
     (.end batch))
   entities)
 
