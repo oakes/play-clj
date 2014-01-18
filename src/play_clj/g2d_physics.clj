@@ -1,8 +1,8 @@
 (ns play-clj.g2d-physics
   (:require [play-clj.math :as m]
             [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.physics.box2d Body BodyDef ContactListener
-            FixtureDef World]))
+  (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
+            ContactListener EdgeShape FixtureDef PolygonShape World]))
 
 ; world
 
@@ -22,7 +22,7 @@
 
 (defmacro box-2d!
   [screen k & options]
-  `(u/call! ^World (:world ~screen) ~k ~@options))
+  `(u/call! ^World (or (:world ~screen) ~screen) ~k ~@options))
 
 ; bodies
 
@@ -65,8 +65,57 @@
         :friction (set! (. fixture-def friction) v)
         :is-sensor? (set! (. fixture-def isSensor) v)
         :restitution (set! (. fixture-def restitution) v)
-        :shape (set! (. fixture-def shape) v)))
+        :shape (set! (. fixture-def shape) v)
+        (u/throw-key-not-found k)))
     fixture-def))
+
+(defn chain*
+  []
+  (ChainShape.))
+
+(defmacro chain
+  [& options]
+  `(u/calls! ^ChainShape (chain*) ~@options))
+
+(defmacro chain!-shape
+  [object k & options]
+  `(u/call! ^ChainShape ~object ~k ~@options))
+
+(defn circle*
+  []
+  (CircleShape.))
+
+(defmacro circle
+  [& options]
+  `(u/calls! ^CircleShape (circle*) ~@options))
+
+(defmacro circle!
+  [object k & options]
+  `(u/call! ^CircleShape ~object ~k ~@options))
+
+(defn edge*
+  []
+  (EdgeShape.))
+
+(defmacro edge
+  [& options]
+  `(u/calls! ^EdgeShape (edge*) ~@options))
+
+(defmacro edge!
+  [object k & options]
+  `(u/call! ^EdgeShape ~object ~k ~@options))
+
+(defn polygon*
+  []
+  (PolygonShape.))
+
+(defmacro polygon
+  [& options]
+  `(u/calls! ^PolygonShape (polygon*) ~@options))
+
+(defmacro polygon!
+  [object k & options]
+  `(u/call! ^PolygonShape ~object ~k ~@options))
 
 ; listeners
 
