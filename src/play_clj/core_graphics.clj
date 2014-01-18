@@ -15,11 +15,18 @@
 (defn ^:private update-box-2d!
   [{:keys [^World world]} entities]
   (when-not (.isLocked world)
-    (let [bodies (u/gdx-array [])]
-      (.getBodies world bodies)
-      (doseq [body bodies]
+    (let [arr (u/gdx-array [])]
+      ; remove bodies that no longer exist
+      (.getBodies world arr)
+      (doseq [body arr]
         (when-not (some #(= body (:body %)) entities)
-          (.destroyBody world body))))))
+          (.destroyBody world body)))
+      ; remove joints whose bodies no longer exist
+      (.getJoints world arr)
+      (doseq [^Joint joint arr]
+        (when (and (not (some #(= (.getBodyA joint) (:body %)) entities))
+                   (not (some #(= (.getBodyB joint) (:body %)) entities)))
+          (.destroyJoint world joint))))))
 
 (defn ^:private update-screen!
   ([{:keys [world g2dp-listener]}]

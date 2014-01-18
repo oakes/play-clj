@@ -88,7 +88,7 @@
 (defn create-field-setters
   [obj {:keys [] :as args}]
   (map (fn [[k v]]
-         `(set! (. ~obj ~(symbol (key->camel k))) (eval ~v)))
+         `(set! (. ~obj ~(symbol (key->camel k))) ~v))
        args))
 
 (defmacro fields!

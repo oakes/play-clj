@@ -19,7 +19,7 @@
             IsometricStaggeredTiledMapRenderer
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]
-           [com.badlogic.gdx.physics.box2d World]
+           [com.badlogic.gdx.physics.box2d Joint World]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]))
 
 (load "core_global")
