@@ -269,9 +269,10 @@
   `(u/call! ^PerspectiveCamera (or (:camera ~screen) ~screen) ~k ~@options))
 
 (defn size!
-  [{:keys [^OrthographicCamera camera]} width height]
-  (assert camera)
-  (.setToOrtho camera false width height))
+  [screen width height]
+  (let [^OrthographicCamera camera (or (:camera screen) screen)]
+    (assert camera)
+    (.setToOrtho camera false width height)))
 
 (defn height!
   [screen new-height]
@@ -282,22 +283,25 @@
   (size! screen new-width (* new-width (/ (game :height) (game :width)))))
 
 (defn x!
-  [{:keys [^Camera camera]} x]
-  (assert camera)
-  (set! (. (. camera position) x) x)
-  (.update camera))
+  [screen x]
+  (let [^Camera camera (or (:camera screen) screen)]
+    (assert camera)
+    (set! (. (. camera position) x) x)
+    (.update camera)))
 
 (defn y!
-  [{:keys [^Camera camera]} y]
-  (assert camera)
-  (set! (. (. camera position) y) y)
-  (.update camera))
+  [screen y]
+  (let [^Camera camera (or (:camera screen) screen)]
+    (assert camera)
+    (set! (. (. camera position) y) y)
+    (.update camera)))
 
 (defn z!
-  [{:keys [^Camera camera]} z]
-  (assert camera)
-  (set! (. (. camera position) z) z)
-  (.update camera))
+  [screen z]
+  (let [^Camera camera (or (:camera screen) screen)]
+    (assert camera)
+    (set! (. (. camera position) z) z)
+    (.update camera)))
 
 (defn position!
   ([screen x y]
