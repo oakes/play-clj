@@ -2,8 +2,8 @@
   (:require [play-clj.math :as m]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
-            Contact ContactListener EdgeShape Fixture FixtureDef PolygonShape
-            Transform World]))
+            Contact ContactListener EdgeShape Fixture FixtureDef JointDef
+            PolygonShape Transform World]))
 
 ; world
 
@@ -32,14 +32,11 @@
   `~(symbol (str u/main-package ".physics.box2d.BodyDef$BodyType/"
                  (u/key->pascal k) "Body")))
 
-(defn body
-  [& {:keys [] :as options}]
-  (let [body-def (BodyDef.)]
-    (doseq [[k v] options]
-      (case k
-        :type (set! (. body-def type) v)
-        (u/throw-key-not-found k)))
-    body-def))
+(defmacro body
+  [k & options]
+  `(let [^BodyDef object# (BodyDef.)]
+     (set! (. object# type) (body-type ~k))
+     (u/fields! object# ~@options)))
 
 (defmacro body!
   [entity k & options]
@@ -51,9 +48,9 @@
   (box-2d! screen :create-body body-def))
 
 (defmacro create-body!
-  [screen type-name & options]
-  `(let [object# (create-body!* ~screen (body :type (body-type ~type-name)))]
-     (u/calls! ^Body object# ~@options)))
+  [screen body-def & options]
+  `(let [^Body object# (create-body!* ~screen ~body-def)]
+     (u/calls! object# ~@options)))
 
 (defn body-x
   [entity]
@@ -84,20 +81,40 @@
   [entity angle]
   (body-transform! entity (body-x entity) (body-y entity) angle))
 
+; joints
+
+(defmacro joint-init
+  [k]
+  `(~(symbol (str u/main-package ".physics.box2d.joints."
+                  (u/key->pascal k) "JointDef."))))
+
+(defmacro joint
+  [k & options]
+  `(let [object# (joint-init ~k)]
+     (u/fields! object# ~@options)))
+
+(defn create-joint!*
+  [screen joint-def]
+  (box-2d! screen :create-joint joint-def))
+
+(defmacro create-joint!
+  [screen joint-def & options]
+  `(let [object# (create-joint!* ~screen ~joint-def)]
+     (u/calls! object# ~@options)))
+
 ; fixtures
 
-(defn fixture
-  [& {:keys [] :as options}]
-  (let [fixture-def (FixtureDef.)]
-    (doseq [[k v] options]
-      (case k
-        :density (set! (. fixture-def density) v)
-        :friction (set! (. fixture-def friction) v)
-        :is-sensor? (set! (. fixture-def isSensor) v)
-        :restitution (set! (. fixture-def restitution) v)
-        :shape (set! (. fixture-def shape) v)
-        (u/throw-key-not-found k)))
-    fixture-def))
+(defn fixture*
+  []
+  (FixtureDef.))
+
+(defmacro fixture
+  [& options]
+  `(let [^FixtureDef object# (fixture*)]
+     (u/fields! object# ~@options)
+     object#))
+
+; shapes
 
 (defn chain*
   []

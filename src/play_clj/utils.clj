@@ -85,6 +85,17 @@
   [obj & args]
   `(doto ~obj ~@(create-method-calls [] args)))
 
+(defn create-field-setters
+  [obj {:keys [] :as args}]
+  (map (fn [[k v]]
+         `(set! (. ~obj ~(symbol (key->camel k))) (eval ~v)))
+       args))
+
+(defmacro fields!
+  [obj & args]
+  `(do ~@(create-field-setters obj args)
+     ~obj))
+
 ; data structures
 
 (defn gdx-array*
