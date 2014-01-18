@@ -173,6 +173,8 @@
 
 (defmulti draw-entity! #(-> % second :type))
 
+(defmethod draw-entity! nil [_])
+
 (defmethod draw-entity! :actor
   [[^SpriteBatch batch {:keys [^Actor object] :as entity}]]
   (assert object)
