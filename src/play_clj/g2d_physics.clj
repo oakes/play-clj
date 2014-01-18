@@ -32,7 +32,7 @@
   `~(symbol (str u/main-package ".physics.box2d.BodyDef$BodyType/"
                  (u/key->pascal k) "Body")))
 
-(defmacro body
+(defmacro body-def
   [k & options]
   `(let [^BodyDef object# (BodyDef.)]
      (set! (. object# type) (body-type ~k))
@@ -44,12 +44,12 @@
      (u/call! object# ~k ~@options)))
 
 (defn create-body!*
-  [screen body-def]
-  (box-2d! screen :create-body body-def))
+  [screen b-def]
+  (box-2d! screen :create-body b-def))
 
 (defmacro create-body!
-  [screen body-def & options]
-  `(let [^Body object# (create-body!* ~screen ~body-def)]
+  [screen b-def & options]
+  `(let [^Body object# (create-body!* ~screen ~b-def)]
      (u/calls! object# ~@options)))
 
 (defn body-x
@@ -88,18 +88,18 @@
   `(~(symbol (str u/main-package ".physics.box2d.joints."
                   (u/key->pascal k) "JointDef."))))
 
-(defmacro joint
+(defmacro joint-def
   [k & options]
   `(let [object# (joint-init ~k)]
      (u/fields! object# ~@options)))
 
 (defn create-joint!*
-  [screen joint-def]
-  (box-2d! screen :create-joint joint-def))
+  [screen j-def]
+  (box-2d! screen :create-joint j-def))
 
 (defmacro create-joint!
-  [screen joint-def & options]
-  `(let [object# (create-joint!* ~screen ~joint-def)]
+  [screen j-def & options]
+  `(let [object# (create-joint!* ~screen ~j-def)]
      (u/calls! object# ~@options)))
 
 ; fixtures
