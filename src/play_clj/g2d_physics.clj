@@ -17,13 +17,13 @@
 
 (defmacro box-2d
   [gravity-x gravity-y & options]
-  `(let [object# (box-2d* ~gravity-x ~gravity-y)]
-     (u/calls! ^World object# ~@options)
-     object#))
+  `(let [^World object# (box-2d* ~gravity-x ~gravity-y)]
+     (u/calls! object# ~@options)))
 
 (defmacro box-2d!
   [screen k & options]
-  `(u/call! ^World (or (:world ~screen) ~screen) ~k ~@options))
+  `(let [^World object# (or (:world ~screen) ~screen)]
+     (u/call! object# ~k ~@options)))
 
 ; bodies
 
@@ -43,7 +43,8 @@
 
 (defmacro body!
   [entity k & options]
-  `(u/call! ^Body (or (:body ~entity) ~entity) ~k ~@options))
+  `(let [^Body object# (or (:body ~entity) ~entity)]
+     (u/call! object# ~k ~@options)))
 
 (defn create-body!*
   [screen body-def]
@@ -52,8 +53,7 @@
 (defmacro create-body!
   [screen type-name & options]
   `(let [object# (create-body!* ~screen (body :type (body-type ~type-name)))]
-     (u/calls! ^Body object# ~@options)
-     object#))
+     (u/calls! ^Body object# ~@options)))
 
 (defn body-x
   [entity]
@@ -115,7 +115,7 @@
   ([]
     (CircleShape.))
   ([radius]
-    (doto (circle*)
+    (doto ^CircleShape (circle*)
       (.setRadius radius)
       (.setPosition (m/vector-2 radius radius)))))
 
