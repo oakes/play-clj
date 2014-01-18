@@ -104,13 +104,9 @@
 
 ; fixtures
 
-(defn fixture*
-  []
-  (FixtureDef.))
-
-(defmacro fixture
+(defmacro fixture-def
   [& options]
-  `(let [^FixtureDef object# (fixture*)]
+  `(let [^FixtureDef object# (FixtureDef.)]
      (u/fields! object# ~@options)
      object#))
 
