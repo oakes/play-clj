@@ -74,18 +74,15 @@
 
 (defn body-x!
   [entity x]
-  (body-transform! entity x (body-y entity) (body-angle entity))
-  entity)
+  (body-transform! entity x (body-y entity) (body-angle entity)))
 
 (defn body-y!
   [entity y]
-  (body-transform! entity (body-x entity) y (body-angle entity))
-  entity)
+  (body-transform! entity (body-x entity) y (body-angle entity)))
 
 (defn body-angle!
   [entity angle]
-  (body-transform! entity (body-x entity) (body-y entity) angle)
-  entity)
+  (body-transform! entity (body-x entity) (body-y entity) angle))
 
 ; fixtures
 
