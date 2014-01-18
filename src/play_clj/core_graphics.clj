@@ -167,18 +167,6 @@
   [{:keys [^Stage renderer]}]
   (.getSpriteBatch renderer))
 
-(defmulti batch-begin! type)
-
-(defmethod batch-begin! SpriteBatch
-  [^SpriteBatch batch]
-  (.begin batch))
-
-(defmulti batch-end! type)
-
-(defmethod batch-end! SpriteBatch
-  [^SpriteBatch batch]
-  (.end batch))
-
 ; rendering
 
 (defmulti draw-entity! #(-> % second :type))
@@ -206,10 +194,10 @@
 (defn draw! [{:keys [renderer] :as screen} entities]
   (assert renderer)
   (let [^SpriteBatch batch (batch screen)]
-    (batch-begin! batch)
+    (.begin batch)
     (doseq [entity entities]
       (draw-entity! [batch entity]))
-    (batch-end! batch))
+    (.end batch))
   entities)
 
 (defn ^:private render-map!
