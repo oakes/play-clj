@@ -110,12 +110,16 @@
   `(u/call! ^ChainShape ~object ~k ~@options))
 
 (defn circle*
-  []
-  (CircleShape.))
+  ([]
+    (CircleShape.))
+  ([radius]
+    (doto (circle*)
+      (.setRadius radius)
+      (.setPosition (m/vector-2 radius radius)))))
 
 (defmacro circle
-  [& options]
-  `(u/calls! ^CircleShape (circle*) ~@options))
+  [radius & options]
+  `(u/calls! ^CircleShape (circle* ~radius) ~@options))
 
 (defmacro circle!
   [object k & options]
