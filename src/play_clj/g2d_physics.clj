@@ -2,7 +2,8 @@
   (:require [play-clj.math :as m]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
-            ContactListener EdgeShape FixtureDef PolygonShape Transform World]))
+            Contact ContactListener EdgeShape Fixture FixtureDef PolygonShape
+            Transform World]))
 
 ; world
 
@@ -68,19 +69,23 @@
 
 (defn body-transform!
   [entity x y angle]
-  (body! entity :set-transform x y angle))
+  (body! entity :set-transform x y angle)
+  entity)
 
 (defn body-x!
   [entity x]
-  (body-transform! entity x (body-y entity) (body-angle entity)))
+  (body-transform! entity x (body-y entity) (body-angle entity))
+  entity)
 
 (defn body-y!
   [entity y]
-  (body-transform! entity (body-x entity) y (body-angle entity)))
+  (body-transform! entity (body-x entity) y (body-angle entity))
+  entity)
 
 (defn body-angle!
   [entity angle]
-  (body-transform! entity (body-x entity) (body-y entity) angle))
+  (body-transform! entity (body-x entity) (body-y entity) angle)
+  entity)
 
 ; fixtures
 
@@ -148,6 +153,36 @@
 (defmacro polygon!
   [object k & options]
   `(u/call! ^PolygonShape ~object ~k ~@options))
+
+; misc functions
+
+(defmacro contact!
+  [object k & options]
+  `(u/call! ^Contact ~object ~k ~@options))
+
+(defmacro fixture!
+  [object k & options]
+  `(u/call! ^Fixture ~object ~k ~@options))
+
+(defn find-body
+  [body entities]
+  (some #(if (= body (:body %)) %) entities))
+
+(defn first-contact
+  ([screen]
+    (let [^Contact contact (or (:contact screen) screen)]
+      (assert contact)
+      (-> contact .getFixtureA .getBody)))
+  ([screen entities]
+    (find-body (first-contact screen) entities)))
+
+(defn second-contact
+  ([screen]
+    (let [^Contact contact (or (:contact screen) screen)]
+      (assert contact)
+      (-> contact .getFixtureB .getBody)))
+  ([screen entities]
+    (find-body (second-contact screen) entities)))
 
 ; listeners
 

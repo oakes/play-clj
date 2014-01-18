@@ -12,14 +12,24 @@
   (remove-input! renderer)
   (add-input! renderer))
 
+(defn ^:private update-box-2d!
+  [{:keys [^World world]} entities]
+  (when-not (.isLocked world)
+    (let [bodies (u/gdx-array [])]
+      (.getBodies world bodies)
+      (doseq [body bodies]
+        (when-not (some #(= body (:body %)) entities)
+          (.destroyBody world body))))))
+
 (defn ^:private update-screen!
   ([{:keys [world g2dp-listener]}]
     (when (isa? (type world) World)
       (.setContactListener ^World world g2dp-listener)))
-  ([{:keys [renderer] :as screen} entities]
-    (cond
-      (isa? (type renderer) Stage)
-      (update-stage! screen entities))))
+  ([{:keys [renderer world] :as screen} entities]
+    (when (isa? (type renderer) Stage)
+      (update-stage! screen entities))
+    (when (isa? (type world) World)
+      (update-box-2d! screen entities))))
 
 ; tiled maps
 
