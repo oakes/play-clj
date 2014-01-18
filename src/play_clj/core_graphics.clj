@@ -234,7 +234,13 @@
       (.step ^World world time-step velocity-iterations position-iterations)))
   ([screen entities]
     (step! screen)
-    entities))
+    (map (fn [entity]
+           (if-let [body (:body entity)]
+             (assoc entity
+                    :x (g2dp/body-x body)
+                    :y (g2dp/body-y body))
+             entity))
+         entities)))
 
 ; cameras
 

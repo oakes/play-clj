@@ -2,7 +2,7 @@
   (:require [play-clj.math :as m]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
-            ContactListener EdgeShape FixtureDef PolygonShape World]))
+            ContactListener EdgeShape FixtureDef PolygonShape Transform World]))
 
 ; world
 
@@ -53,6 +53,34 @@
   `(let [object# (create-body!* ~screen (body :type (body-type ~type-name)))]
      (u/calls! ^Body object# ~@options)
      object#))
+
+(defn body-x
+  [entity]
+  (. (body! entity :get-position) x))
+
+(defn body-y
+  [entity]
+  (. (body! entity :get-position) y))
+
+(defn body-angle
+  [entity]
+  (.getRotation ^Transform (body! entity :get-transform)))
+
+(defn body-transform!
+  [entity x y angle]
+  (body! entity :set-transform x y angle))
+
+(defn body-x!
+  [entity x]
+  (body-transform! entity x (body-y entity) (body-angle entity)))
+
+(defn body-y!
+  [entity y]
+  (body-transform! entity (body-x entity) y (body-angle entity)))
+
+(defn body-angle!
+  [entity angle]
+  (body-transform! entity (body-x entity) (body-y entity) angle))
 
 ; fixtures
 
