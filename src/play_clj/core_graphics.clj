@@ -51,13 +51,14 @@
   `(u/calls! ^TiledMap (tiled-map* ~s) ~@options))
 
 (defmacro tiled-map!
-  [{:keys [^BatchTiledMapRenderer renderer]} k & options]
-  `(u/call! ^TiledMap (.getMap ~renderer) ~k ~@options))
+  [screen k & options]
+  `(let [^BatchTiledMapRenderer object# (or (:renderer ~screen) ~screen)]
+     (u/call! ^TiledMap (.getMap object#) ~k ~@options)))
 
 (defn tiled-map-layers
-  [{:keys [^BatchTiledMapRenderer renderer]}]
-  (assert renderer)
-  (let [layers (-> renderer .getMap .getLayers)]
+  [screen]
+  (let [^BatchTiledMapRenderer renderer (or (:renderer screen) screen)
+        ^MapLayers layers (-> renderer .getMap .getLayers)]
     (for [^long i (range (.getCount layers))]
       (.get layers i))))
 
@@ -71,7 +72,8 @@
 
 (defmacro tiled-map-layer
   [screen layer & options]
-  `(u/calls! ^TiledMapTileLayer (tiled-map-layer* ~screen ~layer) ~@options))
+  `(let [^TiledMapTileLayer object# (tiled-map-layer* ~screen ~layer)]
+     (u/calls! object# ~@options)))
 
 (defmacro tiled-map-layer!
   [object k & options]
@@ -83,8 +85,8 @@
 
 (defmacro tiled-map-cell
   [screen layer x y & options]
-  `(u/calls! ^TiledMapTileLayer$Cell (tiled-map-cell* ~screen ~layer ~x ~y)
-             ~@options))
+  `(let [^TiledMapTileLayer$Cell object# (tiled-map-cell* ~screen ~layer ~x ~y)]
+     (u/calls! object# ~@options)))
 
 (defmacro tiled-map-cell!
   [object k & options]
@@ -259,7 +261,8 @@
 
 (defmacro orthographic
   [& options]
-  `(u/calls! ^OrthographicCamera (orthographic*) ~@options))
+  `(let [^OrthographicCamera object# (orthographic*)]
+     (u/calls! object# ~@options)))
 
 (defmacro orthographic!
   [screen k & options]
@@ -272,7 +275,8 @@
 
 (defmacro perspective
   [& options]
-  `(u/calls! ^PerspectiveCamera (perspective*) ~@options))
+  `(let [^PerspectiveCamera object# (perspective*)]
+     (u/calls! object# ~@options)))
 
 (defmacro perspective!
   [screen k & options]
