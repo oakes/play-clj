@@ -133,7 +133,7 @@ We already know how to change an entity's position, so let's leverage that to ma
     nil))
 ```
 
-Now we can update out `:on-key-down` and `:on-touch-down` functions to move the entity. Note that we are technically returning a single entity rather than an entities list, but play-clj will turn it back into a list automatically.
+Now we can update our `:on-key-down` and `:on-touch-down` functions to move the entity. Note that we are technically returning a single entity rather than an entities list, but play-clj will turn it back into a list automatically.
 
 ```clojure
   :on-key-down
