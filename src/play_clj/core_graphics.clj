@@ -14,12 +14,12 @@
 
 (defmacro tiled-map!
   [screen k & options]
-  `(let [^BatchTiledMapRenderer object# (or (:renderer ~screen) ~screen)]
+  `(let [^BatchTiledMapRenderer object# (u/get-obj ~screen :renderer)]
      (u/call! ^TiledMap (.getMap object#) ~k ~@options)))
 
 (defn tiled-map-layers
   [screen]
-  (let [^BatchTiledMapRenderer renderer (or (:renderer screen) screen)
+  (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
         ^MapLayers layers (-> renderer .getMap .getLayers)]
     (for [^long i (range (.getCount layers))]
       (.get layers i))))
@@ -67,7 +67,7 @@
 
 (defmacro orthogonal-tiled-map!
   [screen k & options]
-  `(let [^OrthogonalTiledMapRenderer object# (or (:renderer ~screen) ~screen)]
+  `(let [^OrthogonalTiledMapRenderer object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 (defn isometric-tiled-map*
@@ -81,7 +81,7 @@
 
 (defmacro isometric-tiled-map!
   [screen k & options]
-  `(let [^IsometricTiledMapRenderer object# (or (:renderer ~screen) ~screen)]
+  `(let [^IsometricTiledMapRenderer object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 (defn isometric-staggered-tiled-map*
@@ -98,7 +98,7 @@
 (defmacro isometric-staggered-tiled-map!
   [screen k & options]
   `(let [^IsometricStaggeredTiledMapRenderer object#
-         (or (:renderer ~screen) ~screen)]
+         (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 (defn hexagonal-tiled-map*
@@ -112,7 +112,7 @@
 
 (defmacro hexagonal-tiled-map!
   [screen k & options]
-  `(let [^HexagonalTiledMapRenderer object# (or (:renderer ~screen) ~screen)]
+  `(let [^HexagonalTiledMapRenderer object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 (defn stage*
@@ -125,7 +125,7 @@
 
 (defmacro stage!
   [screen k & options]
-  `(let [^Stage object# (or (:renderer ~screen) ~screen)]
+  `(let [^Stage object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 ; batch
@@ -209,7 +209,7 @@
 
 (defmacro orthographic!
   [screen k & options]
-  `(let [^OrthographicCamera object# (or (:camera ~screen) ~screen)]
+  `(let [^OrthographicCamera object# (u/get-obj ~screen :camera)]
      (u/call! object# ~k ~@options)))
 
 (defn perspective
@@ -223,12 +223,12 @@
 
 (defmacro perspective!
   [screen k & options]
-  `(let [^PerspectiveCamera object# (or (:camera ~screen) ~screen)]
+  `(let [^PerspectiveCamera object# (u/get-obj ~screen :camera)]
      (u/call! object# ~k ~@options)))
 
 (defn size!
   [screen width height]
-  (let [^OrthographicCamera camera (or (:camera screen) screen)]
+  (let [^OrthographicCamera camera (u/get-obj screen :camera)]
     (assert camera)
     (.setToOrtho camera false width height)))
 
@@ -242,21 +242,21 @@
 
 (defn x!
   [screen x]
-  (let [^Camera camera (or (:camera screen) screen)]
+  (let [^Camera camera (u/get-obj screen :camera)]
     (assert camera)
     (set! (. (. camera position) x) x)
     (.update camera)))
 
 (defn y!
   [screen y]
-  (let [^Camera camera (or (:camera screen) screen)]
+  (let [^Camera camera (u/get-obj screen :camera)]
     (assert camera)
     (set! (. (. camera position) y) y)
     (.update camera)))
 
 (defn z!
   [screen z]
-  (let [^Camera camera (or (:camera screen) screen)]
+  (let [^Camera camera (u/get-obj screen :camera)]
     (assert camera)
     (set! (. (. camera position) z) z)
     (.update camera)))

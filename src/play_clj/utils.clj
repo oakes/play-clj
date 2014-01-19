@@ -4,11 +4,18 @@
            [com.badlogic.gdx.scenes.scene2d Actor]
            [com.badlogic.gdx.utils Array ArrayMap]))
 
-; exceptions
+; misc
 
 (defn throw-key-not-found
   [k]
-  (throw (Exception. (str "The keyword " k " is not supported."))))
+  (throw (Exception. (str "The keyword " k " is not found."))))
+
+(defn get-obj
+  [obj k]
+  (if (map? obj)
+    (or (get obj k)
+        (throw-key-not-found k))
+    obj))
 
 ; converting keys
 

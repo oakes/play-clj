@@ -14,19 +14,19 @@
       (string? arg)
       (-> ^String arg Texture. TextureRegion.)
       (map? arg)
-      (TextureRegion. ^TextureRegion (:object arg))
+      (TextureRegion. ^TextureRegion (u/get-obj arg :object))
       :else
       arg)))
 
 (defmacro texture
   [arg & options]
   `(let [entity# (texture* ~arg)]
-     (u/calls! ^TextureRegion (:object entity#) ~@options)
+     (u/calls! ^TextureRegion (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro texture!
   [entity k & options]
-  `(u/call! ^TextureRegion (:object ~entity) ~k ~@options))
+  `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))
 
 (defmacro play-mode
   [key]
@@ -35,7 +35,7 @@
 (defn animation*
   [duration textures]
   (Animation. duration
-              (u/gdx-array (map :object textures))
+              (u/gdx-array (map #(u/get-obj % :object) textures))
               (play-mode :normal)))
 
 (defmacro animation

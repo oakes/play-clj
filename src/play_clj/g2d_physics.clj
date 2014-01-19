@@ -22,7 +22,7 @@
 
 (defmacro box-2d!
   [screen k & options]
-  `(let [^World object# (or (:world ~screen) ~screen)]
+  `(let [^World object# (u/get-obj ~screen :world)]
      (u/call! object# ~k ~@options)))
 
 ; bodies
@@ -40,7 +40,7 @@
 
 (defmacro body!
   [entity k & options]
-  `(let [^Body object# (or (:body ~entity) ~entity)]
+  `(let [^Body object# (u/get-obj ~entity :body)]
      (u/call! object# ~k ~@options)))
 
 (defn create-body!*
@@ -180,7 +180,7 @@
 
 (defn first-contact
   ([screen]
-    (let [^Contact contact (or (:contact screen) screen)]
+    (let [^Contact contact (u/get-obj screen :contact)]
       (assert contact)
       (-> contact .getFixtureA .getBody)))
   ([screen entities]
@@ -188,7 +188,7 @@
 
 (defn second-contact
   ([screen]
-    (let [^Contact contact (or (:contact screen) screen)]
+    (let [^Contact contact (u/get-obj screen :contact)]
       (assert contact)
       (-> contact .getFixtureB .getBody)))
   ([screen entities]

@@ -149,12 +149,12 @@
 (defmacro check-box
   [text arg & options]
   `(let [entity# (check-box* ~text ~arg)]
-     (u/calls! ^CheckBox (:object entity#) ~@options)
+     (u/calls! ^CheckBox (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro check-box!
   [entity k & options]
-  `(u/call! ^Checkbox (:object ~entity) ~k ~@options))
+  `(u/call! ^Checkbox (u/get-obj ~entity :object) ~k ~@options))
 
 (defn dialog*
   [text arg]
@@ -163,12 +163,12 @@
 (defmacro dialog
   [text arg & options]
   `(let [entity# (dialog* ~text ~arg)]
-     (u/calls! ^Dialog (:object entity#) ~@options)
+     (u/calls! ^Dialog (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro dialog!
   [entity k & options]
-  `(u/call! ^Dialog (:object ~entity) ~k ~@options))
+  `(u/call! ^Dialog (u/get-obj ~entity :object) ~k ~@options))
 
 (defn horizontal*
   [children]
@@ -177,12 +177,12 @@
 (defmacro horizontal
   [children & options]
   `(let [entity# (horizontal* ~children)]
-     (u/calls! ^HorizontalGroup (:object entity#) ~@options)
+     (u/calls! ^HorizontalGroup (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro horizontal!
   [entity k & options]
-  `(u/call! ^HorizontalGroup (:object ~entity) ~k ~@options))
+  `(u/call! ^HorizontalGroup (u/get-obj ~entity :object) ~k ~@options))
 
 (defn image*
   [arg]
@@ -198,12 +198,12 @@
 (defmacro image
   [arg & options]
   `(let [entity# (image* ~arg)]
-     (u/calls! ^Image (:object entity#) ~@options)
+     (u/calls! ^Image (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro image!
   [entity k & options]
-  `(u/call! ^Image (:object ~entity) ~k ~@options))
+  `(u/call! ^Image (u/get-obj ~entity :object) ~k ~@options))
 
 (defn image-button*
   [arg]
@@ -212,12 +212,12 @@
 (defmacro image-button
   [arg & options]
   `(let [entity# (image-button* ~arg)]
-     (u/calls! ^ImageButton (:object entity#) ~@options)
+     (u/calls! ^ImageButton (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro image-button!
   [entity k & options]
-  `(u/call! ^ImageButton (:object ~entity) ~k ~@options))
+  `(u/call! ^ImageButton (u/get-obj ~entity :object) ~k ~@options))
 
 (defn image-text-button*
   [^String text arg]
@@ -226,12 +226,12 @@
 (defmacro image-text-button
   [text arg & options]
   `(let [entity# (image-text-button* ~text ~arg)]
-     (u/calls! ^ImageTextButton (:object entity#) ~@options)
+     (u/calls! ^ImageTextButton (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro image-text-button!
   [entity k & options]
-  `(u/call! ^ImageTextButton (:object ~entity) ~k ~@options))
+  `(u/call! ^ImageTextButton (u/get-obj ~entity :object) ~k ~@options))
 
 (defn label*
   [^String text arg]
@@ -243,26 +243,26 @@
 (defmacro label
   [text arg & options]
   `(let [entity# (label* ~text ~arg)]
-     (u/calls! ^Label (:object entity#) ~@options)
+     (u/calls! ^Label (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro label!
   [entity k & options]
-  `(u/call! ^Label (:object ~entity) ~k ~@options))
+  `(u/call! ^Label (u/get-obj ~entity :object) ~k ~@options))
 
 (defn scroll-pane*
   [child arg]
-  (u/create-entity (ScrollPane. (:object child) arg)))
+  (u/create-entity (ScrollPane. (u/get-obj child :object) arg)))
 
 (defmacro scroll-pane
   [child arg & options]
   `(let [entity# (scroll-pane* ~child ~arg)]
-     (u/calls! ^ScrollPane (:object entity#) ~@options)
+     (u/calls! ^ScrollPane (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro scroll-pane!
   [entity k & options]
-  `(u/call! ^ScrollPane (:object ~entity) ~k ~@options))
+  `(u/call! ^ScrollPane (u/get-obj ~entity :object) ~k ~@options))
 
 (defn select-box*
   [items arg]
@@ -271,12 +271,12 @@
 (defmacro select-box
   [items arg & options]
   `(let [entity# (select-box* ~items ~arg)]
-     (u/calls! ^SelectBox (:object entity#) ~@options)
+     (u/calls! ^SelectBox (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro select-box!
   [entity k & options]
-  `(u/call! ^SelectBox (:object ~entity) ~k ~@options))
+  `(u/call! ^SelectBox (u/get-obj ~entity :object) ~k ~@options))
 
 (defn slider*
   [{:keys [min max step vertical?]
@@ -288,12 +288,12 @@
 (defmacro slider
   [attrs arg & options]
   `(let [entity# (slider* ~attrs ~arg)]
-     (u/calls! ^Slider (:object entity#) ~@options)
+     (u/calls! ^Slider (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro slider!
   [entity k & options]
-  `(u/call! ^Slider (:object ~entity) ~k ~@options))
+  `(u/call! ^Slider (u/get-obj ~entity :object) ~k ~@options))
 
 (defn stack*
   [children]
@@ -302,12 +302,12 @@
 (defmacro stack
   [children & options]
   `(let [entity# (stack* ~children)]
-     (u/calls! ^Stack (:object entity#) ~@options)
+     (u/calls! ^Stack (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro stack!
   [entity k & options]
-  `(u/call! ^Stack (:object ~entity) ~k ~@options))
+  `(u/call! ^Stack (u/get-obj ~entity :object) ~k ~@options))
 
 (defn table*
   [children]
@@ -316,12 +316,12 @@
 (defmacro table
   [children & options]
   `(let [entity# (table* ~children)]
-     (u/calls! ^Table (:object entity#) ~@options)
+     (u/calls! ^Table (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro table!
   [entity k & options]
-  `(u/call! ^Table (:object ~entity) ~k ~@options))
+  `(u/call! ^Table (u/get-obj ~entity :object) ~k ~@options))
 
 (defn text-button*
   [^String text arg]
@@ -330,12 +330,12 @@
 (defmacro text-button
   [text arg & options]
   `(let [entity# (text-button* ~text ~arg)]
-     (u/calls! ^TextButton (:object entity#) ~@options)
+     (u/calls! ^TextButton (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro text-button!
   [entity k & options]
-  `(u/call! ^TextButton (:object ~entity) ~k ~@options))
+  `(u/call! ^TextButton (u/get-obj ~entity :object) ~k ~@options))
 
 (defn text-field*
   [^String text arg]
@@ -344,12 +344,12 @@
 (defmacro text-field
   [text arg & options]
   `(let [entity# (text-field* ~text ~arg)]
-     (u/calls! ^TextField (:object entity#) ~@options)
+     (u/calls! ^TextField (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro text-field!
   [entity k & options]
-  `(u/call! ^TextField (:object ~entity) ~k ~@options))
+  `(u/call! ^TextField (u/get-obj ~entity :object) ~k ~@options))
 
 (defn tree*
   [children arg]
@@ -358,12 +358,12 @@
 (defmacro tree
   [children arg & options]
   `(let [entity# (tree* ~children ~arg)]
-     (u/calls! ^Tree (:object entity#) ~@options)
+     (u/calls! ^Tree (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro tree!
   [entity k & options]
-  `(u/call! ^Tree (:object ~entity) ~k ~@options))
+  `(u/call! ^Tree (u/get-obj ~entity :object) ~k ~@options))
 
 (defn vertical*
   [children]
@@ -372,12 +372,12 @@
 (defmacro vertical
   [children & options]
   `(let [entity# (vertical* ~children)]
-     (u/calls! ^VerticalGroup (:object entity#) ~@options)
+     (u/calls! ^VerticalGroup (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro vertical!
   [entity k & options]
-  `(u/call! ^VerticalGroup (:object ~entity) ~k ~@options))
+  `(u/call! ^VerticalGroup (u/get-obj ~entity :object) ~k ~@options))
 
 (defn window*
   [children ^String title arg]
@@ -386,9 +386,9 @@
 (defmacro window
   [children title arg & options]
   `(let [entity# (window* ~children ~title ~arg)]
-     (u/calls! ^Window (:object entity#) ~@options)
+     (u/calls! ^Window (u/get-obj entity# :object) ~@options)
      entity#))
 
 (defmacro window!
   [entity k & options]
-  `(u/call! ^Window (:object ~entity) ~k ~@options))
+  `(u/call! ^Window (u/get-obj ~entity :object) ~k ~@options))
