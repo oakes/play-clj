@@ -140,6 +140,8 @@
   [^TextureRegion obj]
   {:type :texture
    :object obj
+   :x 0
+   :y 0
    :width (.getRegionWidth obj)
    :height (.getRegionHeight obj)})
 
