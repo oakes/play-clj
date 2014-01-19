@@ -215,8 +215,7 @@ You may want to display two different screens at once. This is useful in situati
          (render! screen)))
   :on-resize
   (fn [screen entities]
-    (height! screen 300)
-    nil))
+    (height! screen 300)))
 ```
 
 Then, in `defgame`, set the screens in the order in which you'd like them to appear:
