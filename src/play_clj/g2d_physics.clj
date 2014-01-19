@@ -93,6 +93,10 @@
   `(let [object# (~(joint-init k))]
      (u/fields! object# ~@options)))
 
+(defmacro joint!
+  [object k & options]
+  `(u/call! ^Joint ~object ~k ~@options))
+
 (defn create-joint!*
   [screen j-def]
   (box-2d! screen :create-joint j-def))
@@ -109,6 +113,10 @@
   `(let [^FixtureDef object# (FixtureDef.)]
      (u/fields! object# ~@options)
      object#))
+
+(defmacro fixture!
+  [object k & options]
+  `(u/call! ^Fixture ~object ~k ~@options))
 
 ; shapes
 
@@ -169,10 +177,6 @@
 (defmacro contact!
   [object k & options]
   `(u/call! ^Contact ~object ~k ~@options))
-
-(defmacro fixture!
-  [object k & options]
-  `(u/call! ^Fixture ~object ~k ~@options))
 
 (defn find-body
   [body entities]
