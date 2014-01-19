@@ -1,7 +1,6 @@
 (ns play-clj.core
   (:require [clojure.set :as set]
             [play-clj.g2d-physics :as g2dp]
-            [play-clj.ui :as ui]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
@@ -19,11 +18,14 @@
             IsometricStaggeredTiledMapRenderer
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]
-           [com.badlogic.gdx.physics.box2d Joint World]
-           [com.badlogic.gdx.scenes.scene2d Actor Stage]))
+           [com.badlogic.gdx.physics.box2d ContactListener Joint World]
+           [com.badlogic.gdx.scenes.scene2d Actor Stage]
+           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
+            ChangeListener ClickListener DragListener FocusListener]))
 
 (load "core_global")
 (load "core_graphics")
+(load "core_listeners")
 
 (defn ^:private reset-changed!
   [e-atom e-old e-new]
@@ -55,8 +57,8 @@
              (swap! screen assoc
                     :total-time 0
                     :update-fn! #(swap! screen merge %)
-                    :ui-listeners (ui/ui-listeners options execute-fn!)
-                    :g2dp-listener (g2dp/contact-listener options execute-fn!))
+                    :ui-listeners (ui-listeners options execute-fn!)
+                    :g2dp-listener (contact-listener options execute-fn!))
              (execute-fn! on-show))
      :render (fn [d]
                (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
@@ -65,8 +67,7 @@
      :pause #(execute-fn! on-pause)
      :resize #(execute-fn! on-resize :width %1 :height %2)
      :resume #(execute-fn! on-resume)
-     :input-listeners [(input-processor options execute-fn!)
-                       (gesture-detector options execute-fn!)]}))
+     :input-listeners (global-listeners options execute-fn!)}))
 
 (defmacro defscreen
   [n & {:keys [] :as options}]

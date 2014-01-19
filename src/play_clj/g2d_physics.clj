@@ -2,8 +2,8 @@
   (:require [play-clj.math :as m]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
-            Contact ContactListener EdgeShape Fixture FixtureDef JointDef
-            PolygonShape Transform World]))
+            Contact EdgeShape Fixture FixtureDef JointDef PolygonShape Transform
+            World]))
 
 ; world
 
@@ -193,17 +193,3 @@
       (-> contact .getFixtureB .getBody)))
   ([screen entities]
     (find-body (second-contact screen) entities)))
-
-; listeners
-
-(defn contact-listener
-  [{:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]} execute-fn!]
-  (reify ContactListener
-    (beginContact [this c]
-      (execute-fn! on-begin-contact :contact c))
-    (endContact [this c]
-      (execute-fn! on-end-contact :contact c))
-    (postSolve [this c i]
-      (execute-fn! on-post-solve :contact c :impulse i))
-    (preSolve [this c m]
-      (execute-fn! on-pre-solve :contact c :old-manifold m))))
