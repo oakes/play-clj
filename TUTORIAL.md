@@ -257,7 +257,7 @@ That should print out a list with a single map inside of it. Now try moving your
 1. Make sure you have JDK 7 installed (for Windows/OSX, you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), and for Linux you can get it from [apt-get](http://openjdk.java.net/install/).
 2. Download [the Android SDK](http://developer.android.com/sdk/index.html). However, don't bother getting the "ADT Bundle", which includes a full IDE, because you'll be using Nightcode. Instead, click "Use an Existing IDE" click the button that appears.
 3. Extract the file anywhere you want.
-4. Run the executable called "android" which is located in the "tools" folder of that archive. This executable will display the SDK Manager with several things checked by default. We want to at least support Ice Cream Sandwich, so check the box next to _Android 4.0.3 (API 15)_ and click _Install_.
+4. Run the executable called `android` which is located in the `tools` folder of that archive. This executable will display the SDK Manager with several things checked by default. We want to at least support Ice Cream Sandwich, so check the box next to _Android 4.0.3 (API 15)_ and click _Install_.
 5. In Nightcode, click on the `android` folder for your project in the sidebar. You should see a red-colored button called _Android SDK_. Click that, and find the folder you extracted the SDK to.
 6. Connect your Android device to your computer and make sure USB debugging is enabled.
 7. Click _Run_ and wait for the app to be built and installed on your device.
