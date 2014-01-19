@@ -188,6 +188,29 @@ Lastly, you'll need to make either the width or height of the screen a constant 
 
 Now, when you resize your game, the image is no longer stretched!
 
+## Using the REPL
+
+It is much faster to develop a game while it's running, and that's what the Clojure REPL lets you do. To get started, just hit the _Run with REPL_ button in the build pane. When it launches, type `(main-)` into the prompt and hit enter, and your game will launch.
+
+Then, switch back to your code while the game is still running. Let's modify `:on-key-down` so the left arrow makes it go right, and vice versa, by swiching the keyword you pass into `move`:
+
+```clojure
+      (= (:keycode screen) (key-code :dpad-right))
+      (move (first entities) :left)
+      (= (:keycode screen) (key-code :dpad-left))
+      (move (first entities) :right)
+```
+
+Now save the file and hit _Reload_ in the build pane. Now try it out! The key bindings have been changed while the game is still running. Now switch the keywords back and reload again.
+
+The next thing to try is reading and modifying state. We'll need to switch the REPL to be in the right namespace, so type in `(in-ns 'hello-world.core)`. Let's peek into the entities list by typing the following into the REPL:
+
+`(-> main-screen :entities deref)`
+
+That should print out a list with a single map inside of it. Now try moving your image and then run the command again. The `:x` and `:y` values should now be updated. You're looking at your game in real-time! Lastly, let's try moving the entity from the REPL:
+
+`(-> main-screen :entities (swap! #(list (assoc (first %) :x 200 :y 200))))`
+
 ## Building for Android
 
 1. Make sure you have JDK 7 installed (for Windows/OSX, you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), and for Linux you can get it from [apt-get](http://openjdk.java.net/install/).
