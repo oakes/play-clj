@@ -268,5 +268,5 @@ That should print out a list with a single map inside of it. Now try moving your
 2. Make sure you have JDK 7 installed (you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html).
 3. Install Xcode from the Mac App Store.
 4. Download and extract [the latest RoboVM](http://download.robovm.org/).
-5. In Nightcode, click on the 'ios' folder for your project in the sidebar. You should see a red-colored button called _RoboVM_. Click that, and find the folder you extracted the SDK to.
+5. In Nightcode, click on the `ios` folder for your project in the sidebar. You should see a red-colored button called _RoboVM_. Click that, and find the folder you extracted the SDK to.
 6. Click _Run_ and wait for the app to be built and run in the iOS simulator (the _Build_ button will send it to your device, but you need the certificates set up for that and may need to edit `ios/project.clj` to pass the appropriate values to RoboVM).
