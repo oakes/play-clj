@@ -88,7 +88,7 @@
 
 (defmacro catmull-rom-spline!
   [object k & options]
-  `(u/call! ^BSpline ~object ~k ~@options))
+  `(u/call! ^CatmullRomSpline ~object ~k ~@options))
 
 ; circle
 
