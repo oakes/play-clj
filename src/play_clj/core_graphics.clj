@@ -183,7 +183,7 @@
   (when camera
     (.setCamera renderer camera)
     (.setViewport renderer (. camera viewportWidth) (. camera viewportHeight)))
-  (.draw renderer))
+  (doto renderer .act .draw))
 
 (defn render!
   ([{:keys [renderer] :as screen}]
