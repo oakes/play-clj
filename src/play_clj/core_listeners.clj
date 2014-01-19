@@ -173,3 +173,43 @@
       (execute-fn! on-post-solve :contact c :impulse i))
     (preSolve [this c m]
       (execute-fn! on-pre-solve :contact c :old-manifold m))))
+
+; update functions
+
+(defn ^:private update-stage!
+  [{:keys [^Stage renderer ui-listeners]} entities]
+  (doseq [^Actor a (.getActors renderer)]
+    (.remove a))
+  (doseq [{:keys [object]} entities]
+    (when (isa? (type object) Actor)
+      (.addActor renderer object)
+      (doseq [listener ui-listeners]
+        (.addListener ^Actor object listener))))
+  (remove-input! renderer)
+  (add-input! renderer))
+
+(defn ^:private update-box-2d!
+  [{:keys [^World world]} entities]
+  (when-not (.isLocked world)
+    (let [arr (u/gdx-array [])]
+      ; remove bodies that no longer exist
+      (.getBodies world arr)
+      (doseq [body arr]
+        (when-not (some #(= body (:body %)) entities)
+          (.destroyBody world body)))
+      ; remove joints whose bodies no longer exist
+      (.getJoints world arr)
+      (doseq [^Joint joint arr]
+        (when (and (not (some #(= (.getBodyA joint) (:body %)) entities))
+                   (not (some #(= (.getBodyB joint) (:body %)) entities)))
+          (.destroyJoint world joint))))))
+
+(defn ^:private update-screen!
+  ([{:keys [world g2dp-listener]}]
+    (when (isa? (type world) World)
+      (.setContactListener ^World world g2dp-listener)))
+  ([{:keys [renderer world] :as screen} entities]
+    (when (isa? (type renderer) Stage)
+      (update-stage! screen entities))
+    (when (isa? (type world) World)
+      (update-box-2d! screen entities))))
