@@ -1,6 +1,10 @@
 ## Introduction
 
-A Clojure library that provides a wrapper for [LibGDX](http://libgdx.badlogicgames.com/), allowing you to write Clojure games that run on desktop OSes (Windows, OS X, and Linux) and mobile OSes (Android and iOS) with the same codebase.
+A Clojure library that provides a wrapper for [LibGDX](http://libgdx.badlogicgames.com/), allowing you to write games that run on desktop OSes (Windows, OS X, and Linux) and mobile OSes (Android and iOS) with the same Clojure codebase. It is a work in progress, and currently only covers the parts of LibGDX relevant to 2D games, but the goal is to eventually have full coverage.
+
+## Getting Started
+
+You can easily get started with play-clj by creating a new project with [Nightcode](https://nightcode.info/) and choosing the Clojure game option. You'll get three separate projects for desktop, Android, and iOS, all pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
 
 ## Justification
 
@@ -8,15 +12,13 @@ The best thing about making a game in Clojure is that you can modify it in a REP
 
 Clojure also brings the benefits of functional programming. This is becoming a big topic of discussion in gamedev circles, including by [John Carmack](http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/). Part of this is due to the prevalence of multi-core hardware, making concurrency more important. Additionally, there is a general difficulty of maintaining object-oriented game codebases as they grow, due to complicated class hierarchies and state mutations.
 
-## Installation
-
-The recommended way to start using play-clj is to create a Clojure game project with [Nightcode](https://nightcode.info/). It will automatically generate three separate Leiningen projects for desktop, Android, and iOS, all pointing to the same source code and resources directories. You can build the projects with Nightcode itself or with Leiningen on the command line (if you choose the latter, you will need to set up [lein-droid](https://github.com/clojure-android/lein-droid) and [lein-fruit](https://github.com/oakes/lein-fruit) to build the Android and iOS projects respectively).
-
 ## Documentation
 
-There are currently no tutorials or generated docs, because play-clj is changing rapidly. This will be resolved in the near future.
+There are currently no generated docs, but that will change once the first stable release comes out.
 
-For now, check out the [example projects](https://github.com/oakes/play-clj-examples). For a quick taste, consider this commented example:
+* Check out [the example games](https://github.com/oakes/play-clj-examples)
+* Read [the tutorial](TUTORIAL.md)
+* Look at this commented example:
 
 ```clojure
 (ns game-test.core
