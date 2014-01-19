@@ -27,15 +27,15 @@
 
 ; bodies
 
-(defmacro body-type
+(defmacro ^:private body-type
   [k]
-  `~(symbol (str u/main-package ".physics.box2d.BodyDef$BodyType/"
-                 (u/key->pascal k) "Body")))
+  `(symbol (str u/main-package ".physics.box2d.BodyDef$BodyType/"
+                (u/key->pascal ~k) "Body")))
 
 (defmacro body-def
   [k & options]
   `(let [^BodyDef object# (BodyDef.)]
-     (set! (. object# type) (body-type ~k))
+     (set! (. object# type) ~(body-type k))
      (u/fields! object# ~@options)))
 
 (defmacro body!
@@ -83,14 +83,14 @@
 
 ; joints
 
-(defmacro joint-init
+(defmacro ^:private joint-init
   [k]
-  `(~(symbol (str u/main-package ".physics.box2d.joints."
-                  (u/key->pascal k) "JointDef."))))
+  `(symbol (str u/main-package ".physics.box2d.joints."
+                (u/key->pascal ~k) "JointDef.")))
 
 (defmacro joint-def
   [k & options]
-  `(let [object# (joint-init ~k)]
+  `(let [object# (~(joint-init k))]
      (u/fields! object# ~@options)))
 
 (defn create-joint!*
