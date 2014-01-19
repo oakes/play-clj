@@ -72,9 +72,9 @@ Let's add a new function at the end of `defscreen` called `:on-key-down`, which 
     )
 ```
 
-If takes the same form as the other functions, expecting a new entities list to be returned at the end. The first argument, `screen`, which we haven't talked about yet, is a Clojure map containing various important values. In the `:on-key-down` function, it will contain a `:keycode` which is a number referring to the key which was pressed.
+If takes the same form as the other functions, expecting a new entities list to be returned at the end. The first argument, `screen`, which we haven't talked about yet, is a Clojure map containing various important values. In the `:on-key-down` function, it will contain a `:keycode` which indicates what key was pressed.
 
-You can reference the [LibGDX documentation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html) to see all the possible keys. To get a key's number, just pass the name as a keyword into the `key-code` function. For example, `(key-code :PAGE_DOWN)` will return the number associated with that key. You can also write the keyword in a more Clojuresque way, using lower-case with hyphens, like this: `(key-code :page-down)`.
+You can reference the [LibGDX documentation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html) to see all the possible keys. To get a key's code, just pass the name as a keyword into the `key-code` function. For example, `(key-code :PAGE_DOWN)` will return the number associated with that key. You can also write the keyword in a more Clojuresque way, using lower-case with hyphens, like this: `(key-code :page-down)`.
 
 Let's write a conditional statement that prints out which arrow key you pressed. Note that if a `defscreen` function returns `nil`, it leaves the entities list unchanged, so the code below won't wipe out the entities list.
 
@@ -92,7 +92,7 @@ Let's write a conditional statement that prints out which arrow key you pressed.
       (println "left")))
 ```
 
-Now, what about mobile devices? We don't have a keyboard, so let's create an `:on-touch-down` function:
+Now, what about mobile devices? We may not have a keyboard, so let's create an `:on-touch-down` function:
 
 ```clojure
   :on-touch-down
@@ -220,7 +220,7 @@ You may want to display two different screens at once. This is useful in situati
 
 Then, in `defgame`, set the screens in the order in which you'd like them to appear:
 
-```clojur
+```clojure
 (defgame hello-world
   :on-create
   (fn [this]
