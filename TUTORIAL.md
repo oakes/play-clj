@@ -1,14 +1,10 @@
 ## Getting Started
 
-You can easily get started with play-clj by creating a new project with [Nightcode](https://nightcode.info/) and choosing the Clojure game option. You may also create a project on the command line with [Leiningen](https://github.com/technomancy/leiningen):
-
-    lein new play-clj hello-world
-
-Either way, you'll get three separate projects for desktop, Android, and iOS, all pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
+You can easily get started with play-clj by creating a new project with [Nightcode](https://nightcode.info/) and choosing the Clojure game option. You'll get three separate projects for desktop, Android, and iOS, all pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
 
 ## Project Structure
 
-After making a game called `hello-world`, you'll see three sub-folders: `android`, `desktop`, and `ios`. You'll be spending most of your time in the `desktop` folder, because it's easier to develop your game on your computer and build it for mobile devices later.
+After making a game called _hello-world_, you'll see three sub-folders: `android`, `desktop`, and `ios`. You'll be spending most of your time in the `desktop` folder, because it's easier to develop your game on your computer and build it for mobile devices later.
 
 Your actual game code will be in the `desktop/src-common` folder, and all the images and sound files will be in the `desktop/resources` folder. When you're ready to build an Android and iOS version, they will read from both of these folders, so you don't have to duplicate any files.
 
@@ -166,7 +162,7 @@ Now we can update out `:on-key-down` and `:on-touch-down` functions to move the 
 
 ## Camera
 
-You'll notice that when you resize your game's window, the image looks stretched. That's because the game still thinks it's 800x600 pixels in size, so it adjusts accordingly. To make your game adjust dynamically to different screen sizes, you need to use a camera to adjust the size of the screen.
+You'll notice that when you resize your game's window, the image looks stretched. That's because the game still thinks it's 800x600 pixels in size, so it stretches accordingly. To make your game adjust its ratio for different screen sizes, you need to use a camera.
 
 First, you need to create a camera and add it to the screen map in the `:on-show` function, like this:
 
@@ -194,7 +190,7 @@ Now, when you resize your game, the image is no longer stretched!
 
 ## Building for Android
 
-1. Make sure you have JDK 7 installed (for Windows/OSX, you can get it from [Orcle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), and for Linux you can get it from [apt-get](http://openjdk.java.net/install/).
+1. Make sure you have JDK 7 installed (for Windows/OSX, you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), and for Linux you can get it from [apt-get](http://openjdk.java.net/install/).
 2. Download [the Android SDK](http://developer.android.com/sdk/index.html). However, don't bother getting the "ADT Bundle", which includes a full IDE, because you'll be using Nightcode. Instead, click "Use an Existing IDE" click the button that appears.
 3. Extract the file anywhere you want.
 4. Run the executable called "android" which is located in the "tools" folder of that archive. This executable will display the SDK Manager with several things checked by default. We want to at least support Ice Cream Sandwich, so check the box next to _Android 4.0.3 (API 15)_ and click _Install_.
