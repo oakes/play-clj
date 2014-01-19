@@ -234,25 +234,6 @@
     (render! screen)
     (draw! screen entities)))
 
-; physics
-
-(defn step!
-  ([{:keys [world time-step velocity-iterations position-iterations]
-     :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}}]
-    (assert world)
-    (cond
-      (isa? (type world) World)
-      (.step ^World world time-step velocity-iterations position-iterations)))
-  ([screen entities]
-    (step! screen)
-    (map (fn [entity]
-           (if-let [body (:body entity)]
-             (assoc entity
-                    :x (g2dp/body-x body)
-                    :y (g2dp/body-y body))
-             entity))
-         entities)))
-
 ; cameras
 
 (defn orthographic*

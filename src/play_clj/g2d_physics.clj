@@ -164,7 +164,7 @@
   [object k & options]
   `(u/call! ^PolygonShape ~object ~k ~@options))
 
-; misc functions
+; misc
 
 (defmacro contact!
   [object k & options]
@@ -193,3 +193,20 @@
       (-> contact .getFixtureB .getBody)))
   ([screen entities]
     (find-body (second-contact screen) entities)))
+
+(defn step!
+  ([{:keys [world time-step velocity-iterations position-iterations]
+     :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}}]
+    (assert world)
+    (cond
+      (isa? (type world) World)
+      (.step ^World world time-step velocity-iterations position-iterations)))
+  ([screen entities]
+    (step! screen)
+    (map (fn [entity]
+           (if-let [body (:body entity)]
+             (assoc entity
+                    :x (body-x body)
+                    :y (body-y body))
+             entity))
+         entities)))

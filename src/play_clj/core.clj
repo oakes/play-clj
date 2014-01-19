@@ -1,7 +1,5 @@
 (ns play-clj.core
-  (:require [clojure.set :as set]
-            [play-clj.g2d-physics :as g2dp]
-            [play-clj.utils :as u])
+  (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
