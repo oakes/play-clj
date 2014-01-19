@@ -159,13 +159,10 @@
   (.draw object batch 1))
 
 (defmethod draw-entity! :texture
-  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
+  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]
+                       :or {x 0 y 0}}]
   (assert object)
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        width (float (or width (.getRegionWidth object)))
-        height (float (or height (.getRegionHeight object)))]
-    (.draw batch object x y width height)))
+  (.draw batch object (float x) (float y) (float width) (float height)))
 
 (defn draw! [{:keys [renderer] :as screen} entities]
   (assert renderer)

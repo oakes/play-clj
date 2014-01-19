@@ -137,8 +137,11 @@
 (defmulti create-entity class)
 
 (defmethod create-entity TextureRegion
-  [obj]
-  {:type :texture :object obj})
+  [^TextureRegion obj]
+  {:type :texture
+   :object obj
+   :width (.getRegionWidth obj)
+   :height (.getRegionHeight obj)})
 
 (defmethod create-entity Actor
   [obj]
