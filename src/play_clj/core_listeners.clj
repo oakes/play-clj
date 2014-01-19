@@ -17,19 +17,19 @@
       (execute-fn! on-key-up :keycode k)
       false)
     (mouseMoved [this sx sy]
-      (execute-fn! on-mouse-moved :screen-x sx :screen-y sy)
+      (execute-fn! on-mouse-moved :x sx :y sy)
       false)
     (scrolled [this a]
       (execute-fn! on-scrolled :amount a)
       false)
     (touchDown [this sx sy p b]
-      (execute-fn! on-touch-down :screen-x sx :screen-y sy :pointer p :button b)
+      (execute-fn! on-touch-down :x sx :y sy :pointer p :button b)
       false)
     (touchDragged [this sx sy p]
-      (execute-fn! on-touch-dragged :screen-x sx :screen-y sy :pointer p)
+      (execute-fn! on-touch-dragged :x sx :y sy :pointer p)
       false)
     (touchUp [this sx sy p b]
-      (execute-fn! on-touch-up :screen-x sx :screen-y sy :pointer p :button b)
+      (execute-fn! on-touch-up :x sx :y sy :pointer p :button b)
       false)))
 
 (defn ^:private gesture-listener
