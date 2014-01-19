@@ -16,9 +16,9 @@ As long as the selection in the sidebar is somewhere inside the `desktop` folder
 
 ## Game Structure
 
-Let's look at the basic structure of your game. It starts out with a call to `defgame`, which creates the basic game object for you and contains a single function called `:on-create` that runs when your game starts. The only thing it does is hand off to your screen, where all the action takes place.
+Let's look at the basic structure of your game. It starts out with a call to `defgame`, which should only be used once as it initializes the game for you. It contains a single function called `:on-create` that runs when your game starts. The only thing it needs to do is hand off to your screen, where all the action takes place.
 
-In `defscreen`, you'll find that a few simple functions are defined: `:on-show` and `:on-render`. The first only runs when the screen is first shown, and the second is run every single time your game wants to draw on the screen (which is typically 60 times per second).
+In `defscreen`, you'll find that a few simple functions are defined: `:on-show` and `:on-render`. The first only runs when the screen is first shown, and the second is run every single time your game wants to draw on the screen (which is ideally 60 times per second).
 
 There are many other functions you can put inside `defscreen`, each letting you run code when certain important events happen. For now, we'll stick to the two we started with, because they are the most fundamental, but you can read the documentation to learn about the others.
 
@@ -187,6 +187,48 @@ Lastly, you'll need to make either the width or height of the screen a constant 
 ```
 
 Now, when you resize your game, the image is no longer stretched!
+
+## Multiple Screens
+
+It is possible to have multiple screens for your game. You may want a title screen at first, and then go to your game when an item is clicked. You can do this by simply calling the same `set-screen!` function that is run in `defgame`. You'll need to pass the game object as the first parameter, so to do that you'll need to declare your symbols at the top of your file:
+
+`(declare hello-world title-screen main-screen)`
+
+Now you are free to call `(set-screen! hello-world main-screen)` inside your `title-screen` if you wish. You may also call it inside `main-screen` itself, which is useful if you want to restart the game!
+
+You may want to display two different screens at once. This is useful in situations where you want to overlay something on your game that you want to remain fixed and independent of the game's camera. For example, to display a label with the current frames per second, create another screen like this:
+
+```clojure
+(defscreen text-screen
+  :on-show
+  (fn [screen entities]
+    (update! screen :camera (orthographic) :renderer (stage))
+    (assoc (label "0" (color :white))
+           :id :fps
+           :x 5))
+  :on-render
+  (fn [screen entities]
+    (->> (for [entity entities]
+           (case (:id entity)
+             :fps (doto entity (label! :set-text (str (game :fps))))
+             entity))
+         (render! screen)))
+  :on-resize
+  (fn [screen entities]
+    (height! screen 300)
+    nil))
+```
+
+Then, in `defgame`, set the screens in the order in which you'd like them to appear:
+
+```clojur
+(defgame hello-world
+  :on-create
+  (fn [this]
+    (set-screen! this main-screen text-screen)))
+```
+
+Make sure you add `play-clj.ui` back to your `ns` declaration, so you can use the label again. Also, note that only the first screen, which in this case is `main-screen`, calls `(clear!)` in its `:on-render` function. If `text-screen` called it as well, it would clear whatever was drawn by `main-screen`.
 
 ## Using the REPL
 
