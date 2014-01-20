@@ -84,6 +84,11 @@ object"
 ; input/output
 
 (defn game
+  "Calls the global method cooresponding to `k` in a more Clojuresque way
+
+    (game :width)
+    (game :is-touched?)
+"
   [k]
   (case k
     :width (graphics! :get-width)
@@ -96,19 +101,31 @@ object"
     (u/throw-key-not-found k)))
 
 (defmacro key-code
+  "Returns the static field cooresponding to `k` from [Input.Keys](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html)
+
+    (key-code :a)
+    (key-code :page-down)
+"
   [k]
   `~(symbol (str u/main-package ".Input$Keys/" (u/key->upper k))))
 
 (defmacro is-pressed?
+  "Returns a boolean indicating if the key cooresponding to `k` is being pressed
+
+    (is-pressed? :a)
+    (is-pressed? :page-down)
+"
   [k]
   `(input! :is-key-pressed (key-code ~k)))
 
 (defn ^:private add-input!
+  "Internal use only"
   [^InputProcessor p]
   (let [^InputMultiplexer multi (input! :get-input-processor)]
     (.addProcessor multi p)))
 
 (defn ^:private remove-input!
+  "Internal use only"
   [^InputProcessor p]
   (let [^InputMultiplexer multi (input! :get-input-processor)]
     (.removeProcessor multi p)))
