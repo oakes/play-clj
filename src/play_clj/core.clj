@@ -74,7 +74,7 @@
 replaced by simply reloading the namespace, and creates a var for the symbol `n`
 bound to a map containing various important values related to the screen
 
-    (defscreen text-screen
+    (defscreen main-screen
       :on-show
       (fn [screen entities]
         (update! screen :renderer (stage))
@@ -136,7 +136,8 @@ object, sets it as the screen for the `game`, and runs the functions from
 
 (defn update!
   "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`
-is the atom storing the screen map behind the scenes
+is the atom storing the screen map behind the scenes, and returns the new screen
+map
 
     (update! screen :renderer (stage))
 "
