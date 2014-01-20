@@ -4,7 +4,11 @@ A Clojure library that provides a wrapper for [LibGDX](http://libgdx.badlogicgam
 
 ## Getting Started
 
-You can easily get started with play-clj by creating a new project with [Nightcode](https://nightcode.info/) and choosing the Clojure game option. You'll get three separate projects for desktop, Android, and iOS, all pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
+You can easily get started with play-clj by creating a new project with [Nightcode](https://nightcode.info/) and choosing the Clojure game option. You may also create a project on the command line with [Leiningen](https://github.com/technomancy/leiningen):
+
+    lein new play-clj hello-world
+
+Either way, you'll get three separate projects for desktop, Android, and iOS, all pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
 
 ## Justification
 
@@ -14,10 +18,11 @@ Clojure also brings the benefits of functional programming. This is becoming a b
 
 ## Documentation
 
-There are currently no generated docs, but that will change once the first stable release comes out.
+There are several ways to dive into play-clj:
 
 * Check out [the example games](https://github.com/oakes/play-clj-examples)
 * Read [the tutorial](TUTORIAL.md)
+* Read [the generated docs](http://oakes.github.io/play-clj)
 * Look at this commented example:
 
 ```clojure
@@ -50,7 +55,7 @@ There are currently no generated docs, but that will change once the first stabl
           ; add position and size to the player-image map so it can be drawn
           player-image (assoc player-image :x 0 :y 0 :width 2 :height 2)]
       ; return a new entities list with player-image inside of it
-      (conj entities player-image)))
+      [player-image]))
   
   ; this function runs every time a frame must be drawn (about 60 times per sec)
   :on-render
