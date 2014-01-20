@@ -18,8 +18,6 @@ Clojure also brings the benefits of functional programming. This is becoming a b
 
 ## Documentation
 
-There are several ways to dive into play-clj:
-
 * Check out [the example games](https://github.com/oakes/play-clj-examples)
 * Read [the tutorial](TUTORIAL.md)
 * Read [the generated docs](http://oakes.github.io/play-clj)
@@ -48,7 +46,7 @@ There are several ways to dive into play-clj:
     (let [; load a sprite sheet from your resources dir
           sheet (texture "tiles.png")
           ; split the sheet into 16x16 tiles
-          ; (the "texture!" function lets you call TextureRegion methods directly)
+          ; (the texture! macro lets you call TextureRegion methods directly)
           tiles (texture! sheet :split 16 16)
           ; get the tile at row 6, col 0
           player-image (texture (aget tiles 6 0))
