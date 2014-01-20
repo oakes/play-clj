@@ -38,7 +38,8 @@
 
 (defmacro bezier
   [points & options]
-  `(u/calls! ^Bezier (bezier* ~points) ~@options))
+  `(let [^Bezier object# (bezier* ~points)]
+     (u/calls! object# ~@options)))
 
 (defmacro bezier!
   [object k & options]
@@ -52,7 +53,8 @@
 
 (defmacro bresenham2
   [& options]
-  `(u/calls! ^Bresenham2 (bresenham2*) ~@options))
+  `(let [^Bresenham2 object# (bresenham2*)]
+     (u/calls! object# ~@options)))
 
 (defmacro bresenham2!
   [object k & options]
@@ -68,7 +70,8 @@
 
 (defmacro b-spline
   [points degree cont? & options]
-  `(u/calls! ^BSpline (b-spline* ~points ~degree ~cont?) ~@options))
+  `(let [^BSpline object# (b-spline* ~points ~degree ~cont?)]
+     (u/calls! object# ~@options)))
 
 (defmacro b-spline!
   [object k & options]
@@ -84,7 +87,8 @@
 
 (defmacro catmull-rom-spline
   [points cont? & options]
-  `(u/calls! ^CatmullRomSpline (catmull-rom-spline* ~points ~cont?) ~@options))
+  `(let [^CatmullRomSpline object# (catmull-rom-spline* ~points ~cont?)]
+     (u/calls! object# ~@options)))
 
 (defmacro catmull-rom-spline!
   [object k & options]
@@ -100,7 +104,8 @@
 
 (defmacro circle
   [x y radius & options]
-  `(u/calls! ^Circle (circle* ~x ~y ~radius) ~@options))
+  `(let [^Circle object# (circle* ~x ~y ~radius)]
+     (u/calls! object# ~@options)))
 
 (defmacro circle!
   [object k & options]
@@ -114,7 +119,8 @@
 
 (defmacro convex-hull
   [& options]
-  `(u/calls! ^ConvexHull (convex-hull*) ~@options))
+  `(let [^ConvexHull object# (convex-hull*)]
+     (u/calls! object# ~@options)))
 
 (defmacro convex-hull!
   [object k & options]
@@ -128,7 +134,8 @@
 
 (defmacro delaunay-triangulator
   [& options]
-  `(u/calls! ^DelaunayTriangulator (delaunay-triangulator*) ~@options))
+  `(let [^DelaunayTriangulator object# (delaunay-triangulator*)]
+     (u/calls! object# ~@options)))
 
 (defmacro delaunay-triangulator!
   [object k & options]
@@ -142,7 +149,8 @@
 
 (defmacro ear-clipping-triangulator
   [& options]
-  `(u/calls! ^EarClippingTriangulator (ear-clipping-triangulator*) ~@options))
+  `(let [^EarClippingTriangulator object# (ear-clipping-triangulator*)]
+     (u/calls! object# ~@options)))
 
 (defmacro ear-clipping-triangulator!
   [object k & options]
@@ -158,7 +166,8 @@
 
 (defmacro ellipse
   [x y width height & options]
-  `(u/calls! ^Ellipse (ellipse* ~x ~y ~width ~height) ~@options))
+  `(let [^Ellipse object# (ellipse* ~x ~y ~width ~height)]
+     (u/calls! object# ~@options)))
 
 (defmacro ellipse!
   [object k & options]
@@ -172,7 +181,8 @@
 
 (defmacro float-counter
   [window-size & options]
-  `(u/calls! ^FloatCounter (float-counter* ~window-size) ~@options))
+  `(let [^FloatCounter object# (float-counter* ~window-size)]
+     (u/calls! object# ~@options)))
 
 (defmacro float-counter!
   [object k & options]
@@ -186,7 +196,8 @@
 
 (defmacro frustum
   [& options]
-  `(u/calls! ^Frustum (frustum*) ~@options))
+  `(let [^Frustum object# (frustum*)]
+     (u/calls! object# ~@options)))
 
 (defmacro frustum!
   [object k & options]
@@ -200,7 +211,8 @@
 
 (defmacro grid-point-2
   [x y & options]
-  `(u/calls! ^GridPoint2 (grid-point-2* ~x ~y) ~@options))
+  `(let [^GridPoint2 object# (grid-point-2* ~x ~y)]
+     (u/calls! object# ~@options)))
 
 (defmacro grid-point-2!
   [object k & options]
@@ -214,7 +226,8 @@
 
 (defmacro grid-point-3
   [x y z & options]
-  `(u/calls! ^GridPoint3 (grid-point-3* ~x ~y ~z) ~@options))
+  `(let [^GridPoint3 object# (grid-point-3* ~x ~y ~z)]
+     (u/calls! object# ~@options)))
 
 (defmacro grid-point-3!
   [object k & options]
@@ -230,7 +243,8 @@
 
 (defmacro matrix-3
   [values & options]
-  `(u/calls! ^Matrix3 (matrix-3* ~values) ~@options))
+  `(let [^Matrix3 object# (matrix-3* ~values)]
+     (u/calls! object# ~@options)))
 
 (defmacro matrix-3!
   [object k & options]
@@ -246,7 +260,8 @@
 
 (defmacro matrix-4
   [values & options]
-  `(u/calls! ^Matrix4 (matrix-4* ~values) ~@options))
+  `(let [^Matrix4 object# (matrix-4* ~values)]
+     (u/calls! object# ~@options)))
 
 (defmacro matrix-4!
   [object k & options]
@@ -260,7 +275,8 @@
 
 (defmacro plane
   [normal d & options]
-  `(u/calls! ^Plane (plane* ~normal ~d) ~@options))
+  `(let [^Plane object# (plane* ~normal ~d)]
+     (u/calls! object# ~@options)))
 
 (defmacro plane!
   [object k & options]
@@ -276,7 +292,8 @@
 
 (defmacro polygon
   [vertices & options]
-  `(u/calls! ^Polygon (polygon* ~vertices) ~@options))
+  `(let [^Polygon object# (polygon* ~vertices)]
+     (u/calls! object# ~@options)))
 
 (defmacro polygon!
   [object k & options]
@@ -292,7 +309,8 @@
 
 (defmacro polyline
   [vertices & options]
-  `(u/calls! ^Polyline (polyline* ~vertices) ~@options))
+  `(let [^Polyline object# (polyline* ~vertices)]
+     (u/calls! object# ~@options)))
 
 (defmacro polyline!
   [object k & options]
@@ -308,7 +326,8 @@
 
 (defmacro quaternion
   [w x y z & options]
-  `(u/calls! ^Quaternion (quaternion* ~w ~x ~y ~z) ~@options))
+  `(let [^Quaternion object# (quaternion* ~w ~x ~y ~z)]
+     (u/calls! object# ~@options)))
 
 (defmacro quaternion!
   [object k & options]
@@ -324,7 +343,8 @@
 
 (defmacro rectangle
   [x y width height & options]
-  `(u/calls! ^Rectangle (rectangle* ~x ~y ~width ~height) ~@options))
+  `(let [^Rectangle object# (rectangle* ~x ~y ~width ~height)]
+     (u/calls! object# ~@options)))
 
 (defmacro rectangle!
   [object k & options]
@@ -340,7 +360,8 @@
 
 (defmacro vector-2
   [x y & options]
-  `(u/calls! ^Vector2 (vector-2* ~x ~y) ~@options))
+  `(let [^Vector2 object# (vector-2* ~x ~y)]
+     (u/calls! object# ~@options)))
 
 (defmacro vector-2!
   [object k & options]
@@ -356,7 +377,8 @@
 
 (defmacro vector-3
   [x y z & options]
-  `(u/calls! ^Vector3 (vector-3* ~x ~y ~z) ~@options))
+  `(let [^Vector3 object# (vector-3* ~x ~y ~z)]
+     (u/calls! object# ~@options)))
 
 (defmacro vector-3!
   [object k & options]
@@ -370,7 +392,8 @@
 
 (defmacro windowed-mean
   [window-size & options]
-  `(u/calls! ^WindowedMean (windowed-mean* ~window-size) ~@options))
+  `(let [^WindowedMean object# (windowed-mean* ~window-size)]
+     (u/calls! object# ~@options)))
 
 (defmacro windowed-mean!
   [object k & options]
