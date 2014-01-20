@@ -315,7 +315,7 @@ That should print out a list with a single map inside of it. Now try moving your
 
 ## Building for Android
 
-1. Make sure you have JDK 7 installed (for Windows/OSX, you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), and for Linux you can get it from [apt-get](http://openjdk.java.net/install/).
+1. Make sure you have JDK 7 installed (for Windows/OSX, you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), and for Linux you can get it from [apt-get](http://openjdk.java.net/install/)).
 2. Download [the Android SDK](http://developer.android.com/sdk/index.html). However, don't bother getting the "ADT Bundle", which includes a full IDE, because you'll be using Nightcode. Instead, click "Use an Existing IDE" click the button that appears.
 3. Extract the file anywhere you want.
 4. Run the executable called `android` which is located in the `tools` folder of that archive. This executable will display the SDK Manager with several things checked by default. We want to at least support Ice Cream Sandwich, so check the box next to _Android 4.0.3 (API 15)_ and click _Install_.
@@ -326,7 +326,7 @@ That should print out a list with a single map inside of it. Now try moving your
 ## Building for iOS
 
 1. Get a computer running OS X.
-2. Make sure you have JDK 7 installed (you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html).
+2. Make sure you have JDK 7 installed (you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)).
 3. Install Xcode from the Mac App Store.
 4. Download and extract [the latest RoboVM](http://download.robovm.org/).
 5. In Nightcode, click on the `ios` folder for your project in the sidebar. You should see a red-colored button called _RoboVM_. Click that, and find the folder you extracted the SDK to.
