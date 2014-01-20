@@ -26,11 +26,13 @@
 (load "core_listeners")
 
 (defn ^:private reset-changed!
+  "Internal use only"
   [e-atom e-old e-new]
   (when (not= e-old e-new)
     (compare-and-set! e-atom e-old e-new)))
 
 (defn defscreen*
+  "Internal use only"
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
     :as options}]
   (let [screen (atom {})
@@ -68,6 +70,20 @@
      :input-listeners (global-listeners options execute-fn!)}))
 
 (defmacro defscreen
+  "Creates vars for all the anonymous functions provided to it, so they can be
+replaced by simply reloading the namespace, and creates a var for the symbol `n`
+bound to a map containing various important values related to the screen
+
+    (defscreen text-screen
+      :on-show
+      (fn [screen entities]
+        (update! screen :renderer (stage))
+        (label \"Hello world!\" (color :white)))
+      :on-render
+      (fn [screen entities]
+        (clear!)
+        (render! screen entities)))
+"
   [n & {:keys [] :as options}]
   `(let [fns# (->> (for [[k# v#] ~options]
                      [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
@@ -76,16 +92,30 @@
      (defonce ~n (defscreen* fns#))))
 
 (defn defgame*
+  "Internal use only"
   [{:keys [on-create]}]
   (proxy [Game] []
     (create []
       (when on-create (on-create this)))))
 
 (defmacro defgame
+  "Creates a var for the symbol `n` bound to a [Game](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Game.html)
+object
+
+    (defgame hello-world
+      :on-create
+      (fn [this]
+        (set-screen! this main-screen)))"
   [n & {:keys [] :as options}]
   `(defonce ~n (defgame* ~options)))
 
 (defn set-screen!
+  "Creates a [Screen](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Screen.html)
+object, sets it as the screen for the `game`, and runs the functions from
+`screens` in the order they are provided in
+
+    (set-screen! hello-world main-screen)
+"
   [^Game game & screens]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
@@ -105,5 +135,10 @@
                        (dispose [this])))))
 
 (defn update!
+  "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`
+is the atom storing the screen map behind the scenes
+
+    (update! screen :renderer (stage))
+"
   [{:keys [update-fn!]} & {:keys [] :as args}]
   (update-fn! args))
