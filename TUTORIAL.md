@@ -26,9 +26,9 @@ There are many other functions you can put inside `defscreen`, each letting you 
 
 Most games need some way to keep track of all the things displayed within them. We call these things "entities". Normally, we need to remember attributes such as their position, size, and possibly other values like health and damage. In play-clj, these entities are simply maps, so you can store whatever you want inside of them.
 
-Often, games will store these entities in a list, and in their render function they will loop over the list, perform whatever changes are necessary on the entities (such as moving them), and then call a function to render them. This, of course, would not be idiomatic in Clojure, and leads to more complicated software.
+Often, games will store these entities in a list, and in their render function they will loop over the list, modify the entities (such as moving them), and then call a function to render them. With functional programming, on the other hand, we want to avoid directly mutating values, as it leads to more complicated and error-prone software.
 
-In play-clj, the entities list is stored behind the scenes and is given to you in each function within `defscreen`. It's a normal Clojure list, so you can't directly change it. Instead, you must return a new entities list at the end of each `defscreen` function, which will then be provided to all other functions when they run.
+Intead, play-clj stores the entities list behind the scenes and passes it to each function within `defscreen`. It's a normal Clojure list, so you can't directly change it. Instead, you must return a new entities list at the end of each `defscreen` function, which will then be provided to all other functions when they run.
 
 ## Loading a Texture
 
@@ -187,6 +187,63 @@ Lastly, you'll need to make either the width or height of the screen a constant 
 ```
 
 Now, when you resize your game, the image is no longer stretched!
+
+## Java Interop
+
+At some point, you will need to do more than simple positioning and sizing. For that, you'll need to call LibGDX methods directly. You could, of course, use Clojure's Java interop syntax on the `:object` contained within the entity. This is a bit ugly, though, and requires you to do all the importing and type hinting yourself.
+
+In play-clj, anything that creates an entity, such as `texture`, is actually a macro that allows you to call the underlying Java methods after the required argument(s). In this case, the underlying class is called [TextureRegion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html). Consider this:
+
+```clojure
+    (texture "clojure.png" :flip true false)
+```
+
+...which is transformed into:
+
+```clojure
+    (let [entity (texture "clojure.png")]
+      (doto ^TextureRegion (:object entity)
+        (.flip true false))
+      entity)
+```
+
+You can even call multiple methods in the same expression this way. For example:
+
+```clojure
+    (texture "clojure.png"
+             :flip true false
+             :set-region 0 0 100 100)
+```
+
+...which is transformed into:
+
+```clojure
+    (let [entity (texture "clojure.png")]
+      (doto ^TextureRegion (:object entity)
+        (.flip true false)
+        (.setRegion 0 0 100 100)
+      entity)
+```
+
+There is also an equivalent macro with a `!` on the end, which lets you call these methods on an existing entity:
+
+```clojure
+    (texture! entity :flip true false)
+```
+
+In this case, you can only include a single method call, because it's also meant to be a simple way to call getter methods that return a value. For example:
+
+```clojure
+    (texture! entity :get-region-width)
+```
+
+Lastly, there is one final version with a `*` at the end. Essentially, `texture*` is the function version of `texture`. It has the same required arguments, but it can't do any of the Java interop stuff noted above. This is useful because sometimes you may want to pass `texture` around as a function, such as in the first argument of `map`.
+
+If you try that, you'll get the dreaded error: `java.lang.RuntimeException: Can't take value of a macro`. Macros run at compile time, so you can't pass them around like functions. The solution is to use the `*` version, which is indeed a function:
+
+```clojure
+    (map texture* ["image1.png" "image2.png" "image3.png"])
+```
 
 ## Multiple Screens
 
