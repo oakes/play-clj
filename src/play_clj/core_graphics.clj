@@ -11,9 +11,8 @@
 
 (defmacro tiled-map
   "Returns a [TiledMap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMap.html)
-
-    (tiled-map \"level1.tmx\")
-"
+(normally, you don't need to use this directly, because the *-tiled-map
+macros that create the renderers will call this themselves)"
   [s & options]
   `(u/calls! ^TiledMap (tiled-map* ~s) ~@options))
 
