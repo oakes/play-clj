@@ -125,7 +125,7 @@
   `(u/call! ^Joint ~object ~k ~@options))
 
 (defn create-joint!*
-  "The function version of `create-joint`"
+  "The function version of `create-joint!`"
   [screen j-def]
   (box-2d! screen :create-joint j-def))
 
