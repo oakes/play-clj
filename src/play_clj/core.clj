@@ -72,18 +72,7 @@
 (defmacro defscreen
   "Creates vars for all the anonymous functions provided to it, so they can be
 replaced by simply reloading the namespace, and creates a var for the symbol `n`
-bound to a map containing various important values related to the screen
-
-    (defscreen main-screen
-      :on-show
-      (fn [screen entities]
-        (update! screen :renderer (stage))
-        (label \"Hello world!\" (color :white)))
-      :on-render
-      (fn [screen entities]
-        (clear!)
-        (render! screen entities)))
-"
+bound to a map containing various important values related to the screen"
   [n & {:keys [] :as options}]
   `(let [fns# (->> (for [[k# v#] ~options]
                      [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
@@ -100,12 +89,7 @@ bound to a map containing various important values related to the screen
 
 (defmacro defgame
   "Creates a var for the symbol `n` bound to a [Game](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Game.html)
-object
-
-    (defgame hello-world
-      :on-create
-      (fn [this]
-        (set-screen! this main-screen)))"
+object"
   [n & {:keys [] :as options}]
   `(defonce ~n (defgame* ~options)))
 
@@ -114,7 +98,7 @@ object
 object, sets it as the screen for the `game`, and runs the functions from
 `screens` in the order they are provided in
 
-    (set-screen! hello-world main-screen)
+    (set-screen! hello-world main-screen text-screen)
 "
   [^Game game & screens]
   (let [add-inputs! (fn []

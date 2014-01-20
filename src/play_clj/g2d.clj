@@ -39,8 +39,7 @@
      entity#))
 
 (defmacro texture!
-  "Calls a single method on a `texture` entity, returning whatever the method
-itself does
+  "Calls a single method on a `texture`
 
     (texture! entity :flip true false)
     (texture! entity :get-region-width)
@@ -69,7 +68,7 @@ itself does
               (play-mode :normal)))
 
 (defmacro animation
-  "Returns an [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html) object
+  "Returns an [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html)
 
     (animation 0.2
                [walk-1 walk-2 walk-3]
@@ -79,8 +78,7 @@ itself does
   `(u/calls! ^Animation (animation* ~duration ~textures) ~@options))
 
 (defmacro animation!
-  "Calls a single method on an `animation` object, returning whatever the method 
-itself does
+  "Calls a single method on an `animation`
 
     (animation! object :set-play-mode (play-mode :loop))
 "

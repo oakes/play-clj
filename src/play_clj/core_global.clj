@@ -17,7 +17,10 @@
 
 (defmacro color
   "Returns a [Color](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Color.html)
-object"
+
+    (color :white)
+    (color 1 1 1 1)
+"
   [& args]
   `~(if (keyword? (first args))
       `(Color. ^Color (u/static-field-upper :graphics :Color ~(first args)))
