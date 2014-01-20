@@ -1,10 +1,13 @@
 (ns leiningen.new.play-clj
   (:require [clojure.java.io :as io]
+            [leiningen.core.main :as main]
             [leiningen.droid.new :as droid-new]
             [leiningen.new.templates :as t]))
 
 (defn play-clj
   [name & [package-name]]
+  (when (contains? #{"game" "main-screen"} name)
+    (main/abort "Choose a more creative name than that, silly!"))
   (let [render (t/renderer "play-clj")
         lein-droid-render (droid-new/renderer "templates")
         desktop-class-name "desktop-launcher"
