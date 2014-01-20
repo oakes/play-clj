@@ -32,7 +32,7 @@ Most games need some way to keep track of all the things displayed within them. 
 
 Often, games will store these entities in a list, and in their render function they will loop over the list, modify the entities (such as moving them), and then call a function to render them. With functional programming, on the other hand, we want to avoid directly mutating values, as it leads to more complicated and error-prone software.
 
-Intead, play-clj stores the entities list behind the scenes and passes it to each function within `defscreen`. It's a normal Clojure list, so you can't directly change it. Instead, you must return a new entities list at the end of each `defscreen` function, which will then be provided to all other functions when they run.
+Instead, play-clj stores the entities list behind the scenes and passes it to each function within `defscreen`. It's a normal Clojure list, so you can't directly change it. Instead, you must return a new entities list at the end of each `defscreen` function, which will then be provided to all other functions when they run.
 
 ## Loading a Texture
 
