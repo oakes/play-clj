@@ -193,7 +193,7 @@
   `(u/calls! ^EdgeShape (edge*) ~@options))
 
 (defmacro edge!
-  "Calls a single method on a `edge`"
+  "Calls a single method on an `edge`"
   [object k & options]
   `(u/call! ^EdgeShape ~object ~k ~@options))
 
