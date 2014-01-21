@@ -98,8 +98,7 @@ object"
 object, sets it as the screen for the `game`, and runs the functions from
 `screens` in the order they are provided in
 
-    (set-screen! hello-world main-screen text-screen)
-"
+    (set-screen! hello-world main-screen text-screen)"
   [^Game game & screens]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
@@ -123,7 +122,6 @@ object, sets it as the screen for the `game`, and runs the functions from
 is the atom storing the screen map behind the scenes, and returns the new screen
 map
 
-    (update! screen :renderer (stage))
-"
+    (update! screen :renderer (stage))"
   [{:keys [update-fn!]} & {:keys [] :as args}]
   (update-fn! args))

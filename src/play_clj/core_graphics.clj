@@ -19,8 +19,7 @@ macros that create the renderers will call this themselves)"
 (defmacro tiled-map!
   "Calls a single method on a `tiled-map`
 
-    (tiled-map! screen :get-layers)
-"
+    (tiled-map! screen :get-layers)"
   [screen k & options]
   `(let [^BatchTiledMapRenderer object# (u/get-obj ~screen :renderer)]
      (u/call! ^TiledMap (.getMap object#) ~k ~@options)))
@@ -29,8 +28,7 @@ macros that create the renderers will call this themselves)"
   "Returns a list with [MapLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapLayer.html)
 objects cooresponding to each layer in the tiled map in `screen`
 
-    (tiled-map-layers screen)
-"
+    (tiled-map-layers screen)"
   [screen]
   (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
         ^MapLayers layers (-> renderer .getMap .getLayers)]
@@ -50,8 +48,7 @@ objects cooresponding to each layer in the tiled map in `screen`
   "Returns a [TiledMapTileLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
 from the tiled map in `screen` that matches `layer`
 
-    (tiled-map-layer screen \"water\")
-"
+    (tiled-map-layer screen \"water\")"
   [screen layer & options]
   `(let [^TiledMapTileLayer object# (tiled-map-layer* ~screen ~layer)]
      (u/calls! object# ~@options)))
@@ -60,8 +57,7 @@ from the tiled map in `screen` that matches `layer`
   "Calls a single method on a `tiled-map-layer`
 
     (tiled-map-layer! (tiled-map-layer screen \"water\")
-                      :set-cell 0 0 nil)
-"
+                      :set-cell 0 0 nil)"
   [object k & options]
   `(u/call! ^TiledMapTileLayer (cast TiledMapTileLayer ~object) ~k ~@options))
 
@@ -74,8 +70,7 @@ from the tiled map in `screen` that matches `layer`
   "Returns a [TiledMapTileLayer.Cell](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.Cell.html)
 from the tiled map in `screen` from the given `layer` and position `x` and `y`
 
-    (tiled-map-cell screen \"water\" 0 0)
-"
+    (tiled-map-cell screen \"water\" 0 0)"
   [screen layer x y & options]
   `(let [^TiledMapTileLayer$Cell object# (tiled-map-cell* ~screen ~layer ~x ~y)]
      (u/calls! object# ~@options)))
@@ -84,8 +79,7 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`
   "Calls a single method on a `tiled-map-cell`
 
     (tiled-map-cell! (tiled-map-cell screen \"water\" 0 0)
-                     :set-rotation 90)
-"
+                     :set-rotation 90)"
   [object k & options]
   `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
 
@@ -100,8 +94,7 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`
   "Returns an [OrthogonalTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.html)
 with the tiled map file at `path` and `unit` scale
 
-    (orthogonal-tiled-map \"level1.tmx\" (/ 1 8))
-"
+    (orthogonal-tiled-map \"level1.tmx\" (/ 1 8))"
   [path unit & options]
   `(u/calls! ^OrthogonalTiledMapRenderer (orthogonal-tiled-map* ~path ~unit)
              ~@options))
@@ -121,8 +114,7 @@ with the tiled map file at `path` and `unit` scale
   "Returns an [IsometricTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.html)
 with the tiled map file at `path` and `unit` scale
 
-    (isometric-tiled-map \"level1.tmx\" (/ 1 8))
-"
+    (isometric-tiled-map \"level1.tmx\" (/ 1 8))"
   [path unit & options]
   `(u/calls! ^IsometricTiledMapRenderer (isometric-tiled-map* ~path ~unit)
              ~@options))
@@ -143,8 +135,7 @@ with the tiled map file at `path` and `unit` scale
   "Returns an [IsometricStaggeredTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/IsometricStaggeredTiledMapRenderer.html)
 with the tiled map file at `path` and `unit` scale
 
-    (isometric-staggered-tiled-map \"level1.tmx\" (/ 1 8))
-"
+    (isometric-staggered-tiled-map \"level1.tmx\" (/ 1 8))"
   [path unit & options]
   `(u/calls! ^IsometricStaggeredTiledMapRenderer
              (isometric-staggered-tiled-map* ~path ~unit)
@@ -166,8 +157,7 @@ with the tiled map file at `path` and `unit` scale
   "Returns a [HexagonalTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/HexagonalTiledMapRenderer.html)
 with the tiled map file at `path` and `unit` scale
 
-    (hexagonal-tiled-map \"level1.tmx\" (/ 1 8))
-"
+    (hexagonal-tiled-map \"level1.tmx\" (/ 1 8))"
   [path unit & options]
   `(u/calls! ^HexagonalTiledMapRenderer (hexagonal-tiled-map* ~path ~unit)
              ~@options))
@@ -186,8 +176,7 @@ with the tiled map file at `path` and `unit` scale
 (defmacro stage
   "Returns a [Stage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html)
 
-    (stage)
-"
+    (stage)"
   [& options]
   `(u/calls! ^Stage (stage*) ~@options))
 
@@ -243,8 +232,7 @@ with the tiled map file at `path` and `unit` scale
 (defn draw!
   "Draws the `entities` with the renderer from `screen`
 
-    (draw! screen entities)
-"
+    (draw! screen entities)"
   [{:keys [renderer] :as screen} entities]
   (assert renderer)
   (let [^SpriteBatch batch (batch screen)]
@@ -272,8 +260,7 @@ with the tiled map file at `path` and `unit` scale
   "Calls the renderer from `screen` and optionally draws and returns the
 `entities`
 
-    (render! screen entities)
-"
+    (render! screen entities)"
   ([{:keys [renderer] :as screen}]
     (cond
       (isa? (type renderer) BatchTiledMapRenderer)
@@ -294,8 +281,7 @@ with the tiled map file at `path` and `unit` scale
 (defmacro orthographic
   "Returns an [OrthographicCamera](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/OrthographicCamera.html)
 
-    (orthographic)
-"
+    (orthographic)"
   [& options]
   `(let [^OrthographicCamera object# (orthographic*)]
      (u/calls! object# ~@options)))
@@ -314,8 +300,7 @@ with the tiled map file at `path` and `unit` scale
 (defmacro perspective
   "Returns an [PerspectiveCamera](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/PerspectiveCamera.html)
 
-    (perspective)
-"
+    (perspective)"
   [& options]
   `(let [^PerspectiveCamera object# (perspective*)]
      (u/calls! object# ~@options)))
@@ -329,8 +314,7 @@ with the tiled map file at `path` and `unit` scale
 (defn size!
   "Sets the size of the camera in `screen`
 
-    (size! screen 480 360)
-"
+    (size! screen 480 360)"
   [screen width height]
   (let [^OrthographicCamera camera (u/get-obj screen :camera)]
     (assert camera)
@@ -340,8 +324,7 @@ with the tiled map file at `path` and `unit` scale
   "Sets the width of the camera in `screen`, adjusting the height so the ratio
 remains in tact
 
-    (width! screen 480)
-"
+    (width! screen 480)"
   [screen new-width]
   (size! screen new-width (* new-width (/ (game :height) (game :width)))))
 
@@ -349,8 +332,7 @@ remains in tact
   "Sets the height of the camera in `screen`, adjusting the width so the ratio
 remains in tact
 
-    (height! screen 360)
-"
+    (height! screen 360)"
   [screen new-height]
   (size! screen (* new-height (/ (game :width) (game :height))) new-height))
 

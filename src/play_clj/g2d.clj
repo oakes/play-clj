@@ -7,8 +7,7 @@
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
 
     (bitmap-font)
-    (bitmap-font file-handle region)
-"
+    (bitmap-font file-handle region)"
   [& options]
   `(BitmapFont. ~@options))
 
@@ -31,8 +30,7 @@
     (texture \"image.png\" :flip true false)
     (texture \"image.png\"
              :flip true false
-             :set-region 0 0 100 100)
-"
+             :set-region 0 0 100 100)"
   [arg & options]
   `(let [entity# (texture* ~arg)]
      (u/calls! ^TextureRegion (u/get-obj entity# :object) ~@options)
@@ -42,8 +40,7 @@
   "Calls a single method on a `texture`
 
     (texture! entity :flip true false)
-    (texture! entity :get-region-width)
-"
+    (texture! entity :get-region-width)"
   [entity k & options]
   `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))
 
@@ -55,8 +52,7 @@
     (play-mode :loop-random)
     (play-mode :loop-reversed)
     (play-mode :normal)
-    (play-mode :reversed)
-"
+    (play-mode :reversed)"
   [key]
   `(u/static-field-upper :graphics :g2d :Animation ~key))
 
@@ -72,16 +68,14 @@
 
     (animation 0.2
                [walk-1 walk-2 walk-3]
-               :set-play-mode (play-mode :loop-pingpong))
-"
+               :set-play-mode (play-mode :loop-pingpong))"
   [duration textures & options]
   `(u/calls! ^Animation (animation* ~duration ~textures) ~@options))
 
 (defmacro animation!
   "Calls a single method on an `animation`
 
-    (animation! object :set-play-mode (play-mode :loop))
-"
+    (animation! object :set-play-mode (play-mode :loop))"
   [object k & options]
   `(u/call! ^Animation ~object ~k ~@options))
 
@@ -89,8 +83,7 @@
   "Returns a `texture` entity with a frame from `animation` based on the total
 time the `screen` has been showing
 
-    (animation->texture screen anim)
-"
+    (animation->texture screen anim)"
   ([{:keys [total-time]} ^Animation animation]
     (texture* (.getKeyFrame animation total-time true)))
   ([{:keys [total-time]} ^Animation animation is-looping?]

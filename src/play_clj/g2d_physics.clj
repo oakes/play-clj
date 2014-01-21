@@ -19,8 +19,7 @@
 (defmacro box-2d
   "Returns a [World](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/World.html)
 
-    (box-2d 0 0)
-"
+    (box-2d 0 0)"
   [gravity-x gravity-y & options]
   `(let [^World object# (box-2d* ~gravity-x ~gravity-y)]
      (u/calls! object# ~@options)))
@@ -42,8 +41,7 @@
 (defmacro body-def
   "Returns a [BodyDef](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/BodyDef.html)
 
-    (body-def :dynamic)
-"
+    (body-def :dynamic)"
   [k & options]
   `(let [^BodyDef object# (BodyDef.)]
      (set! (. object# type) ~(body-type k))
@@ -113,8 +111,7 @@
 (defmacro joint-def
   "Returns a [JointDef](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/JointDef.html)
 
-    (joint-def :rope)
-"
+    (joint-def :rope)"
   [k & options]
   `(let [object# (~(joint-init k))]
      (u/fields! object# ~@options)))
