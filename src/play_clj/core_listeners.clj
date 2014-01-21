@@ -34,6 +34,7 @@
       false)))
 
 (defn ^:private gesture-listener
+  "Internal use only"
   [{:keys [on-fling on-long-press on-pan on-pan-stop on-pinch on-tap on-zoom]}
    execute-fn!]
   (reify GestureDetector$GestureListener

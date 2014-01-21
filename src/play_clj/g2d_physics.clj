@@ -216,8 +216,8 @@
 
 (defmacro contact!
   "Calls a single method on a [Contact](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html)"
-  [object k & options]
-  `(u/call! ^Contact ~object ~k ~@options))
+  [screen k & options]
+  `(u/call! ^Contact (u/get-obj ~screen :contact) ~k ~@options))
 
 (defn find-body
   "Returns the first entity in `entities` whose body matches `body`"
