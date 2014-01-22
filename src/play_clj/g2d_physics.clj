@@ -109,7 +109,7 @@
                 (u/key->pascal ~k) "JointDef.")))
 
 (defmacro joint-def
-  "Returns a [JointDef](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/JointDef.html)
+  "Returns a subclass of [JointDef](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/JointDef.html)
 
     (joint-def :rope)"
   [k & options]

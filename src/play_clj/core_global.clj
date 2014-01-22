@@ -94,7 +94,7 @@
     (u/throw-key-not-found k)))
 
 (defmacro key-code
-  "Returns the static field cooresponding to `k` from [Input.Keys](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html)
+  "Returns a static field from [Input.Keys](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html)
 
     (key-code :a)
     (key-code :page-down)"
