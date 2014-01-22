@@ -14,14 +14,16 @@
            [com.esotericsoftware.tablelayout Cell]))
 
 (defmacro drawable
-  "Internal use only"
+  "Returns a subclass of [BaseDrawable](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/BaseDrawable.html)
+
+    (drawable :texture-region)"
   [k & options]
-  `(~(symbol (str u/main-package ".scenes.scene2d.ui."
+  `(~(symbol (str u/main-package ".scenes.scene2d.utils."
                   (u/key->pascal k) "Drawable."))
      ~@options))
 
 (defmacro style
-  "Returns a style object based on the keyword `k`
+  "Returns a style object whose class is determined by the keyword `k`
 
     (style :check-box)"
   [k & options]
