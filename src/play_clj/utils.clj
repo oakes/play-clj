@@ -84,9 +84,18 @@ in upper case"
   `~(static-symbol args key->upper))
 
 (defmacro scaling
-  "Internal use only"
+  "Returns a static field from [Scaling](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html)
+
+    (scaling :fill)
+    (scaling :fill-x)
+    (scaling :fill-y)
+    (scaling :fit)
+    (scaling :none)
+    (scaling :stretch)
+    (scaling :stretch-x)
+    (scaling :stretch-y)"
   [k]
-  `(static-field-lower :utils :Scaling ~k))
+  `(static-field-lower main-package :utils :Scaling ~k))
 
 ; java interop
 
