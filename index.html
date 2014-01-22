@@ -3221,7 +3221,7 @@ map</p>
     :is-touched? (input! :is-touched)
     :x (input! :get-x)
     :y (input! :get-y)
-    (u/throw-key-not-found k)))</pre></td></tr><tr><td class="docs"><p>Returns the static field cooresponding to <code>k</code> from <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html">Input.Keys</a></p>
+    (u/throw-key-not-found k)))</pre></td></tr><tr><td class="docs"><p>Returns a static field from <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html">Input.Keys</a></p>
 
 <pre><code>(key-code :a)
 (key-code :page-down)
@@ -3558,7 +3558,7 @@ remains in tact</p>
       false)
     (touchUp [this sx sy p b]
       (execute-fn! on-touch-up :x sx :y sy :pointer p :button b)
-      false)))</pre></td></tr><tr><td class="docs">
+      false)))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private gesture-listener
   [{:keys [on-fling on-long-press on-pan on-pan-stop on-pinch on-tap on-zoom]}
    execute-fn!]
@@ -3873,7 +3873,7 @@ time the <code>screen</code> has been showing</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro ^:private joint-init
   [k]
   `(symbol (str u/main-package &quot;.physics.box2d.joints.&quot;
-                (u/key-&gt;pascal ~k) &quot;JointDef.&quot;)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/JointDef.html">JointDef</a></p>
+                (u/key-&gt;pascal ~k) &quot;JointDef.&quot;)))</pre></td></tr><tr><td class="docs"><p>Returns a subclass of <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/JointDef.html">JointDef</a></p>
 
 <pre><code>(joint-def :rope)
 </code></pre>
@@ -3926,7 +3926,7 @@ time the <code>screen</code> has been showing</p>
   (EdgeShape.))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/EdgeShape.html">EdgeShape</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro edge
   [&amp; options]
-  `(u/calls! ^EdgeShape (edge*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>edge</code></p>
+  `(u/calls! ^EdgeShape (edge*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on an <code>edge</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro edge!
   [object k &amp; options]
   `(u/call! ^EdgeShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>polygon</code></p>
@@ -3978,252 +3978,264 @@ time the <code>screen</code> has been showing</p>
             Circle ConvexHull DelaunayTriangulator EarClippingTriangulator
             Ellipse FloatCounter Frustum GridPoint2 GridPoint3 Matrix3 Matrix4
             Plane Polygon Polyline Quaternion Rectangle Vector2 Vector3
-            WindowedMean]))</pre></td></tr><tr><td class="docs">
+            WindowedMean]))</pre></td></tr><tr><td class="docs"><p>Calls a single method on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/GeometryUtils.html">GeometryUtils</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro geometry!
   [k &amp; options]
-  `(~(u/static-symbol [:math :GeometryUtils k] u/key-&gt;camel) ~@options))</pre></td></tr><tr><td class="docs">
+  `(~(u/static-symbol [:math :GeometryUtils k] u/key-&gt;camel) ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a static class in <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Interpolation.html">Interpolation</a></p>
+
+<pre><code>(interpolation :bounce)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro interpolation
   [k]
-  `~(symbol (str u/main-package &quot;.math.Interpolation$&quot; (u/key-&gt;pascal k))))</pre></td></tr><tr><td class="docs">
+  `~(symbol (str u/main-package &quot;.math.Interpolation$&quot; (u/key-&gt;pascal k))))</pre></td></tr><tr><td class="docs"><p>Calls a single method on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Intersector.html">Intersector</a></p>
+
+<pre><code>(intersector! :is-point-in-triangle 0 1 0 0 1 2 3 0)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro intersector!
   [k &amp; options]
-  `(~(u/static-symbol [:math :Intersector k] u/key-&gt;camel) ~@options))</pre></td></tr><tr><td class="docs">
+  `(~(u/static-symbol [:math :Intersector k] u/key-&gt;camel) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/MathUtils.html">MathUtils</a></p>
+
+<pre><code>(math! :ceil 0.1)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro math!
   [k &amp; options]
-  `(~(u/static-symbol [:math :MathUtils k] u/key-&gt;camel) ~@options))</pre></td></tr><tr><td class="docs">
+  `(~(u/static-symbol [:math :MathUtils k] u/key-&gt;camel) ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a static field in <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Plane.PlaneSide.html">Plane.PlaneSide</a></p>
+
+<pre><code>(plane-side :back)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro plane-side
   [k]
-  `~(symbol (str u/main-package &quot;.math.Plane$PlaneSide/&quot; (u/key-&gt;pascal k))))</pre></td></tr><tr><td class="docs">
+  `~(symbol (str u/main-package &quot;.math.Plane$PlaneSide/&quot; (u/key-&gt;pascal k))))</pre></td></tr><tr><td class="docs"><p>The function version of <code>bezier</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn bezier*
   ([]
     (Bezier.))
   ([points]
-    (Bezier. (into-array points) 0 (count points))))</pre></td></tr><tr><td class="docs">
+    (Bezier. (into-array points) 0 (count points))))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Bezier.html">Bezier</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro bezier
   [points &amp; options]
-  `(u/calls! ^Bezier (bezier* ~points) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Bezier (bezier* ~points) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>bezier</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro bezier!
   [object k &amp; options]
-  `(u/call! ^Bezier ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Bezier ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>bresenham2</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn bresenham2*
   []
-  (Bresenham2.))</pre></td></tr><tr><td class="docs">
+  (Bresenham2.))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Bresenham2.html">Bresenham2</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro bresenham2
   [&amp; options]
-  `(u/calls! ^Bresenham2 (bresenham2*) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Bresenham2 (bresenham2*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>bresenham2</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro bresenham2!
   [object k &amp; options]
-  `(u/call! ^Bresenham2 ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Bresenham2 ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>b-spline</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn b-spline*
   ([]
     (BSpline.))
   ([points degree cont?]
-    (BSpline. (into-array points) degree cont?)))</pre></td></tr><tr><td class="docs">
+    (BSpline. (into-array points) degree cont?)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/BSpline.html">BSpline</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro b-spline
   [points degree cont? &amp; options]
-  `(u/calls! ^BSpline (b-spline* ~points ~degree ~cont?) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^BSpline (b-spline* ~points ~degree ~cont?) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>b-spline</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro b-spline!
   [object k &amp; options]
-  `(u/call! ^BSpline ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^BSpline ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>catmull-rom-spline</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn catmull-rom-spline*
   ([]
     (CatmullRomSpline.))
   ([points cont?]
-    (CatmullRomSpline. (into-array points) cont?)))</pre></td></tr><tr><td class="docs">
+    (CatmullRomSpline. (into-array points) cont?)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/CatmullRomSpline.html">CatmullRomSpline</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro catmull-rom-spline
   [points cont? &amp; options]
-  `(u/calls! ^CatmullRomSpline (catmull-rom-spline* ~points ~cont?) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^CatmullRomSpline (catmull-rom-spline* ~points ~cont?) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>catmull-rom-spline</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro catmull-rom-spline!
   [object k &amp; options]
-  `(u/call! ^CatmullRomSpline ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^CatmullRomSpline ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>circle</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn circle*
   ([]
     (Circle.))
   ([x y radius]
-    (Circle. x y radius)))</pre></td></tr><tr><td class="docs">
+    (Circle. x y radius)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Circle.html">Circle</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro circle
   [x y radius &amp; options]
-  `(u/calls! ^Circle (circle* ~x ~y ~radius) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Circle (circle* ~x ~y ~radius) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>circle</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro circle!
   [object k &amp; options]
-  `(u/call! ^Circle ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Circle ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>convex-hull</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn convex-hull*
   []
-  (ConvexHull.))</pre></td></tr><tr><td class="docs">
+  (ConvexHull.))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/ConvexHull.html">ConvexHull</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro convex-hull
   [&amp; options]
-  `(u/calls! ^ConvexHull (convex-hull*) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^ConvexHull (convex-hull*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>convex-hull</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro convex-hull!
   [object k &amp; options]
-  `(u/call! ^ConvexHull ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^ConvexHull ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>delaunay-triangulator</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn delaunay-triangulator*
   []
-  (DelaunayTriangulator.))</pre></td></tr><tr><td class="docs">
+  (DelaunayTriangulator.))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/DelaunayTriangulator.html">DelaunayTriangulator</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro delaunay-triangulator
   [&amp; options]
-  `(u/calls! ^DelaunayTriangulator (delaunay-triangulator*) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^DelaunayTriangulator (delaunay-triangulator*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>delaunay-triangulator</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro delaunay-triangulator!
   [object k &amp; options]
-  `(u/call! ^DelaunayTriangulator ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^DelaunayTriangulator ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>ear-clipping-triangulator</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn ear-clipping-triangulator*
   []
-  (EarClippingTriangulator.))</pre></td></tr><tr><td class="docs">
+  (EarClippingTriangulator.))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/EarClippingTriangulator.html">EarClippingTriangulator</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro ear-clipping-triangulator
   [&amp; options]
-  `(u/calls! ^EarClippingTriangulator (ear-clipping-triangulator*) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^EarClippingTriangulator (ear-clipping-triangulator*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>ear-clipping-triangulator</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro ear-clipping-triangulator!
   [object k &amp; options]
-  `(u/call! ^EarClippingTriangulator ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^EarClippingTriangulator ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>ellipse</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn ellipse*
   ([]
     (Ellipse.))
   ([x y width height]
-    (Ellipse. x y width height)))</pre></td></tr><tr><td class="docs">
+    (Ellipse. x y width height)))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Ellipse.html">Ellipse</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro ellipse
   [x y width height &amp; options]
-  `(u/calls! ^Ellipse (ellipse* ~x ~y ~width ~height) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Ellipse (ellipse* ~x ~y ~width ~height) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on an <code>ellipse</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro ellipse!
   [object k &amp; options]
-  `(u/call! ^Ellipse ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Ellipse ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>float-counter</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn float-counter*
   [window-size]
-  (FloatCounter. window-size))</pre></td></tr><tr><td class="docs">
+  (FloatCounter. window-size))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/FloatCounter.html">FloatCounter</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro float-counter
   [window-size &amp; options]
-  `(u/calls! ^FloatCounter (float-counter* ~window-size) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^FloatCounter (float-counter* ~window-size) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>float-counter</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro float-counter!
   [object k &amp; options]
-  `(u/call! ^FloatCounter ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^FloatCounter ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>frustum</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn frustum*
   []
-  (Frustum.))</pre></td></tr><tr><td class="docs">
+  (Frustum.))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Frustum.html">Frustum</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro frustum
   [&amp; options]
-  `(u/calls! ^Frustum (frustum*) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Frustum (frustum*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>frustum</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro frustum!
   [object k &amp; options]
-  `(u/call! ^Frustum ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Frustum ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>grid-point-2</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn grid-point-2*
   [x y]
-  (GridPoint2. x y))</pre></td></tr><tr><td class="docs">
+  (GridPoint2. x y))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/GridPoint2.html">GridPoint2</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro grid-point-2
   [x y &amp; options]
-  `(u/calls! ^GridPoint2 (grid-point-2* ~x ~y) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^GridPoint2 (grid-point-2* ~x ~y) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>grid-point-2</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro grid-point-2!
   [object k &amp; options]
-  `(u/call! ^GridPoint2 ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^GridPoint2 ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>grid-point-3</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn grid-point-3*
   [x y z]
-  (GridPoint3. x y z))</pre></td></tr><tr><td class="docs">
+  (GridPoint3. x y z))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/GridPoint3.html">GridPoint3</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro grid-point-3
   [x y z &amp; options]
-  `(u/calls! ^GridPoint3 (grid-point-3* ~x ~y ~z) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^GridPoint3 (grid-point-3* ~x ~y ~z) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>grid-point-3</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro grid-point-3!
   [object k &amp; options]
-  `(u/call! ^GridPoint3 ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^GridPoint3 ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>matrix-3</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn matrix-3*
   ([]
     (Matrix3.))
   ([values]
-    (Matrix3. values)))</pre></td></tr><tr><td class="docs">
+    (Matrix3. values)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Matrix3.html">Matrix3</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro matrix-3
   [values &amp; options]
-  `(u/calls! ^Matrix3 (matrix-3* ~values) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Matrix3 (matrix-3* ~values) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>matrix-3</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro matrix-3!
   [object k &amp; options]
-  `(u/call! ^Matrix3 ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Matrix3 ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>matrix-4</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn matrix-4*
   ([]
     (Matrix4.))
   ([^floats values]
-    (Matrix4. values)))</pre></td></tr><tr><td class="docs">
+    (Matrix4. values)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Matrix4.html">Matrix4</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro matrix-4
   [values &amp; options]
-  `(u/calls! ^Matrix4 (matrix-4* ~values) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Matrix4 (matrix-4* ~values) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>matrix-4</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro matrix-4!
   [object k &amp; options]
-  `(u/call! ^Matrix4 ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Matrix4 ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>plane</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn plane*
   [^Vector3 normal ^double d]
-  (Plane. normal d))</pre></td></tr><tr><td class="docs">
+  (Plane. normal d))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Plane.html">Plane</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro plane
   [normal d &amp; options]
-  `(u/calls! ^Plane (plane* ~normal ~d) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Plane (plane* ~normal ~d) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>plane</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro plane!
   [object k &amp; options]
-  `(u/call! ^Plane ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Plane ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>polygon</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn polygon*
   ([]
     (Polygon.))
   ([vertices]
-    (Polygon. vertices)))</pre></td></tr><tr><td class="docs">
+    (Polygon. vertices)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Polygon.html">Polygon</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro polygon
   [vertices &amp; options]
-  `(u/calls! ^Polygon (polygon* ~vertices) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Polygon (polygon* ~vertices) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>polygon</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro polygon!
   [object k &amp; options]
-  `(u/call! ^Polygon ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Polygon ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>polyline</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn polyline*
   ([]
     (Polyline.))
   ([vertices]
-    (Polyline. vertices)))</pre></td></tr><tr><td class="docs">
+    (Polyline. vertices)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Polyline.html">Polyline</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro polyline
   [vertices &amp; options]
-  `(u/calls! ^Polyline (polyline* ~vertices) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Polyline (polyline* ~vertices) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>polyline</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro polyline!
   [object k &amp; options]
-  `(u/call! ^Polyline ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Polyline ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>quaternion</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn quaternion*
   ([]
     (Quaternion.))
   ([w x y z]
-    (Quaternion. w x y z)))</pre></td></tr><tr><td class="docs">
+    (Quaternion. w x y z)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Quaternion.html">Quaternion</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro quaternion
   [w x y z &amp; options]
-  `(u/calls! ^Quaternion (quaternion* ~w ~x ~y ~z) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Quaternion (quaternion* ~w ~x ~y ~z) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>quaternion</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro quaternion!
   [object k &amp; options]
-  `(u/call! ^Quaternion ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Quaternion ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>rectangle</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn rectangle*
   ([]
     (Rectangle.))
   ([x y width height]
-    (Rectangle. x y width height)))</pre></td></tr><tr><td class="docs">
+    (Rectangle. x y width height)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Rectangle.html">Rectangle</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro rectangle
   [x y width height &amp; options]
-  `(u/calls! ^Rectangle (rectangle* ~x ~y ~width ~height) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Rectangle (rectangle* ~x ~y ~width ~height) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>rectangle</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro rectangle!
   [object k &amp; options]
-  `(u/call! ^Rectangle ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Rectangle ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>vector-2</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn vector-2*
   ([]
     (Vector2.))
   ([x y]
-    (Vector2. x y)))</pre></td></tr><tr><td class="docs">
+    (Vector2. x y)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Vector2.html">Vector2</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro vector-2
   [x y &amp; options]
-  `(u/calls! ^Vector2 (vector-2* ~x ~y) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Vector2 (vector-2* ~x ~y) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>vector-2</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro vector-2!
   [object k &amp; options]
-  `(u/call! ^Vector2 ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Vector2 ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>vector-3</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn vector-3*
   ([]
     (Vector3.))
   ([x y z]
-    (Vector3. x y z)))</pre></td></tr><tr><td class="docs">
+    (Vector3. x y z)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Vector3.html">Vector3</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro vector-3
   [x y z &amp; options]
-  `(u/calls! ^Vector3 (vector-3* ~x ~y ~z) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Vector3 (vector-3* ~x ~y ~z) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>vector-3</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro vector-3!
   [object k &amp; options]
-  `(u/call! ^Vector3 ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Vector3 ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>windowed-mean</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn windowed-mean*
   [window-size]
-  (WindowedMean. window-size))</pre></td></tr><tr><td class="docs">
+  (WindowedMean. window-size))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/WindowedMean.html">WindowedMean</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro windowed-mean
   [window-size &amp; options]
-  `(u/calls! ^WindowedMean (windowed-mean* ~window-size) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^WindowedMean (windowed-mean* ~window-size) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>windowed-mean</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro windowed-mean!
   [object k &amp; options]
   `(u/call! ^WindowedMean ~object ~k ~@options))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.ui" name="play-clj.ui"><h1 class="project-name">play-clj.ui</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
@@ -4240,24 +4252,35 @@ time the <code>screen</code> has been showing</p>
             Tree$Node VerticalGroup WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
             SpriteDrawable TextureRegionDrawable TiledDrawable]
-           [com.esotericsoftware.tablelayout Cell]))</pre></td></tr><tr><td class="docs">
+           [com.esotericsoftware.tablelayout Cell]))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro drawable
-  [type &amp; options]
+  [k &amp; options]
   `(~(symbol (str u/main-package &quot;.scenes.scene2d.ui.&quot;
-                  (u/key-&gt;pascal type) &quot;Drawable.&quot;))
-     ~@options))</pre></td></tr><tr><td class="docs">
+                  (u/key-&gt;pascal k) &quot;Drawable.&quot;))
+     ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a style object based on the keyword <code>k</code></p>
+
+<pre><code>(style :check-box)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro style
-  [type &amp; options]
+  [k &amp; options]
   `(~(symbol (str u/main-package &quot;.scenes.scene2d.ui.&quot;
-                  (u/key-&gt;pascal type) &quot;$&quot;
-                  (u/key-&gt;pascal type) &quot;Style.&quot;))
-     ~@options))</pre></td></tr><tr><td class="docs">
+                  (u/key-&gt;pascal k) &quot;$&quot;
+                  (u/key-&gt;pascal k) &quot;Style.&quot;))
+     ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Skin.html">Skin</a>
+based on the file at <code>path</code></p>
+
+<pre><code>(skin "uiskin.json")
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro skin
   [path &amp; options]
-  `(u/calls! ^Skin (Skin. (.internal ^Files (Gdx/files) ~path)) ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/calls! ^Skin (Skin. (.internal ^Files (Gdx/files) ~path)) ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a static field from <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/Align.html">Align</a></p>
+
+<pre><code>(align :center)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro align
-  [key]
-  `(u/static-field-lower :scenes :scene2d :utils :Align ~key))</pre></td></tr><tr><td class="docs">
+  [k]
+  `(u/static-field-lower :scenes :scene2d :utils :Align ~k))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <a href="https://github.com/libgdx/libgdx/blob/master/gdx/src/com/esotericsoftware/tablelayout/Cell.java">Cell</a>
+(this could probably be made into a macro...)</p>
 </td><td class="codes"><pre class="brush: clojure">(defn cell!
   [^Cell cell &amp; args]
   (let [method (first args)
@@ -4303,8 +4326,18 @@ time the <code>screen</code> has been showing</p>
         :row (.row cell)
         (u/throw-key-not-found method))
       (apply cell! cell rest-args))
-    cell))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmulti add-to-group! #(-&gt; % first :object type) :default WidgetGroup)</pre></td></tr><tr><td class="docs">
+    cell))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+</td><td class="codes"><pre class="brush: clojure">(defmulti add-to-group!
+  #(-&gt; % first :object type) :default WidgetGroup)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+</td><td class="codes"><pre class="brush: clojure">(defn ^:private create-tree-node
+  [child]
+  {:object (Tree$Node. ^Actor (:object child))})</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+</td><td class="codes"><pre class="brush: clojure">(defn ^:private add-tree-nodes
+  [parent children]
+  (when-let [node (add-to-group! [parent (first children)])]
+    (doseq [child (rest children)]
+      (add-to-group! [node child]))
+    node))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod add-to-group! WidgetGroup
   [[parent child]]
   (.addActor ^WidgetGroup (:object parent) ^Actor (:object child)))</pre></td></tr><tr><td class="docs">
@@ -4319,15 +4352,6 @@ time the <code>screen</code> has been showing</p>
     (case child
       :row (.row ^Table (:object parent))
       (u/throw-key-not-found child))))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn ^:private create-tree-node
-  [child]
-  {:object (Tree$Node. ^Actor (:object child))})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defn ^:private add-tree-nodes
-  [parent children]
-  (when-let [node (add-to-group! [parent (first children)])]
-    (doseq [child (rest children)]
-      (add-to-group! [node child]))
-    node))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod add-to-group! Tree
   [[parent child]]
   (cond
@@ -4345,48 +4369,59 @@ time the <code>screen</code> has been showing</p>
       (.add ^Tree$Node (:object parent) ^Tree$Node (:object node))
       node)
     (coll? child)
-    (add-tree-nodes parent child)))</pre></td></tr><tr><td class="docs">
+    (add-tree-nodes parent child)))</pre></td></tr><tr><td class="docs"><p>Adds the entities in <code>children</code> to the <code>group</code> entity of type <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/WidgetGroup.html">WidgetGroup</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defn add!
   [group &amp; children]
   (doseq [child children]
     (add-to-group! [group child]))
-  group)</pre></td></tr><tr><td class="docs">
+  group)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private create-group
   [^WidgetGroup group children]
-  (apply add! (u/create-entity group) children))</pre></td></tr><tr><td class="docs">
+  (apply add! (u/create-entity group) children))</pre></td></tr><tr><td class="docs"><p>The function version of <code>check-box</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn check-box*
   [^String text arg]
-  (u/create-entity (CheckBox. text arg)))</pre></td></tr><tr><td class="docs">
+  (u/create-entity (CheckBox. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/CheckBox.html">CheckBox</a></p>
+
+<pre><code>(check-box "I'm a check box" (style :check-box off on font color))
+(check-box "I'm a check box" (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro check-box
   [text arg &amp; options]
   `(let [entity# (check-box* ~text ~arg)]
      (u/calls! ^CheckBox (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>check-box</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro check-box!
   [entity k &amp; options]
-  `(u/call! ^Checkbox (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Checkbox (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>dialog</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn dialog*
   [text arg]
-  (u/create-entity (Dialog. text arg)))</pre></td></tr><tr><td class="docs">
+  (u/create-entity (Dialog. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Dialog.html">Dialog</a></p>
+
+<pre><code>(dialog "I'm a dialog" (style :window font font-color background))
+(dialog "I'm a dialog" (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro dialog
   [text arg &amp; options]
   `(let [entity# (dialog* ~text ~arg)]
      (u/calls! ^Dialog (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>dialog</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro dialog!
   [entity k &amp; options]
-  `(u/call! ^Dialog (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Dialog (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>horizontal</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn horizontal*
   [children]
-  (create-group (HorizontalGroup.) children))</pre></td></tr><tr><td class="docs">
+  (create-group (HorizontalGroup.) children))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/HorizontalGroup.html">HorizontalGroup</a></p>
+
+<pre><code>(horizontal [entity-1 entity-2])
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro horizontal
   [children &amp; options]
   `(let [entity# (horizontal* ~children)]
      (u/calls! ^HorizontalGroup (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>horizontal</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro horizontal!
   [entity k &amp; options]
-  `(u/call! ^HorizontalGroup (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^HorizontalGroup (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>image</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn image*
   [arg]
   (u/create-entity
@@ -4396,161 +4431,216 @@ time the <code>screen</code> has been showing</p>
       (string? arg)
       (Image. (Texture. ^String arg))
       :else
-      (Image. arg))))</pre></td></tr><tr><td class="docs">
+      (Image. arg))))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Image.html">Image</a></p>
+
+<pre><code>(image "image.png")
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro image
   [arg &amp; options]
   `(let [entity# (image* ~arg)]
      (u/calls! ^Image (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>image</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro image!
   [entity k &amp; options]
-  `(u/call! ^Image (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Image (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>image-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn image-button*
   [arg]
-  (u/create-entity (ImageButton. arg)))</pre></td></tr><tr><td class="docs">
+  (u/create-entity (ImageButton. arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageButton.html">ImageButton</a></p>
+
+<pre><code>(image-button (style :image-button up dn check img-up img-dn img-check))
+(image-button (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro image-button
   [arg &amp; options]
   `(let [entity# (image-button* ~arg)]
      (u/calls! ^ImageButton (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>image-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro image-button!
   [entity k &amp; options]
-  `(u/call! ^ImageButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^ImageButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>image-text-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn image-text-button*
   [^String text arg]
-  (u/create-entity (ImageTextButton. text arg)))</pre></td></tr><tr><td class="docs">
+  (u/create-entity (ImageTextButton. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageTextButton.html">ImageTextButton</a></p>
+
+<pre><code>(image-text-button "I'm an image text button"
+                   (style :image-text-button up down checked font))
+(image-text-button "I'm an image text button" (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro image-text-button
   [text arg &amp; options]
   `(let [entity# (image-text-button* ~text ~arg)]
      (u/calls! ^ImageTextButton (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>image-text-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro image-text-button!
   [entity k &amp; options]
-  `(u/call! ^ImageTextButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^ImageTextButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>label</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn label*
   [^String text arg]
   (u/create-entity
     (if (isa? (type arg) Color)
       (Label. text (style :label (g2d/bitmap-font) arg))
-      (Label. text arg))))</pre></td></tr><tr><td class="docs">
+      (Label. text arg))))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Label.html">Label</a></p>
+
+<pre><code>(label "I'm a label" (color :white))
+(label "I'm a label" (style :label (g2d/bitmap-font) (color :white)))
+(label "I'm a label" (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro label
   [text arg &amp; options]
   `(let [entity# (label* ~text ~arg)]
      (u/calls! ^Label (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>label</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro label!
   [entity k &amp; options]
-  `(u/call! ^Label (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Label (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>scroll-pane</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn scroll-pane*
   [child arg]
-  (u/create-entity (ScrollPane. (u/get-obj child :object) arg)))</pre></td></tr><tr><td class="docs">
+  (u/create-entity (ScrollPane. (u/get-obj child :object) arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ScrollPane.html">ScrollPane</a></p>
+
+<pre><code>(scroll-pane table-entity (style :scroll-pane back h h-knob v v-knob))
+(scroll-pane table-entity (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro scroll-pane
   [child arg &amp; options]
   `(let [entity# (scroll-pane* ~child ~arg)]
      (u/calls! ^ScrollPane (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>scroll-pane</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro scroll-pane!
   [entity k &amp; options]
-  `(u/call! ^ScrollPane (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^ScrollPane (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>select-box</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn select-box*
   [items arg]
-  (u/create-entity (SelectBox. (into-array items) arg)))</pre></td></tr><tr><td class="docs">
+  (u/create-entity (SelectBox. (into-array items) arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html">SelectBox</a></p>
+
+<pre><code>(select-box ["Item 1" "Item 2" "Item 3"]
+            (style :select-box font color back scroll-style list-style))
+(select-box ["Item 1" "Item 2" "Item 3"] (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro select-box
   [items arg &amp; options]
   `(let [entity# (select-box* ~items ~arg)]
      (u/calls! ^SelectBox (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>select-box</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro select-box!
   [entity k &amp; options]
-  `(u/call! ^SelectBox (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^SelectBox (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>slider</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn slider*
   [{:keys [min max step vertical?]
     :or {min 0 max 10 step 1 vertical? false}}
    arg]
   (u/create-entity
-    (Slider. (float min) (float max) (float step) vertical? arg)))</pre></td></tr><tr><td class="docs">
+    (Slider. (float min) (float max) (float step) vertical? arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Slider.html">Slider</a></p>
+
+<pre><code>(slider {:min 0 :max 10 :step 1 :vertical? false} (style :slider back knob))
+(slider {:min 0 :max 10 :step 1 :vertical? false} (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro slider
   [attrs arg &amp; options]
   `(let [entity# (slider* ~attrs ~arg)]
      (u/calls! ^Slider (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>slider</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro slider!
   [entity k &amp; options]
-  `(u/call! ^Slider (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Slider (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>stack</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn stack*
   [children]
-  (create-group (Stack.) children))</pre></td></tr><tr><td class="docs">
+  (create-group (Stack.) children))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Stack.html">Stack</a></p>
+
+<pre><code>(stack [entity-1 entity-2])
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro stack
   [children &amp; options]
   `(let [entity# (stack* ~children)]
      (u/calls! ^Stack (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>stack</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro stack!
   [entity k &amp; options]
-  `(u/call! ^Stack (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Stack (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>table</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn table*
   [children]
-  (create-group (Table.) children))</pre></td></tr><tr><td class="docs">
+  (create-group (Table.) children))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Table.html">Table</a></p>
+
+<pre><code>(table [entity-1 entity-2])
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro table
   [children &amp; options]
   `(let [entity# (table* ~children)]
      (u/calls! ^Table (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>table</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro table!
   [entity k &amp; options]
-  `(u/call! ^Table (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Table (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>text-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn text-button*
   [^String text arg]
-  (u/create-entity (TextButton. text arg)))</pre></td></tr><tr><td class="docs">
+  (u/create-entity (TextButton. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextButton.html">TextButton</a></p>
+
+<pre><code>(text-button "I'm a text button" (style :text-button up dn checked font))
+(text-button "I'm a text button" (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro text-button
   [text arg &amp; options]
   `(let [entity# (text-button* ~text ~arg)]
      (u/calls! ^TextButton (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>text-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro text-button!
   [entity k &amp; options]
-  `(u/call! ^TextButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^TextButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>text-field</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn text-field*
   [^String text arg]
-  (u/create-entity (TextField. text arg)))</pre></td></tr><tr><td class="docs">
+  (u/create-entity (TextField. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextField.html">TextField</a></p>
+
+<pre><code>(text-field "I'm a text field" (style :text-field font col cur sel back))
+(text-field "I'm a text field" (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro text-field
   [text arg &amp; options]
   `(let [entity# (text-field* ~text ~arg)]
      (u/calls! ^TextField (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>text-field</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro text-field!
   [entity k &amp; options]
-  `(u/call! ^TextField (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^TextField (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>tree</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn tree*
   [children arg]
-  (create-group (Tree. arg) children))</pre></td></tr><tr><td class="docs">
+  (create-group (Tree. arg) children))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Tree.html">Tree</a></p>
+
+<pre><code>(tree [entity-1 entity-2] (style :tree plus minus selection))
+(tree [entity-1 entity-2] (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro tree
   [children arg &amp; options]
   `(let [entity# (tree* ~children ~arg)]
      (u/calls! ^Tree (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>tree</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro tree!
   [entity k &amp; options]
-  `(u/call! ^Tree (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^Tree (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>vertical</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn vertical*
   [children]
-  (create-group (VerticalGroup.) children))</pre></td></tr><tr><td class="docs">
+  (create-group (VerticalGroup.) children))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/VerticalGroup.html">VerticalGroup</a></p>
+
+<pre><code>(vertical [entity-1 entity-2])
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro vertical
   [children &amp; options]
   `(let [entity# (vertical* ~children)]
      (u/calls! ^VerticalGroup (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>vertical</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro vertical!
   [entity k &amp; options]
-  `(u/call! ^VerticalGroup (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(u/call! ^VerticalGroup (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>window</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn window*
   [children ^String title arg]
-  (create-group (Window. title arg) children))</pre></td></tr><tr><td class="docs">
+  (create-group (Window. title arg) children))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Window.html">Window</a></p>
+
+<pre><code>(window [entity-1 entity-2] "I'm a window" (style :window title font col))
+(window [entity-1 entity-2] "I'm a window" (skin "uiskin.json"))
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro window
   [children title arg &amp; options]
   `(let [entity# (window* ~children ~title ~arg)]
      (u/calls! ^Window (u/get-obj entity# :object) ~@options)
-     entity#))</pre></td></tr><tr><td class="docs">
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>window</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro window!
   [entity k &amp; options]
   `(u/call! ^Window (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.utils" name="play-clj.utils"><h1 class="project-name">play-clj.utils</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
@@ -4558,60 +4648,66 @@ time the <code>screen</code> has been showing</p>
   (:require [clojure.string :as s])
   (:import [com.badlogic.gdx.graphics.g2d TextureRegion]
            [com.badlogic.gdx.scenes.scene2d Actor]
-           [com.badlogic.gdx.utils Array ArrayMap]))</pre></td></tr><tr><td class="docs">
+           [com.badlogic.gdx.utils Array ArrayMap]))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn throw-key-not-found
   [k]
-  (throw (Exception. (str &quot;The keyword &quot; k &quot; is not found.&quot;))))</pre></td></tr><tr><td class="docs">
+  (throw (Exception. (str &quot;The keyword &quot; k &quot; is not found.&quot;))))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn get-obj
   [obj k]
   (if (map? obj)
     (or (get obj k)
         (throw-key-not-found k))
     obj))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(def ^:const main-package &quot;com.badlogic.gdx&quot;)</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(def ^:const main-package &quot;com.badlogic.gdx&quot;)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private split-key
   [k]
-  (-&gt; k name (s/split #&quot;-&quot;)))</pre></td></tr><tr><td class="docs">
+  (-&gt; k name (s/split #&quot;-&quot;)))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private join-keys
   [k-list]
-  (-&gt;&gt; k-list (map name) (s/join &quot;.&quot;) (str main-package &quot;.&quot;)))</pre></td></tr><tr><td class="docs">
+  (-&gt;&gt; k-list (map name) (s/join &quot;.&quot;) (str main-package &quot;.&quot;)))</pre></td></tr><tr><td class="docs"><p>Returns a string based on keyword <code>k</code> with upper case and underscores</p>
 </td><td class="codes"><pre class="brush: clojure">(defn key-&gt;upper
   [k]
   (-&gt;&gt; (split-key k)
        (map s/upper-case)
-       (s/join &quot;_&quot;)))</pre></td></tr><tr><td class="docs">
+       (s/join &quot;_&quot;)))</pre></td></tr><tr><td class="docs"><p>Returns a string based on keyword <code>k</code> with pascal case and no delimiters</p>
 </td><td class="codes"><pre class="brush: clojure">(defn key-&gt;pascal
   [k]
   (-&gt;&gt; (split-key k)
        (map s/capitalize)
-       (s/join )))</pre></td></tr><tr><td class="docs">
+       (s/join &quot;&quot;)))</pre></td></tr><tr><td class="docs"><p>Returns a string based on keyword <code>k</code> with camel case and no delimiters</p>
 </td><td class="codes"><pre class="brush: clojure">(defn key-&gt;camel
   [k]
   (let [parts (split-key k)]
     (-&gt;&gt; (rest parts)
          (map s/capitalize)
          (cons (first parts))
-         (s/join ))))</pre></td></tr><tr><td class="docs">
+         (s/join &quot;&quot;))))</pre></td></tr><tr><td class="docs"><p>Returns a symbol based on keyword <code>k</code> formatted as a method call</p>
 </td><td class="codes"><pre class="brush: clojure">(defn key-&gt;method
   [k]
-  (symbol (str &quot;.&quot; (key-&gt;camel k))))</pre></td></tr><tr><td class="docs">
+  (symbol (str &quot;.&quot; (key-&gt;camel k))))</pre></td></tr><tr><td class="docs"><p>Returns a fully-qualified static method or field based on <code>args</code> whose last
+item is formatted with <code>transform-fn</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn static-symbol
   [args transform-fn]
   (-&gt;&gt; (transform-fn (last args))
        (str (join-keys (butlast args)) &quot;/&quot;)
-       symbol))</pre></td></tr><tr><td class="docs">
+       symbol))</pre></td></tr><tr><td class="docs"><p>Returns a fully-qualified static method or field whose last item is formatted
+in camel case</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro static-field-lower
   [&amp; args]
-  `~(static-symbol args key-&gt;camel))</pre></td></tr><tr><td class="docs">
+  `~(static-symbol args key-&gt;camel))</pre></td></tr><tr><td class="docs"><p>Returns a fully-qualified static method or field whose last item is formatted
+in upper case</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro static-field-upper
   [&amp; args]
-  `~(static-symbol args key-&gt;upper))</pre></td></tr><tr><td class="docs">
+  `~(static-symbol args key-&gt;upper))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro scaling
   [k]
-  `(static-field-lower :utils :Scaling ~k))</pre></td></tr><tr><td class="docs">
+  `(static-field-lower :utils :Scaling ~k))</pre></td></tr><tr><td class="docs"><p>Calls method <code>k</code> of <code>obj</code> with <code>args</code></p>
+
+<pre><code>(call! "I'm a string" :index-of "s")
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro call!
   [obj k &amp; args]
-  `(~(key-&gt;method k) ~obj ~@args))</pre></td></tr><tr><td class="docs">
+  `(~(key-&gt;method k) ~obj ~@args))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn create-method-calls
   [calls args]
   (let [method-name (first args)
@@ -4619,41 +4715,60 @@ time the <code>screen</code> has been showing</p>
     (if method-name
       (create-method-calls (conj calls `(~(key-&gt;method method-name) ~@my-args))
                            rest-args)
-      calls)))</pre></td></tr><tr><td class="docs">
+      calls)))</pre></td></tr><tr><td class="docs"><p>Calls methods on <code>obj</code></p>
+
+<pre><code>(calls! (java.util.ArrayList.) :add "I'm a string" :add "So am I")
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro calls!
   [obj &amp; args]
-  `(doto ~obj ~@(create-method-calls [] args)))</pre></td></tr><tr><td class="docs">
+  `(doto ~obj ~@(create-method-calls [] args)))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn create-field-setters
   [obj {:keys [] :as args}]
   (map (fn [[k v]]
          `(set! (. ~obj ~(symbol (key-&gt;camel k))) ~v))
-       args))</pre></td></tr><tr><td class="docs">
+       args))</pre></td></tr><tr><td class="docs"><p>Sets fields on <code>obj</code> (it is important that <code>obj</code> is a symbol, because when
+the macro expands it will use it several times, and you probably don't want a
+new object to be created each time a field is set)</p>
+
+<pre><code>(fields! obj
+         :active true
+         :angle 2
+         :awake true
+         :fixed-rotation false)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro fields!
   [obj &amp; args]
   `(do ~@(create-field-setters obj args)
-     ~obj))</pre></td></tr><tr><td class="docs">
+     ~obj))</pre></td></tr><tr><td class="docs"><p>The function version of <code>gdx-array</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn gdx-array*
   [clj-arr]
-  (Array. true (into-array clj-arr) 1 (count clj-arr)))</pre></td></tr><tr><td class="docs">
+  (Array. true (into-array clj-arr) 1 (count clj-arr)))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Array.html">Array</a></p>
+
+<pre><code>(gdx-array [1 2 3 4])
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro gdx-array
   [clj-arr &amp; options]
-  `(calls! ^Array (gdx-array* ~clj-arr) ~@options))</pre></td></tr><tr><td class="docs">
+  `(calls! ^Array (gdx-array* ~clj-arr) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>gdx-array</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro gdx-array!
   [object k &amp; options]
-  `(call! ^Array ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
+  `(call! ^Array ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>gdx-array-map</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn gdx-array-map*
  [clj-map]
  (let [gdx-map (ArrayMap.)]
    (doseq [[k v] clj-map]
      (.put gdx-map k v))
-   gdx-map))</pre></td></tr><tr><td class="docs">
+   gdx-map))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/ArrayMap.html">ArrayMap</a></p>
+
+<pre><code>(gdx-array-map {:key-1 1 :key-2 2})
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro gdx-array-map
   [clj-map &amp; options]
-  `(calls! ^ArrayMap (gdx-array-map* ~clj-map) ~@options))</pre></td></tr><tr><td class="docs">
+  `(calls! ^ArrayMap (gdx-array-map* ~clj-map) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>gdx-array-map</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro gdx-array-map!
   [object k &amp; options]
-  `(call! ^ArrayMap ~object ~k ~@options))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmulti create-entity class)</pre></td></tr><tr><td class="docs">
+  `(call! ^ArrayMap ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+</td><td class="codes"><pre class="brush: clojure">(defmulti create-entity
+  class)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod create-entity TextureRegion
   [obj]
   {:type :texture :object obj})</pre></td></tr><tr><td class="docs">
