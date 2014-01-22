@@ -150,7 +150,7 @@ new object to be created each time a field is set)
   `(calls! ^Array (gdx-array* ~clj-arr) ~@options))
 
 (defmacro gdx-array!
-  "Calls a single method on `gdx-array`"
+  "Calls a single method on a `gdx-array`"
   [object k & options]
   `(call! ^Array ~object ~k ~@options))
 
@@ -170,7 +170,7 @@ new object to be created each time a field is set)
   `(calls! ^ArrayMap (gdx-array-map* ~clj-map) ~@options))
 
 (defmacro gdx-array-map!
-  "Calls a single method on `gdx-array-map`"
+  "Calls a single method on a `gdx-array-map`"
   [object k & options]
   `(call! ^ArrayMap ~object ~k ~@options))
 
