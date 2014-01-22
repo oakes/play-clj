@@ -21,6 +21,7 @@ Clojure also brings the benefits of functional programming. This is becoming a b
 * Check out [the example games](https://github.com/oakes/play-clj-examples)
 * Read [the tutorial](TUTORIAL.md)
 * Read [the generated docs](http://oakes.github.io/play-clj)
+* Join the discussion on [/r/playclj](http://www.reddit.com/r/playclj/)
 * Look at this commented example:
 
 ```clojure
