@@ -95,7 +95,7 @@ in upper case"
     (scaling :stretch-x)
     (scaling :stretch-y)"
   [k]
-  `(static-field-lower main-package :utils :Scaling ~k))
+  `(static-field-lower :utils :Scaling ~k))
 
 ; java interop
 
