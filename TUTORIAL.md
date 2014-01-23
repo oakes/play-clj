@@ -292,7 +292,7 @@ Make sure you add `play-clj.ui` back to your `ns` declaration, so you can use th
 
 ## Using the REPL
 
-It is much faster to develop a game while it's running, and that's what the Clojure REPL lets you do. To get started, just hit the _Run with REPL_ button in the build pane. When it launches, type `(main-)` into the prompt and hit enter, and your game will launch.
+It is much faster to develop a game while it's running, and that's what the Clojure REPL lets you do. To get started, just hit the _Run with REPL_ button in the build pane. When it launches, type `(-main)` into the prompt and hit enter, and your game will launch.
 
 Then, switch back to your code while the game is still running. Let's modify `:on-key-down` so the left arrow makes it go right, and vice versa, by swiching the keyword you pass into `move`:
 
