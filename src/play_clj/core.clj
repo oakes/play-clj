@@ -2,6 +2,7 @@
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
+           [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera]
            [com.badlogic.gdx.graphics.g2d SpriteBatch TextureRegion]

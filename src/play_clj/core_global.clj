@@ -120,3 +120,20 @@
   [^InputProcessor p]
   (let [^InputMultiplexer multi (input! :get-input-processor)]
     (.removeProcessor multi p)))
+
+(defn sound*
+  "The function version of `sound`"
+  [^String path]
+  (audio! :new-sound (files! :internal path)))
+
+(defmacro sound
+  "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html)
+
+    (sound \"playerhurt.wav\")"
+  [path & options]
+  `(u/calls! ^Sound (sound* ~path) ~@options))
+
+(defmacro sound!
+  "Calls a single method on a `sound`"
+  [object k & options]
+  `(u/call! ^Sound ~object ~k ~@options))
