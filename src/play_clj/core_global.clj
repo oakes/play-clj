@@ -136,4 +136,5 @@
 (defmacro sound!
   "Calls a single method on a `sound`"
   [object k & options]
-  `(u/call! ^Sound ~object ~k ~@options))
+  `(let [^Sound object# ~object]
+     (u/call! object# ~k ~@options)))
