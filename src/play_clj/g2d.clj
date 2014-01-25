@@ -77,7 +77,7 @@
     (nine-patch! entity :set-color (color :blue))
     (nine-patch! entity :get-middle-width)"
   [entity k & options]
-  `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))
+  `(u/call! ^NinePatch (u/get-obj ~entity :object) ~k ~@options))
 
 (defmacro play-mode
   "Returns a static field from [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html)
