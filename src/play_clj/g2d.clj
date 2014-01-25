@@ -2,7 +2,7 @@
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
-            ParticleEffect TextureRegion]))
+            ParticleEffect TextureAtlas TextureRegion]))
 
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
@@ -72,7 +72,7 @@
     (nine-patch \"image.png\" :set-color (color :blue))
     (nine-patch {:image \"image.png\" :left 10 :right 10 :top 10 :bottom 10})"
   [arg & options]
-  `(let [entity# (texture* ~arg)]
+  `(let [entity# (nine-patch* ~arg)]
      (u/calls! ^NinePatch (u/get-obj entity# :object) ~@options)
      entity#))
 
@@ -98,7 +98,7 @@
                      (files! :internal \"fire.p\")
                      (files! :internal \"fire-images\"))"
   [& options]
-  `(let [entity# (texture*)]
+  `(let [entity# (particle-effect*)]
      (u/calls! ^ParticleEffect (u/get-obj entity# :object) ~@options)
      entity#))
 
@@ -108,6 +108,29 @@
     (particle-effect! entity :set-position 10 10)"
   [entity k & options]
   `(u/call! ^ParticleEffect (u/get-obj ~entity :object) ~k ~@options))
+
+; texture-atlas
+
+(defn texture-atlas*
+  "The function version of `texture-atlas`"
+  [^String path]
+  (TextureAtlas. path))
+
+(defmacro texture-atlas
+  "Returns a [TextureAtlas](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureAtlas.html)
+
+    (texture-atlas \"packed.txt\")"
+  [path & options]
+  `(let [^TextureAtlas object# (texture-atlas* path)]
+     (u/calls! object# ~@options)
+     object#))
+
+(defmacro texture-atlas!
+  "Calls a single method on a `texture-atlas`
+
+    (texture-atlas! object :create-patch \"test\")"
+  [object k & options]
+  `(u/call! ^TextureAtlas ~object ~k ~@options))
 
 ; animation
 
