@@ -1,7 +1,8 @@
 (ns play-clj.g2d
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Texture]
-           [com.badlogic.gdx.graphics.g2d Animation BitmapFont TextureRegion]))
+           [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
+            TextureRegion]))
 
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
@@ -18,8 +19,8 @@
     (cond
       (string? arg)
       (-> ^String arg Texture. TextureRegion.)
-      (map? arg)
-      (TextureRegion. ^TextureRegion (u/get-obj arg :object))
+      (:object arg)
+      (TextureRegion. ^TextureRegion (:object arg))
       :else
       arg)))
 
@@ -41,6 +42,40 @@
 
     (texture! entity :flip true false)
     (texture! entity :get-region-width)"
+  [entity k & options]
+  `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))
+
+(defn nine-patch*
+  "The function version of `nine-patch`"
+  [arg]
+  (u/create-entity
+    (cond
+      (string? arg)
+      (-> ^String arg Texture. TextureRegion. NinePatch.)
+      (:object arg)
+      (NinePatch. (:object arg))
+      (map? arg)
+      (let [{:keys [^TextureRegion region left right top bottom]} arg]
+        (NinePatch. region left right top bottom))
+      :else
+      arg)))
+
+(defmacro nine-patch
+  "Returns an entity based on [NinePatch](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/NinePatch.html)
+
+    (nine-patch \"image.png\")
+    (nine-patch \"image.png\" :set-color (color :blue))
+    (nine-patch {:image \"image.png\" :left 10 :right 10 :top 10 :bottom 10})"
+  [arg & options]
+  `(let [entity# (texture* ~arg)]
+     (u/calls! ^NinePatch (u/get-obj entity# :object) ~@options)
+     entity#))
+
+(defmacro nine-patch!
+  "Calls a single method on a `nine-patch`
+
+    (nine-patch! entity :set-color (color :blue))
+    (nine-patch! entity :get-middle-width)"
   [entity k & options]
   `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))
 

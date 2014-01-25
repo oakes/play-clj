@@ -208,6 +208,24 @@ with the tiled map file at `path` and `unit` scale
 
 (defmethod draw-entity! nil [_ _])
 
+(defmethod draw-entity! :texture
+  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
+  (assert object)
+  (let [x (float (or x 0))
+        y (float (or y 0))
+        width (float (or width (.getRegionWidth object)))
+        height (float (or height (.getRegionHeight object)))]
+    (.draw batch object x y width height)))
+
+(defmethod draw-entity! :nine-patch
+  [^SpriteBatch batch {:keys [^NinePatch object x y width height]}]
+  (assert object)
+  (let [x (float (or x 0))
+        y (float (or y 0))
+        width (float (or width (.getTotalWidth object)))
+        height (float (or height (.getTotalHeight object)))]
+    (.draw object batch x y width height)))
+
 (defmethod draw-entity! :actor
   [^SpriteBatch batch {:keys [^Actor object] :as entity}]
   (assert object)
@@ -219,15 +237,6 @@ with the tiled map file at `path` and `unit` scale
       :height (.setHeight object v)
       nil))
   (.draw object batch 1))
-
-(defmethod draw-entity! :texture
-  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
-  (assert object)
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        width (float (or width (.getRegionWidth object)))
-        height (float (or height (.getRegionHeight object)))]
-    (.draw batch object x y width height)))
 
 (defn draw!
   "Draws the `entities` with the renderer from `screen`
