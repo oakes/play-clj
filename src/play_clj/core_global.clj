@@ -129,12 +129,16 @@
 (defmacro sound
   "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html)
 
-    (sound \"playerhurt.wav\")"
+    (sound \"playerhurt.wav\")
+    (sound \"playerhurt.wav\" :play)"
   [path & options]
   `(u/calls! ^Sound (sound* ~path) ~@options))
 
 (defmacro sound!
-  "Calls a single method on a `sound`"
+  "Calls a single method on a `sound`
+
+    (sound! object :play)
+    (sound! object :dispose)"
   [object k & options]
   `(let [^Sound object# ~object]
      (u/call! object# ~k ~@options)))
