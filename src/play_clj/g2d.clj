@@ -55,7 +55,8 @@
       (:object arg)
       (NinePatch. (:object arg))
       (map? arg)
-      (let [{:keys [^TextureRegion region left right top bottom]} arg]
+      (let [{:keys [region left right top bottom]} arg]
+        (assert (and region left right top bottom))
         (NinePatch. region left right top bottom))
       :else
       arg)))
