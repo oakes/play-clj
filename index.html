@@ -3028,15 +3028,17 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>play-clj -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">play-clj</h1><h2 class="project-version">0.1.0</h2><br /><p>A LibGDX wrapper for easy cross-platform game development</p>
+</script><title>play-clj -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">play-clj</h1><h2 class="project-version">0.1.1</h2><br /><p>A LibGDX wrapper for easy cross-platform game development</p>
 </div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">com.badlogicgames.gdx/gdx</td><td class="dotted"><hr /></td><td class="dep-version">0.9.9</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#play-clj.core">play-clj.core</a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#play-clj.g2d">play-clj.g2d</a></li><li><a href="#play-clj.g2d-physics">play-clj.g2d-physics</a></li><li><a href="#play-clj.math">play-clj.math</a></li><li><a href="#play-clj.ui">play-clj.ui</a></li><li><a href="#play-clj.utils">play-clj.utils</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.core" name="play-clj.core"><h1 class="project-name">play-clj.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.core
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
+           [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera]
-           [com.badlogic.gdx.graphics.g2d SpriteBatch TextureRegion]
+           [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
+            TextureRegion]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers]
@@ -3243,7 +3245,25 @@ map</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private remove-input!
   [^InputProcessor p]
   (let [^InputMultiplexer multi (input! :get-input-processor)]
-    (.removeProcessor multi p)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+    (.removeProcessor multi p)))</pre></td></tr><tr><td class="docs"><p>The function version of <code>sound</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn sound*
+  [^String path]
+  (audio! :new-sound (files! :internal path)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html">Sound</a></p>
+
+<pre><code>(sound "playerhurt.wav")
+(sound "playerhurt.wav" :play)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro sound
+  [path &amp; options]
+  `(u/calls! ^Sound (sound* ~path) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>sound</code></p>
+
+<pre><code>(sound! object :play)
+(sound! object :dispose)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro sound!
+  [object k &amp; options]
+  `(let [^Sound object# ~object]
+     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(in-ns 'play-clj.core)</pre></td></tr><tr><td class="docs"><p>The function version of <code>tiled-map</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn tiled-map*
   [s]
@@ -3399,6 +3419,30 @@ with the tiled map file at <code>path</code> and <code>unit</code> scale</p>
 </td><td class="codes"><pre class="brush: clojure">(defmulti draw-entity!
   (fn [_ entity] (:type entity)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! nil [_ _])</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :texture
+  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
+  (assert object)
+  (let [x (float (or x 0))
+        y (float (or y 0))
+        width (float (or width (.getRegionWidth object)))
+        height (float (or height (.getRegionHeight object)))]
+    (.draw batch object x y width height)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :nine-patch
+  [^SpriteBatch batch {:keys [^NinePatch object x y width height]}]
+  (assert object)
+  (let [x (float (or x 0))
+        y (float (or y 0))
+        width (float (or width (.getTotalWidth object)))
+        height (float (or height (.getTotalHeight object)))]
+    (.draw object batch x y width height)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :particle-effect
+  [^SpriteBatch batch {:keys [^ParticleEffect object x y delta-time]}]
+  (assert object)
+  (let [x (float (or x 0))
+        y (float (or y 0))
+        delta-time (float (or delta-time (graphics! :get-delta-time)))]
+    (.setPosition object x y)
+    (.draw object batch delta-time)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :actor
   [^SpriteBatch batch {:keys [^Actor object] :as entity}]
   (assert object)
@@ -3409,15 +3453,7 @@ with the tiled map file at <code>path</code> and <code>unit</code> scale</p>
       :width (.setWidth object v)
       :height (.setHeight object v)
       nil))
-  (.draw object batch 1))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :texture
-  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
-  (assert object)
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        width (float (or width (.getRegionWidth object)))
-        height (float (or height (.getRegionHeight object)))]
-    (.draw batch object x y width height)))</pre></td></tr><tr><td class="docs"><p>Draws the <code>entities</code> with the renderer from <code>screen</code></p>
+  (.draw object batch 1))</pre></td></tr><tr><td class="docs"><p>Draws the <code>entities</code> with the renderer from <code>screen</code></p>
 
 <pre><code>(draw! screen entities)
 </code></pre>
@@ -3725,7 +3761,8 @@ remains in tact</p>
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.g2d
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Texture]
-           [com.badlogic.gdx.graphics.g2d Animation BitmapFont TextureRegion]))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html">BitmapFont</a></p>
+           [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
+            ParticleEffect TextureAtlas TextureRegion]))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html">BitmapFont</a></p>
 
 <pre><code>(bitmap-font)
 (bitmap-font file-handle region)
@@ -3739,8 +3776,8 @@ remains in tact</p>
     (cond
       (string? arg)
       (-&gt; ^String arg Texture. TextureRegion.)
-      (map? arg)
-      (TextureRegion. ^TextureRegion (u/get-obj arg :object))
+      (:object arg)
+      (TextureRegion. ^TextureRegion (:object arg))
       :else
       arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html">TextureRegion</a></p>
 
@@ -3761,7 +3798,74 @@ remains in tact</p>
 </code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro texture!
   [entity k &amp; options]
-  `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a static field from <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html">Animation</a></p>
+  `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>nine-patch</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn nine-patch*
+  [arg]
+  (u/create-entity
+    (cond
+      (string? arg)
+      (-&gt; ^String arg Texture. TextureRegion. NinePatch.)
+      (:object arg)
+      (NinePatch. (:object arg))
+      (map? arg)
+      (let [{:keys [region left right top bottom]} arg]
+        (assert (and region left right top bottom))
+        (NinePatch. region left right top bottom))
+      :else
+      arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/NinePatch.html">NinePatch</a></p>
+
+<pre><code>(nine-patch "image.png")
+(nine-patch "image.png" :set-color (color :blue))
+(nine-patch {:image "image.png" :left 10 :right 10 :top 10 :bottom 10})
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro nine-patch
+  [arg &amp; options]
+  `(let [entity# (nine-patch* ~arg)]
+     (u/calls! ^NinePatch (u/get-obj entity# :object) ~@options)
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>nine-patch</code></p>
+
+<pre><code>(nine-patch! entity :set-color (color :blue))
+(nine-patch! entity :get-middle-width)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro nine-patch!
+  [entity k &amp; options]
+  `(u/call! ^NinePatch (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>particle-effect</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn particle-effect*
+  []
+  (u/create-entity (ParticleEffect.)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html">ParticleEffect</a></p>
+
+<pre><code>(particle-effect :load
+                 (files! :internal "fire.p")
+                 (files! :internal "fire-images"))
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro particle-effect
+  [&amp; options]
+  `(let [entity# (particle-effect*)]
+     (u/calls! ^ParticleEffect (u/get-obj entity# :object) ~@options)
+     entity#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>particle-effect</code></p>
+
+<pre><code>(particle-effect! entity :set-position 10 10)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro particle-effect!
+  [entity k &amp; options]
+  `(u/call! ^ParticleEffect (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>texture-atlas</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn texture-atlas*
+  [^String path]
+  (TextureAtlas. path))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureAtlas.html">TextureAtlas</a></p>
+
+<pre><code>(texture-atlas "packed.txt")
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro texture-atlas
+  [path &amp; options]
+  `(let [^TextureAtlas object# (texture-atlas* path)]
+     (u/calls! object# ~@options)
+     object#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>texture-atlas</code></p>
+
+<pre><code>(texture-atlas! object :create-patch "test")
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro texture-atlas!
+  [object k &amp; options]
+  `(u/call! ^TextureAtlas ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a static field from <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html">Animation</a></p>
 
 <pre><code>(play-mode :loop)
 (play-mode :loop-pingpong)
@@ -3940,8 +4044,8 @@ time the <code>screen</code> has been showing</p>
   [object k &amp; options]
   `(u/call! ^PolygonShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html">Contact</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro contact!
-  [object k &amp; options]
-  `(u/call! ^Contact ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>Returns the first entity in <code>entities</code> whose body matches <code>body</code></p>
+  [screen k &amp; options]
+  `(u/call! ^Contact (u/get-obj ~screen :contact) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>Returns the first entity in <code>entities</code> whose body matches <code>body</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn find-body
   [body entities]
   (some #(if (= body (:body %)) %) entities))</pre></td></tr><tr><td class="docs"><p>Returns the first body in a contact</p>
@@ -4252,12 +4356,15 @@ time the <code>screen</code> has been showing</p>
             Tree$Node VerticalGroup WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
             SpriteDrawable TextureRegionDrawable TiledDrawable]
-           [com.esotericsoftware.tablelayout Cell]))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+           [com.esotericsoftware.tablelayout Cell]))</pre></td></tr><tr><td class="docs"><p>Returns a subclass of <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/BaseDrawable.html">BaseDrawable</a></p>
+
+<pre><code>(drawable :texture-region)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro drawable
   [k &amp; options]
-  `(~(symbol (str u/main-package &quot;.scenes.scene2d.ui.&quot;
+  `(~(symbol (str u/main-package &quot;.scenes.scene2d.utils.&quot;
                   (u/key-&gt;pascal k) &quot;Drawable.&quot;))
-     ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a style object based on the keyword <code>k</code></p>
+     ~@options))</pre></td></tr><tr><td class="docs"><p>Returns a style object whose class is determined by the keyword <code>k</code></p>
 
 <pre><code>(style :check-box)
 </code></pre>
@@ -4646,7 +4753,8 @@ based on the file at <code>path</code></p>
   `(u/call! ^Window (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.utils" name="play-clj.utils"><h1 class="project-name">play-clj.utils</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.utils
   (:require [clojure.string :as s])
-  (:import [com.badlogic.gdx.graphics.g2d TextureRegion]
+  (:import [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect
+            TextureRegion]
            [com.badlogic.gdx.scenes.scene2d Actor]
            [com.badlogic.gdx.utils Array ArrayMap]))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn throw-key-not-found
@@ -4698,7 +4806,17 @@ in camel case</p>
 in upper case</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro static-field-upper
   [&amp; args]
-  `~(static-symbol args key-&gt;upper))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+  `~(static-symbol args key-&gt;upper))</pre></td></tr><tr><td class="docs"><p>Returns a static field from <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html">Scaling</a></p>
+
+<pre><code>(scaling :fill)
+(scaling :fill-x)
+(scaling :fill-y)
+(scaling :fit)
+(scaling :none)
+(scaling :stretch)
+(scaling :stretch-x)
+(scaling :stretch-y)
+</code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro scaling
   [k]
   `(static-field-lower :utils :Scaling ~k))</pre></td></tr><tr><td class="docs"><p>Calls method <code>k</code> of <code>obj</code> with <code>args</code></p>
@@ -4772,6 +4890,12 @@ new object to be created each time a field is set)</p>
 </td><td class="codes"><pre class="brush: clojure">(defmethod create-entity TextureRegion
   [obj]
   {:type :texture :object obj})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod create-entity NinePatch
+  [obj]
+  {:type :nine-patch :object obj})</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defmethod create-entity ParticleEffect
+  [obj]
+  {:type :particle-effect :object obj})</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod create-entity Actor
   [obj]
   {:type :actor :object obj})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
