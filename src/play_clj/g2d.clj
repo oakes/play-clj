@@ -2,7 +2,7 @@
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
-            TextureRegion]))
+            ParticleEffect TextureRegion]))
 
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
@@ -11,6 +11,8 @@
     (bitmap-font file-handle region)"
   [& options]
   `(BitmapFont. ~@options))
+
+; texture
 
 (defn texture*
   "The function version of `texture`"
@@ -44,6 +46,8 @@
     (texture! entity :get-region-width)"
   [entity k & options]
   `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))
+
+; nine-patch
 
 (defn nine-patch*
   "The function version of `nine-patch`"
@@ -79,6 +83,33 @@
     (nine-patch! entity :get-middle-width)"
   [entity k & options]
   `(u/call! ^NinePatch (u/get-obj ~entity :object) ~k ~@options))
+
+; particle-effect
+
+(defn particle-effect*
+  "The function version of `particle-effect`"
+  []
+  (u/create-entity (ParticleEffect.)))
+
+(defmacro particle-effect
+  "Returns an entity based on [ParticleEffect](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html)
+
+    (particle-effect :load
+                     (files! :internal \"fire.p\")
+                     (files! :internal \"fire-images\"))"
+  [& options]
+  `(let [entity# (texture*)]
+     (u/calls! ^ParticleEffect (u/get-obj entity# :object) ~@options)
+     entity#))
+
+(defmacro particle-effect!
+  "Calls a single method on a `particle-effect`
+
+    (particle-effect! entity :set-position 10 10)"
+  [entity k & options]
+  `(u/call! ^ParticleEffect (u/get-obj ~entity :object) ~k ~@options))
+
+; animation
 
 (defmacro play-mode
   "Returns a static field from [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html)

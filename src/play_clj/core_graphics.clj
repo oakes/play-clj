@@ -226,6 +226,14 @@ with the tiled map file at `path` and `unit` scale
         height (float (or height (.getTotalHeight object)))]
     (.draw object batch x y width height)))
 
+(defmethod draw-entity! :particle-effect
+  [^SpriteBatch batch {:keys [^ParticleEffect object x y]}]
+  (assert object)
+  (let [x (float (or x 0))
+        y (float (or y 0))]
+    (.setPosition object x y)
+    (.draw object batch (graphics! :get-delta-time))))
+
 (defmethod draw-entity! :actor
   [^SpriteBatch batch {:keys [^Actor object] :as entity}]
   (assert object)

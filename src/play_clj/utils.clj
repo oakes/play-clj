@@ -1,6 +1,7 @@
 (ns play-clj.utils
   (:require [clojure.string :as s])
-  (:import [com.badlogic.gdx.graphics.g2d NinePatch TextureRegion]
+  (:import [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect
+            TextureRegion]
            [com.badlogic.gdx.scenes.scene2d Actor]
            [com.badlogic.gdx.utils Array ArrayMap]))
 
@@ -196,6 +197,10 @@ new object to be created each time a field is set)
 (defmethod create-entity NinePatch
   [obj]
   {:type :nine-patch :object obj})
+
+(defmethod create-entity ParticleEffect
+  [obj]
+  {:type :particle-effect :object obj})
 
 (defmethod create-entity Actor
   [obj]
