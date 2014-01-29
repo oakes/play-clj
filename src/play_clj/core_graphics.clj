@@ -186,21 +186,7 @@ with the tiled map file at `path` and `unit` scale
   `(let [^Stage object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
-; batch
-
-(defmulti batch
-  "Internal use only"
-  #(-> % :renderer class))
-
-(defmethod batch BatchTiledMapRenderer
-  [{:keys [^BatchTiledMapRenderer renderer]}]
-  (.getSpriteBatch renderer))
-
-(defmethod batch Stage
-  [{:keys [^Stage renderer]}]
-  (.getSpriteBatch renderer))
-
-; rendering
+; draw-entity
 
 (defmulti draw-entity!
   "Internal use only"
@@ -210,7 +196,6 @@ with the tiled map file at `path` and `unit` scale
 
 (defmethod draw-entity! :texture
   [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
-  (assert object)
   (let [x (float (or x 0))
         y (float (or y 0))
         width (float (or width (.getRegionWidth object)))
@@ -219,7 +204,6 @@ with the tiled map file at `path` and `unit` scale
 
 (defmethod draw-entity! :nine-patch
   [^SpriteBatch batch {:keys [^NinePatch object x y width height]}]
-  (assert object)
   (let [x (float (or x 0))
         y (float (or y 0))
         width (float (or width (.getTotalWidth object)))
@@ -228,7 +212,6 @@ with the tiled map file at `path` and `unit` scale
 
 (defmethod draw-entity! :particle-effect
   [^SpriteBatch batch {:keys [^ParticleEffect object x y delta-time]}]
-  (assert object)
   (let [x (float (or x 0))
         y (float (or y 0))
         delta-time (float (or delta-time (graphics! :get-delta-time)))]
@@ -237,7 +220,6 @@ with the tiled map file at `path` and `unit` scale
 
 (defmethod draw-entity! :actor
   [^SpriteBatch batch {:keys [^Actor object] :as entity}]
-  (assert object)
   (doseq [[k v] entity]
     (case k
       :x (.setX object v)
@@ -247,18 +229,44 @@ with the tiled map file at `path` and `unit` scale
       nil))
   (.draw object batch 1))
 
-(defn draw!
-  "Draws the `entities` with the renderer from `screen`
+(defmethod draw-entity! :model
+  [{:keys [^ModelBatch batch ^Environment attributes]}
+   {:keys [^ModelInstance object]}]
+  (.render batch object attributes))
 
-    (draw! screen entities)"
-  [{:keys [renderer] :as screen} entities]
-  (assert renderer)
-  (let [^SpriteBatch batch (batch screen)]
+; draw
+
+(defmulti draw!
+  "Internal use only"
+  (fn [screen _] (-> screen :renderer class)))
+
+(defmethod draw! BatchTiledMapRenderer
+  [{:keys [^BatchTiledMapRenderer renderer]} entities]
+  (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
       (draw-entity! batch entity))
     (.end batch))
   entities)
+
+(defmethod draw! Stage
+  [{:keys [^Stage renderer]} entities]
+  (let [^SpriteBatch batch (.getSpriteBatch renderer)]
+    (.begin batch)
+    (doseq [entity entities]
+      (draw-entity! batch entity))
+    (.end batch))
+  entities)
+
+(defmethod draw! ModelBatch
+  [{:keys [^ModelBatch renderer ^Camera camera] :as screen} entities]
+  (.begin renderer camera)
+  (doseq [entity entities]
+    (draw-entity! screen entity))
+  (.end renderer)
+  entities)
+
+; render
 
 (defn ^:private render-map!
   "Internal use only"

@@ -7,6 +7,7 @@
             PerspectiveCamera]
            [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
             TextureRegion]
+           [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers]
