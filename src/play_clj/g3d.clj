@@ -1,7 +1,10 @@
 (ns play-clj.g3d
   (:require [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.graphics.g3d Environment Model ModelBatch
+  (:import [com.badlogic.gdx.graphics.g3d Environment Material Model ModelBatch
             ModelInstance]
+           [com.badlogic.gdx.graphics.g3d.attributes BlendingAttribute
+            ColorAttribute CubemapAttribute DepthTestAttribute FloatAttribute
+            IntAttribute TextureAttribute]
            [com.badlogic.gdx.graphics.g3d.utils ModelBuilder]))
 
 ; environment
@@ -95,3 +98,44 @@
   [object k & options]
   `(let [^ModelBuilder object# object]
      (u/call! object# ~k ~@options)))
+
+; material
+
+(defmacro material
+  "Returns a [Material](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Material.html)
+
+    (material)"
+  [& args]
+  `(Material. ~@args))
+
+(defmacro material!
+  "Calls a single method on an `material`"
+  [object k & options]
+  `(let [^Material object# object]
+     (u/call! object# ~k ~@options)))
+
+; attribute
+
+(defmacro ^:private attribute-type
+  "Internal use only"
+  [k]
+  `(symbol (str u/main-package ".graphics.g3d."
+                (u/key->pascal ~k) "Attribute")))
+
+(defmacro attribute
+  "Returns a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
+
+    (attribute :color)"
+  [type & args]
+  `(~(attribute-type type) ~@args))
+
+(defmacro attribute!
+  "Calls a single method on [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
+
+    (attribute! :color)"
+  [type k & options]
+  `((u/static-camel :graphics
+                    :g2d
+                    (str (u/key->pascal type) "Attribute")
+                    k)
+     ~@options))

@@ -11,35 +11,35 @@
 (defmacro geometry!
   "Calls a single method on [GeometryUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/GeometryUtils.html)"
   [k & options]
-  `(~(u/static-symbol [:math :GeometryUtils k] u/key->camel) ~@options))
+  `(~(u/static-camel :math :GeometryUtils k) ~@options))
 
 (defmacro interpolation
   "Returns a static class in [Interpolation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Interpolation.html)
 
     (interpolation :bounce)"
   [k]
-  `~(symbol (str u/main-package ".math.Interpolation$" (u/key->pascal k))))
+  `~(static-class :math :Interpolation k))
 
 (defmacro intersector!
   "Calls a single method on [Intersector](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Intersector.html)
 
     (intersector! :is-point-in-triangle 0 1 0 0 1 2 3 0)"
   [k & options]
-  `(~(u/static-symbol [:math :Intersector k] u/key->camel) ~@options))
+  `(~(u/static-camel :math :Intersector k) ~@options))
 
 (defmacro math!
   "Calls a single method on [MathUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/MathUtils.html)
 
     (math! :ceil 0.1)"
   [k & options]
-  `(~(u/static-symbol [:math :MathUtils k] u/key->camel) ~@options))
+  `(~(u/static-camel :math :MathUtils k) ~@options))
 
 (defmacro plane-side
   "Returns a static field in [Plane.PlaneSide](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Plane.PlaneSide.html)
 
     (plane-side :back)"
   [k]
-  `~(symbol (str u/main-package ".math.Plane$PlaneSide/" (u/key->pascal k))))
+  `~(u/static-class :math :Plane (str "PlaneSide/" (u/key->pascal k))))
 
 ; bezier
 

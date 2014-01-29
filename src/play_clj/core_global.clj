@@ -99,7 +99,7 @@
     (key-code :a)
     (key-code :page-down)"
   [k]
-  `~(symbol (str u/main-package ".Input$Keys/" (u/key->upper k))))
+  `~(u/static-upper "Input$Keys" k))
 
 (defmacro is-pressed?
   "Returns a boolean indicating if the key cooresponding to `k` is being pressed

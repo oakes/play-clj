@@ -33,7 +33,7 @@
 (defn ^:private join-keys
   "Internal use only"
   [k-list]
-  (->> k-list (map name) (s/join ".") (str main-package ".")))
+  (->> k-list (map name) (s/join ".")))
 
 (defn key->upper
   "Returns a string based on keyword `k` with upper case and underscores"
@@ -66,24 +66,27 @@
 ; static methods/fields
 
 (defn static-symbol
-  "Returns a fully-qualified static method or field based on `args` whose last
-item is formatted with `transform-fn`"
-  [args transform-fn]
-  (->> (transform-fn (last args))
-       (str (join-keys (butlast args)) "/")
-       symbol))
+  "Returns a fully-qualified static method or field"
+  [k-list ^String divider ^String str-name]
+  (symbol (str main-package "." (join-keys k-list) divider str-name)))
 
-(defmacro static-field-lower
+(defmacro static-camel
   "Returns a fully-qualified static method or field whose last item is formatted
 in camel case"
   [& args]
-  `~(static-symbol args key->camel))
+  `~(static-symbol (butlast args) "/" (key->camel (last args))))
 
-(defmacro static-field-upper
+(defmacro static-upper
   "Returns a fully-qualified static method or field whose last item is formatted
 in upper case"
   [& args]
-  `~(static-symbol args key->upper))
+  `~(static-symbol (butlast args) "/" (key->upper (last args))))
+
+(defmacro static-class
+  "Returns a fully-qualified static class whose last item is formatted in
+pascal case"
+  [& args]
+  `~(static-symbol (butlast args) "$" (key->pascal (last args))))
 
 (defmacro scaling
   "Returns a static field from [Scaling](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html)
