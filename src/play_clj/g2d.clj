@@ -144,7 +144,7 @@
     (play-mode :normal)
     (play-mode :reversed)"
   [key]
-  `(u/static-field-upper :graphics :g2d :Animation ~key))
+  `(u/static-upper :graphics :g2d :Animation ~key))
 
 (defn animation*
   "The function version of `animation`"

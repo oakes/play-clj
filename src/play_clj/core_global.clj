@@ -21,7 +21,7 @@
     (color 1 1 1 1)"
   [& args]
   `~(if (keyword? (first args))
-      `(Color. ^Color (u/static-field-upper :graphics :Color ~(first args)))
+      `(Color. ^Color (u/static-upper :graphics :Color ~(first args)))
       `(Color. ~@args)))
 
 ; interop
@@ -99,7 +99,7 @@
     (key-code :a)
     (key-code :page-down)"
   [k]
-  `~(u/static-upper "Input$Keys" k))
+  `(u/static-upper "Input$Keys" ~k))
 
 (defmacro is-pressed?
   "Returns a boolean indicating if the key cooresponding to `k` is being pressed

@@ -100,7 +100,7 @@ pascal case"
     (scaling :stretch-x)
     (scaling :stretch-y)"
   [k]
-  `(static-field-lower :utils :Scaling ~k))
+  `(static-lower :utils :Scaling ~k))
 
 ; java interop
 
