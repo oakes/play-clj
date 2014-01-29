@@ -230,9 +230,9 @@ with the tiled map file at `path` and `unit` scale
   (.draw object batch 1))
 
 (defmethod draw-entity! :model
-  [{:keys [^ModelBatch batch ^Environment attributes]}
+  [{:keys [^ModelBatch renderer ^Environment attributes]}
    {:keys [^ModelInstance object]}]
-  (.render batch object attributes))
+  (.render renderer object attributes))
 
 ; draw
 
@@ -320,15 +320,17 @@ with the tiled map file at `path` and `unit` scale
 
 (defn perspective*
   "The function version of `perspective`"
-  []
-  (PerspectiveCamera.))
+  ([]
+    (PerspectiveCamera.))
+  ([field-of-view viewport-width viewport-height]
+    (PerspectiveCamera. field-of-view viewport-width viewport-height)))
 
 (defmacro perspective
   "Returns an [PerspectiveCamera](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/PerspectiveCamera.html)
 
     (perspective)"
-  [& options]
-  `(let [^PerspectiveCamera object# (perspective*)]
+  [fov vw vh & options]
+  `(let [^PerspectiveCamera object# (perspective* ~fov ~vw ~vh)]
      (u/calls! object# ~@options)))
 
 (defmacro perspective!
@@ -343,7 +345,6 @@ with the tiled map file at `path` and `unit` scale
     (size! screen 480 360)"
   [screen width height]
   (let [^OrthographicCamera camera (u/get-obj screen :camera)]
-    (assert camera)
     (.setToOrtho camera false width height)))
 
 (defn width!
@@ -366,7 +367,6 @@ remains in tact
   "Sets only the x position of the camera in `screen`"
   [screen x]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (assert camera)
     (set! (. (. camera position) x) x)
     (.update camera)))
 
@@ -374,7 +374,6 @@ remains in tact
   "Sets only the y position of the camera in `screen`"
   [screen y]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (assert camera)
     (set! (. (. camera position) y) y)
     (.update camera)))
 
@@ -382,7 +381,6 @@ remains in tact
   "Sets only the z position of the camera in `screen`"
   [screen z]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (assert camera)
     (set! (. (. camera position) z) z)
     (.update camera)))
 
@@ -394,3 +392,31 @@ remains in tact
     (when x (x! screen x))
     (when y (y! screen y))
     (when z (z! screen z))))
+
+(defn direction!
+  "Sets the directino of the camera in `screen`"
+  [screen x y z]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (.lookAt camera x y z)
+    (.update camera)))
+
+(defn near!
+  "Sets the near clipping plane distance of the camera in `screen`"
+  [screen n]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. camera near) n)
+    (.update camera)))
+
+(defn far!
+  "Sets the far clipping plane distance of the camera in `screen`"
+  [screen n]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. camera far) n)
+    (.update camera)))
+
+; misc
+
+(defmacro usage
+  "Returns a static field in [VertexAttributes.Usage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html)"
+  [k]
+  `~(u/gdx-field :graphics "VertexAttributes$Usage" (u/key->pascal k)))

@@ -54,7 +54,7 @@
 (defmacro model
   "Returns an entity based on [ModelInstance](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html)"
   [& args]
-  `(ModelInstance. ~@args))
+  `(u/create-entity (ModelInstance. ~@args)))
 
 (defmacro model!
   "Calls a single method on a `model`"
@@ -84,12 +84,18 @@
 
 ; material
 
+(defn material*
+  "The function version of `material`"
+  []
+  (Material.))
+
 (defmacro material
   "Returns a [Material](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Material.html)
 
     (material)"
-  [& args]
-  `(Material. ~@args))
+  [& options]
+  `(let [^Material object# (material*)]
+     (u/calls! object# ~@options)))
 
 (defmacro material!
   "Calls a single method on a `material`"
@@ -120,7 +126,7 @@
                  (u/key->pascal k)))
 
 (defmacro attribute!
-  "Calls a single method on a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
+  "Calls a static method in a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
 
     (attribute! :color :create-diffuse (color :blue))"
   [type k & options]

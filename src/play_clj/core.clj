@@ -4,7 +4,7 @@
             InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
-            PerspectiveCamera]
+            PerspectiveCamera VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
