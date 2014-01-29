@@ -2,6 +2,7 @@
   (:require [clojure.string :as s])
   (:import [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect
             TextureRegion]
+           [com.badlogic.gdx.graphics.g3d ModelInstance]
            [com.badlogic.gdx.scenes.scene2d Actor]
            [com.badlogic.gdx.utils Array ArrayMap]))
 
@@ -205,3 +206,7 @@ new object to be created each time a field is set)
 (defmethod create-entity Actor
   [obj]
   {:type :actor :object obj})
+
+(defmethod create-entity ModelInstance
+  [obj]
+  {:type :model :object obj})
