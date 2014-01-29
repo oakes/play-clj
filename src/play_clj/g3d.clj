@@ -98,11 +98,10 @@
 
 ; attribute
 
-(defmacro ^:private attribute-init
+(defn ^:private attribute-init
   "Internal use only"
   [k]
-  `(symbol (str u/main-package ".graphics.g3d.attributes."
-                (u/key->pascal ~k) "Attribute.")))
+  (u/gdx :graphics :g3d :attributes (str (u/key->pascal k) "Attribute.")))
 
 (defmacro attribute
   "Returns a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
@@ -116,20 +115,16 @@
 
     (attribute-type :color :diffuse)"
   [type k]
-  `(u/static-pascal :graphics
-                    :g3d
-                    :attributes
-                    ~(str (u/key->pascal type) "Attribute")
-                    ~k))
+  `~(u/gdx-field :graphics :g3d :attributes
+                 (str (u/key->pascal type) "Attribute")
+                 (u/key->pascal k)))
 
 (defmacro attribute!
   "Calls a single method on a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
 
-    (attribute! :color :create-diffuse (color :blue)"
+    (attribute! :color :create-diffuse (color :blue))"
   [type k & options]
-  `((u/static-camel :graphics
-                    :g3d
-                    :attributes
-                    ~(str (u/key->pascal type) "Attribute")
-                    ~k)
+  `(~(u/gdx-field :graphics :g3d :attributes
+                  (str (u/key->pascal type) "Attribute")
+                  (u/key->camel k))
      ~@options))

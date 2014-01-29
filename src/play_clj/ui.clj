@@ -18,8 +18,8 @@
 
     (drawable :texture-region)"
   [k & options]
-  `(~(symbol (str u/main-package ".scenes.scene2d.utils."
-                  (u/key->pascal k) "Drawable."))
+  `(~(u/gdx :scenes :scene2d :utils
+            (str (u/key->pascal k) "Drawable."))
      ~@options))
 
 (defmacro style
@@ -27,9 +27,9 @@
 
     (style :check-box)"
   [k & options]
-  `(~(symbol (str u/main-package ".scenes.scene2d.ui."
-                  (u/key->pascal k) "$"
-                  (u/key->pascal k) "Style."))
+  `(~(u/gdx-class :scenes :scene2d :ui
+                  (u/key->pascal k)
+                  (str (u/key->pascal k) "Style."))
      ~@options))
 
 (defmacro skin
@@ -45,7 +45,7 @@ based on the file at `path`
 
     (align :center)"
   [k]
-  `(u/static-camel :scenes :scene2d :utils :Align ~k))
+  `~(u/gdx-field :scenes :scene2d :utils :Align (u/key->camel k)))
 
 (defn cell!
   "Calls a single method on a [Cell](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/esotericsoftware/tablelayout/Cell.java)

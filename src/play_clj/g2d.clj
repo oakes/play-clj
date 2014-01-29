@@ -143,8 +143,8 @@
     (play-mode :loop-reversed)
     (play-mode :normal)
     (play-mode :reversed)"
-  [key]
-  `(u/static-upper :graphics :g2d :Animation ~key))
+  [k]
+  `~(u/gdx-field :graphics :g2d :Animation (u/key->upper k)))
 
 (defn animation*
   "The function version of `animation`"

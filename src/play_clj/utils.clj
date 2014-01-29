@@ -63,36 +63,28 @@
   [k]
   (symbol (str "." (key->camel k))))
 
-; static methods/fields
+; classes/methods/fields
 
-(defn static-symbol
-  "Returns a fully-qualified static method or field"
-  [k-list ^String divider ^String str-name]
-  (symbol (str main-package "." (join-keys k-list) divider str-name)))
+(defn ^:private add-divider
+  "Internal use only"
+  [args divider]
+  (let [[a1 a2] (take-last 2 args)]
+    (conj (vec (drop-last 2 args)) (str (name a1) divider a2))))
 
-(defmacro static-upper
-  "Returns a fully-qualified static method or field whose last item is formatted
-in upper case"
+(defn gdx
+  "Returns a fully-qualified LibGDX symbol"
   [& args]
-  `~(static-symbol (butlast args) "/" (key->upper (last args))))
+  (symbol (str main-package "." (join-keys args))))
 
-(defmacro static-pascal
-  "Returns a fully-qualified static method or field whose last item is formatted
-in pascal case"
+(defn gdx-field
+  "Returns a fully-qualified LibGDX static method or field"
   [& args]
-  `~(static-symbol (butlast args) "/" (key->pascal (last args))))
+  (apply gdx (add-divider args "/")))
 
-(defmacro static-camel
-  "Returns a fully-qualified static method or field whose last item is formatted
-in camel case"
+(defn gdx-class
+  "Returns a fully-qualified LibGDX static class"
   [& args]
-  `~(static-symbol (butlast args) "/" (key->camel (last args))))
-
-(defmacro static-class
-  "Returns a fully-qualified static class whose last item is formatted in
-pascal case"
-  [& args]
-  `~(static-symbol (butlast args) "$" (key->pascal (last args))))
+  (apply gdx (add-divider args "$")))
 
 (defmacro scaling
   "Returns a static field from [Scaling](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html)
@@ -106,7 +98,7 @@ pascal case"
     (scaling :stretch-x)
     (scaling :stretch-y)"
   [k]
-  `(static-camcel :utils :Scaling ~k))
+  `~(gdx-field :utils :Scaling k))
 
 ; java interop
 

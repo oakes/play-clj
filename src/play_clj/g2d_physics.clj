@@ -32,11 +32,11 @@
 
 ; bodies
 
-(defmacro ^:private body-type
+(defn ^:private body-type
   "Internal use only"
   [k]
-  `(symbol (str u/main-package ".physics.box2d.BodyDef$BodyType/"
-                (u/key->pascal ~k) "Body")))
+  (u/gdx-class :physics :box2d :BodyDef
+               (str "BodyType/" (u/key->pascal k) "Body")))
 
 (defmacro body-def
   "Returns a [BodyDef](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/BodyDef.html)
@@ -102,11 +102,10 @@
 
 ; joints
 
-(defmacro ^:private joint-init
+(defn ^:private joint-init
   "Internal use only"
   [k]
-  `(symbol (str u/main-package ".physics.box2d.joints."
-                (u/key->pascal ~k) "JointDef.")))
+  (u/gdx :physics :box2d :joints (str (u/key->pascal k) "JointDef.")))
 
 (defmacro joint-def
   "Returns a subclass of [JointDef](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/JointDef.html)
