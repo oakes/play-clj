@@ -70,17 +70,23 @@
   [k-list ^String divider ^String str-name]
   (symbol (str main-package "." (join-keys k-list) divider str-name)))
 
-(defmacro static-camel
-  "Returns a fully-qualified static method or field whose last item is formatted
-in camel case"
-  [& args]
-  `~(static-symbol (butlast args) "/" (key->camel (last args))))
-
 (defmacro static-upper
   "Returns a fully-qualified static method or field whose last item is formatted
 in upper case"
   [& args]
   `~(static-symbol (butlast args) "/" (key->upper (last args))))
+
+(defmacro static-pascal
+  "Returns a fully-qualified static method or field whose last item is formatted
+in pascal case"
+  [& args]
+  `~(static-symbol (butlast args) "/" (key->pascal (last args))))
+
+(defmacro static-camel
+  "Returns a fully-qualified static method or field whose last item is formatted
+in camel case"
+  [& args]
+  `~(static-symbol (butlast args) "/" (key->camel (last args))))
 
 (defmacro static-class
   "Returns a fully-qualified static class whose last item is formatted in
@@ -100,7 +106,7 @@ pascal case"
     (scaling :stretch-x)
     (scaling :stretch-y)"
   [k]
-  `(static-lower :utils :Scaling ~k))
+  `(static-camcel :utils :Scaling ~k))
 
 ; java interop
 
