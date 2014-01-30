@@ -5,6 +5,7 @@
            [com.badlogic.gdx.graphics.g3d.attributes BlendingAttribute
             ColorAttribute CubemapAttribute DepthTestAttribute FloatAttribute
             IntAttribute TextureAttribute]
+           [com.badlogic.gdx.graphics.g3d.model.data ModelData]
            [com.badlogic.gdx.graphics.g3d.utils ModelBuilder]))
 
 ; environment
@@ -54,7 +55,15 @@
 (defmacro model
   "Returns an entity based on [ModelInstance](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html)"
   [& args]
-  `(u/create-entity (ModelInstance. ~@args)))
+  `(u/create-entity
+     (let [arg1# ~(first args)]
+       (cond
+         (:object arg1#)
+         (ModelInstance. ^ModelInstance (:object arg1#))
+         (isa? arg1# ModelData)
+         (ModelInstance. ^Model (Model. ~@args))
+         :else
+         (ModelInstance. ~@args)))))
 
 (defmacro model!
   "Calls a single method on a `model`"
