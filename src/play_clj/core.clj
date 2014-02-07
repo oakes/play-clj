@@ -39,7 +39,7 @@
   [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
     :as options}]
   (let [screen (atom {})
-        entities (atom '())
+        entities (atom [])
         execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
                         (let [old-entities @entities]
@@ -47,6 +47,7 @@
                                    list
                                    flatten
                                    (remove nil?)
+                                   vec
                                    (reset-changed! entities old-entities)))))]
     ; update screen when either the screen or entities are changed
     (add-watch screen :changed (fn [_ _ _ new-screen]
