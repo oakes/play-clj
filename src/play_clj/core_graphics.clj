@@ -61,6 +61,13 @@ from the tiled map in `screen` that matches `layer`
   [object k & options]
   `(u/call! ^TiledMapTileLayer (cast TiledMapTileLayer ~object) ~k ~@options))
 
+(defn tiled-map-layer-names
+  "Returns a list with strings cooresponding to the name of each layer in the
+tiled map in `screen`"
+  [screen]
+  (for [layer (tiled-map-layers screen)]
+    (tiled-map-layer! layer :get-name)))
+
 (defn tiled-map-cell*
   "The function version of `tiled-map-cell`"
   [screen layer x y]
@@ -268,19 +275,41 @@ with the tiled map file at `path` and `unit` scale
 
 ; render
 
-(defn ^:private render-map!
-  "Internal use only"
-  [{:keys [^BatchTiledMapRenderer renderer ^Camera camera]}]
-  (when camera (.setView renderer camera))
-  (.render renderer))
+(defn render-map!
+  "Calls the tiled-map renderer from `screen`, optionally allowing you to
+specify which layers to render with or without
 
-(defn ^:private render-stage!
-  "Internal use only"
+    (render-map! screen :with \"water\" \"grass\")
+    (render-map! screen :without \"desert\" \"rocks\")"
+  [{:keys [^BatchTiledMapRenderer renderer ^Camera camera] :as screen}
+   & [k & layer-names]]
+  (when camera (.setView renderer camera))
+  (if k
+    (let [all-layer-names (tiled-map-layer-names screen)]
+      ; make sure the layer names exist
+      (doseq [n layer-names]
+        (when-not (contains? (set all-layer-names) n)
+          (throw (Exception. (format "Layer \"%s\" does not exist." n)))))
+      ; render with or without the supplied layers
+      (->> (case k
+             :with (set layer-names)
+             :without (clojure.set/difference (set all-layer-names)
+                                              (set layer-names))
+             (u/throw-key-not-found k))
+           (map #(.indexOf ^java.util.List all-layer-names %))
+           int-array
+           (.render renderer)))
+    (.render renderer))
+  nil)
+
+(defn render-stage!
+  "Calls the stage renderer from `screen`"
   [{:keys [^Stage renderer ^Camera camera]}]
   (when camera
     (.setCamera renderer camera)
     (.setViewport renderer (. camera viewportWidth) (. camera viewportHeight)))
-  (doto renderer .act .draw))
+  (doto renderer .act .draw)
+  nil)
 
 (defn render!
   "Calls the renderer from `screen` and optionally draws and returns the
