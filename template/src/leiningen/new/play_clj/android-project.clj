@@ -3,7 +3,7 @@
   
   :dependencies [[com.badlogicgames.gdx/gdx "0.9.9" :use-resources true]
                  [com.badlogicgames.gdx/gdx-backend-android "0.9.9"]
-                 [neko/neko "3.0.0"]
+                 [neko/neko "3.0.1"]
                  [org.clojure-android/clojure "1.5.1-jb" :use-resources true]
                  [play-clj "0.1.1"]]
   :repositories [["sonatype"
@@ -34,4 +34,4 @@
   
   :source-paths ["src/clojure" "../desktop/src-common"]
   :java-source-paths ["src/java" "gen"]
-  :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"])
+  :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"])
