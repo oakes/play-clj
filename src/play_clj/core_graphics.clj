@@ -101,11 +101,11 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`
      :width (.get prop "width")
      :height (.get prop "height")}))
 
-(defn screen->isometric-map
+(defn screen->isometric
   "Returns a copy of the provided map with x/y values converted from screen
 to isometric map coordinates
 
-    (screen->isometric-map screen {:x 64 :y 32})"
+    (screen->isometric screen {:x 64 :y 32})"
   [screen {:keys [x y] :as entity}]
   (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
         half-tile-width (/ (* tile-width unit-scale) 2)
@@ -118,11 +118,11 @@ to isometric map coordinates
                     (/ x half-tile-width))
                  2))))
 
-(defn isometric-map->screen
+(defn isometric->screen
   "Returns a copy of the provided map with x/y values converted from isometric
 map to screen coordinates
 
-    (isometric-map->screen screen {:x 2 :y 1})"
+    (isometric->screen screen {:x 2 :y 1})"
   [screen {:keys [x y] :as entity}]
   (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
         half-tile-width (/ (* tile-width unit-scale) 2)
@@ -382,7 +382,7 @@ specify which layers to render with or without
   [screen layer-name]
   (let [^TiledMapTileLayer l (tiled-map-layer screen layer-name)]
     (reduce (fn [layers {:keys [x y] :as map-tile}]
-              (let [screen-tile (isometric-map->screen screen map-tile)
+              (let [screen-tile (isometric->screen screen map-tile)
                     new-layer (or (->> layers (filter #(= y (:y %))) first)
                                   (assoc screen-tile :layer (create-layer l)))]
                 (->> (tiled-map-layer! l :get-cell x y)
