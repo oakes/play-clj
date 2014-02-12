@@ -377,12 +377,20 @@ specify which layers to render with or without
                       (int (.getTileWidth layer))
                       (int (.getTileHeight layer))))
 
+(defn ^:private isometric?
+  "Internal use only"
+  [{:keys [renderer] :as screen}]
+  (or (isa? (type renderer) IsometricTiledMapRenderer)
+      (isa? (type renderer) IsometricStaggeredTiledMapRenderer)))
+
 (defn ^:private split-layer
   "Internal use only"
   [screen layer-name]
   (let [^TiledMapTileLayer l (tiled-map-layer screen layer-name)]
     (reduce (fn [layers {:keys [x y] :as map-tile}]
-              (let [screen-tile (isometric->screen screen map-tile)
+              (let [screen-tile (if (isometric? screen)
+                                  (isometric->screen screen map-tile)
+                                  map-tile)
                     new-layer (or (->> layers (filter #(= y (:y %))) first)
                                   (assoc screen-tile :layer (create-layer l)))]
                 (->> (tiled-map-layer! l :get-cell x y)
