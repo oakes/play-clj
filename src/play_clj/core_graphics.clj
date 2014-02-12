@@ -90,6 +90,49 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`
   [object k & options]
   `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
 
+(defn ^:private tiled-map-prop
+  "Internal use only"
+  [screen]
+  (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
+        ^MapProperties prop (-> renderer .getMap .getProperties)]
+    {:unit-scale (.getUnitScale renderer)
+     :tile-width (.get prop "tilewidth")
+     :tile-height (.get prop "tileheight")
+     :width (.get prop "width")
+     :height (.get prop "height")}))
+
+(defn screen->isometric-map
+  "Returns a copy of the provided map with x/y values converted from screen
+to isometric map coordinates
+
+    (screen->isometric-map screen {:x 64 :y 32})"
+  [screen {:keys [x y] :as entity}]
+  (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
+        half-tile-width (/ (* tile-width unit-scale) 2)
+        half-tile-height (/ (* tile-height unit-scale) 2)]
+    (assoc entity
+           :x (/ (- (/ x half-tile-width)
+                    (/ y half-tile-height))
+                 2)
+           :y (/ (+ (/ y half-tile-height)
+                    (/ x half-tile-width))
+                 2))))
+
+(defn isometric-map->screen
+  "Returns a copy of the provided map with x/y values converted from isometric
+map to screen coordinates
+
+    (isometric-map->screen screen {:x 2 :y 1})"
+  [screen {:keys [x y] :as entity}]
+  (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
+        half-tile-width (/ (* tile-width unit-scale) 2)
+        half-tile-height (/ (* tile-height unit-scale) 2)]
+    (assoc entity
+           :x (+ (* x half-tile-width)
+                 (* y half-tile-width))
+           :y (+ (* -1 x half-tile-height)
+                 (* y half-tile-height)))))
+
 ; renderers
 
 (defn orthogonal-tiled-map*
@@ -325,6 +368,56 @@ specify which layers to render with or without
   ([screen entities]
     (render! screen)
     (draw! screen entities)))
+
+(defn ^:private create-layer
+  "Internal use only"
+  [^TiledMapTileLayer layer]
+  (TiledMapTileLayer. (.getWidth layer)
+                      (.getHeight layer)
+                      (int (.getTileWidth layer))
+                      (int (.getTileHeight layer))))
+
+(defn ^:private split-layer
+  "Internal use only"
+  [screen layer-name]
+  (let [^TiledMapTileLayer l (tiled-map-layer screen layer-name)]
+    (reduce (fn [layers {:keys [x y] :as map-tile}]
+              (let [screen-tile (isometric-map->screen screen map-tile)
+                    new-layer (or (->> layers (filter #(= y (:y %))) first)
+                                  (assoc screen-tile :layer (create-layer l)))]
+                (->> (tiled-map-layer! l :get-cell x y)
+                     (tiled-map-layer! (:layer new-layer) :set-cell x y))
+                (if (contains? (set layers) new-layer)
+                  layers
+                  (conj layers new-layer))))
+            []
+            (for [x (range (- (.getWidth l) 1) -1 -1)
+                  y (range (- (.getHeight l) 1) -1 -1)]
+              {:x x :y y}))))
+
+(defn render-sorted-map!
+  "Draws the supplied tiled-map layers and entities sorted by latitude
+
+    (render-sorted-map! screen [\"walls\"] entities)"
+  [{:keys [^BatchTiledMapRenderer renderer
+           ^Camera camera
+           update-fn!]
+    :as screen}
+   layer-names entities]
+  (doseq [ln layer-names]
+    (when-not (get-in screen [:layers ln])
+      (update-fn! assoc-in [[:layers ln] (split-layer screen ln)])))
+  (when camera (.setView renderer camera))
+  (let [^SpriteBatch batch (.getSpriteBatch renderer)]
+    (.begin batch)
+    (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
+                        (apply concat entities)
+                        (sort #(if (< (:y %1) (:y %2)) 1 -1)))]
+      (if-let [layer (:layer entity)]
+        (.renderTileLayer renderer layer)
+        (draw-entity! batch entity)))
+    (.end batch))
+  entities)
 
 ; cameras
 

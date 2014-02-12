@@ -11,7 +11,7 @@
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
-           [com.badlogic.gdx.maps MapLayer MapLayers]
+           [com.badlogic.gdx.maps MapLayer MapLayers MapProperties]
            [com.badlogic.gdx.maps.tiled TiledMap TiledMapTileLayer
             TiledMapTileLayer$Cell TmxMapLoader]
            [com.badlogic.gdx.maps.tiled.renderers
@@ -61,7 +61,7 @@
      :show (fn []
              (swap! screen assoc
                     :total-time 0
-                    :update-fn! #(swap! screen merge %)
+                    :update-fn! #(apply swap! screen %1 %2)
                     :ui-listeners (ui-listeners options execute-fn!)
                     :g2dp-listener (contact-listener options execute-fn!))
              (execute-fn! on-show))
@@ -128,5 +128,5 @@ is the atom storing the screen map behind the scenes, and returns the new screen
 map
 
     (update! screen :renderer (stage))"
-  [{:keys [update-fn!]} & {:keys [] :as args}]
-  (update-fn! args))
+  [{:keys [update-fn!]} & args]
+  (update-fn! assoc args))
