@@ -157,7 +157,7 @@
   [& options]
   `(u/calls! ^ChainShape (chain*) ~@options))
 
-(defmacro chain-shape!
+(defmacro chain!
   "Calls a single method on a `chain`"
   [object k & options]
   `(u/call! ^ChainShape ~object ~k ~@options))
