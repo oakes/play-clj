@@ -1,26 +1,5 @@
 (in-ns 'play-clj.core)
 
-; utilities
-
-(defmacro usage
-  "Returns a static field in [VertexAttributes.Usage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html)"
-  [k]
-  `~(u/gdx-field :graphics "VertexAttributes$Usage" (u/key->pascal k)))
-
-(defn low->high
-  "Sorts the `entities` by `k` in ascending order
-
-    (low->high :y entities)"
-  [k entities]
-  (sort #(if (< (get %1 k) (get %2 k)) -1 1) entities))
-
-(defn high->low
-  "Sorts the `entities` by `k` in descending order
-
-    (high->low :y entities)"
-  [k entities]
-  (sort #(if (< (get %1 k) (get %2 k)) 1 -1) entities))
-
 ; tiled maps
 
 (defn tiled-map*
@@ -441,7 +420,7 @@ specify which layers to render with or without
     (.begin batch)
     (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
                         (apply concat entities)
-                        (high->low :y))]
+                        (sort-by :y #(compare %2 %1)))]
       (if-let [layer (:layer entity)]
         (.renderTileLayer renderer layer)
         (draw-entity! batch entity)))
@@ -564,3 +543,10 @@ remains in tact
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. camera far) n)
     (.update camera)))
+
+; misc
+
+(defmacro usage
+  "Returns a static field in [VertexAttributes.Usage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html)"
+  [k]
+  `~(u/gdx-field :graphics "VertexAttributes$Usage" (u/key->pascal k)))
