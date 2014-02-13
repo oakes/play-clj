@@ -1,6 +1,6 @@
 (in-ns 'play-clj.core)
 
-; misc
+; utilities
 
 (defmacro usage
   "Returns a static field in [VertexAttributes.Usage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html)"

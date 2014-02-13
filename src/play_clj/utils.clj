@@ -69,7 +69,7 @@
   "Internal use only"
   [args divider]
   (let [[a1 a2] (take-last 2 args)]
-    (conj (vec (drop-last 2 args)) (str (name a1) divider a2))))
+    (conj (vec (drop-last 2 args)) (str (name a1) divider (name a2)))))
 
 (defn gdx
   "Returns a fully-qualified LibGDX symbol"

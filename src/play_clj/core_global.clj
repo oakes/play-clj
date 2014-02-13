@@ -146,6 +146,8 @@
   `(let [^Sound object# ~object]
      (u/call! object# ~k ~@options)))
 
+; assets
+
 (defn ^:private loader-init
   "Internal use only"
   [k]

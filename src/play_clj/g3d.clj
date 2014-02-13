@@ -19,7 +19,7 @@
 (defmacro animation-controller
   "Returns an [AnimationController](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/utils/AnimationController.html)
 
-    (animation-controller entity)"
+    (animation-controller model-entity)"
   [entity & options]
   `(let [^AnimationController object# (animation-controller* ~entity)]
      (u/calls! object# ~@options)))
