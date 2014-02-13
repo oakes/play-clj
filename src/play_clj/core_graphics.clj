@@ -424,10 +424,10 @@ specify which layers to render with or without
                   y (range (- (.getHeight l) 1) -1 -1)]
               {:x x :y y}))))
 
-(defn render-sorted-map!
-  "Draws the supplied tiled-map layers and entities sorted by latitude
+(defn render-sorted!
+  "Draws the supplied tiled-map layers and entities, sorted by latitude
 
-    (render-sorted-map! screen [\"walls\"] entities)"
+    (render-sorted! screen [\"walls\"] entities)"
   [{:keys [^BatchTiledMapRenderer renderer
            ^Camera camera
            update-fn!]
