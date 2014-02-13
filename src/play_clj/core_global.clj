@@ -124,8 +124,10 @@
 
 (defn sound*
   "The function version of `sound`"
-  [^String path]
-  (audio! :new-sound (files! :internal path)))
+  [path]
+  (audio! :new-sound (if (string? path)
+                       (files! :internal path)
+                       path)))
 
 (defmacro sound
   "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html)
@@ -143,3 +145,43 @@
   [object k & options]
   `(let [^Sound object# ~object]
      (u/call! object# ~k ~@options)))
+
+(defn ^:private loader-init
+  "Internal use only"
+  [k]
+  (cond
+    (contains? #{:atlas-tmx-map :tmx-map} k)
+    (u/gdx :maps :tiled (str (u/key->pascal k) "Loader."))
+    (contains? #{:g3d-model :obj} k)
+    (u/gdx :graphics :g3d :loader (str (u/key->pascal k) "Loader."))
+    :else
+    (u/gdx :assets :loaders (str (u/key->pascal k) "Loader."))))
+
+(defmacro loader
+  "Returns a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html)
+
+    (loader :atlas-tmx-map \"map.atlas\")
+    (loader :tmx-map \"map.tmx\")
+    (loader :obj \"model.obj\")
+    (loader :g3d-model \"cube.g3dj\")
+    (loader :bitmap-font \"arial.fnt\")
+    (loader :music \"song.ogg\")
+    (loader :pixmap \"background.png\")
+    (loader :skin \"uiskin.json\")
+    (loader :sound \"hit.ogg\")
+    (loader :texture \"monster.png\")"
+  [type path & options]
+  `(let [object# (~(loader-init type) (if (string? ~path)
+                                        (files! :internal ~path)
+                                        ~path))]
+     (u/calls! object# ~@options)))
+
+(defmacro loader!
+  "Calls a static method in a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html)
+
+    (attribute! :color :create-diffuse (color :blue))"
+  [type k & options]
+  `(~(u/gdx-field :graphics :g3d :attributes
+                  (str (u/key->pascal type) "Attribute")
+                  (u/key->camel k))
+     ~@options))
