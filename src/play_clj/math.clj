@@ -25,7 +25,7 @@
 
     (intersector! :is-point-in-triangle 0 1 0 0 1 2 3 0)"
   [k & options]
-  `(~(u/gdx-field :math :Intersector (u/key->pascal k)) ~@options))
+  `(~(u/gdx-field :math :Intersector (u/key->camel k)) ~@options))
 
 (defmacro math!
   "Calls a single method on [MathUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/MathUtils.html)
@@ -39,7 +39,7 @@
 
     (plane-side :back)"
   [k]
-  `~(u/gdx-field :math :Plane (str "PlaneSide/" (u/key->pascal k))))
+  `~(u/gdx-field :math "Plane$PlaneSide" (u/key->pascal k)))
 
 ; bezier
 
