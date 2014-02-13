@@ -6,7 +6,29 @@
             ColorAttribute CubemapAttribute DepthTestAttribute FloatAttribute
             IntAttribute TextureAttribute]
            [com.badlogic.gdx.graphics.g3d.model.data ModelData]
-           [com.badlogic.gdx.graphics.g3d.utils ModelBuilder]))
+           [com.badlogic.gdx.graphics.g3d.utils AnimationController
+            ModelBuilder]))
+
+; animation-controller
+
+(defn animation-controller*
+  "The function version of `animation-controller`"
+  [entity]
+  (AnimationController. (u/get-obj entity :object)))
+
+(defmacro animation-controller
+  "Returns an [AnimationController](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/utils/AnimationController.html)
+
+    (animation-controller entity)"
+  [entity & options]
+  `(let [^AnimationController object# (animation-controller* ~entity)]
+     (u/calls! object# ~@options)))
+
+(defmacro animation-controller!
+  "Calls a single method on an `animation-controller`"
+  [object k & options]
+  `(let [^AnimationController object# ~object]
+     (u/call! object# ~k ~@options)))
 
 ; environment
 
