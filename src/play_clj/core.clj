@@ -4,6 +4,7 @@
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.audio Sound]
+           [com.badlogic.gdx.assets AssetManager]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch

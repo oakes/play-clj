@@ -170,18 +170,36 @@
     (loader :skin \"uiskin.json\")
     (loader :sound \"hit.ogg\")
     (loader :texture \"monster.png\")"
-  [type path & options]
-  `(let [object# (~(loader-init type) (if (string? ~path)
-                                        (files! :internal ~path)
-                                        ~path))]
+  [type resolver & options]
+  `(let [object# (~(loader-init type) ~resolver)]
      (u/calls! object# ~@options)))
 
 (defmacro loader!
-  "Calls a static method in a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html)
+  "Calls a single method in a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html)
 
-    (attribute! :color :create-diffuse (color :blue))"
-  [type k & options]
-  `(~(u/gdx-field :graphics :g3d :attributes
-                  (str (u/key->pascal type) "Attribute")
-                  (u/key->camel k))
-     ~@options))
+    (loader! object :load \"map.tmx\")"
+  [object & options]
+  `(u/call! ~object ~@options))
+
+(defn asset-manager*
+  "The function version of `asset-manager`"
+  ([]
+    (AssetManager.))
+  ([resolver]
+    (AssetManager. resolver)))
+
+(defmacro asset-manager
+  "Returns an [AssetManager](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/AssetManager.html)
+
+    (asset-manager)"
+  [& options]
+  `(let [^AssetManager object# (asset-manager*)]
+     (u/calls! object# ~@options)))
+
+(defmacro asset-manager!
+  "Calls a single method in an `asset-manager`
+
+    (asset-manager! object :clear)"
+  [object k & options]
+  `(let [^AssetManager object# ~object]
+     (u/call! object# ~k ~@options)))
