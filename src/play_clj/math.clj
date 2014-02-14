@@ -314,13 +314,15 @@
 
 (defn plane*
   "The function version of `plane`"
-  [^Vector3 normal ^double d]
-  (Plane. normal d))
+  ([arg1 arg2]
+    (Plane. arg1 arg2))
+  ([^Vector3 p1 ^Vector3 p2 ^Vector3 p3]
+    (Plane. p1 p2 p3)))
 
 (defmacro plane
   "Returns a [Plane](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Plane.html)"
-  [normal d & options]
-  `(u/calls! ^Plane (plane* ~normal ~d) ~@options))
+  [args & options]
+  `(u/calls! ^Plane (apply plane* ~args) ~@options))
 
 (defmacro plane!
   "Calls a single method on a `plane`"
