@@ -6,7 +6,7 @@
            [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.assets AssetManager]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
-            PerspectiveCamera VertexAttributes$Usage]
+            PerspectiveCamera Texture VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
@@ -91,7 +91,9 @@ bound to a map containing various important values related to the screen"
   [{:keys [on-create]}]
   (proxy [Game] []
     (create []
-      (when on-create (on-create this)))))
+      (Texture/setEnforcePotImages false)
+      (when on-create
+        (on-create this)))))
 
 (defmacro defgame
   "Creates a var for the symbol `n` bound to a [Game](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Game.html)
