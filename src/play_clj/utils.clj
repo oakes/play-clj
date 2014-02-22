@@ -86,20 +86,6 @@
   [& args]
   (apply gdx (add-divider args "$")))
 
-(defmacro scaling
-  "Returns a static field from [Scaling](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html)
-
-    (scaling :fill)
-    (scaling :fill-x)
-    (scaling :fill-y)
-    (scaling :fit)
-    (scaling :none)
-    (scaling :stretch)
-    (scaling :stretch-x)
-    (scaling :stretch-y)"
-  [k]
-  `~(gdx-field :utils :Scaling k))
-
 ; java interop
 
 (defmacro call!

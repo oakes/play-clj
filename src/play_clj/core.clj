@@ -24,11 +24,13 @@
            [com.badlogic.gdx.physics.box2d ContactListener Joint World]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
-            ChangeListener ClickListener DragListener FocusListener]))
+            ChangeListener ClickListener DragListener FocusListener]
+           [com.badlogic.gdx.utils Timer$Task]))
 
 (load "core_global")
 (load "core_graphics")
 (load "core_listeners")
+(load "core_utils")
 
 (defn ^:private reset-changed!
   "Internal use only"
@@ -38,7 +40,7 @@
 
 (defn defscreen*
   "Internal use only"
-  [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
+  [{:keys [on-show on-render on-hide on-pause on-resize on-resume on-timer]
     :as options}]
   (let [screen (atom {})
         entities (atom [])
@@ -63,6 +65,8 @@
              (swap! screen assoc
                     :total-time 0
                     :update-fn! #(apply swap! screen %1 %2)
+                    :execute-fn! execute-fn!
+                    :on-timer on-timer
                     :ui-listeners (ui-listeners options execute-fn!)
                     :g2dp-listener (contact-listener options execute-fn!))
              (execute-fn! on-show))
