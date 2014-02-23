@@ -192,6 +192,51 @@ Lastly, you'll need to make either the width or height of the screen a constant 
 
 Now, when you resize your game, the image is no longer stretched!
 
+## Timers
+
+It is often necessary to do something in the future or at regular intervals. For this, we have `add-timer!` and its companion, `remove-timer!`. Let's suppose you want to spawn a new enemy exactly 10 seconds after the game begins. First, add the timer in the beginning of the `:on-show` function:
+
+```clojure
+    (add-timer! screen :spawn-enemy 10)
+```
+
+Then, add the `:on-timer` function to your screen:
+
+```clojure
+  :on-timer
+  (fn [screen entities]
+    )
+```
+
+If you want `:on-timer` to run at a regular 2-second interval, just add that as an argument:
+
+```clojure
+    (add-timer! screen :spawn-enemy 10 2)
+```
+
+If you want it to run exactly 20 times, you can add one final argument to specify how many times it should repeat after the first run:
+
+```clojure
+    (add-timer! screen :spawn-enemy 10 2 19)
+```
+
+Of course, you can add more than one timer. The id you supply them will be supplied to the `:on-timer` function's screen map:
+
+```clojure
+  :on-timer
+  (fn [screen entities]
+    (case (:id screen)
+      :spawn-enemy (conj entities (create-enemy))
+      :spawn-friend (conj entities (create-friend))
+      nil))
+```
+
+Lastly, at any time you can remove a timer:
+
+```clojure
+    (remove-timer! screen :spawn-enemy)
+```
+
 ## Java Interop
 
 At some point, you will need to do more than simple positioning and sizing. For that, you'll need to call LibGDX methods directly. You could, of course, use Clojure's [Java interop](http://clojure.org/java_interop) syntax on the `:object` contained within the entity. This is a bit ugly, though, and requires you to do all the importing and type hinting yourself.
