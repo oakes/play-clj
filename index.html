@@ -3028,8 +3028,8 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>play-clj -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">play-clj</h1><h2 class="project-version">0.2.0</h2><br /><p>A LibGDX wrapper for easy cross-platform game development</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">com.badlogicgames.gdx/gdx</td><td class="dotted"><hr /></td><td class="dep-version">0.9.9</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#play-clj.core">play-clj.core</a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#play-clj.g2d">play-clj.g2d</a></li><li><a href="#play-clj.g2d-physics">play-clj.g2d-physics</a></li><li><a href="#play-clj.g3d">play-clj.g3d</a></li><li><a href="#play-clj.math">play-clj.math</a></li><li><a href="#play-clj.ui">play-clj.ui</a></li><li><a href="#play-clj.utils">play-clj.utils</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.core" name="play-clj.core"><h1 class="project-name">play-clj.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</script><title>play-clj -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">play-clj</h1><h2 class="project-version">0.2.1</h2><br /><p>A LibGDX wrapper for easy cross-platform game development</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">com.badlogicgames.gdx/gdx</td><td class="dotted"><hr /></td><td class="dep-version">0.9.9</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#play-clj.core">play-clj.core</a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#play-clj.g2d">play-clj.g2d</a></li><li><a href="#play-clj.g2d-physics">play-clj.g2d-physics</a></li><li><a href="#play-clj.g3d">play-clj.g3d</a></li><li><a href="#play-clj.math">play-clj.math</a></li><li><a href="#play-clj.ui">play-clj.ui</a></li><li><a href="#play-clj.utils">play-clj.utils</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.core" name="play-clj.core"><h1 class="project-name">play-clj.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.core
   (:require [clojure.set]
             [play-clj.utils :as u])
@@ -3038,7 +3038,7 @@ net.brehaut.ClojureTools = (function (SH) {
            [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.assets AssetManager]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
-            PerspectiveCamera VertexAttributes$Usage]
+            PerspectiveCamera Texture VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
@@ -3056,16 +3056,18 @@ net.brehaut.ClojureTools = (function (SH) {
            [com.badlogic.gdx.physics.box2d ContactListener Joint World]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
-            ChangeListener ClickListener DragListener FocusListener]))</pre></td></tr><tr><td class="docs">
+            ChangeListener ClickListener DragListener FocusListener]
+           [com.badlogic.gdx.utils Timer$Task]))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(load &quot;core_global&quot;)
 (load &quot;core_graphics&quot;)
-(load &quot;core_listeners&quot;)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+(load &quot;core_listeners&quot;)
+(load &quot;core_utils&quot;)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private reset-changed!
   [e-atom e-old e-new]
   (when (not= e-old e-new)
     (compare-and-set! e-atom e-old e-new)))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn defscreen*
-  [{:keys [on-show on-render on-hide on-pause on-resize on-resume]
+  [{:keys [on-show on-render on-hide on-pause on-resize on-resume on-timer]
     :as options}]
   (let [screen (atom {})
         entities (atom [])
@@ -3090,6 +3092,8 @@ net.brehaut.ClojureTools = (function (SH) {
              (swap! screen assoc
                     :total-time 0
                     :update-fn! #(apply swap! screen %1 %2)
+                    :execute-fn! execute-fn!
+                    :on-timer on-timer
                     :ui-listeners (ui-listeners options execute-fn!)
                     :g2dp-listener (contact-listener options execute-fn!))
              (execute-fn! on-show))
@@ -3114,7 +3118,9 @@ bound to a map containing various important values related to the screen</p>
   [{:keys [on-create]}]
   (proxy [Game] []
     (create []
-      (when on-create (on-create this)))))</pre></td></tr><tr><td class="docs"><p>Creates a var for the symbol <code>n</code> bound to a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Game.html">Game</a>
+      (Texture/setEnforcePotImages false)
+      (when on-create
+        (on-create this)))))</pre></td></tr><tr><td class="docs"><p>Creates a var for the symbol <code>n</code> bound to a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Game.html">Game</a>
 object</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro defgame
   [n &amp; {:keys [] :as options}]
@@ -3270,56 +3276,6 @@ map</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro sound!
   [object k &amp; options]
   `(let [^Sound object# ~object]
-     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
-</td><td class="codes"><pre class="brush: clojure">(defn ^:private loader-init
-  [k]
-  (cond
-    (contains? #{:atlas-tmx-map :tmx-map} k)
-    (u/gdx :maps :tiled (str (u/key-&gt;pascal k) &quot;Loader.&quot;))
-    (contains? #{:g3d-model :obj} k)
-    (u/gdx :graphics :g3d :loader (str (u/key-&gt;pascal k) &quot;Loader.&quot;))
-    :else
-    (u/gdx :assets :loaders (str (u/key-&gt;pascal k) &quot;Loader.&quot;))))</pre></td></tr><tr><td class="docs"><p>Returns a subclass of <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html">AsynchronousAssetLoader</a></p>
-
-<pre><code>(loader :atlas-tmx-map "map.atlas")
-(loader :tmx-map "map.tmx")
-(loader :obj "model.obj")
-(loader :g3d-model "cube.g3dj")
-(loader :bitmap-font "arial.fnt")
-(loader :music "song.ogg")
-(loader :pixmap "background.png")
-(loader :skin "uiskin.json")
-(loader :sound "hit.ogg")
-(loader :texture "monster.png")
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defmacro loader
-  [type resolver &amp; options]
-  `(let [object# (~(loader-init type) ~resolver)]
-     (u/calls! object# ~@options)))</pre></td></tr><tr><td class="docs"><p>Calls a single method in a subclass of <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html">AsynchronousAssetLoader</a></p>
-
-<pre><code>(loader! object :load "map.tmx")
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defmacro loader!
-  [object &amp; options]
-  `(u/call! ~object ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>asset-manager</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn asset-manager*
-  ([]
-    (AssetManager.))
-  ([resolver]
-    (AssetManager. resolver)))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/AssetManager.html">AssetManager</a></p>
-
-<pre><code>(asset-manager)
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defmacro asset-manager
-  [&amp; options]
-  `(let [^AssetManager object# (asset-manager*)]
-     (u/calls! object# ~@options)))</pre></td></tr><tr><td class="docs"><p>Calls a single method in an <code>asset-manager</code></p>
-
-<pre><code>(asset-manager! object :clear)
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defmacro asset-manager!
-  [object k &amp; options]
-  `(let [^AssetManager object# ~object]
      (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(in-ns 'play-clj.core)</pre></td></tr><tr><td class="docs"><p>The function version of <code>tiled-map</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn tiled-map*
@@ -3757,10 +3713,7 @@ remains in tact</p>
   [screen n]
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. camera far) n)
-    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Returns a static field in <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html">VertexAttributes.Usage</a></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro usage
-  [k]
-  `~(u/gdx-field :graphics &quot;VertexAttributes$Usage&quot; (u/key-&gt;pascal k)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+    (.update camera)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(in-ns 'play-clj.core)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private input-processor
   [{:keys [on-key-down on-key-typed on-key-up on-mouse-moved
@@ -3953,7 +3906,115 @@ remains in tact</p>
     (when (isa? (type renderer) Stage)
       (update-stage! screen entities))
     (when (isa? (type world) World)
-      (update-box-2d! screen entities))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.g2d" name="play-clj.g2d"><h1 class="project-name">play-clj.g2d</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+      (update-box-2d! screen entities))))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(in-ns 'play-clj.core)</pre></td></tr><tr><td class="docs"><p>Returns a static field from <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html">Scaling</a></p>
+
+<pre><code>(scaling :fill)
+(scaling :fill-x)
+(scaling :fill-y)
+(scaling :fit)
+(scaling :none)
+(scaling :stretch)
+(scaling :stretch-x)
+(scaling :stretch-y)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro scaling
+  [k]
+  `~(u/gdx-field :utils :Scaling k))</pre></td></tr><tr><td class="docs"><p>Returns a static field in <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html">VertexAttributes.Usage</a></p>
+</td><td class="codes"><pre class="brush: clojure">(defmacro usage
+  [k]
+  `~(u/gdx-field :graphics &quot;VertexAttributes$Usage&quot; (u/key-&gt;pascal k)))</pre></td></tr><tr><td class="docs"><p>Internal use only.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn ^:private task*
+  [{:keys [execute-fn! on-timer]} id]
+  (proxy [Timer$Task] []
+    (run []
+      (execute-fn! on-timer :id id))))</pre></td></tr><tr><td class="docs"><p>Internal use only.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn ^:private timer*
+  []
+  (some-&gt; (Class/forName &quot;com.badlogic.gdx.utils.Timer&quot;)
+          (try (catch Exception _))
+          .newInstance))</pre></td></tr><tr><td class="docs"><p>Internal use only.</p>
+</td><td class="codes"><pre class="brush: clojure">(defn ^:private create-and-add-timer!
+  [{:keys [update-fn!] :as screen} id]
+  (when-let [timer (timer*)]
+    (update-fn! assoc-in [[:timers id] timer])
+    timer))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Timer.html">Timer</a>
+that runs the :on-timer function according to the given arguments</p>
+
+<pre><code>; wait 2 seconds and run once
+(add-timer! screen :spawn-enemy 2)
+; wait 2 seconds and run forever at 10 second intervals
+(add-timer! screen :spawn-enemy 2 10)
+; wait 2 seconds, run once, and then run 3 more times at 10 second intervals
+(add-timer! screen :spawn-enemy 2 10 3)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defn add-timer!
+  ([screen id delay]
+    (doto (create-and-add-timer! screen id)
+      (.scheduleTask (task* screen id) delay)))
+  ([screen id delay interval]
+    (doto (create-and-add-timer! screen id)
+      (.scheduleTask (task* screen id) delay interval)))
+  ([screen id delay interval repeat]
+    (doto (create-and-add-timer! screen id)
+      (.scheduleTask (task* screen id) delay interval repeat))))</pre></td></tr><tr><td class="docs"><p>Stops and removes the timer associated with <code>id</code>, returning it or nil if not
+found</p>
+</td><td class="codes"><pre class="brush: clojure">(defn remove-timer!
+  [{:keys [update-fn!] :as screen} id]
+  (when-let [timer (get-in screen [:timers id])]
+    (.stop timer)
+    (update-fn! update-in [[:timers] dissoc id])
+    timer))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+</td><td class="codes"><pre class="brush: clojure">(defn ^:private loader-init
+  [k]
+  (cond
+    (contains? #{:atlas-tmx-map :tmx-map} k)
+    (u/gdx :maps :tiled (str (u/key-&gt;pascal k) &quot;Loader.&quot;))
+    (contains? #{:g3d-model :obj} k)
+    (u/gdx :graphics :g3d :loader (str (u/key-&gt;pascal k) &quot;Loader.&quot;))
+    :else
+    (u/gdx :assets :loaders (str (u/key-&gt;pascal k) &quot;Loader.&quot;))))</pre></td></tr><tr><td class="docs"><p>Returns a subclass of <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html">AsynchronousAssetLoader</a></p>
+
+<pre><code>(loader :atlas-tmx-map "map.atlas")
+(loader :tmx-map "map.tmx")
+(loader :obj "model.obj")
+(loader :g3d-model "cube.g3dj")
+(loader :bitmap-font "arial.fnt")
+(loader :music "song.ogg")
+(loader :pixmap "background.png")
+(loader :skin "uiskin.json")
+(loader :sound "hit.ogg")
+(loader :texture "monster.png")
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro loader
+  [type resolver &amp; options]
+  `(let [object# (~(loader-init type) ~resolver)]
+     (u/calls! object# ~@options)))</pre></td></tr><tr><td class="docs"><p>Calls a single method in a subclass of <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html">AsynchronousAssetLoader</a></p>
+
+<pre><code>(loader! object :load "map.tmx")
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro loader!
+  [object &amp; options]
+  `(u/call! ~object ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>asset-manager</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn asset-manager*
+  ([]
+    (AssetManager.))
+  ([resolver]
+    (AssetManager. resolver)))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/AssetManager.html">AssetManager</a></p>
+
+<pre><code>(asset-manager)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro asset-manager
+  [&amp; options]
+  `(let [^AssetManager object# (asset-manager*)]
+     (u/calls! object# ~@options)))</pre></td></tr><tr><td class="docs"><p>Calls a single method in an <code>asset-manager</code></p>
+
+<pre><code>(asset-manager! object :clear)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro asset-manager!
+  [object k &amp; options]
+  `(let [^AssetManager object# ~object]
+     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.g2d" name="play-clj.g2d"><h1 class="project-name">play-clj.g2d</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.g2d
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Texture]
@@ -4204,7 +4265,7 @@ time the <code>screen</code> has been showing</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro chain
   [&amp; options]
   `(u/calls! ^ChainShape (chain*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>chain</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro chain-shape!
+</td><td class="codes"><pre class="brush: clojure">(defmacro chain!
   [object k &amp; options]
   `(u/call! ^ChainShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>circle</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn circle*
@@ -4574,11 +4635,13 @@ time the <code>screen</code> has been showing</p>
   [object k &amp; options]
   `(u/call! ^Matrix4 ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>plane</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn plane*
-  [^Vector3 normal ^double d]
-  (Plane. normal d))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Plane.html">Plane</a></p>
+  ([arg1 arg2]
+    (Plane. arg1 arg2))
+  ([^Vector3 p1 ^Vector3 p2 ^Vector3 p3]
+    (Plane. p1 p2 p3)))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Plane.html">Plane</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro plane
-  [normal d &amp; options]
-  `(u/calls! ^Plane (plane* ~normal ~d) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>plane</code></p>
+  [args &amp; options]
+  `(u/calls! ^Plane (apply plane* ~args) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>plane</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro plane!
   [object k &amp; options]
   `(u/call! ^Plane ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>polygon</code></p>
@@ -5120,20 +5183,7 @@ based on the file at <code>path</code></p>
   (apply gdx (add-divider args &quot;/&quot;)))</pre></td></tr><tr><td class="docs"><p>Returns a fully-qualified LibGDX static class</p>
 </td><td class="codes"><pre class="brush: clojure">(defn gdx-class
   [&amp; args]
-  (apply gdx (add-divider args &quot;$&quot;)))</pre></td></tr><tr><td class="docs"><p>Returns a static field from <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html">Scaling</a></p>
-
-<pre><code>(scaling :fill)
-(scaling :fill-x)
-(scaling :fill-y)
-(scaling :fit)
-(scaling :none)
-(scaling :stretch)
-(scaling :stretch-x)
-(scaling :stretch-y)
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defmacro scaling
-  [k]
-  `~(gdx-field :utils :Scaling k))</pre></td></tr><tr><td class="docs"><p>Calls method <code>k</code> of <code>obj</code> with <code>args</code></p>
+  (apply gdx (add-divider args &quot;$&quot;)))</pre></td></tr><tr><td class="docs"><p>Calls method <code>k</code> of <code>obj</code> with <code>args</code></p>
 
 <pre><code>(call! "I'm a string" :index-of "s")
 </code></pre>
