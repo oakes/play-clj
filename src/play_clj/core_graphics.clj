@@ -543,10 +543,3 @@ remains in tact
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. camera far) n)
     (.update camera)))
-
-; misc
-
-(defmacro usage
-  "Returns a static field in [VertexAttributes.Usage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html)"
-  [k]
-  `~(u/gdx-field :graphics "VertexAttributes$Usage" (u/key->pascal k)))
