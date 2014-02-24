@@ -391,7 +391,9 @@ specify which layers to render with or without
               (let [screen-tile (if (isometric? screen)
                                   (isometric->screen screen map-tile)
                                   map-tile)
-                    new-layer (or (->> layers (filter #(= y (:y %))) first)
+                    new-layer (or (->> layers
+                                       (filter #(= (:y screen-tile) (:y %)))
+                                       first)
                                   (assoc screen-tile :layer (create-layer l)))]
                 (->> (tiled-map-layer! l :get-cell x y)
                      (tiled-map-layer! (:layer new-layer) :set-cell x y))
