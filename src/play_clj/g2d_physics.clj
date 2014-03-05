@@ -147,67 +147,67 @@
 
 ; shapes
 
-(defn chain*
-  "The function version of `chain`"
+(defn chain-shape*
+  "The function version of `chain-shape`"
   []
   (ChainShape.))
 
-(defmacro chain
+(defmacro chain-shape
   "Returns a [ChainShape](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ChainShape.html)"
   [& options]
-  `(u/calls! ^ChainShape (chain*) ~@options))
+  `(u/calls! ^ChainShape (chain-shape*) ~@options))
 
-(defmacro chain!
-  "Calls a single method on a `chain`"
+(defmacro chain-shape!
+  "Calls a single method on a `chain-shape`"
   [object k & options]
   `(u/call! ^ChainShape ~object ~k ~@options))
 
-(defn circle*
-  "The function version of `circle`"
+(defn circle-shape*
+  "The function version of `circle-shape`"
   ([]
     (CircleShape.))
   ([radius]
-    (doto ^CircleShape (circle*)
+    (doto ^CircleShape (circle-shape*)
       (.setRadius radius)
       (.setPosition (m/vector-2 radius radius)))))
 
-(defmacro circle
+(defmacro circle-shape
   "Returns a [CircleShape](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/CircleShape.html)"
   [radius & options]
-  `(u/calls! ^CircleShape (circle* ~radius) ~@options))
+  `(u/calls! ^CircleShape (circle-shape* ~radius) ~@options))
 
-(defmacro circle!
-  "Calls a single method on a `circle`"
+(defmacro circle-shape!
+  "Calls a single method on a `circle-shape`"
   [object k & options]
   `(u/call! ^CircleShape ~object ~k ~@options))
 
-(defn edge*
-  "The function version of `edge`"
+(defn edge-shape*
+  "The function version of `edge-shape`"
   []
   (EdgeShape.))
 
-(defmacro edge
+(defmacro edge-shape
   "Returns an [EdgeShape](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/EdgeShape.html)"
   [& options]
-  `(u/calls! ^EdgeShape (edge*) ~@options))
+  `(u/calls! ^EdgeShape (edge-shape*) ~@options))
 
-(defmacro edge!
-  "Calls a single method on an `edge`"
+(defmacro edge-shape!
+  "Calls a single method on an `edge-shape`"
   [object k & options]
   `(u/call! ^EdgeShape ~object ~k ~@options))
 
-(defn polygon*
-  "The function version of `polygon`"
+(defn polygon-shape*
+  "The function version of `polygon-shape`"
   []
   (PolygonShape.))
 
-(defmacro polygon
+(defmacro polygon-shape
   "Returns a [PolygonShape](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/PolygonShape.html)"
   [& options]
-  `(u/calls! ^PolygonShape (polygon*) ~@options))
+  `(u/calls! ^PolygonShape (polygon-shape*) ~@options))
 
-(defmacro polygon!
-  "Calls a single method on a `polygon`"
+(defmacro polygon-shape!
+  "Calls a single method on a `polygon-shape`"
   [object k & options]
   `(u/call! ^PolygonShape ~object ~k ~@options))
 
