@@ -3028,7 +3028,7 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>play-clj -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">play-clj</h1><h2 class="project-version">0.2.1</h2><br /><p>A LibGDX wrapper for easy cross-platform game development</p>
+</script><title>play-clj -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">play-clj</h1><h2 class="project-version">0.2.2</h2><br /><p>A LibGDX wrapper for easy cross-platform game development</p>
 </div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">com.badlogicgames.gdx/gdx</td><td class="dotted"><hr /></td><td class="dep-version">0.9.9</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#play-clj.core">play-clj.core</a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#play-clj.g2d">play-clj.g2d</a></li><li><a href="#play-clj.g2d-physics">play-clj.g2d-physics</a></li><li><a href="#play-clj.g3d">play-clj.g3d</a></li><li><a href="#play-clj.math">play-clj.math</a></li><li><a href="#play-clj.ui">play-clj.ui</a></li><li><a href="#play-clj.utils">play-clj.utils</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.core" name="play-clj.core"><h1 class="project-name">play-clj.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.core
   (:require [clojure.set]
@@ -3592,7 +3592,9 @@ specify which layers to render with or without</p>
               (let [screen-tile (if (isometric? screen)
                                   (isometric-&gt;screen screen map-tile)
                                   map-tile)
-                    new-layer (or (-&gt;&gt; layers (filter #(= y (:y %))) first)
+                    new-layer (or (-&gt;&gt; layers
+                                       (filter #(= (:y screen-tile) (:y %)))
+                                       first)
                                   (assoc screen-tile :layer (create-layer l)))]
                 (-&gt;&gt; (tiled-map-layer! l :get-cell x y)
                      (tiled-map-layer! (:layer new-layer) :set-cell x y))
@@ -4258,45 +4260,45 @@ time the <code>screen</code> has been showing</p>
      object#))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a fixture</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro fixture!
   [object k &amp; options]
-  `(u/call! ^Fixture ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>chain</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn chain*
+  `(u/call! ^Fixture ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>chain-shape</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn chain-shape*
   []
   (ChainShape.))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ChainShape.html">ChainShape</a></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro chain
+</td><td class="codes"><pre class="brush: clojure">(defmacro chain-shape
   [&amp; options]
-  `(u/calls! ^ChainShape (chain*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>chain</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro chain!
+  `(u/calls! ^ChainShape (chain-shape*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>chain-shape</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defmacro chain-shape!
   [object k &amp; options]
-  `(u/call! ^ChainShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>circle</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn circle*
+  `(u/call! ^ChainShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>circle-shape</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn circle-shape*
   ([]
     (CircleShape.))
   ([radius]
-    (doto ^CircleShape (circle*)
+    (doto ^CircleShape (circle-shape*)
       (.setRadius radius)
       (.setPosition (m/vector-2 radius radius)))))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/CircleShape.html">CircleShape</a></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro circle
+</td><td class="codes"><pre class="brush: clojure">(defmacro circle-shape
   [radius &amp; options]
-  `(u/calls! ^CircleShape (circle* ~radius) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>circle</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro circle!
+  `(u/calls! ^CircleShape (circle-shape* ~radius) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>circle-shape</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defmacro circle-shape!
   [object k &amp; options]
-  `(u/call! ^CircleShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>edge</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn edge*
+  `(u/call! ^CircleShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>edge-shape</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn edge-shape*
   []
   (EdgeShape.))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/EdgeShape.html">EdgeShape</a></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro edge
+</td><td class="codes"><pre class="brush: clojure">(defmacro edge-shape
   [&amp; options]
-  `(u/calls! ^EdgeShape (edge*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on an <code>edge</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro edge!
+  `(u/calls! ^EdgeShape (edge-shape*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on an <code>edge-shape</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defmacro edge-shape!
   [object k &amp; options]
-  `(u/call! ^EdgeShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>polygon</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn polygon*
+  `(u/call! ^EdgeShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>polygon-shape</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn polygon-shape*
   []
   (PolygonShape.))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/PolygonShape.html">PolygonShape</a></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro polygon
+</td><td class="codes"><pre class="brush: clojure">(defmacro polygon-shape
   [&amp; options]
-  `(u/calls! ^PolygonShape (polygon*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>polygon</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro polygon!
+  `(u/calls! ^PolygonShape (polygon-shape*) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>polygon-shape</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defmacro polygon-shape!
   [object k &amp; options]
   `(u/call! ^PolygonShape ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html">Contact</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro contact!
