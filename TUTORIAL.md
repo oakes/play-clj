@@ -350,6 +350,10 @@ Then, switch back to your code while the game is still running. Let's modify `:o
 
 Now save the file and hit _Reload_ in the build pane. Now try it out! The key bindings have been changed while the game is still running. Now switch the keywords back and reload again.
 
+Keep in mind that the `:on-show` function only runs when the screen first shows. Therefore, if you want to modify something there and see the result, after you hit _Reload_ you'll need to restart the screen by typing the following into the REPL:
+
+`(app! :post-runnable #(set-screen! hello-world main-screen))`
+
 The next thing to try is reading and modifying state. We'll need to switch the REPL to be in the right namespace, so type in `(in-ns 'hello-world.core)`. Let's peek into the entities list by typing the following into the REPL:
 
 `(-> main-screen :entities deref)`
