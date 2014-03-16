@@ -7,9 +7,8 @@
            [com.badlogic.gdx.assets AssetManager]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture VertexAttributes$Usage]
-           [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
-            TextureRegion]
-           [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
+           [com.badlogic.gdx.graphics.g2d SpriteBatch]
+           [com.badlogic.gdx.graphics.g3d ModelBatch]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers MapProperties]
@@ -25,7 +24,8 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener]
-           [com.badlogic.gdx.utils Timer$Task]))
+           [com.badlogic.gdx.utils Timer$Task]
+           [play_clj.utils Entity]))
 
 (load "core_global")
 (load "core_graphics")

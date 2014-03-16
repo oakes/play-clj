@@ -236,55 +236,11 @@ with the tiled map file at `path` and `unit` scale
   `(let [^Stage object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
-; draw-entity
-
-(defmulti draw-entity!
-  "Internal use only"
-  (fn [_ entity] (:type entity)))
-
-(defmethod draw-entity! nil [_ _])
-
-(defmethod draw-entity! :texture
-  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        width (float (or width (.getRegionWidth object)))
-        height (float (or height (.getRegionHeight object)))]
-    (.draw batch object x y width height)))
-
-(defmethod draw-entity! :nine-patch
-  [^SpriteBatch batch {:keys [^NinePatch object x y width height]}]
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        width (float (or width (.getTotalWidth object)))
-        height (float (or height (.getTotalHeight object)))]
-    (.draw object batch x y width height)))
-
-(defmethod draw-entity! :particle-effect
-  [^SpriteBatch batch {:keys [^ParticleEffect object x y delta-time]}]
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        delta-time (float (or delta-time (graphics! :get-delta-time)))]
-    (.setPosition object x y)
-    (.draw object batch delta-time)))
-
-(defmethod draw-entity! :actor
-  [^SpriteBatch batch {:keys [^Actor object] :as entity}]
-  (doseq [[k v] entity]
-    (case k
-      :x (.setX object v)
-      :y (.setY object v)
-      :width (.setWidth object v)
-      :height (.setHeight object v)
-      nil))
-  (.draw object batch 1))
-
-(defmethod draw-entity! :model
-  [{:keys [^ModelBatch renderer ^Environment attributes]}
-   {:keys [^ModelInstance object]}]
-  (.render renderer object attributes))
-
 ; draw
+
+(defn filter-entities
+  [entities]
+  (filter #(isa? (type %) Entity) entities))
 
 (defmulti draw!
   "Internal use only"
@@ -294,8 +250,8 @@ with the tiled map file at `path` and `unit` scale
   [{:keys [^BatchTiledMapRenderer renderer]} entities]
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
-    (doseq [entity entities]
-      (draw-entity! batch entity))
+    (doseq [entity (filter-entities entities)]
+      (u/draw-entity! entity batch))
     (.end batch))
   entities)
 
@@ -303,16 +259,16 @@ with the tiled map file at `path` and `unit` scale
   [{:keys [^Stage renderer]} entities]
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
-    (doseq [entity entities]
-      (draw-entity! batch entity))
+    (doseq [entity (filter-entities entities)]
+      (u/draw-entity! entity batch))
     (.end batch))
   entities)
 
 (defmethod draw! ModelBatch
   [{:keys [^ModelBatch renderer ^Camera camera] :as screen} entities]
   (.begin renderer camera)
-  (doseq [entity entities]
-    (draw-entity! screen entity))
+  (doseq [entity (filter-entities entities)]
+    (u/draw-entity! entity screen))
   (.end renderer)
   entities)
 
@@ -421,11 +377,11 @@ specify which layers to render with or without
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
-                        (apply concat entities)
+                        (apply concat (filter-entities entities))
                         (sort-by :y #(compare %2 %1)))]
       (if-let [layer (:layer entity)]
         (.renderTileLayer renderer layer)
-        (draw-entity! batch entity)))
+        (u/draw-entity! entity batch)))
     (.end batch))
   entities)
 
