@@ -106,21 +106,19 @@ object"
   [n & {:keys [] :as options}]
   `(defonce ~n (defgame* ~options)))
 
-(defn set-screen!
-  "Creates a [Screen](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Screen.html)
-object, sets it as the screen for the `game`, and runs the functions from
-`screens` in the order they are provided in
-
-    (set-screen! hello-world main-screen text-screen)"
-  [^Game game & screens]
+(defn set-screen-with-options!
+  "Internal use only"
+  [^Game game screens error-fn]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
                       (doseq [{:keys [input-listeners]} screens]
                         (doseq [listener input-listeners]
                           (add-input! listener))))
         run-fn! (fn [k & args]
-                  (doseq [screen screens]
-                    (apply (get screen k) args)))]
+                  (try
+                    (doseq [screen screens]
+                      (apply (get screen k) args))
+                    (catch Exception e (error-fn e))))]
     (.setScreen game (reify Screen
                        (show [this] (add-inputs!) (run-fn! :show))
                        (render [this d] (run-fn! :render d))
@@ -129,6 +127,15 @@ object, sets it as the screen for the `game`, and runs the functions from
                        (resize [this w h] (run-fn! :resize w h))
                        (resume [this] (run-fn! :resume))
                        (dispose [this])))))
+
+(defn set-screen!
+  "Creates a [Screen](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Screen.html)
+object, sets it as the screen for the `game`, and runs the functions from
+`screens` in the order they are provided in
+
+    (set-screen! hello-world main-screen text-screen)"
+  [game & screens]
+  (set-screen-with-options! game screens #(throw %)))
 
 (defn update!
   "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`
