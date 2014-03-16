@@ -27,7 +27,8 @@
            [com.badlogic.gdx.utils Timer$Task]
            [play_clj.utils Entity]))
 
-(load "core_global")
+(load "core_basics")
+(load "core_cameras")
 (load "core_graphics")
 (load "core_listeners")
 (load "core_utils")
