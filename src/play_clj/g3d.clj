@@ -7,7 +7,8 @@
             IntAttribute TextureAttribute]
            [com.badlogic.gdx.graphics.g3d.model.data ModelData]
            [com.badlogic.gdx.graphics.g3d.utils AnimationController
-            ModelBuilder]))
+            ModelBuilder]
+           [play_clj.utils ModelEntity]))
 
 ; animation-controller
 
@@ -77,7 +78,7 @@
 (defmacro model
   "Returns an entity based on [ModelInstance](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html)"
   [& args]
-  `(u/create-entity
+  `(ModelEntity.
      (let [arg1# ~(first args)]
        (cond
          (:object arg1#)

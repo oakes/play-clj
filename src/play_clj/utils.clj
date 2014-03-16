@@ -194,7 +194,7 @@ new object to be created each time a field is set)
           height (float (or height (.getTotalHeight object)))]
       (.draw object ^SpriteBatch batch x y width height))))
 
-(defrecord ParticleEffectEntity [object] Entity
+(defrecord ParticleEntity [object] Entity
   (draw-entity! [{:keys [^ParticleEffect object x y delta-time]} batch]
     (let [x (float (or x 0))
           y (float (or y 0))
@@ -217,29 +217,3 @@ new object to be created each time a field is set)
   (draw-entity! [{:keys [^ModelInstance object]}
                  {:keys [^ModelBatch renderer ^Environment attributes]}]
     (.render renderer object attributes)))
-
-; create-entity
-
-(defmulti create-entity
-  "Internal use only"
-  class)
-
-(defmethod create-entity TextureRegion
-  [obj]
-  (TextureEntity. obj))
-
-(defmethod create-entity NinePatch
-  [obj]
-  (NinePatchEntity. obj))
-
-(defmethod create-entity ParticleEffect
-  [obj]
-  (ParticleEffectEntity. obj))
-
-(defmethod create-entity Actor
-  [obj]
-  (ActorEntity. obj))
-
-(defmethod create-entity ModelInstance
-  [obj]
-  (ModelEntity. obj))

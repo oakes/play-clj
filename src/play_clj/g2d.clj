@@ -2,7 +2,8 @@
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
-            ParticleEffect TextureAtlas TextureRegion]))
+            ParticleEffect TextureAtlas TextureRegion]
+           [play_clj.utils TextureEntity NinePatchEntity ParticleEntity]))
 
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
@@ -17,7 +18,7 @@
 (defn texture*
   "The function version of `texture`"
   [arg]
-  (u/create-entity
+  (TextureEntity.
     (cond
       (string? arg)
       (-> ^String arg Texture. TextureRegion.)
@@ -52,7 +53,7 @@
 (defn nine-patch*
   "The function version of `nine-patch`"
   [arg]
-  (u/create-entity
+  (NinePatchEntity.
     (cond
       (string? arg)
       (-> ^String arg Texture. TextureRegion. NinePatch.)
@@ -89,7 +90,7 @@
 (defn particle-effect*
   "The function version of `particle-effect`"
   []
-  (u/create-entity (ParticleEffect.)))
+  (ParticleEntity. (ParticleEffect.)))
 
 (defmacro particle-effect
   "Returns an entity based on [ParticleEffect](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html)

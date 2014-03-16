@@ -11,7 +11,8 @@
             Tree$Node VerticalGroup WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
             SpriteDrawable TextureRegionDrawable TiledDrawable]
-           [com.esotericsoftware.tablelayout Cell]))
+           [com.esotericsoftware.tablelayout Cell]
+           [play_clj.utils ActorEntity]))
 
 (defmacro drawable
   "Returns a subclass of [BaseDrawable](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/BaseDrawable.html)
@@ -159,14 +160,14 @@ based on the file at `path`
 (defn ^:private create-group
   "Internal use only"
   [^WidgetGroup group children]
-  (apply add! (u/create-entity group) children))
+  (apply add! (ActorEntity. group) children))
 
 ; check-box
 
 (defn check-box*
   "The function version of `check-box`"
   [^String text arg]
-  (u/create-entity (CheckBox. text arg)))
+  (ActorEntity. (CheckBox. text arg)))
 
 (defmacro check-box
   "Returns an entity based on [CheckBox](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/CheckBox.html)
@@ -188,7 +189,7 @@ based on the file at `path`
 (defn dialog*
   "The function version of `dialog`"
   [text arg]
-  (u/create-entity (Dialog. text arg)))
+  (ActorEntity. (Dialog. text arg)))
 
 (defmacro dialog
   "Returns an entity based on [Dialog](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Dialog.html)
@@ -231,7 +232,7 @@ based on the file at `path`
 (defn image*
   "The function version of `image`"
   [arg]
-  (u/create-entity
+  (ActorEntity.
     (cond
       (map? arg)
       (Image. ^TextureRegion (:object arg))
@@ -259,7 +260,7 @@ based on the file at `path`
 (defn image-button*
   "The function version of `image-button`"
   [arg]
-  (u/create-entity (ImageButton. arg)))
+  (ActorEntity. (ImageButton. arg)))
 
 (defmacro image-button
   "Returns an entity based on [ImageButton](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageButton.html)
@@ -281,7 +282,7 @@ based on the file at `path`
 (defn image-text-button*
   "The function version of `image-text-button`"
   [^String text arg]
-  (u/create-entity (ImageTextButton. text arg)))
+  (ActorEntity. (ImageTextButton. text arg)))
 
 (defmacro image-text-button
   "Returns an entity based on [ImageTextButton](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageTextButton.html)
@@ -304,7 +305,7 @@ based on the file at `path`
 (defn label*
   "The function version of `label`"
   [^String text arg]
-  (u/create-entity
+  (ActorEntity.
     (if (isa? (type arg) Color)
       (Label. text (style :label (g2d/bitmap-font) arg))
       (Label. text arg))))
@@ -330,7 +331,7 @@ based on the file at `path`
 (defn scroll-pane*
   "The function version of `scroll-pane`"
   [child arg]
-  (u/create-entity (ScrollPane. (u/get-obj child :object) arg)))
+  (ActorEntity. (ScrollPane. (u/get-obj child :object) arg)))
 
 (defmacro scroll-pane
   "Returns an entity based on [ScrollPane](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ScrollPane.html)
@@ -352,7 +353,7 @@ based on the file at `path`
 (defn select-box*
   "The function version of `select-box`"
   [items arg]
-  (u/create-entity (SelectBox. (into-array items) arg)))
+  (ActorEntity. (SelectBox. (into-array items) arg)))
 
 (defmacro select-box
   "Returns an entity based on [SelectBox](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html)
@@ -377,7 +378,7 @@ based on the file at `path`
   [{:keys [min max step vertical?]
     :or {min 0 max 10 step 1 vertical? false}}
    arg]
-  (u/create-entity
+  (ActorEntity.
     (Slider. (float min) (float max) (float step) vertical? arg)))
 
 (defmacro slider
@@ -442,7 +443,7 @@ based on the file at `path`
 (defn text-button*
   "The function version of `text-button`"
   [^String text arg]
-  (u/create-entity (TextButton. text arg)))
+  (ActorEntity. (TextButton. text arg)))
 
 (defmacro text-button
   "Returns an entity based on [TextButton](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextButton.html)
@@ -464,7 +465,7 @@ based on the file at `path`
 (defn text-field*
   "The function version of `text-field`"
   [^String text arg]
-  (u/create-entity (TextField. text arg)))
+  (ActorEntity. (TextField. text arg)))
 
 (defmacro text-field
   "Returns an entity based on [TextField](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextField.html)
