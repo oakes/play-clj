@@ -108,17 +108,17 @@ object"
 
 (defn set-screen-with-options!
   "Internal use only"
-  [^Game game screens error-fn]
+  [^Game game screens & {:keys [wrap]}]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
                       (doseq [{:keys [input-listeners]} screens]
                         (doseq [listener input-listeners]
                           (add-input! listener))))
         run-fn! (fn [k & args]
-                  (try
-                    (doseq [screen screens]
-                      (apply (get screen k) args))
-                    (catch Exception e (error-fn e))))]
+                  (doseq [screen screens]
+                    (if wrap
+                      (wrap (get screen k) args)
+                      (apply (get screen k) args))))]
     (.setScreen game (reify Screen
                        (show [this] (add-inputs!) (run-fn! :show))
                        (render [this d] (run-fn! :render d))
@@ -135,7 +135,7 @@ object, sets it as the screen for the `game`, and runs the functions from
 
     (set-screen! hello-world main-screen text-screen)"
   [game & screens]
-  (set-screen-with-options! game screens #(throw %)))
+  (set-screen-with-options! game screens))
 
 (defn update!
   "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`
