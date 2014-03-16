@@ -3,7 +3,7 @@
   (:import [com.badlogic.gdx.graphics Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
             ParticleEffect TextureAtlas TextureRegion]
-           [play_clj.utils TextureEntity NinePatchEntity ParticleEntity]))
+           [play_clj.utils TextureEntity NinePatchEntity ParticleEffectEntity]))
 
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
@@ -90,7 +90,7 @@
 (defn particle-effect*
   "The function version of `particle-effect`"
   []
-  (ParticleEntity. (ParticleEffect.)))
+  (ParticleEffectEntity. (ParticleEffect.)))
 
 (defmacro particle-effect
   "Returns an entity based on [ParticleEffect](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html)

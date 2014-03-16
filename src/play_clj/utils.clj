@@ -1,6 +1,7 @@
 (ns play-clj.utils
   (:require [clojure.string :as s])
-  (:import [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
+  (:import [com.badlogic.gdx Gdx Graphics]
+           [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
            [com.badlogic.gdx.scenes.scene2d Actor]
@@ -194,11 +195,12 @@ new object to be created each time a field is set)
           height (float (or height (.getTotalHeight object)))]
       (.draw object ^SpriteBatch batch x y width height))))
 
-(defrecord ParticleEntity [object] Entity
+(defrecord ParticleEffectEntity [object] Entity
   (draw-entity! [{:keys [^ParticleEffect object x y delta-time]} batch]
     (let [x (float (or x 0))
           y (float (or y 0))
-          delta-time (float delta-time)]
+          ^Graphics g (Gdx/graphics)
+          delta-time (float (or delta-time (.getDeltaTime g)))]
       (.setPosition object x y)
       (.draw object ^SpriteBatch batch delta-time))))
 
