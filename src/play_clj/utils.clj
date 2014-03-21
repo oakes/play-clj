@@ -179,6 +179,12 @@ new object to be created each time a field is set)
   "Internal use only"
   (draw-entity! [this batch] "Draws the entity"))
 
+(extend-protocol Entity
+  clojure.lang.PersistentArrayMap
+  (draw-entity! [this batch])
+  clojure.lang.PersistentHashMap
+  (draw-entity! [this batch]))
+
 (defrecord TextureEntity [object] Entity
   (draw-entity! [{:keys [^TextureRegion object x y width height]} batch]
     (let [x (float (or x 0))

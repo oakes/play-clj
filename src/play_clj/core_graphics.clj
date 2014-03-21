@@ -238,10 +238,6 @@ with the tiled map file at `path` and `unit` scale
 
 ; draw
 
-(defn filter-entities
-  [entities]
-  (filter #(isa? (type %) Entity) entities))
-
 (defmulti draw!
   "Internal use only"
   (fn [screen _] (-> screen :renderer class)))
@@ -250,7 +246,7 @@ with the tiled map file at `path` and `unit` scale
   [{:keys [^BatchTiledMapRenderer renderer]} entities]
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
-    (doseq [entity (filter-entities entities)]
+    (doseq [entity entities]
       (u/draw-entity! entity batch))
     (.end batch))
   entities)
@@ -259,7 +255,7 @@ with the tiled map file at `path` and `unit` scale
   [{:keys [^Stage renderer]} entities]
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
-    (doseq [entity (filter-entities entities)]
+    (doseq [entity entities]
       (u/draw-entity! entity batch))
     (.end batch))
   entities)
@@ -267,7 +263,7 @@ with the tiled map file at `path` and `unit` scale
 (defmethod draw! ModelBatch
   [{:keys [^ModelBatch renderer ^Camera camera] :as screen} entities]
   (.begin renderer camera)
-  (doseq [entity (filter-entities entities)]
+  (doseq [entity entities]
     (u/draw-entity! entity screen))
   (.end renderer)
   entities)
@@ -377,7 +373,7 @@ specify which layers to render with or without
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
-                        (apply concat (filter-entities entities))
+                        (apply concat entities)
                         (sort-by :y #(compare %2 %1)))]
       (if-let [layer (:layer entity)]
         (.renderTileLayer renderer layer)
