@@ -41,11 +41,10 @@
 
 (defn defscreen*
   "Internal use only"
-  [{:keys [on-show on-render on-hide on-pause on-resize on-resume on-timer]
+  [{:keys [screen entities
+           on-show on-render on-hide on-pause on-resize on-resume on-timer]
     :as options}]
-  (let [screen (atom {})
-        entities (atom [])
-        execute-fn! (fn [func & {:keys [] :as options}]
+  (let [execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
                         (let [old-entities @entities]
                           (some->> (func (merge @screen options) old-entities)
@@ -85,11 +84,20 @@
 replaced by simply reloading the namespace, and creates a var for the symbol `n`
 bound to a map containing various important values related to the screen"
   [n & {:keys [] :as options}]
-  `(let [fns# (->> (for [[k# v#] ~options]
-                     [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
-                   flatten
-                   (apply hash-map))]
-     (defonce ~n (defscreen* fns#))))
+  `(let [fn-syms# (->> (for [[k# v#] ~options]
+                         [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
+                       flatten
+                       (apply hash-map))
+         map-sym# (symbol (str '~n "-map"))
+         entities-sym# (symbol (str '~n "-entities"))
+         syms# (assoc fn-syms#
+                      :screen (deref
+                                (or (resolve map-sym#)
+                                    (intern *ns* map-sym# (atom {}))))
+                      :entities (deref
+                                  (or (resolve entities-sym#)
+                                      (intern *ns* entities-sym# (atom [])))))]
+     (def ~n (defscreen* syms#))))
 
 (defn defgame*
   "Internal use only"
