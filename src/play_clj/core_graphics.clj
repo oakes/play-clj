@@ -247,7 +247,7 @@ with the tiled map file at `path` and `unit` scale
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
-      (u/draw-entity! entity batch))
+      (e/draw-entity! entity batch))
     (.end batch))
   entities)
 
@@ -256,7 +256,7 @@ with the tiled map file at `path` and `unit` scale
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
-      (u/draw-entity! entity batch))
+      (e/draw-entity! entity batch))
     (.end batch))
   entities)
 
@@ -264,7 +264,7 @@ with the tiled map file at `path` and `unit` scale
   [{:keys [^ModelBatch renderer ^Camera camera] :as screen} entities]
   (.begin renderer camera)
   (doseq [entity entities]
-    (u/draw-entity! entity screen))
+    (e/draw-entity! entity screen))
   (.end renderer)
   entities)
 
@@ -377,6 +377,6 @@ specify which layers to render with or without
                         (sort-by :y #(compare %2 %1)))]
       (if-let [layer (:layer entity)]
         (.renderTileLayer renderer layer)
-        (u/draw-entity! entity batch)))
+        (e/draw-entity! entity batch)))
     (.end batch))
   entities)

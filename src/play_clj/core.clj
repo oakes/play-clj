@@ -1,5 +1,6 @@
 (ns play-clj.core
   (:require [clojure.set]
+            [play-clj.entities :as e]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
@@ -25,7 +26,7 @@
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener]
            [com.badlogic.gdx.utils Timer$Task]
-           [play_clj.utils Entity]))
+           [play_clj.entities Entity]))
 
 (load "core_basics")
 (load "core_cameras")

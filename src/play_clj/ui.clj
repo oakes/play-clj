@@ -12,7 +12,7 @@
            [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
             SpriteDrawable TextureRegionDrawable TiledDrawable]
            [com.esotericsoftware.tablelayout Cell]
-           [play_clj.utils ActorEntity]))
+           [play_clj.entities ActorEntity]))
 
 (defmacro drawable
   "Returns a subclass of [BaseDrawable](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/BaseDrawable.html)

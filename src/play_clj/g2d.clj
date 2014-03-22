@@ -3,7 +3,8 @@
   (:import [com.badlogic.gdx.graphics Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
             ParticleEffect TextureAtlas TextureRegion]
-           [play_clj.utils TextureEntity NinePatchEntity ParticleEffectEntity]))
+           [play_clj.entities TextureEntity NinePatchEntity
+            ParticleEffectEntity]))
 
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
