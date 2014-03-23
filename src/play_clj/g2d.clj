@@ -10,7 +10,7 @@
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
 
     (bitmap-font)
-    (bitmap-font file-handle region)"
+    (bitmap-font (files! :internal \"default.fnt\"))"
   [& options]
   `(BitmapFont. ~@options))
 
