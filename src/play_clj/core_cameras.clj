@@ -45,8 +45,10 @@
 
     (size! screen 480 360)"
   [screen width height]
-  (let [^OrthographicCamera camera (u/get-obj screen :camera)]
-    (.setToOrtho camera false width height)))
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. camera viewportWidth) width)
+    (set! (. camera viewportHeight) height)
+    (.update camera)))
 
 (defn width!
   "Sets the width of the camera in `screen`, adjusting the height so the ratio
