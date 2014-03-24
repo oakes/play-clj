@@ -25,8 +25,7 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener]
-           [com.badlogic.gdx.utils Timer$Task]
-           [play_clj.entities Entity]))
+           [com.badlogic.gdx.utils Timer$Task]))
 
 (load "core_basics")
 (load "core_cameras")
