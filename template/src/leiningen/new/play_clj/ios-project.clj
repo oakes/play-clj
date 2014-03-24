@@ -4,8 +4,6 @@
                  [com.badlogicgames.gdx/gdx-backend-robovm "0.9.9"]
                  [org.clojure/clojure "1.5.1"]
                  [play-clj "0.2.2"]]
-  :repositories [["sonatype"
-                  "https://oss.sonatype.org/content/repositories/snapshots/"]]
   :source-paths ["src/clojure" "../desktop/src-common"]
   :java-source-paths ["src/java"]
   :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
