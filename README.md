@@ -32,10 +32,10 @@ Clojure also brings the benefits of functional programming. This is becoming a b
 ; define a screen, where all the action takes place
 (defscreen main-screen
   ; all the screen functions get a map called "screen" containing various
-  ; important values, and a list called "entities" for storing game objects
+  ; important values, and a vector called "entities" for storing game objects
   
-  ; the entities list is immutable, so in order to update it you must simply
-  ; return a new list at the end of each screen function
+  ; the entities vector is immutable, so in order to update it you must simply
+  ; return a new vector at the end of each screen function
   
   ; this function runs only once, when the screen is first shown
   :on-show
@@ -53,7 +53,7 @@ Clojure also brings the benefits of functional programming. This is becoming a b
           player-image (texture (aget tiles 6 0))
           ; add position and size to the player-image map so it can be drawn
           player-image (assoc player-image :x 0 :y 0 :width 2 :height 2)]
-      ; return a new entities list with player-image inside of it
+      ; return a new entities vector with player-image inside of it
       [player-image]))
   
   ; this function runs every time a frame must be drawn (about 60 times per sec)

@@ -32,7 +32,7 @@ Most games need some way to keep track of all the things displayed within them. 
 
 Often, games will store these entities in a list, and in their render function they will loop over the list, modify the entities (such as moving them), and then call a function to render them. With functional programming, on the other hand, we want to avoid directly mutating values, as it leads to more complicated and error-prone software.
 
-Instead, play-clj stores the entities list behind the scenes and passes it to each function within `defscreen`. It's a normal Clojure list, so you can't directly change it. Instead, you must return a new entities list at the end of each `defscreen` function, which will then be provided to all other functions when they run.
+Instead, play-clj stores the entities vector behind the scenes and passes it to each function within `defscreen`. It's a normal Clojure vector, so you can't directly change it. Instead, you must return a new entities vector at the end of each `defscreen` function, which will then be provided to all other functions when they run.
 
 ## Loading a Texture
 
@@ -52,11 +52,10 @@ Now let's find an image to use as a texture in the game. Find one you'd like to 
 
 ## Size and Position
 
-If you run the code now, you'll see the image in the bottom-left corner. As mentioned, entities such as the one created by `texture` are simply Clojure maps. By default, our entity will look like this:
+If you run the code now, you'll see the image in the bottom-left corner. As mentioned, entities such as the one created by `texture` are simply Clojure records. By default, our entity will look like this:
 
 ```clojure
-{:type :texture
- :object #<TextureRegion com.badlogic.gdx.graphics.g2d.TextureRegion@207bfdc3>}
+#play_clj.entities.TextureEntity{:object #<TextureRegion com.badlogic.gdx.graphics.g2d.TextureRegion@4634b96>}
 ```
 
 A `texture` contains the underlying Java object. By default, it will be drawn at the bottom-left corner with the size of the image itself. You can change the position and size by simply using `assoc`:
@@ -76,11 +75,11 @@ Let's add a new function at the end of `defscreen` called `:on-key-down`, which 
     )
 ```
 
-If takes the same form as the other functions, expecting a new entities list to be returned at the end. The first argument, `screen`, which we haven't talked about yet, is a Clojure map containing various important values. In the `:on-key-down` function, it will contain a `:keycode` which indicates what key was pressed.
+If takes the same form as the other functions, expecting a new entities vector to be returned at the end. The first argument, `screen`, which we haven't talked about yet, is a Clojure map containing various important values. In the `:on-key-down` function, it will contain a `:keycode` which indicates what key was pressed.
 
 You can reference the [LibGDX documentation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html) to see all the possible keys. To get a key's code, just pass the name as a keyword into the `key-code` function. For example, `(key-code :PAGE_DOWN)` will return the number associated with that key. You can also write the keyword in a more Clojuresque way, using lower-case with hyphens, like this: `(key-code :page-down)`.
 
-Let's write a conditional statement that prints out which arrow key you pressed. Note that if a `defscreen` function returns `nil`, it leaves the entities list unchanged, so the code below won't wipe out the entities list.
+Let's write a conditional statement that prints out which arrow key you pressed. Note that if a `defscreen` function returns `nil`, it leaves the entities vector unchanged, so the code below won't wipe out the entities vector.
 
 ```clojure
   :on-key-down
@@ -137,7 +136,7 @@ We already know how to change an entity's position, so let's leverage that to ma
     nil))
 ```
 
-Now we can update our `:on-key-down` and `:on-touch-down` functions to move the entity. Note that we are technically returning a single entity rather than an entities list, but play-clj will turn it back into a list automatically.
+Now we can update our `:on-key-down` and `:on-touch-down` functions to move the entity. Note that we are technically returning a single entity rather than an entities vector, but play-clj will turn it back into a vector automatically.
 
 ```clojure
   :on-key-down
@@ -182,7 +181,7 @@ Orthographic cameras are for 2D games, so that's what we're using. Now, we need 
     )
 ```
 
-Lastly, you'll need to make either the width or height of the screen a constant value, so the other dimension can adjust to keep a constant ratio. We'll make the screen's height a constant 600 units in size using the `height!` function, which returns `nil` so the entities list won't be changed.
+Lastly, you'll need to make either the width or height of the screen a constant value, so the other dimension can adjust to keep a constant ratio. We'll make the screen's height a constant 600 units in size using the `height!` function, which returns `nil` so the entities vector won't be changed.
 
 ```clojure
   :on-resize
@@ -356,13 +355,13 @@ First, switch the REPL into the right namespace by typing `(in-ns 'hello-world.c
 
 `(app! :post-runnable #(set-screen! hello-world main-screen))`
 
-The next thing to try is reading and modifying state. Let's peek into the entities list by typing the following into the REPL:
+The next thing to try is reading and modifying state. Let's peek into the entities vector by typing the following into the REPL:
 
 `(-> main-screen :entities deref)`
 
-That should print out a list with a single map inside of it. Now try moving your image and then run the command again. The `:x` and `:y` values should now be updated. You're looking at your game in real-time! Lastly, let's try moving the entity from the REPL:
+That should print out a vector with a single map inside of it. Now try moving your image and then run the command again. The `:x` and `:y` values should now be updated. You're looking at your game in real-time! Lastly, let's try moving the entity from the REPL:
 
-`(-> main-screen :entities (swap! #(list (assoc (first %) :x 200 :y 200))))`
+`(-> main-screen :entities (swap! #(vector (assoc (first %) :x 200 :y 200))))`
 
 ## Building for Android
 
