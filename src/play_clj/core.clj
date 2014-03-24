@@ -40,6 +40,11 @@
   (when (not= e-old e-new)
     (compare-and-set! e-atom e-old e-new)))
 
+(defn ^:private wrapper
+  "Internal use only"
+  [screen f]
+  (f))
+
 (defn defscreen*
   "Internal use only"
   [{:keys [screen entities
@@ -48,7 +53,8 @@
   (let [execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
                         (let [old-entities @entities]
-                          (some->> (func (merge @screen options) old-entities)
+                          (some->> #(func (merge @screen options) old-entities)
+                                   (wrapper screen)
                                    list
                                    flatten
                                    (remove nil?)
@@ -115,9 +121,13 @@ object"
   [n & {:keys [] :as options}]
   `(defonce ~n (defgame* ~options)))
 
-(defn set-screen-with-options!
-  "Internal use only"
-  [^Game game screens & {:keys [wrap]}]
+(defn set-screen!
+  "Creates a [Screen](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Screen.html)
+object, sets it as the screen for the `game`, and runs the functions from
+`screens` in the order they are provided in
+
+    (set-screen! hello-world main-screen text-screen)"
+  [^Game game & screens]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
                       (doseq [{:keys [input-listeners]} screens]
@@ -125,9 +135,7 @@ object"
                           (add-input! listener))))
         run-fn! (fn [k & args]
                   (doseq [screen screens]
-                    (if wrap
-                      (wrap screen k args)
-                      (apply (get screen k) args))))]
+                    (apply (get screen k) args)))]
     (.setScreen game (reify Screen
                        (show [this] (add-inputs!) (run-fn! :show))
                        (render [this d] (run-fn! :render d))
@@ -136,15 +144,6 @@ object"
                        (resize [this w h] (run-fn! :resize w h))
                        (resume [this] (run-fn! :resume))
                        (dispose [this])))))
-
-(defn set-screen!
-  "Creates a [Screen](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Screen.html)
-object, sets it as the screen for the `game`, and runs the functions from
-`screens` in the order they are provided in
-
-    (set-screen! hello-world main-screen text-screen)"
-  [game & screens]
-  (set-screen-with-options! game screens))
 
 (defn update!
   "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`
