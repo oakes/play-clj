@@ -126,7 +126,7 @@ object"
         run-fn! (fn [k & args]
                   (doseq [screen screens]
                     (if wrap
-                      (wrap (get screen k) args)
+                      (wrap screen k args)
                       (apply (get screen k) args))))]
     (.setScreen game (reify Screen
                        (show [this] (add-inputs!) (run-fn! :show))
