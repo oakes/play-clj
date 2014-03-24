@@ -3028,10 +3028,11 @@ net.brehaut.ClojureTools = (function (SH) {
     build_tree: build_tree
   };
 })(SyntaxHighlighter);
-</script><title>play-clj -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">play-clj</h1><h2 class="project-version">0.2.2</h2><br /><p>A LibGDX wrapper for easy cross-platform game development</p>
-</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">com.badlogicgames.gdx/gdx</td><td class="dotted"><hr /></td><td class="dep-version">0.9.9</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#play-clj.core">play-clj.core</a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#play-clj.g2d">play-clj.g2d</a></li><li><a href="#play-clj.g2d-physics">play-clj.g2d-physics</a></li><li><a href="#play-clj.g3d">play-clj.g3d</a></li><li><a href="#play-clj.math">play-clj.math</a></li><li><a href="#play-clj.ui">play-clj.ui</a></li><li><a href="#play-clj.utils">play-clj.utils</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.core" name="play-clj.core"><h1 class="project-name">play-clj.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</script><title>play-clj -- Marginalia</title></head><body><table><tr><td class="docs"><div class="header"><h1 class="project-name">play-clj</h1><h2 class="project-version">0.2.3</h2><br /><p>A LibGDX wrapper for easy cross-platform game development</p>
+</div><div class="dependencies"><h3>dependencies</h3><table><tr><td class="dep-name">com.badlogicgames.gdx/gdx</td><td class="dotted"><hr /></td><td class="dep-version">0.9.9</td></tr><tr><td class="dep-name">org.clojure/clojure</td><td class="dotted"><hr /></td><td class="dep-version">1.5.1</td></tr></table></div></td><td class="codes" style="text-align: center; vertical-align: middle;color: #666;padding-right:20px"><br /><br /><br />(this space intentionally left almost blank)</td></tr><tr><td class="docs"><div class="toc"><a name="toc"><h3>namespaces</h3></a><ul><li><a href="#play-clj.core">play-clj.core</a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#"></a></li><li><a href="#play-clj.entities">play-clj.entities</a></li><li><a href="#play-clj.g2d">play-clj.g2d</a></li><li><a href="#play-clj.g2d-physics">play-clj.g2d-physics</a></li><li><a href="#play-clj.g3d">play-clj.g3d</a></li><li><a href="#play-clj.math">play-clj.math</a></li><li><a href="#play-clj.ui">play-clj.ui</a></li><li><a href="#play-clj.utils">play-clj.utils</a></li></ul></div></td><td class="codes">&nbsp;</td></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.core" name="play-clj.core"><h1 class="project-name">play-clj.core</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.core
   (:require [clojure.set]
+            [play-clj.entities :as e]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
@@ -3039,9 +3040,8 @@ net.brehaut.ClojureTools = (function (SH) {
            [com.badlogic.gdx.assets AssetManager]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Texture VertexAttributes$Usage]
-           [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
-            TextureRegion]
-           [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
+           [com.badlogic.gdx.graphics.g2d SpriteBatch]
+           [com.badlogic.gdx.graphics.g3d ModelBatch]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers MapProperties]
@@ -3057,8 +3057,10 @@ net.brehaut.ClojureTools = (function (SH) {
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener]
-           [com.badlogic.gdx.utils Timer$Task]))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(load &quot;core_global&quot;)
+           [com.badlogic.gdx.utils Timer$Task]
+           [play_clj.entities Entity]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(load &quot;core_basics&quot;)
+(load &quot;core_cameras&quot;)
 (load &quot;core_graphics&quot;)
 (load &quot;core_listeners&quot;)
 (load &quot;core_utils&quot;)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
@@ -3066,15 +3068,18 @@ net.brehaut.ClojureTools = (function (SH) {
   [e-atom e-old e-new]
   (when (not= e-old e-new)
     (compare-and-set! e-atom e-old e-new)))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+</td><td class="codes"><pre class="brush: clojure">(defn ^:private wrapper
+  [screen f]
+  (f))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn defscreen*
-  [{:keys [on-show on-render on-hide on-pause on-resize on-resume on-timer]
+  [{:keys [screen entities
+           on-show on-render on-hide on-pause on-resize on-resume on-timer]
     :as options}]
-  (let [screen (atom {})
-        entities (atom [])
-        execute-fn! (fn [func &amp; {:keys [] :as options}]
+  (let [execute-fn! (fn [func &amp; {:keys [] :as options}]
                       (when func
                         (let [old-entities @entities]
-                          (some-&gt;&gt; (func (merge @screen options) old-entities)
+                          (some-&gt;&gt; #(func (merge @screen options) old-entities)
+                                   (wrapper screen)
                                    list
                                    flatten
                                    (remove nil?)
@@ -3109,11 +3114,20 @@ replaced by simply reloading the namespace, and creates a var for the symbol <co
 bound to a map containing various important values related to the screen</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro defscreen
   [n &amp; {:keys [] :as options}]
-  `(let [fns# (-&gt;&gt; (for [[k# v#] ~options]
-                     [k# (intern *ns* (symbol (str '~n &quot;-&quot; (name k#))) v#)])
-                   flatten
-                   (apply hash-map))]
-     (defonce ~n (defscreen* fns#))))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+  `(let [fn-syms# (-&gt;&gt; (for [[k# v#] ~options]
+                         [k# (intern *ns* (symbol (str '~n &quot;-&quot; (name k#))) v#)])
+                       flatten
+                       (apply hash-map))
+         map-sym# (symbol (str '~n &quot;-map&quot;))
+         entities-sym# (symbol (str '~n &quot;-entities&quot;))
+         syms# (assoc fn-syms#
+                      :screen (deref
+                                (or (resolve map-sym#)
+                                    (intern *ns* map-sym# (atom {}))))
+                      :entities (deref
+                                  (or (resolve entities-sym#)
+                                      (intern *ns* entities-sym# (atom [])))))]
+     (def ~n (defscreen* syms#))))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn defgame*
   [{:keys [on-create]}]
   (proxy [Game] []
@@ -3277,6 +3291,144 @@ map</p>
   [object k &amp; options]
   `(let [^Sound object# ~object]
      (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(in-ns 'play-clj.core)</pre></td></tr><tr><td class="docs"><p>The function version of <code>orthographic</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn orthographic*
+  []
+  (OrthographicCamera.))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/OrthographicCamera.html">OrthographicCamera</a></p>
+
+<pre><code>(orthographic)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro orthographic
+  [&amp; options]
+  `(let [^OrthographicCamera object# (orthographic*)]
+     (u/calls! object# ~@options)))</pre></td></tr><tr><td class="docs"><p>Calls a single method on an <code>orthographic</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defmacro orthographic!
+  [screen k &amp; options]
+  `(let [^OrthographicCamera object# (u/get-obj ~screen :camera)]
+     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="docs"><p>The function version of <code>perspective</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn perspective*
+  ([]
+    (PerspectiveCamera.))
+  ([field-of-view viewport-width viewport-height]
+    (PerspectiveCamera. field-of-view viewport-width viewport-height)))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/PerspectiveCamera.html">PerspectiveCamera</a></p>
+
+<pre><code>(perspective)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defmacro perspective
+  [fov vw vh &amp; options]
+  `(let [^PerspectiveCamera object# (perspective* ~fov ~vw ~vh)]
+     (u/calls! object# ~@options)))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>perspective</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defmacro perspective!
+  [screen k &amp; options]
+  `(let [^PerspectiveCamera object# (u/get-obj ~screen :camera)]
+     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="docs"><p>Sets the size of the camera in <code>screen</code></p>
+
+<pre><code>(size! screen 480 360)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defn size!
+  [screen width height]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. camera viewportWidth) width)
+    (set! (. camera viewportHeight) height)
+    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Sets the width of the camera in <code>screen</code>, adjusting the height so the ratio
+remains in tact</p>
+
+<pre><code>(width! screen 480)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defn width!
+  [screen new-width]
+  (size! screen new-width (* new-width (/ (game :height) (game :width)))))</pre></td></tr><tr><td class="docs"><p>Returns the width of the camera in <code>screen</code></p>
+
+<pre><code>(width screen)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defn width
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera viewportWidth)))</pre></td></tr><tr><td class="docs"><p>Sets the height of the camera in <code>screen</code>, adjusting the width so the ratio
+remains in tact</p>
+
+<pre><code>(height! screen 360)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defn height!
+  [screen new-height]
+  (size! screen (* new-height (/ (game :width) (game :height))) new-height))</pre></td></tr><tr><td class="docs"><p>Returns the height of the camera in <code>screen</code></p>
+
+<pre><code>(height screen)
+</code></pre>
+</td><td class="codes"><pre class="brush: clojure">(defn height
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera viewportHeight)))</pre></td></tr><tr><td class="docs"><p>Sets only the x position of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn x!
+  [screen x-val]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. (. camera position) x) x-val)
+    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Returns the x position of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn x
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. (. camera position) x)))</pre></td></tr><tr><td class="docs"><p>Sets only the y position of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn y!
+  [screen y-val]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. (. camera position) y) y-val)
+    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Returns the y position of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn y
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. (. camera position) y)))</pre></td></tr><tr><td class="docs"><p>Sets only the z position of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn z!
+  [screen z-val]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. (. camera position) z) z-val)
+    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Returns the z position of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn z
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. (. camera position) z)))</pre></td></tr><tr><td class="docs"><p>Sets the position of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn position!
+  ([screen pos]
+    (let [^Camera camera (u/get-obj screen :camera)]
+      (set! (. camera position) pos)))
+  ([screen x-val y-val]
+    (position! screen x-val y-val nil))
+  ([screen x-val y-val z-val]
+    (let [^Camera camera (u/get-obj screen :camera)]
+      (when x-val (set! (. (. camera position) x) x-val))
+      (when y-val (set! (. (. camera position) y) y-val))
+      (when z-val (set! (. (. camera position) z) z-val))
+      (.update camera))))</pre></td></tr><tr><td class="docs"><p>Returns the position of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn position
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera position)))</pre></td></tr><tr><td class="docs"><p>Sets the direction of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn direction!
+  [screen x y z]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (.lookAt camera x y z)
+    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Returns the direction of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn direction
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera direction)))</pre></td></tr><tr><td class="docs"><p>Sets the near clipping plane distance of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn near!
+  [screen n]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. camera near) n)
+    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Returns the near clipping plane distance of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn near
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera near)))</pre></td></tr><tr><td class="docs"><p>Sets the far clipping plane distance of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn far!
+  [screen n]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. camera far) n)
+    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Returns the far clipping plane distance of the camera in <code>screen</code></p>
+</td><td class="codes"><pre class="brush: clojure">(defn far
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera far)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(in-ns 'play-clj.core)</pre></td></tr><tr><td class="docs"><p>The function version of <code>tiled-map</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn tiled-map*
   [s]
@@ -3465,44 +3617,6 @@ with the tiled map file at <code>path</code> and <code>unit</code> scale</p>
   [screen k &amp; options]
   `(let [^Stage object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
-</td><td class="codes"><pre class="brush: clojure">(defmulti draw-entity!
-  (fn [_ entity] (:type entity)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! nil [_ _])</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :texture
-  [^SpriteBatch batch {:keys [^TextureRegion object x y width height]}]
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        width (float (or width (.getRegionWidth object)))
-        height (float (or height (.getRegionHeight object)))]
-    (.draw batch object x y width height)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :nine-patch
-  [^SpriteBatch batch {:keys [^NinePatch object x y width height]}]
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        width (float (or width (.getTotalWidth object)))
-        height (float (or height (.getTotalHeight object)))]
-    (.draw object batch x y width height)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :particle-effect
-  [^SpriteBatch batch {:keys [^ParticleEffect object x y delta-time]}]
-  (let [x (float (or x 0))
-        y (float (or y 0))
-        delta-time (float (or delta-time (graphics! :get-delta-time)))]
-    (.setPosition object x y)
-    (.draw object batch delta-time)))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :actor
-  [^SpriteBatch batch {:keys [^Actor object] :as entity}]
-  (doseq [[k v] entity]
-    (case k
-      :x (.setX object v)
-      :y (.setY object v)
-      :width (.setWidth object v)
-      :height (.setHeight object v)
-      nil))
-  (.draw object batch 1))</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod draw-entity! :model
-  [{:keys [^ModelBatch renderer ^Environment attributes]}
-   {:keys [^ModelInstance object]}]
-  (.render renderer object attributes))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defmulti draw!
   (fn [screen _] (-&gt; screen :renderer class)))</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod draw! BatchTiledMapRenderer
@@ -3510,7 +3624,7 @@ with the tiled map file at <code>path</code> and <code>unit</code> scale</p>
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
-      (draw-entity! batch entity))
+      (e/draw-entity! entity batch))
     (.end batch))
   entities)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod draw! Stage
@@ -3518,14 +3632,14 @@ with the tiled map file at <code>path</code> and <code>unit</code> scale</p>
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
-      (draw-entity! batch entity))
+      (e/draw-entity! entity batch))
     (.end batch))
   entities)</pre></td></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(defmethod draw! ModelBatch
   [{:keys [^ModelBatch renderer ^Camera camera] :as screen} entities]
   (.begin renderer camera)
   (doseq [entity entities]
-    (draw-entity! screen entity))
+    (e/draw-entity! entity screen))
   (.end renderer)
   entities)</pre></td></tr><tr><td class="docs"><p>Calls the tiled-map renderer from <code>screen</code>, optionally allowing you to
 specify which layers to render with or without</p>
@@ -3625,97 +3739,9 @@ specify which layers to render with or without</p>
                         (sort-by :y #(compare %2 %1)))]
       (if-let [layer (:layer entity)]
         (.renderTileLayer renderer layer)
-        (draw-entity! batch entity)))
+        (e/draw-entity! entity batch)))
     (.end batch))
-  entities)</pre></td></tr><tr><td class="docs"><p>The function version of <code>orthographic</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn orthographic*
-  []
-  (OrthographicCamera.))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/OrthographicCamera.html">OrthographicCamera</a></p>
-
-<pre><code>(orthographic)
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defmacro orthographic
-  [&amp; options]
-  `(let [^OrthographicCamera object# (orthographic*)]
-     (u/calls! object# ~@options)))</pre></td></tr><tr><td class="docs"><p>Calls a single method on an <code>orthographic</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro orthographic!
-  [screen k &amp; options]
-  `(let [^OrthographicCamera object# (u/get-obj ~screen :camera)]
-     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="docs"><p>The function version of <code>perspective</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn perspective*
-  ([]
-    (PerspectiveCamera.))
-  ([field-of-view viewport-width viewport-height]
-    (PerspectiveCamera. field-of-view viewport-width viewport-height)))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/PerspectiveCamera.html">PerspectiveCamera</a></p>
-
-<pre><code>(perspective)
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defmacro perspective
-  [fov vw vh &amp; options]
-  `(let [^PerspectiveCamera object# (perspective* ~fov ~vw ~vh)]
-     (u/calls! object# ~@options)))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>perspective</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defmacro perspective!
-  [screen k &amp; options]
-  `(let [^PerspectiveCamera object# (u/get-obj ~screen :camera)]
-     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="docs"><p>Sets the size of the camera in <code>screen</code></p>
-
-<pre><code>(size! screen 480 360)
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defn size!
-  [screen width height]
-  (let [^OrthographicCamera camera (u/get-obj screen :camera)]
-    (.setToOrtho camera false width height)))</pre></td></tr><tr><td class="docs"><p>Sets the width of the camera in <code>screen</code>, adjusting the height so the ratio
-remains in tact</p>
-
-<pre><code>(width! screen 480)
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defn width!
-  [screen new-width]
-  (size! screen new-width (* new-width (/ (game :height) (game :width)))))</pre></td></tr><tr><td class="docs"><p>Sets the height of the camera in <code>screen</code>, adjusting the width so the ratio
-remains in tact</p>
-
-<pre><code>(height! screen 360)
-</code></pre>
-</td><td class="codes"><pre class="brush: clojure">(defn height!
-  [screen new-height]
-  (size! screen (* new-height (/ (game :width) (game :height))) new-height))</pre></td></tr><tr><td class="docs"><p>Sets only the x position of the camera in <code>screen</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn x!
-  [screen x]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) x) x)
-    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Sets only the y position of the camera in <code>screen</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn y!
-  [screen y]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) y) y)
-    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Sets only the z position of the camera in <code>screen</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn z!
-  [screen z]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) z) z)
-    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Sets the position of the camera in <code>screen</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn position!
-  ([screen x y]
-    (position! screen x y nil))
-  ([screen x y z]
-    (when x (x! screen x))
-    (when y (y! screen y))
-    (when z (z! screen z))))</pre></td></tr><tr><td class="docs"><p>Sets the directino of the camera in <code>screen</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn direction!
-  [screen x y z]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (.lookAt camera x y z)
-    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Sets the near clipping plane distance of the camera in <code>screen</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn near!
-  [screen n]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. camera near) n)
-    (.update camera)))</pre></td></tr><tr><td class="docs"><p>Sets the far clipping plane distance of the camera in <code>screen</code></p>
-</td><td class="codes"><pre class="brush: clojure">(defn far!
-  [screen n]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. camera far) n)
-    (.update camera)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+  entities)</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#" name=""><h1 class="project-name"></h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(in-ns 'play-clj.core)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private input-processor
   [{:keys [on-key-down on-key-typed on-key-up on-mouse-moved
@@ -4016,22 +4042,73 @@ found</p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro asset-manager!
   [object k &amp; options]
   `(let [^AssetManager object# ~object]
-     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.g2d" name="play-clj.g2d"><h1 class="project-name">play-clj.g2d</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+     (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.entities" name="play-clj.entities"><h1 class="project-name">play-clj.entities</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(ns play-clj.entities
+  (:import [com.badlogic.gdx Gdx Graphics]
+           [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
+            TextureRegion]
+           [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
+           [com.badlogic.gdx.scenes.scene2d Actor]))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+</td><td class="codes"><pre class="brush: clojure">(defprotocol Entity
+  (draw-entity! [this batch] &quot;Draws the entity&quot;))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(extend-protocol Entity
+  clojure.lang.PersistentArrayMap
+  (draw-entity! [this batch])
+  clojure.lang.PersistentHashMap
+  (draw-entity! [this batch]))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord TextureEntity [object] Entity
+  (draw-entity! [{:keys [^TextureRegion object x y width height]} batch]
+    (let [x (float (or x 0))
+          y (float (or y 0))
+          width (float (or width (.getRegionWidth object)))
+          height (float (or height (.getRegionHeight object)))]
+      (.draw ^SpriteBatch batch object x y width height))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord NinePatchEntity [object] Entity
+  (draw-entity! [{:keys [^NinePatch object x y width height]} batch]
+    (let [x (float (or x 0))
+          y (float (or y 0))
+          width (float (or width (.getTotalWidth object)))
+          height (float (or height (.getTotalHeight object)))]
+      (.draw object ^SpriteBatch batch x y width height))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord ParticleEffectEntity [object] Entity
+  (draw-entity! [{:keys [^ParticleEffect object x y delta-time]} batch]
+    (let [x (float (or x 0))
+          y (float (or y 0))
+          ^Graphics g (Gdx/graphics)
+          delta-time (float (or delta-time (.getDeltaTime g)))]
+      (.setPosition object x y)
+      (.draw object ^SpriteBatch batch delta-time))))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord ActorEntity [object] Entity
+  (draw-entity! [{:keys [^Actor object] :as entity} batch]
+    (doseq [[k v] entity]
+      (case k
+        :x (.setX object v)
+        :y (.setY object v)
+        :width (.setWidth object v)
+        :height (.setHeight object v)
+        nil))
+    (.draw object ^SpriteBatch batch 1)))</pre></td></tr><tr><td class="docs">
+</td><td class="codes"><pre class="brush: clojure">(defrecord ModelEntity [object] Entity
+  (draw-entity! [{:keys [^ModelInstance object]}
+                 {:keys [^ModelBatch renderer ^Environment attributes]}]
+    (.render renderer object attributes)))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.g2d" name="play-clj.g2d"><h1 class="project-name">play-clj.g2d</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.g2d
   (:require [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
-            ParticleEffect TextureAtlas TextureRegion]))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html">BitmapFont</a></p>
+            ParticleEffect TextureAtlas TextureRegion]
+           [play_clj.entities TextureEntity NinePatchEntity
+            ParticleEffectEntity]))</pre></td></tr><tr><td class="docs"><p>Returns a <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html">BitmapFont</a></p>
 
 <pre><code>(bitmap-font)
-(bitmap-font file-handle region)
+(bitmap-font (files! :internal "default.fnt"))
 </code></pre>
 </td><td class="codes"><pre class="brush: clojure">(defmacro bitmap-font
   [&amp; options]
   `(BitmapFont. ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>texture</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn texture*
   [arg]
-  (u/create-entity
+  (TextureEntity.
     (cond
       (string? arg)
       (-&gt; ^String arg Texture. TextureRegion.)
@@ -4060,7 +4137,7 @@ found</p>
   `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>nine-patch</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn nine-patch*
   [arg]
-  (u/create-entity
+  (NinePatchEntity.
     (cond
       (string? arg)
       (-&gt; ^String arg Texture. TextureRegion. NinePatch.)
@@ -4091,7 +4168,7 @@ found</p>
   `(u/call! ^NinePatch (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>particle-effect</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn particle-effect*
   []
-  (u/create-entity (ParticleEffect.)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html">ParticleEffect</a></p>
+  (ParticleEffectEntity. (ParticleEffect.)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html">ParticleEffect</a></p>
 
 <pre><code>(particle-effect :load
                  (files! :internal "fire.p")
@@ -4343,7 +4420,8 @@ time the <code>screen</code> has been showing</p>
             IntAttribute TextureAttribute]
            [com.badlogic.gdx.graphics.g3d.model.data ModelData]
            [com.badlogic.gdx.graphics.g3d.utils AnimationController
-            ModelBuilder]))</pre></td></tr><tr><td class="docs"><p>The function version of <code>animation-controller</code></p>
+            ModelBuilder]
+           [play_clj.entities ModelEntity]))</pre></td></tr><tr><td class="docs"><p>The function version of <code>animation-controller</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn animation-controller*
   [entity]
   (AnimationController. (u/get-obj entity :object)))</pre></td></tr><tr><td class="docs"><p>Returns an <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/utils/AnimationController.html">AnimationController</a></p>
@@ -4388,7 +4466,7 @@ time the <code>screen</code> has been showing</p>
      (u/call! object# ~k ~@options)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html">ModelInstance</a></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro model
   [&amp; args]
-  `(u/create-entity
+  `(ModelEntity.
      (let [arg1# ~(first args)]
        (cond
          (:object arg1#)
@@ -4735,7 +4813,8 @@ time the <code>screen</code> has been showing</p>
             Tree$Node VerticalGroup WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
             SpriteDrawable TextureRegionDrawable TiledDrawable]
-           [com.esotericsoftware.tablelayout Cell]))</pre></td></tr><tr><td class="docs"><p>Returns a subclass of <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/BaseDrawable.html">BaseDrawable</a></p>
+           [com.esotericsoftware.tablelayout Cell]
+           [play_clj.entities ActorEntity]))</pre></td></tr><tr><td class="docs"><p>Returns a subclass of <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/BaseDrawable.html">BaseDrawable</a></p>
 
 <pre><code>(drawable :texture-region)
 </code></pre>
@@ -4863,10 +4942,10 @@ based on the file at <code>path</code></p>
   group)</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn ^:private create-group
   [^WidgetGroup group children]
-  (apply add! (u/create-entity group) children))</pre></td></tr><tr><td class="docs"><p>The function version of <code>check-box</code></p>
+  (apply add! (ActorEntity. group) children))</pre></td></tr><tr><td class="docs"><p>The function version of <code>check-box</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn check-box*
   [^String text arg]
-  (u/create-entity (CheckBox. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/CheckBox.html">CheckBox</a></p>
+  (ActorEntity. (CheckBox. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/CheckBox.html">CheckBox</a></p>
 
 <pre><code>(check-box "I'm a check box" (style :check-box off on font color))
 (check-box "I'm a check box" (skin "uiskin.json"))
@@ -4881,7 +4960,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^Checkbox (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>dialog</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn dialog*
   [text arg]
-  (u/create-entity (Dialog. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Dialog.html">Dialog</a></p>
+  (ActorEntity. (Dialog. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Dialog.html">Dialog</a></p>
 
 <pre><code>(dialog "I'm a dialog" (style :window font font-color background))
 (dialog "I'm a dialog" (skin "uiskin.json"))
@@ -4910,7 +4989,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^HorizontalGroup (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>image</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn image*
   [arg]
-  (u/create-entity
+  (ActorEntity.
     (cond
       (map? arg)
       (Image. ^TextureRegion (:object arg))
@@ -4931,7 +5010,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^Image (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>image-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn image-button*
   [arg]
-  (u/create-entity (ImageButton. arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageButton.html">ImageButton</a></p>
+  (ActorEntity. (ImageButton. arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageButton.html">ImageButton</a></p>
 
 <pre><code>(image-button (style :image-button up dn check img-up img-dn img-check))
 (image-button (skin "uiskin.json"))
@@ -4946,7 +5025,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^ImageButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>image-text-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn image-text-button*
   [^String text arg]
-  (u/create-entity (ImageTextButton. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageTextButton.html">ImageTextButton</a></p>
+  (ActorEntity. (ImageTextButton. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageTextButton.html">ImageTextButton</a></p>
 
 <pre><code>(image-text-button "I'm an image text button"
                    (style :image-text-button up down checked font))
@@ -4962,7 +5041,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^ImageTextButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>label</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn label*
   [^String text arg]
-  (u/create-entity
+  (ActorEntity.
     (if (isa? (type arg) Color)
       (Label. text (style :label (g2d/bitmap-font) arg))
       (Label. text arg))))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Label.html">Label</a></p>
@@ -4981,7 +5060,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^Label (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>scroll-pane</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn scroll-pane*
   [child arg]
-  (u/create-entity (ScrollPane. (u/get-obj child :object) arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ScrollPane.html">ScrollPane</a></p>
+  (ActorEntity. (ScrollPane. (u/get-obj child :object) arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ScrollPane.html">ScrollPane</a></p>
 
 <pre><code>(scroll-pane table-entity (style :scroll-pane back h h-knob v v-knob))
 (scroll-pane table-entity (skin "uiskin.json"))
@@ -4996,7 +5075,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^ScrollPane (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>select-box</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn select-box*
   [items arg]
-  (u/create-entity (SelectBox. (into-array items) arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html">SelectBox</a></p>
+  (ActorEntity. (SelectBox. (into-array items) arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html">SelectBox</a></p>
 
 <pre><code>(select-box ["Item 1" "Item 2" "Item 3"]
             (style :select-box font color back scroll-style list-style))
@@ -5014,7 +5093,7 @@ based on the file at <code>path</code></p>
   [{:keys [min max step vertical?]
     :or {min 0 max 10 step 1 vertical? false}}
    arg]
-  (u/create-entity
+  (ActorEntity.
     (Slider. (float min) (float max) (float step) vertical? arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Slider.html">Slider</a></p>
 
 <pre><code>(slider {:min 0 :max 10 :step 1 :vertical? false} (style :slider back knob))
@@ -5058,7 +5137,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^Table (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>text-button</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn text-button*
   [^String text arg]
-  (u/create-entity (TextButton. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextButton.html">TextButton</a></p>
+  (ActorEntity. (TextButton. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextButton.html">TextButton</a></p>
 
 <pre><code>(text-button "I'm a text button" (style :text-button up dn checked font))
 (text-button "I'm a text button" (skin "uiskin.json"))
@@ -5073,7 +5152,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^TextButton (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="docs"><p>The function version of <code>text-field</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defn text-field*
   [^String text arg]
-  (u/create-entity (TextField. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextField.html">TextField</a></p>
+  (ActorEntity. (TextField. text arg)))</pre></td></tr><tr><td class="docs"><p>Returns an entity based on <a href="http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextField.html">TextField</a></p>
 
 <pre><code>(text-field "I'm a text field" (style :text-field font col cur sel back))
 (text-field "I'm a text field" (skin "uiskin.json"))
@@ -5132,11 +5211,7 @@ based on the file at <code>path</code></p>
   `(u/call! ^Window (u/get-obj ~entity :object) ~k ~@options))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr><tr><td class="docs"><div class="docs-header"><a class="anchor" href="#play-clj.utils" name="play-clj.utils"><h1 class="project-name">play-clj.utils</h1><a class="toc-link" href="#toc">toc</a></a></div></td><td class="codes" /></tr><tr><td class="docs">
 </td><td class="codes"><pre class="brush: clojure">(ns play-clj.utils
   (:require [clojure.string :as s])
-  (:import [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect
-            TextureRegion]
-           [com.badlogic.gdx.graphics.g3d ModelInstance]
-           [com.badlogic.gdx.scenes.scene2d Actor]
-           [com.badlogic.gdx.utils Array ArrayMap]))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
+  (:import [com.badlogic.gdx.utils Array ArrayMap]))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
 </td><td class="codes"><pre class="brush: clojure">(defn throw-key-not-found
   [k]
   (throw (Exception. (str &quot;The keyword &quot; k &quot; is not found.&quot;))))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
@@ -5250,22 +5325,5 @@ new object to be created each time a field is set)</p>
   `(calls! ^ArrayMap (gdx-array-map* ~clj-map) ~@options))</pre></td></tr><tr><td class="docs"><p>Calls a single method on a <code>gdx-array-map</code></p>
 </td><td class="codes"><pre class="brush: clojure">(defmacro gdx-array-map!
   [object k &amp; options]
-  `(call! ^ArrayMap ~object ~k ~@options))</pre></td></tr><tr><td class="docs"><p>Internal use only</p>
-</td><td class="codes"><pre class="brush: clojure">(defmulti create-entity
-  class)</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod create-entity TextureRegion
-  [obj]
-  {:type :texture :object obj})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod create-entity NinePatch
-  [obj]
-  {:type :nine-patch :object obj})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod create-entity ParticleEffect
-  [obj]
-  {:type :particle-effect :object obj})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod create-entity Actor
-  [obj]
-  {:type :actor :object obj})</pre></td></tr><tr><td class="docs">
-</td><td class="codes"><pre class="brush: clojure">(defmethod create-entity ModelInstance
-  [obj]
-  {:type :model :object obj})</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
+  `(call! ^ArrayMap ~object ~k ~@options))</pre></td></tr><tr><td class="spacer docs">&nbsp;</td><td class="codes" /></tr></table><div class="footer">Generated by <a href="https://github.com/fogus/marginalia">Marginalia</a>.&nbsp;&nbsp;Syntax highlighting provided by Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a></div><script type="text/javascript">SyntaxHighlighter.defaults['gutter'] = false;
        SyntaxHighlighter.all()</script></body></html>
