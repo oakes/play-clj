@@ -126,12 +126,14 @@ remains in tact
   ([screen pos]
     (let [^Camera camera (u/get-obj screen :camera)]
       (set! (. camera position) pos)))
-  ([screen x y]
-    (position! screen x y nil))
-  ([screen x y z]
-    (when x (x! screen x))
-    (when y (y! screen y))
-    (when z (z! screen z))))
+  ([screen x-val y-val]
+    (position! screen x-val y-val nil))
+  ([screen x-val y-val z-val]
+    (let [^Camera camera (u/get-obj screen :camera)]
+      (when x-val (set! (. (. camera position) x) x-val))
+      (when y-val (set! (. (. camera position) y) y-val))
+      (when z-val (set! (. (. camera position) z) z-val))
+      (.update camera))))
 
 (defn position
   "Returns the position of the camera in `screen`"
