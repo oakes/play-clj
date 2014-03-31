@@ -1,0 +1,152 @@
+{"Align" {"align" :static-fields}
+ "Animation" {"play-mode" :static-fields
+              "animation!" :methods}
+ "AnimationController" {"animation-controller!" :methods}
+ "Application" {"app!" :methods}
+ "Array" {"gdx-array!" :methods}
+ "ArrayMap" {"gdx-array-map!" :methods}
+ "AssetManager" {"asset-manager" :methods}
+ "AtlasTmxMapLoader" {"loader :atlas-tmx-map" :methods}
+ "Audio" {"audio!" :methods}
+ "Bezier" {"bezier!" :methods}
+ "BitmapFont" {"bitmap-font" :constructors}
+ "BitmapFontLoader" {"loader :bitmap-font" :methods}
+ "BlendingAttribute" {"attribute :blending" :constructors
+                      "attribute-type :blending" :static-fields
+                      "attribute! :blending" :static-methods}
+ "Body" {"body!" :methods}
+ "BodyDef" {"body-def" :fields}
+ "Bresenham2" {"bresenham2!" :methods}
+ "BSpline" {"b-spline!" :methods}
+ "Button.ButtonStyle" {"style :button" :constructors}
+ "CatmullRomSpline" {"catmull-rom-spline!" :methods}
+ "Circle" {"circle!" :methods}
+ "Color" {"color" :static-fields}
+ "ColorAttribute" {"attribute :color" :constructors
+                   "attribute-type :color" :static-fields
+                   "attribute! :color" :static-methods}
+ "Contact" {"contact!" :methods}
+ "ConvexHull" {"convex-hull!" :methods}
+ "ChainShape" {"chain-shape!" :methods}
+ "CheckBox" {"check-box!" :methods}
+ "CheckBox.CheckBoxStyle" {"style :check-box" :constructors}
+ "CircleShape" {"circle-shape!" :methods}
+ "CubemapAttribute" {"attribute :cubemap" :constructors
+                     "attribute-type :cubemap" :static-fields
+                     "attribute! :cubemap" :static-methods}
+ "DelaunayTriangulator" {"delauny-triangulator!" :methods}
+ "DepthTestAttribute" {"attribute :depth-test" :constructors
+                       "attribute-type :depth-test" :static-fields
+                       "attribute! :depth-test" :static-methods}
+ "Dialog" {"dialog!" :methods}
+ "DistanceJointDef" {"joint-def :distance" :fields}
+ "EarClippingTriangulator" {"ear-clipping-triangulator!" :methods}
+ "EdgeShape" {"edge-shape!" :methods}
+ "Ellipse" {"ellipse!" :methods}
+ "Environment" {"environment!" :methods}
+ "Files" {"files!" :methods}
+ "Fixture" {"fixture!" :methods}
+ "FixtureDef" {"fixture-def" :fields}
+ "FloatAttribute" {"attribute :float" :constructors
+                   "attribute-type :float" :static-fields
+                   "attribute! :float" :static-methods}
+ "FloatCounter" {"float-counter!" :methods}
+ "FrictionJointDef" {"joint-def :friction" :fields}
+ "Frustum" {"frustum!" :methods}
+ "GearJointDef" {"joint-def :gear" :fields}
+ "GeometryUtils" {"geometry!" :static-methods}
+ "Graphics" {"graphics!" :methods}
+ "GridPoint2" {"grid-point-2!" :methods}
+ "GridPoint3" {"grid-point-3!" :methods}
+ "GL20" {"gl!" :methods}
+ "HexagonalTiledMapRenderer" {"hexagonal-tiled-map!" :methods}
+ "HorizontalGroup" {"horizontal!" :methods}
+ "Image" {"image!" :methods}
+ "ImageButton" {"image-button!" :methods}
+ "ImageButton.ImageButtonStyle" {"style :image-button" :constructors}
+ "ImageTextButton" {"image-text-button!" :methods}
+ "ImageTextButton.ImageTextButtonStyle" {"style :image-text-button" :constructors}
+ "Input" {"input!" :methods}
+ "Input.Keys" {"key-word" :static-fields}
+ "Interpolation" {"interpolation" :static-classes}
+ "Intersector" {"intersector!" :static-methods}
+ "IntAttribute" {"attribute :int" :constructors
+                 "attribute-type :int" :static-fields
+                 "attribute! :int" :static-methods}
+ "IsometricStaggeredTiledMapRenderer" {"isometric-staggered-tiled-map!" :methods}
+ "IsometricTiledMapRenderer" {"isometric-tiled-map!" :methods}
+ "Joint" {"joint!" :methods}
+ "Label" {"label!" :methods}
+ "Material" {"material!" :methods}
+ "MathUtils" {"math!" :static-methods}
+ "Matrix3" {"matrix-3!" :methods}
+ "Matrix4" {"matrix-4!" :methods}
+ "ModelBatch" {"model-batch!" :methods}
+ "ModelBuilder" {"model-builder!" :methods}
+ "ModelInstance" {"model!" :methods}
+ "ModelLoader" {"loader :model" :methods}
+ "MouseJointDef" {"joint-def :mouse" :fields}
+ "MusicLoader" {"loader :music" :methods}
+ "Net" {"net!" :methods}
+ "NinePatch" {"nine-patch!" :methods}
+ "NinePatchDrawable" {"drawable :nine-patch" :constructors}
+ "OrthogonalTiledMapRenderer" {"orthogonal-tiled-map!" :methods}
+ "OrthographicCamera" {"orthographic!" :methods}
+ "ParticleEffect" {"particle-effect!" :methods}
+ "PerspectiveCamera" {"perspective!" :methods}
+ "PixmapLoader" {"loader :pixmap" :methods}
+ "Plane" {"plane!" :methods}
+ "Plane.PlaneSide" {"plane-side" :static-fields}
+ "Polygon" {"polygon!" :methods}
+ "PolygonShape" {"polygon-shape!" :methods}
+ "Polyline" {"polyline!" :methods}
+ "PrismaticJointDef" {"joint-def :prismatic" :fields}
+ "ProgressBar.ProgressBarStyle" {"style :progress-bar" :constructors}
+ "PulleyJointDef" {"joint-def :pulley" :fields}
+ "Quaternion" {"quaternion!" :methods}
+ "Rectangle" {"rectangle!" :methods}
+ "RevoluteJointDef" {"joint-def :revolute" :fields}
+ "RopeJointDef" {"joint-def :rope" :fields}
+ "Scaling" {"scaling" :static-fields}
+ "ScrollPane" {"scroll-pane!" :methods}
+ "ScrollPane.ScrollPaneStyle" {"style :scroll-pane" :constructors}
+ "SelectBox" {"select-box!" :methods}
+ "SelectBox.SelectBoxStyle" {"style :select-box" :constructors}
+ "Skin" {"skin" :methods}
+ "SkinLoader" {"loader :skin" :methods}
+ "Slider" {"slider!" :methods}
+ "Sound" {"sound!" :methods}
+ "SoundLoader" {"loader :sound" :methods}
+ "SplitPane.SplitPaneStyle" {"style :split-pane" :constructors}
+ "SpriteDrawable" {"drawable :sprite" :constructors}
+ "Stack" {"stack!" :methods}
+ "Stage" {"stage!" :methods}
+ "Table" {"table!" :methods}
+ "TextureAtlas" {"texture-atlas!" :methods}
+ "TextureAttribute" {"attribute :texture" :constructors
+                     "attribute-type :texture" :static-fields
+                     "attribute! :texture" :static-methods}
+ "TextButton" {"text-button!" :methods}
+ "TextButton.TextButtonStyle" {"style :text-button" :constructors}
+ "TextField" {"text-field!" :methods}
+ "TextField.TextFieldStyle" {"style :text-field" :constructors}
+ "TextureLoader" {"loader :texture" :methods}
+ "TextureRegion" {"texture!" :methods}
+ "TextureRegionDrawable" {"drawable :texture-region" :constructors}
+ "Tree" {"tree!" :methods}
+ "TmxMapLoader" {"loader :tmx-map" :methods}
+ "Touchpad.TouchpadStyle" {"style :touchpad" :constructors}
+ "TiledMap" {"tiled-map!" :methods}
+ "TiledMapTileLayer" {"tiled-map-layer!" :methods}
+ "TiledMapTileLayer.Cell" {"tiled-map-cell!" :methods}
+ "Tree.TreeStyle" {"style :tree" :constructors}
+ "Vector2" {"vector-2!" :methods}
+ "Vector3" {"vector-3!" :methods}
+ "VertexAttributes.Usage" {"usage" :static-fields}
+ "VerticalGroup" {"vertical!" :methods}
+ "WeldJointDef" {"joint-def :weld" :fields}
+ "WheelJointDef" {"joint-def :wheel" :fields}
+ "Window" {"window!" :methods}
+ "Window.WindowStyle" {"style :window" :constructors}
+ "WindowedMean" {"windowed-mean!" :methods}
+ "World" {"box-2d!" :methods}}
