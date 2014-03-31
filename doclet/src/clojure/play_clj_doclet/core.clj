@@ -71,11 +71,6 @@
            (map #(vector (first %) (parse-class-entry c (second %))))
            (into {})))
 
-(defn match?
-  [doc-name sym-name]
-  (or (= doc-name sym-name)
-      (.startsWith doc-name (str sym-name " "))))
-
 (defn process-group
   [{:keys [type raw] :as group} doc-map]
   (let [form (read-string raw)
@@ -85,7 +80,7 @@
       (assoc group
              :name (str n)
              :java (->> doc-map
-                        (filter #(match? (first %) (str n)))
+                        (filter #(.startsWith (first %) (str n)))
                         (sort-by first)
                         vec)))))
 
