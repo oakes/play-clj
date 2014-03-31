@@ -1,7 +1,8 @@
 (ns play-clj-doclet.core
   (:require [clojure.edn :as edn]
-            [clojure.string :as string]
             [clojure.java.io :as io]
+            [clojure.string :as string]
+            [marginalia.core :as marg]
             [play-clj-doclet.html :as html])
   (:import [com.sun.javadoc ClassDoc ConstructorDoc Doc ExecutableMemberDoc
             Parameter RootDoc]))
@@ -50,15 +51,49 @@
            (map #(vector (first %) (parse-class-entry c (second %))))
            (into {})))
 
-(defn save
+(def ^:const valid-syms #{'defn 'defmacro})
+
+(defn match?
+  [doc-name sym-name]
+  (or (= doc-name sym-name)
+      (.startsWith doc-name (str sym-name " "))))
+
+(defn process-group
+  [{:keys [type raw] :as group} doc-map]
+  (let [form (read-string raw)
+        n (second form)]
+    (when (and (contains? valid-syms (first form))
+               (-> n meta :private not))
+      (assoc group
+             :name (str n)
+             :java (filter #(match? (first %) (str n)) doc-map)))))
+
+(defn process-groups
+  [{:keys [groups] :as parsed-file} doc-map]
+  (->> (map #(process-group % doc-map) groups)
+       (remove #(nil? (:name %)))
+       (assoc parsed-file :groups)))
+
+(defn parse-clj
   [doc-map]
-  (->> doc-map pr-str (spit (io/file "uberdoc.edn")))
-  (->> doc-map html/create (spit (io/file "uberdoc.html"))))
+  (->> (io/file "../src/")
+       file-seq
+       (filter #(-> % .getName (.endsWith ".clj")))
+       (sort-by #(.getName %))
+       (map #(.getCanonicalPath %))
+       (map marg/path-to-doc)
+       (map #(process-groups % doc-map))))
+
+(defn save
+  [parsed-files]
+  (->> parsed-files pr-str (spit (io/file "uberdoc.edn")))
+  (->> parsed-files html/create (spit (io/file "uberdoc.html"))))
 
 (defn parse
   [^RootDoc root]
   (->> (map parse-class (.classes root))
        (filter some?)
        (into {})
+       parse-clj
        save)
   (println "Created uberdoc.html and uberdoc.edn."))

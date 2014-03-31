@@ -23,14 +23,20 @@
     [:b (str name)]
     " "
     (string/join ", " (map param params))]
-   [:i text]])
+   (when (> (count text) 0)
+     [:i text])])
 
-(defn section
-  [[clj-name items]]
-  [:div
-   [:h2 {} clj-name]
-   (map item (sort-by first items))])
+(defn create-from-file
+  [parsed-file]
+  (for [group (:groups parsed-file)]
+    [:div
+     [:h1 {} (:name group)]
+     (for [[name items] (:java group)]
+       [:div
+        (when (not= (:name group) name)
+          [:h3 name])
+        (map item (sort-by first items))])]))
 
 (defn create
-  [doc-map]
-  (html (map section doc-map)))
+  [parsed-files]
+  (html (map create-from-file parsed-files)))
