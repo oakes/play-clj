@@ -5,27 +5,43 @@
             [marginalia.core :as marg]
             [play-clj-doclet.html :as html])
   (:import [com.sun.javadoc ClassDoc ConstructorDoc Doc ExecutableMemberDoc
-            Parameter RootDoc]))
+            FieldDoc Parameter RootDoc]))
 
 (def targets (-> "targets.edn" io/resource slurp edn/read-string))
 
+(defn camel->keyword
+  [s]
+  (->> (string/split (string/replace s "_" "-") #"(?<=[a-z])(?=[A-Z])")
+       (map string/lower-case)
+       (string/join "-")
+       keyword))
+
 (defn parse-param
   [^Parameter p]
-  [(.typeName p) (.name p)])
+  [(.typeName p) (-> (.name p) camel->keyword name)])
+
+(defn parse-doc-name
+  [^Doc d]
+  (cond
+    (isa? (type d) ConstructorDoc)
+    nil
+    (isa? (type d) ClassDoc)
+    (subs (.name d) (+ 1 (.lastIndexOf (.name d) ".")))
+    :else
+    (.name d)))
 
 (defn parse-doc
   [^Doc d]
-  [(some-> (cond
-             (isa? (type d) ConstructorDoc)
-             nil
-             (isa? (type d) ClassDoc)
-             (subs (.name d) (+ 1 (.lastIndexOf (.name d) ".")))
-             :else
-             (.name d))
-           html/camel->keyword)
-   (.commentText d)
-   (when (isa? (type d) ExecutableMemberDoc)
-     (->> d .parameters (map parse-param) vec))])
+  (merge {}
+         (when-let [n (some-> (parse-doc-name d) camel->keyword)]
+           {:name n})
+         (when (> (count (.commentText d)) 0)
+           {:text (.commentText d)})
+         (cond
+           (isa? (type d) ExecutableMemberDoc)
+           {:args (->> d .parameters (map parse-param) vec)}
+           (isa? (type d) FieldDoc)
+           {:args [[(-> d .type .typeName) "val"]]})))
 
 (defn parse-class-entry
   [^ClassDoc c type]
