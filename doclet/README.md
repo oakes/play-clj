@@ -1,6 +1,4 @@
-# doclet
-
-This doclet generates the edn file used by the play-clj documentation.
+This doclet generates the play-clj doc site.
 
 ## Usage
 

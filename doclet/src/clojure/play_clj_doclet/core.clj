@@ -1,7 +1,8 @@
 (ns play-clj-doclet.core
   (:require [clojure.edn :as edn]
             [clojure.string :as string]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [play-clj-doclet.html :as html])
   (:import [com.sun.javadoc ClassDoc ConstructorDoc Doc ExecutableMemberDoc
             Parameter RootDoc]))
 
@@ -33,7 +34,7 @@
      (->> d .parameters (map parse-param) vec))])
 
 (defn parse-class-entry
-  [^ClassDoc c [clj-name type]]
+  [^ClassDoc c type]
   (some->> (case type
              :methods (filter #(-> % .isStatic not) (.methods c))
              :static-methods (filter #(.isStatic %) (.methods c))
@@ -47,21 +48,24 @@
            (map parse-doc)
            (concat (when-let [sc (.superclass c)]
                      (when (not= (.typeName sc) "Object")
-                       (parse-class-entry sc [clj-name type]))))
-           vec
-           (vector clj-name)))
+                       (parse-class-entry sc type))))
+           vec))
 
 (defn parse-class
   [^ClassDoc c]
   (some->> (get targets (.typeName c))
-           (map #(parse-class-entry c %))
+           (map #(vector (first %) (parse-class-entry c (second %))))
            (into {})))
+
+(defn save
+  [doc-map]
+  (->> doc-map pr-str (spit (io/file "uberdoc.edn")))
+  (->> doc-map html/create-html (spit (io/file "uberdoc.html"))))
 
 (defn parse
   [^RootDoc root]
   (->> (map parse-class (.classes root))
        (filter some?)
        (into {})
-       pr-str
-       (spit (io/file "java.edn")))
-  (println "Created edn file."))
+       save)
+  (println "Created uberdoc.html and uberdoc.edn."))
