@@ -16,14 +16,12 @@
     [:b (str name)]
     " "
     (string/join ", " (map param args))]
-   (when text
-     [:i text])])
+   (when text [:i text])])
 
 (defn create-from-file
   [{:keys [ns groups] :as parsed-file}]
   [:div
-   (when (and ns (> (count groups) 0))
-     [:h1 ns])
+   (when ns [:h1 ns])
    (for [group groups]
      [:div
       [:h2 {} (:name group)]

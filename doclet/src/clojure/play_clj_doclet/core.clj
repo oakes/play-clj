@@ -89,10 +89,19 @@
                         (sort-by first)
                         vec)))))
 
+(defn merge-groups
+  [groups]
+  (for [{:keys [name] :as group} groups]
+    (when (and name (not (.endsWith name "*")))
+      (->> (some #(if (= (:name %) (str name "*")) %) groups)
+           :raw
+           (assoc group :raw*)))))
+
 (defn process-groups
   [{:keys [groups] :as parsed-file} doc-map]
   (->> (map #(process-group % doc-map) groups)
-       (remove #(nil? (:name %)))
+       merge-groups
+       (remove nil?)
        (assoc parsed-file :groups)))
 
 (defn parse-clj
@@ -103,7 +112,8 @@
        (sort-by #(.getName %))
        (map #(.getCanonicalPath %))
        (map marg/path-to-doc)
-       (map #(process-groups % doc-map))))
+       (map #(process-groups % doc-map))
+       (filter #(> (count (:groups %)) 0))))
 
 (defn save
   [parsed-files]
