@@ -43,8 +43,8 @@
          (cond
            (isa? (type d) ExecutableMemberDoc)
            {:args (->> d .parameters (map parse-param) vec)}
-           (isa? (type d) FieldDoc)
-           {:args [[(-> d .type .typeName) "val"]]})))
+           (and (isa? (type d) FieldDoc) (not (.isStatic d)))
+           {:args [[(-> d .type .typeName) "value"]]})))
 
 (defn parse-class-entry
   [^ClassDoc c type]
