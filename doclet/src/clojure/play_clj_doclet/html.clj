@@ -16,9 +16,7 @@
     [:b (str name)]
     " "
     (string/join ", " (map param args))]
-   (cond
-     text [:i text]
-     type [:i (str "Returns a " type)])])
+   (when text [:i text])])
 
 (defn create-from-file
   [parsed-file]
