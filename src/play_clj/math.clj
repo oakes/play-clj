@@ -9,7 +9,7 @@
 ; static methods/fields
 
 (defmacro geometry!
-  "Calls a single method on [GeometryUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/GeometryUtils.html)"
+  "Calls a single static method on [GeometryUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/GeometryUtils.html)"
   [k & options]
   `(~(u/gdx-field :math :GeometryUtils (u/key->camel k)) ~@options))
 
@@ -21,14 +21,14 @@
   `~(u/gdx-class :math :Interpolation (u/key->pascal k)))
 
 (defmacro intersector!
-  "Calls a single method on [Intersector](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Intersector.html)
+  "Calls a single static method on [Intersector](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Intersector.html)
 
     (intersector! :is-point-in-triangle 0 1 0 0 1 2 3 0)"
   [k & options]
   `(~(u/gdx-field :math :Intersector (u/key->camel k)) ~@options))
 
 (defmacro math!
-  "Calls a single method on [MathUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/MathUtils.html)
+  "Calls a single static method on [MathUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/MathUtils.html)
 
     (math! :ceil 0.1)"
   [k & options]
@@ -62,18 +62,18 @@
 
 ; bresenham2
 
-(defn bresenham2*
-  "The function version of `bresenham2`"
+(defn bresenham-2*
+  "The function version of `bresenham-2`"
   []
   (Bresenham2.))
 
-(defmacro bresenham2
+(defmacro bresenham-2
   "Returns a [Bresenham2](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Bresenham2.html)"
   [& options]
-  `(u/calls! ^Bresenham2 (bresenham2*) ~@options))
+  `(u/calls! ^Bresenham2 (bresenham-2*) ~@options))
 
-(defmacro bresenham2!
-  "Calls a single method on a `bresenham2`"
+(defmacro bresenham-2!
+  "Calls a single method on a `bresenham-2`"
   [object k & options]
   `(u/call! ^Bresenham2 ~object ~k ~@options))
 
