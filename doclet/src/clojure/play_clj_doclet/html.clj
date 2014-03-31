@@ -28,7 +28,7 @@
        [:div
         (when (not= (:name group) name)
           [:h3 name])
-        (map item (sort-by first items))])]))
+        (map item items)])]))
 
 (defn create
   [parsed-files]

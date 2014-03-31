@@ -62,6 +62,7 @@
            (concat (when-let [sc (.superclass c)]
                      (when (not= (.typeName sc) "Object")
                        (parse-class-entry sc type))))
+           (sort-by :name)
            vec))
 
 (defn parse-class
@@ -83,7 +84,10 @@
                (-> n meta :private not))
       (assoc group
              :name (str n)
-             :java (filter #(match? (first %) (str n)) doc-map)))))
+             :java (->> doc-map
+                        (filter #(match? (first %) (str n)))
+                        (sort-by first)
+                        vec)))))
 
 (defn process-groups
   [{:keys [groups] :as parsed-file} doc-map]
