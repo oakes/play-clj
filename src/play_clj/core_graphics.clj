@@ -3,21 +3,19 @@
 ; tiled maps
 
 (defn tiled-map*
-  "The function version of `tiled-map`"
   [s]
   (if (string? s)
     (.load (TmxMapLoader.) s)
     s))
 
 (defmacro tiled-map
-  "Returns a [TiledMap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMap.html)
-(normally, you don't need to use this directly, because the *-tiled-map
-macros that create the renderers will call this themselves)"
+  "Returns a [TiledMap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMap.html).
+Normally, you don't need to use this directly."
   [s & options]
   `(u/calls! ^TiledMap (tiled-map* ~s) ~@options))
 
 (defmacro tiled-map!
-  "Calls a single method on a `tiled-map`
+  "Calls a single method on a `tiled-map`.
 
     (tiled-map! screen :get-layers)"
   [screen k & options]
@@ -26,7 +24,7 @@ macros that create the renderers will call this themselves)"
 
 (defn tiled-map-layers
   "Returns a list with [MapLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapLayer.html)
-objects cooresponding to each layer in the tiled map in `screen`
+objects cooresponding to each layer in the tiled map in `screen`.
 
     (tiled-map-layers screen)"
   [screen]
@@ -36,7 +34,6 @@ objects cooresponding to each layer in the tiled map in `screen`
       (.get layers i))))
 
 (defn tiled-map-layer*
-  "The function version of `tiled-map-layer`"
   [screen layer]
   (if (isa? (type layer) MapLayer)
     layer
@@ -46,7 +43,7 @@ objects cooresponding to each layer in the tiled map in `screen`
 
 (defmacro tiled-map-layer
   "Returns a [TiledMapTileLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
-from the tiled map in `screen` that matches `layer`
+from the tiled map in `screen` that matches `layer`.
 
     (tiled-map-layer screen \"water\")"
   [screen layer & options]
@@ -54,7 +51,7 @@ from the tiled map in `screen` that matches `layer`
      (u/calls! object# ~@options)))
 
 (defmacro tiled-map-layer!
-  "Calls a single method on a `tiled-map-layer`
+  "Calls a single method on a `tiled-map-layer`.
 
     (tiled-map-layer! (tiled-map-layer screen \"water\")
                       :set-cell 0 0 nil)"
@@ -63,19 +60,18 @@ from the tiled map in `screen` that matches `layer`
 
 (defn tiled-map-layer-names
   "Returns a list with strings cooresponding to the name of each layer in the
-tiled map in `screen`"
+tiled map in `screen`."
   [screen]
   (for [layer (tiled-map-layers screen)]
     (tiled-map-layer! layer :get-name)))
 
 (defn tiled-map-cell*
-  "The function version of `tiled-map-cell`"
   [screen layer x y]
   (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y))
 
 (defmacro tiled-map-cell
   "Returns a [TiledMapTileLayer.Cell](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.Cell.html)
-from the tiled map in `screen` from the given `layer` and position `x` and `y`
+from the tiled map in `screen` from the given `layer` and position `x` and `y`.
 
     (tiled-map-cell screen \"water\" 0 0)"
   [screen layer x y & options]
@@ -83,7 +79,7 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`
      (u/calls! object# ~@options)))
 
 (defmacro tiled-map-cell!
-  "Calls a single method on a `tiled-map-cell`
+  "Calls a single method on a `tiled-map-cell`.
 
     (tiled-map-cell! (tiled-map-cell screen \"water\" 0 0)
                      :set-rotation 90)"
@@ -91,7 +87,6 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`
   `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
 
 (defn ^:private tiled-map-prop
-  "Internal use only"
   [screen]
   (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
         ^MapProperties prop (-> renderer .getMap .getProperties)]
@@ -103,7 +98,7 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`
 
 (defn screen->isometric
   "Returns a copy of the provided map with x/y values converted from screen
-to isometric map coordinates
+to isometric map coordinates.
 
     (screen->isometric screen {:x 64 :y 32})"
   [screen {:keys [x y] :as entity}]
@@ -120,7 +115,7 @@ to isometric map coordinates
 
 (defn isometric->screen
   "Returns a copy of the provided map with x/y values converted from isometric
-map to screen coordinates
+map to screen coordinates.
 
     (isometric->screen screen {:x 2 :y 1})"
   [screen {:keys [x y] :as entity}]
@@ -136,13 +131,12 @@ map to screen coordinates
 ; renderers
 
 (defn orthogonal-tiled-map*
-  "The function version of `orthogonal-tiled-map`"
   [path unit]
   (OrthogonalTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
 
 (defmacro orthogonal-tiled-map
   "Returns an [OrthogonalTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.html)
-with the tiled map file at `path` and `unit` scale
+with the tiled map file at `path` and `unit` scale.
 
     (orthogonal-tiled-map \"level1.tmx\" (/ 1 8))"
   [path unit & options]
@@ -150,19 +144,18 @@ with the tiled map file at `path` and `unit` scale
              ~@options))
 
 (defmacro orthogonal-tiled-map!
-  "Calls a single method on an `orthogonal-tiled-map`"
+  "Calls a single method on an `orthogonal-tiled-map`."
   [screen k & options]
   `(let [^OrthogonalTiledMapRenderer object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 (defn isometric-tiled-map*
-  "The function version of `isometric-tiled-map`"
   [path unit]
   (IsometricTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
 
 (defmacro isometric-tiled-map
   "Returns an [IsometricTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.html)
-with the tiled map file at `path` and `unit` scale
+with the tiled map file at `path` and `unit` scale.
 
     (isometric-tiled-map \"level1.tmx\" (/ 1 8))"
   [path unit & options]
@@ -170,20 +163,19 @@ with the tiled map file at `path` and `unit` scale
              ~@options))
 
 (defmacro isometric-tiled-map!
-  "Calls a single method on an `isometric-tiled-map`"
+  "Calls a single method on an `isometric-tiled-map`."
   [screen k & options]
   `(let [^IsometricTiledMapRenderer object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 (defn isometric-staggered-tiled-map*
-  "The function version of `isometric-staggered-tiled-map`"
   [path unit]
   (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map* path)
                                        ^double unit))
 
 (defmacro isometric-staggered-tiled-map
   "Returns an [IsometricStaggeredTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/IsometricStaggeredTiledMapRenderer.html)
-with the tiled map file at `path` and `unit` scale
+with the tiled map file at `path` and `unit` scale.
 
     (isometric-staggered-tiled-map \"level1.tmx\" (/ 1 8))"
   [path unit & options]
@@ -192,20 +184,19 @@ with the tiled map file at `path` and `unit` scale
              ~@options))
 
 (defmacro isometric-staggered-tiled-map!
-  "Calls a single method on an `isometric-staggered-tiled-map`"
+  "Calls a single method on an `isometric-staggered-tiled-map`."
   [screen k & options]
   `(let [^IsometricStaggeredTiledMapRenderer object#
          (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 (defn hexagonal-tiled-map*
-  "The function version of `hexagonal-tiled-map`"
   [path unit]
   (HexagonalTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
 
 (defmacro hexagonal-tiled-map
   "Returns a [HexagonalTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/HexagonalTiledMapRenderer.html)
-with the tiled map file at `path` and `unit` scale
+with the tiled map file at `path` and `unit` scale.
 
     (hexagonal-tiled-map \"level1.tmx\" (/ 1 8))"
   [path unit & options]
@@ -213,25 +204,24 @@ with the tiled map file at `path` and `unit` scale
              ~@options))
 
 (defmacro hexagonal-tiled-map!
-  "Calls a single method on a `hexagonal-tiled-map`"
+  "Calls a single method on a `hexagonal-tiled-map`."
   [screen k & options]
   `(let [^HexagonalTiledMapRenderer object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
 
 (defn stage*
-  "The function version of `stage`"
   []
   (Stage.))
 
 (defmacro stage
-  "Returns a [Stage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html)
+  "Returns a [Stage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Stage.html).
 
     (stage)"
   [& options]
   `(u/calls! ^Stage (stage*) ~@options))
 
 (defmacro stage!
-  "Calls a single method on a `stage`"
+  "Calls a single method on a `stage`."
   [screen k & options]
   `(let [^Stage object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
@@ -239,7 +229,6 @@ with the tiled map file at `path` and `unit` scale
 ; draw
 
 (defmulti draw!
-  "Internal use only"
   (fn [screen _] (-> screen :renderer class)))
 
 (defmethod draw! BatchTiledMapRenderer
@@ -272,7 +261,7 @@ with the tiled map file at `path` and `unit` scale
 
 (defn render-map!
   "Calls the tiled-map renderer from `screen`, optionally allowing you to
-specify which layers to render with or without
+specify which layers to render with or without.
 
     (render-map! screen :with \"water\" \"grass\")
     (render-map! screen :without \"desert\" \"rocks\")"
@@ -298,7 +287,7 @@ specify which layers to render with or without
   nil)
 
 (defn render-stage!
-  "Calls the stage renderer from `screen`"
+  "Calls the stage renderer from `screen`."
   [{:keys [^Stage renderer ^Camera camera]}]
   (when camera
     (.setCamera renderer camera)
@@ -308,7 +297,7 @@ specify which layers to render with or without
 
 (defn render!
   "Calls the renderer from `screen` and optionally draws and returns the
-`entities`
+`entities`.
 
     (render! screen entities)"
   ([{:keys [renderer] :as screen}]
@@ -322,7 +311,6 @@ specify which layers to render with or without
     (draw! screen entities)))
 
 (defn ^:private create-layer
-  "Internal use only"
   [^TiledMapTileLayer layer]
   (TiledMapTileLayer. (.getWidth layer)
                       (.getHeight layer)
@@ -330,13 +318,11 @@ specify which layers to render with or without
                       (int (.getTileHeight layer))))
 
 (defn ^:private isometric?
-  "Internal use only"
   [{:keys [renderer] :as screen}]
   (or (isa? (type renderer) IsometricTiledMapRenderer)
       (isa? (type renderer) IsometricStaggeredTiledMapRenderer)))
 
 (defn ^:private split-layer
-  "Internal use only"
   [screen layer-name]
   (let [^TiledMapTileLayer l (tiled-map-layer screen layer-name)]
     (reduce (fn [layers {:keys [x y] :as map-tile}]
@@ -358,7 +344,7 @@ specify which layers to render with or without
               {:x x :y y}))))
 
 (defn render-sorted!
-  "Draws the supplied tiled-map layers and entities, sorted by latitude
+  "Draws the supplied tiled-map layers and entities, sorted by latitude.
 
     (render-sorted! screen [\"walls\"] entities)"
   [{:keys [^BatchTiledMapRenderer renderer

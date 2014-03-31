@@ -13,12 +13,11 @@
 ; animation-controller
 
 (defn animation-controller*
-  "The function version of `animation-controller`"
   [entity]
   (AnimationController. (u/get-obj entity :object)))
 
 (defmacro animation-controller
-  "Returns an [AnimationController](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/utils/AnimationController.html)
+  "Returns an [AnimationController](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/utils/AnimationController.html).
 
     (animation-controller model-entity)"
   [entity & options]
@@ -26,7 +25,7 @@
      (u/calls! object# ~@options)))
 
 (defmacro animation-controller!
-  "Calls a single method on an `animation-controller`"
+  "Calls a single method on an `animation-controller`."
   [object k & options]
   `(let [^AnimationController object# ~object]
      (u/call! object# ~k ~@options)))
@@ -34,12 +33,11 @@
 ; environment
 
 (defn environment*
-  "The function version of `environment`"
   []
   (Environment.))
 
 (defmacro environment
-  "Returns an [Environment](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Environment.html)
+  "Returns an [Environment](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Environment.html).
 
     (environment)"
   [& options]
@@ -47,7 +45,7 @@
      (u/calls! object# ~@options)))
 
 (defmacro environment!
-  "Calls a single method on an `environment`"
+  "Calls a single method on an `environment`."
   [screen k & options]
   `(let [^Environment object# (u/get-obj ~screen :attributes)]
      (u/call! object# ~k ~@options)))
@@ -55,12 +53,11 @@
 ; model-batch
 
 (defn model-batch*
-  "The function version of `model-batch`"
   []
   (ModelBatch.))
 
 (defmacro model-batch
-  "Returns a [ModelBatch](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelBatch.html)
+  "Returns a [ModelBatch](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelBatch.html).
 
     (model-batch)"
   [& options]
@@ -68,7 +65,7 @@
      (u/calls! object# ~@options)))
 
 (defmacro model-batch!
-  "Calls a single method on a `model-batch`"
+  "Calls a single method on a `model-batch`."
   [screen k & options]
   `(let [^ModelBatch object# (u/get-obj ~screen :renderer)]
      (u/call! object# ~k ~@options)))
@@ -76,7 +73,7 @@
 ; model
 
 (defmacro model
-  "Returns an entity based on [ModelInstance](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html)"
+  "Returns an entity based on [ModelInstance](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html)."
   [& args]
   `(ModelEntity.
      (let [arg1# ~(first args)]
@@ -89,7 +86,7 @@
          (ModelInstance. ~@args)))))
 
 (defmacro model!
-  "Calls a single method on a `model`"
+  "Calls a single method on a `model`."
   [entity k & options]
   `(let [^ModelInstance object# (u/get-obj ~entity :object)]
      (u/call! object# ~k ~@options)))
@@ -97,12 +94,11 @@
 ; model-builder
 
 (defn model-builder*
-  "The function version of `model-builder`"
   []
   (ModelBuilder.))
 
 (defmacro model-builder
-  "Returns a [ModelBuilder](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/utils/ModelBuilder.html)
+  "Returns a [ModelBuilder](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/utils/ModelBuilder.html).
 
     (model-builder)"
   [& options]
@@ -110,19 +106,18 @@
      (u/calls! object# ~@options)))
 
 (defmacro model-builder!
-  "Calls a single method on a `model-builder`"
+  "Calls a single method on a `model-builder`."
   [object k & options]
   `(u/call! ^ModelBuilder ~object ~k ~@options))
 
 ; material
 
 (defn material*
-  "The function version of `material`"
   []
   (Material.))
 
 (defmacro material
-  "Returns a [Material](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Material.html)
+  "Returns a [Material](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Material.html).
 
     (material)"
   [& options]
@@ -130,26 +125,25 @@
      (u/calls! object# ~@options)))
 
 (defmacro material!
-  "Calls a single method on a `material`"
+  "Calls a single method on a `material`."
   [object k & options]
   `(u/call! ^Material ~object ~k ~@options))
 
 ; attribute
 
 (defn ^:private attribute-init
-  "Internal use only"
   [k]
   (u/gdx :graphics :g3d :attributes (str (u/key->pascal k) "Attribute.")))
 
 (defmacro attribute
-  "Returns a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
+  "Returns a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html).
 
     (attribute :color (attribute-type :color :diffuse) (color :blue))"
   [type & args]
   `(~(attribute-init type) ~@args))
 
 (defmacro attribute-type
-  "Returns a static field in a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
+  "Returns a static field in a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html).
 
     (attribute-type :color :diffuse)"
   [type k]
@@ -158,7 +152,7 @@
                  (u/key->pascal k)))
 
 (defmacro attribute!
-  "Calls a static method in a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html)
+  "Calls a static method in a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html).
 
     (attribute! :color :create-diffuse (color :blue))"
   [type k & options]

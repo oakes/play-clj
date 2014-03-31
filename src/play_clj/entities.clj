@@ -6,7 +6,6 @@
            [com.badlogic.gdx.scenes.scene2d Actor]))
 
 (defprotocol Entity
-  "Internal use only"
   (draw-entity! [this batch] "Draws the entity"))
 
 (extend-protocol Entity

@@ -1,12 +1,11 @@
 (in-ns 'play-clj.core)
 
 (defn orthographic*
-  "The function version of `orthographic`"
   []
   (OrthographicCamera.))
 
 (defmacro orthographic
-  "Returns an [OrthographicCamera](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/OrthographicCamera.html)
+  "Returns an [OrthographicCamera](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/OrthographicCamera.html).
 
     (orthographic)"
   [& options]
@@ -14,20 +13,19 @@
      (u/calls! object# ~@options)))
 
 (defmacro orthographic!
-  "Calls a single method on an `orthographic`"
+  "Calls a single method on an `orthographic`."
   [screen k & options]
   `(let [^OrthographicCamera object# (u/get-obj ~screen :camera)]
      (u/call! object# ~k ~@options)))
 
 (defn perspective*
-  "The function version of `perspective`"
   ([]
     (PerspectiveCamera.))
   ([field-of-view viewport-width viewport-height]
     (PerspectiveCamera. field-of-view viewport-width viewport-height)))
 
 (defmacro perspective
-  "Returns an [PerspectiveCamera](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/PerspectiveCamera.html)
+  "Returns a [PerspectiveCamera](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/PerspectiveCamera.html).
 
     (perspective)"
   [fov vw vh & options]
@@ -35,13 +33,13 @@
      (u/calls! object# ~@options)))
 
 (defmacro perspective!
-  "Calls a single method on a `perspective`"
+  "Calls a single method on a `perspective`."
   [screen k & options]
   `(let [^PerspectiveCamera object# (u/get-obj ~screen :camera)]
      (u/call! object# ~k ~@options)))
 
 (defn size!
-  "Sets the size of the camera in `screen`
+  "Sets the size of the camera in `screen`.
 
     (size! screen 480 360)"
   [screen width height]
@@ -52,14 +50,14 @@
 
 (defn width!
   "Sets the width of the camera in `screen`, adjusting the height so the ratio
-remains in tact
+remains in tact.
 
     (width! screen 480)"
   [screen new-width]
   (size! screen new-width (* new-width (/ (game :height) (game :width)))))
 
 (defn width
-  "Returns the width of the camera in `screen`
+  "Returns the width of the camera in `screen`.
 
     (width screen)"
   [screen]
@@ -68,14 +66,14 @@ remains in tact
 
 (defn height!
   "Sets the height of the camera in `screen`, adjusting the width so the ratio
-remains in tact
+remains in tact.
 
     (height! screen 360)"
   [screen new-height]
   (size! screen (* new-height (/ (game :width) (game :height))) new-height))
 
 (defn height
-  "Returns the height of the camera in `screen`
+  "Returns the height of the camera in `screen`.
 
     (height screen)"
   [screen]
@@ -83,46 +81,46 @@ remains in tact
     (. camera viewportHeight)))
 
 (defn x!
-  "Sets only the x position of the camera in `screen`"
+  "Sets only the x position of the camera in `screen`."
   [screen x-val]
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. (. camera position) x) x-val)
     (.update camera)))
 
 (defn x
-  "Returns the x position of the camera in `screen`"
+  "Returns the x position of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
     (. (. camera position) x)))
 
 (defn y!
-  "Sets only the y position of the camera in `screen`"
+  "Sets only the y position of the camera in `screen`."
   [screen y-val]
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. (. camera position) y) y-val)
     (.update camera)))
 
 (defn y
-  "Returns the y position of the camera in `screen`"
+  "Returns the y position of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
     (. (. camera position) y)))
 
 (defn z!
-  "Sets only the z position of the camera in `screen`"
+  "Sets only the z position of the camera in `screen`."
   [screen z-val]
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. (. camera position) z) z-val)
     (.update camera)))
 
 (defn z
-  "Returns the z position of the camera in `screen`"
+  "Returns the z position of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
     (. (. camera position) z)))
 
 (defn position!
-  "Sets the position of the camera in `screen`"
+  "Sets the position of the camera in `screen`."
   ([screen pos]
     (let [^Camera camera (u/get-obj screen :camera)]
       (set! (. camera position) pos)))
@@ -136,46 +134,46 @@ remains in tact
       (.update camera))))
 
 (defn position
-  "Returns the position of the camera in `screen`"
+  "Returns the position of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
     (. camera position)))
 
 (defn direction!
-  "Sets the direction of the camera in `screen`"
+  "Sets the direction of the camera in `screen`."
   [screen x y z]
   (let [^Camera camera (u/get-obj screen :camera)]
     (.lookAt camera x y z)
     (.update camera)))
 
 (defn direction
-  "Returns the direction of the camera in `screen`"
+  "Returns the direction of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
     (. camera direction)))
 
 (defn near!
-  "Sets the near clipping plane distance of the camera in `screen`"
+  "Sets the near clipping plane distance of the camera in `screen`."
   [screen n]
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. camera near) n)
     (.update camera)))
 
 (defn near
-  "Returns the near clipping plane distance of the camera in `screen`"
+  "Returns the near clipping plane distance of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
     (. camera near)))
 
 (defn far!
-  "Sets the far clipping plane distance of the camera in `screen`"
+  "Sets the far clipping plane distance of the camera in `screen`."
   [screen n]
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. camera far) n)
     (.update camera)))
 
 (defn far
-  "Returns the far clipping plane distance of the camera in `screen`"
+  "Returns the far clipping plane distance of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
     (. camera far)))

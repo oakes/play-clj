@@ -34,18 +34,15 @@
 (load "core_utils")
 
 (defn ^:private reset-changed!
-  "Internal use only"
   [e-atom e-old e-new]
   (when (not= e-old e-new)
     (compare-and-set! e-atom e-old e-new)))
 
 (defn ^:private wrapper
-  "Internal use only"
   [screen f]
   (f))
 
 (defn defscreen*
-  "Internal use only"
   [{:keys [screen entities
            on-show on-render on-hide on-pause on-resize on-resume on-timer]
     :as options}]
@@ -86,9 +83,7 @@
      :input-listeners (global-listeners options execute-fn!)}))
 
 (defmacro defscreen
-  "Creates vars for all the anonymous functions provided to it, so they can be
-replaced by simply reloading the namespace, and creates a var for the symbol `n`
-bound to a map containing various important values related to the screen"
+  "Defines a screen, and creates vars for all the functions inside of it."
   [n & {:keys [] :as options}]
   `(let [fn-syms# (->> (for [[k# v#] ~options]
                          [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
@@ -106,7 +101,6 @@ bound to a map containing various important values related to the screen"
      (def ~n (defscreen* syms#))))
 
 (defn defgame*
-  "Internal use only"
   [{:keys [on-create]}]
   (proxy [Game] []
     (create []
@@ -115,15 +109,14 @@ bound to a map containing various important values related to the screen"
         (on-create this)))))
 
 (defmacro defgame
-  "Creates a var for the symbol `n` bound to a [Game](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Game.html)
-object"
+  "Defines a game. This should only be called once."
+  {:url ""}
   [n & {:keys [] :as options}]
   `(defonce ~n (defgame* ~options)))
 
 (defn set-screen!
-  "Creates a [Screen](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Screen.html)
-object, sets it as the screen for the `game`, and runs the functions from
-`screens` in the order they are provided in
+  "Creates and displays a screen for the `game` object, using one or more
+`screen` maps in the order they were provided.
 
     (set-screen! hello-world main-screen text-screen)"
   [^Game game & screens]
@@ -146,9 +139,9 @@ object, sets it as the screen for the `game`, and runs the functions from
 
 (defn update!
   "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`
-is the atom storing the screen map behind the scenes, and returns the new screen
-map
+is the atom storing the screen map behind the scenes. Returns the updated
+`screen` map.
 
     (update! screen :renderer (stage))"
-  [{:keys [update-fn!]} & args]
+  [{:keys [update-fn!] :as screen} & args]
   (update-fn! assoc args))

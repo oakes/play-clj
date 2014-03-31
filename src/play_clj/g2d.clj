@@ -7,7 +7,7 @@
             ParticleEffectEntity]))
 
 (defmacro bitmap-font
-  "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html)
+  "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html).
 
     (bitmap-font)
     (bitmap-font (files! :internal \"default.fnt\"))"
@@ -17,7 +17,6 @@
 ; texture
 
 (defn texture*
-  "The function version of `texture`"
   [arg]
   (TextureEntity.
     (cond
@@ -29,7 +28,7 @@
       arg)))
 
 (defmacro texture
-  "Returns an entity based on [TextureRegion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html)
+  "Returns an entity based on [TextureRegion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html).
 
     (texture \"image.png\")
     (texture \"image.png\" :flip true false)
@@ -42,7 +41,7 @@
      entity#))
 
 (defmacro texture!
-  "Calls a single method on a `texture`
+  "Calls a single method on a `texture`.
 
     (texture! entity :flip true false)
     (texture! entity :get-region-width)"
@@ -52,7 +51,6 @@
 ; nine-patch
 
 (defn nine-patch*
-  "The function version of `nine-patch`"
   [arg]
   (NinePatchEntity.
     (cond
@@ -68,7 +66,7 @@
       arg)))
 
 (defmacro nine-patch
-  "Returns an entity based on [NinePatch](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/NinePatch.html)
+  "Returns an entity based on [NinePatch](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/NinePatch.html).
 
     (nine-patch \"image.png\")
     (nine-patch \"image.png\" :set-color (color :blue))
@@ -79,7 +77,7 @@
      entity#))
 
 (defmacro nine-patch!
-  "Calls a single method on a `nine-patch`
+  "Calls a single method on a `nine-patch`.
 
     (nine-patch! entity :set-color (color :blue))
     (nine-patch! entity :get-middle-width)"
@@ -89,12 +87,11 @@
 ; particle-effect
 
 (defn particle-effect*
-  "The function version of `particle-effect`"
   []
   (ParticleEffectEntity. (ParticleEffect.)))
 
 (defmacro particle-effect
-  "Returns an entity based on [ParticleEffect](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html)
+  "Returns an entity based on [ParticleEffect](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html).
 
     (particle-effect :load
                      (files! :internal \"fire.p\")
@@ -105,7 +102,7 @@
      entity#))
 
 (defmacro particle-effect!
-  "Calls a single method on a `particle-effect`
+  "Calls a single method on a `particle-effect`.
 
     (particle-effect! entity :set-position 10 10)"
   [entity k & options]
@@ -114,12 +111,11 @@
 ; texture-atlas
 
 (defn texture-atlas*
-  "The function version of `texture-atlas`"
   [^String path]
   (TextureAtlas. path))
 
 (defmacro texture-atlas
-  "Returns a [TextureAtlas](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureAtlas.html)
+  "Returns a [TextureAtlas](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureAtlas.html).
 
     (texture-atlas \"packed.txt\")"
   [path & options]
@@ -128,7 +124,7 @@
      object#))
 
 (defmacro texture-atlas!
-  "Calls a single method on a `texture-atlas`
+  "Calls a single method on a `texture-atlas`.
 
     (texture-atlas! object :create-patch \"test\")"
   [object k & options]
@@ -137,26 +133,20 @@
 ; animation
 
 (defmacro play-mode
-  "Returns a static field from [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html)
+  "Returns a static field from [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html).
 
-    (play-mode :loop)
-    (play-mode :loop-pingpong)
-    (play-mode :loop-random)
-    (play-mode :loop-reversed)
-    (play-mode :normal)
-    (play-mode :reversed)"
+    (play-mode :loop)"
   [k]
   `~(u/gdx-field :graphics :g2d :Animation (u/key->upper k)))
 
 (defn animation*
-  "The function version of `animation`"
   [duration textures]
   (Animation. duration
               (u/gdx-array (map #(u/get-obj % :object) textures))
               (play-mode :normal)))
 
 (defmacro animation
-  "Returns an [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html)
+  "Returns an [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html).
 
     (animation 0.2
                [walk-1 walk-2 walk-3]
@@ -165,7 +155,7 @@
   `(u/calls! ^Animation (animation* ~duration ~textures) ~@options))
 
 (defmacro animation!
-  "Calls a single method on an `animation`
+  "Calls a single method on an `animation`.
 
     (animation! object :set-play-mode (play-mode :loop))"
   [object k & options]
@@ -173,7 +163,7 @@
 
 (defn animation->texture
   "Returns a `texture` entity with a frame from `animation` based on the total
-time the `screen` has been showing
+time the `screen` has been showing.
 
     (animation->texture screen anim)"
   ([{:keys [total-time]} ^Animation animation]

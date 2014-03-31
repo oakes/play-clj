@@ -3,42 +3,32 @@
 ; static fields
 
 (defmacro scaling
-  "Returns a static field from [Scaling](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html)
+  "Returns a static field from [Scaling](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Scaling.html).
 
-    (scaling :fill)
-    (scaling :fill-x)
-    (scaling :fill-y)
-    (scaling :fit)
-    (scaling :none)
-    (scaling :stretch)
-    (scaling :stretch-x)
-    (scaling :stretch-y)"
+    (scaling :fill)"
   [k]
   `~(u/gdx-field :utils :Scaling k))
 
 (defmacro usage
-  "Returns a static field in [VertexAttributes.Usage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html)"
+  "Returns a static field in [VertexAttributes.Usage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html)."
   [k]
   `~(u/gdx-field :graphics "VertexAttributes$Usage" (u/key->pascal k)))
 
 ; timers
 
 (defn ^:private task*
-  "Internal use only."
   [{:keys [execute-fn! on-timer]} id]
   (proxy [Timer$Task] []
     (run []
       (execute-fn! on-timer :id id))))
 
 (defn ^:private timer*
-  "Internal use only."
   []
   (some-> (Class/forName "com.badlogic.gdx.utils.Timer")
           (try (catch Exception _))
           .newInstance))
 
 (defn ^:private create-and-add-timer!
-  "Internal use only."
   [{:keys [update-fn!] :as screen} id]
   (when-let [timer (timer*)]
     (update-fn! assoc-in [[:timers id] timer])
@@ -46,7 +36,7 @@
 
 (defn add-timer!
   "Returns a [Timer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Timer.html)
-that runs the :on-timer function according to the given arguments
+that runs the :on-timer function according to the given arguments.
 
     ; wait 2 seconds and run once
     (add-timer! screen :spawn-enemy 2)
@@ -66,7 +56,7 @@ that runs the :on-timer function according to the given arguments
 
 (defn remove-timer!
   "Stops and removes the timer associated with `id`, returning it or nil if not
-found"
+found."
   [{:keys [update-fn!] :as screen} id]
   (when-let [timer (get-in screen [:timers id])]
     (.stop timer)
@@ -76,7 +66,6 @@ found"
 ; assets
 
 (defn ^:private loader-init
-  "Internal use only"
   [k]
   (cond
     (contains? #{:atlas-tmx-map :tmx-map} k)
@@ -87,7 +76,7 @@ found"
     (u/gdx :assets :loaders (str (u/key->pascal k) "Loader."))))
 
 (defmacro loader
-  "Returns a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html)
+  "Returns a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html).
 
     (loader :atlas-tmx-map \"map.atlas\")
     (loader :tmx-map \"map.tmx\")
@@ -104,21 +93,20 @@ found"
      (u/calls! object# ~@options)))
 
 (defmacro loader!
-  "Calls a single method in a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html)
+  "Calls a single method in a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html).
 
     (loader! object :load \"map.tmx\")"
   [object & options]
   `(u/call! ~object ~@options))
 
 (defn asset-manager*
-  "The function version of `asset-manager`"
   ([]
     (AssetManager.))
   ([resolver]
     (AssetManager. resolver)))
 
 (defmacro asset-manager
-  "Returns an [AssetManager](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/AssetManager.html)
+  "Returns an [AssetManager](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/AssetManager.html).
 
     (asset-manager)"
   [& options]
@@ -126,7 +114,7 @@ found"
      (u/calls! object# ~@options)))
 
 (defmacro asset-manager!
-  "Calls a single method in an `asset-manager`
+  "Calls a single method in an `asset-manager`.
 
     (asset-manager! object :clear)"
   [object k & options]

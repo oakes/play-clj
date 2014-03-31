@@ -3,7 +3,6 @@
 ; global
 
 (defn ^:private input-processor
-  "Internal use only"
   [{:keys [on-key-down on-key-typed on-key-up on-mouse-moved
            on-scrolled on-touch-down on-touch-dragged on-touch-up]}
    execute-fn!]
@@ -34,7 +33,6 @@
       false)))
 
 (defn ^:private gesture-listener
-  "Internal use only"
   [{:keys [on-fling on-long-press on-pan on-pan-stop on-pinch on-tap on-zoom]}
    execute-fn!]
   (reify GestureDetector$GestureListener
@@ -65,12 +63,10 @@
       false)))
 
 (defn ^:private gesture-detector
-  "Internal use only"
   [options execute-fn!]
   (proxy [GestureDetector] [(gesture-listener options execute-fn!)]))
 
 (defn ^:private global-listeners
-  "Internal use only"
   [options execute-fn!]
   [(input-processor options execute-fn!)
    (gesture-detector options execute-fn!)])
@@ -78,7 +74,6 @@
 ; ui
 
 (defn ^:private actor-gesture-listener
-  "Internal use only"
   [{:keys [on-ui-fling on-ui-long-press on-ui-pan on-ui-pinch
            on-ui-tap on-ui-touch-down on-ui-touch-up on-ui-zoom]}
    execute-fn!]
@@ -105,14 +100,12 @@
       (execute-fn! on-ui-zoom :event e :initial-distance id :distance d))))
 
 (defn ^:private change-listener
-  "Internal use only"
   [{:keys [on-ui-changed]} execute-fn!]
   (proxy [ChangeListener] []
     (changed [e a]
       (execute-fn! on-ui-changed :event e :actor a))))
 
 (defn ^:private click-listener
-  "Internal use only"
   [{:keys [on-ui-clicked on-ui-enter on-ui-exit
            on-ui-touch-down on-ui-touch-dragged on-ui-touch-up]}
    execute-fn!]
@@ -132,7 +125,6 @@
       (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))))
 
 (defn ^:private drag-listener
-  "Internal use only"
   [{:keys [on-ui-drag on-ui-drag-start on-ui-drag-stop
            on-ui-touch-down on-ui-touch-dragged on-ui-touch-up]}
    execute-fn!]
@@ -152,7 +144,6 @@
       (execute-fn! on-ui-drag-stop :event e :x x :y y :pointer p))))
 
 (defn ^:private focus-listener
-  "Internal use only"
   [{:keys [on-ui-keyboard-focus-changed on-ui-scroll-focus-changed]}
    execute-fn!]
   (proxy [FocusListener] []
@@ -162,7 +153,6 @@
       (execute-fn! on-ui-scroll-focus-changed :event e :actor a :focused? f))))
 
 (defn ^:private ui-listeners
-  "Internal use only"
   [options execute-fn!]
   [(actor-gesture-listener options execute-fn!)
    (change-listener options execute-fn!)
@@ -173,7 +163,6 @@
 ; g2d-physics
 
 (defn ^:private contact-listener
-  "Internal use only"
   [{:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]} execute-fn!]
   (reify ContactListener
     (beginContact [this c]
@@ -188,7 +177,6 @@
 ; update functions
 
 (defn ^:private update-stage!
-  "Internal use only"
   [{:keys [^Stage renderer ui-listeners]} entities]
   (doseq [^Actor a (.getActors renderer)]
     (.remove a))
@@ -201,7 +189,6 @@
   (add-input! renderer))
 
 (defn ^:private update-box-2d!
-  "Internal use only"
   [{:keys [^World world]} entities]
   (when-not (.isLocked world)
     (let [arr (u/gdx-array [])]
@@ -218,7 +205,6 @@
           (.destroyJoint world joint))))))
 
 (defn ^:private update-screen!
-  "Internal use only"
   ([{:keys [world g2dp-listener]}]
     (when (isa? (type world) World)
       (.setContactListener ^World world g2dp-listener)))

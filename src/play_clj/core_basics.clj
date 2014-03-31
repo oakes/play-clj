@@ -3,7 +3,7 @@
 ; graphics
 
 (defn clear!
-  "Clears the screen with a uniform color, defaulting to black
+  "Clears the screen with a uniform color, defaulting to black.
 
     (clear!)
     (clear! 0.5 0.5 1 1)"
@@ -15,7 +15,7 @@
       (.glClear (bit-or GL20/GL_COLOR_BUFFER_BIT GL20/GL_DEPTH_BUFFER_BIT)))))
 
 (defmacro color
-  "Returns a [Color](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Color.html)
+  "Returns a [Color](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Color.html).
 
     (color :white)
     (color 1 1 1 1)"
@@ -28,49 +28,49 @@
 ; interop
 
 (defmacro app!
-  "Calls a single method on [Gdx.app](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Application.html)
+  "Calls a single method on [Gdx.app](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Application.html).
 
     (app! :error \"MYTAG\" \"An error occurred, so I'm logging it!\")"
   [k & options]
   `(u/call! ^Application (Gdx/app) ~k ~@options))
 
 (defmacro audio!
-  "Calls a single method on [Gdx.audio](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Audio.html)
+  "Calls a single method on [Gdx.audio](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Audio.html).
 
     (audio! :new-audio-recorder 44100 false)"
   [k & options]
   `(u/call! ^Audio (Gdx/audio) ~k ~@options))
 
 (defmacro files!
-  "Calls a single method on [Gdx.files](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Files.html)
+  "Calls a single method on [Gdx.files](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Files.html).
 
     (files! :internal \"image.png\")"
   [k & options]
   `(u/call! ^Files (Gdx/files) ~k ~@options))
 
 (defmacro gl!
-  "Calls a single method on [Gdx.gl20](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/GL20.html)
+  "Calls a single method on [Gdx.gl20](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/GL20.html).
 
     (gl! :gl-create-program)"
   [k & options]
   `(u/call! ^GL20 (Gdx/gl20) ~k ~@options))
 
 (defmacro graphics!
-  "Calls a single method on [Gdx.graphics](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Graphics.html)
+  "Calls a single method on [Gdx.graphics](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Graphics.html).
 
     (graphics! :is-fullscreen)"
   [k & options]
   `(u/call! ^Graphics (Gdx/graphics) ~k ~@options))
 
 (defmacro input!
-  "Calls a single method on [Gdx.input](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.html)
+  "Calls a single method on [Gdx.input](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.html).
 
     (input! :is-touched)"
   [k & options]
   `(u/call! ^Input (Gdx/input) ~k ~@options))
 
 (defmacro net!
-  "Calls a single method on [Gdx.net](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Net.html)
+  "Calls a single method on [Gdx.net](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Net.html).
 
     (net! :open-uri \"https://nightcode.info/\")"
   [k & options]
@@ -79,10 +79,15 @@
 ; input/output
 
 (defn game
-  "Calls the global method cooresponding to `k` in a more Clojuresque way
+  "Provides quick access to often-used functions.
 
-    (game :width)
-    (game :is-touched?)"
+    (game :width) ; width of the window
+    (game :height) ; height of the window
+    (game :fps) ; frames per second
+    (game :is-fullscreen?) ; whether the window is fullscreen
+    (game :is-touched?) ; whether the window is being touched/clicked
+    (game :x) ; the x position of the touch/click
+    (game :y) ; the y position of the touch/click"
   [k]
   (case k
     :width (graphics! :get-width)
@@ -95,7 +100,7 @@
     (u/throw-key-not-found k)))
 
 (defmacro key-code
-  "Returns a static field from [Input.Keys](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html)
+  "Returns a static field from [Input.Keys](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html).
 
     (key-code :a)
     (key-code :page-down)"
@@ -103,7 +108,7 @@
   `~(u/gdx-field "Input$Keys" (u/key->upper k)))
 
 (defmacro is-pressed?
-  "Returns a boolean indicating if the key cooresponding to `k` is being pressed
+  "Returns a boolean indicating if the key cooresponding to `k` is being pressed.
 
     (is-pressed? :a)
     (is-pressed? :page-down)"
@@ -111,26 +116,23 @@
   `(input! :is-key-pressed (key-code ~k)))
 
 (defn ^:private add-input!
-  "Internal use only"
   [^InputProcessor p]
   (let [^InputMultiplexer multi (input! :get-input-processor)]
     (.addProcessor multi p)))
 
 (defn ^:private remove-input!
-  "Internal use only"
   [^InputProcessor p]
   (let [^InputMultiplexer multi (input! :get-input-processor)]
     (.removeProcessor multi p)))
 
 (defn sound*
-  "The function version of `sound`"
   [path]
   (audio! :new-sound (if (string? path)
                        (files! :internal path)
                        path)))
 
 (defmacro sound
-  "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html)
+  "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html).
 
     (sound \"playerhurt.wav\")
     (sound \"playerhurt.wav\" :play)"
@@ -138,7 +140,7 @@
   `(u/calls! ^Sound (sound* ~path) ~@options))
 
 (defmacro sound!
-  "Calls a single method on a `sound`
+  "Calls a single method on a `sound`.
 
     (sound! object :play)
     (sound! object :dispose)"
