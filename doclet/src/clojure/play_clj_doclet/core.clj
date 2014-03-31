@@ -5,7 +5,7 @@
             [marginalia.core :as marg]
             [play-clj-doclet.html :as html])
   (:import [com.sun.javadoc ClassDoc ConstructorDoc Doc ExecutableMemberDoc
-            FieldDoc Parameter RootDoc]))
+            FieldDoc MethodDoc Parameter RootDoc]))
 
 (def targets (-> "targets.edn" io/resource slurp edn/read-string))
 
@@ -37,6 +37,9 @@
            {:name n})
          (when (> (count (.commentText d)) 0)
            {:text (.commentText d)})
+         (when (and (isa? (type d) MethodDoc)
+                    (not= (-> d .returnType .typeName) "void"))
+           {:type (-> d .returnType .typeName)})
          (cond
            (isa? (type d) ExecutableMemberDoc)
            {:args (->> d .parameters (map parse-param) vec)}

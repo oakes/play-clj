@@ -10,13 +10,15 @@
          param-name]))
 
 (defn item
-  [{:keys [name text args]}]
+  [{:keys [name text type args]}]
   [:div
    [:p
     [:b (str name)]
     " "
     (string/join ", " (map param args))]
-   (when text [:i text])])
+   (cond
+     text [:i text]
+     type [:i (str "Returns a " type)])])
 
 (defn create-from-file
   [parsed-file]
