@@ -16,7 +16,7 @@
                       "attribute! :blending" :static-methods}
  "Body" {"body!" :methods}
  "BodyDef" {"body-def" :fields}
- "Bresenham2" {"bresenham2!" :methods}
+ "Bresenham2" {"bresenham-2!" :methods}
  "BSpline" {"b-spline!" :methods}
  "Button.ButtonStyle" {"style :button" :constructors}
  "CatmullRomSpline" {"catmull-rom-spline!" :methods}
