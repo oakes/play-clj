@@ -8,13 +8,6 @@
 
 (def targets (-> "targets.edn" io/resource slurp edn/read-string))
 
-(defn camel->keyword
-  [s]
-  (->> (string/split (string/replace s "_" "-") #"(?<=[a-z])(?=[A-Z])")
-       (map string/lower-case)
-       (string/join "-")
-       keyword))
-
 (defn parse-param
   [^Parameter p]
   [(.typeName p) (.name p)])
@@ -28,7 +21,7 @@
              (subs (.name d) (+ 1 (.lastIndexOf (.name d) ".")))
              :else
              (.name d))
-           camel->keyword)
+           html/camel->keyword)
    (.commentText d)
    (when (isa? (type d) ExecutableMemberDoc)
      (->> d .parameters (map parse-param) vec))])
@@ -60,7 +53,7 @@
 (defn save
   [doc-map]
   (->> doc-map pr-str (spit (io/file "uberdoc.edn")))
-  (->> doc-map html/create-html (spit (io/file "uberdoc.html"))))
+  (->> doc-map html/create (spit (io/file "uberdoc.html"))))
 
 (defn parse
   [^RootDoc root]
