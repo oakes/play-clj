@@ -7,7 +7,7 @@
   (:import [com.sun.javadoc ClassDoc ConstructorDoc Doc ExecutableMemberDoc
             FieldDoc MethodDoc Parameter RootDoc]))
 
-(def targets (-> "targets.edn" io/resource slurp edn/read-string))
+(def classes (-> "classes.edn" io/resource slurp edn/read-string))
 
 (defn camel->keyword
   [s]
@@ -66,11 +66,9 @@
 
 (defn parse-class
   [^ClassDoc c]
-  (some->> (get targets (.typeName c))
+  (some->> (get classes (.typeName c))
            (map #(vector (first %) (parse-class-entry c (second %))))
            (into {})))
-
-(def ^:const valid-syms #{'defn 'defmacro})
 
 (defn match?
   [doc-name sym-name]
@@ -81,7 +79,7 @@
   [{:keys [type raw] :as group} doc-map]
   (let [form (read-string raw)
         n (second form)]
-    (when (and (contains? valid-syms (first form))
+    (when (and (contains? #{'defn 'defmacro} (first form))
                (-> n meta :private not))
       (assoc group
              :name (str n)
