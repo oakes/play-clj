@@ -116,7 +116,7 @@
  "Skin" {"skin" :methods}
  "SkinLoader" {"loader :skin" :methods}
  "Slider" {"slider" :methods}
- "Sound" {"sound!" :methods}
+ "Sound" {"sound" :methods}
  "SoundLoader" {"loader :sound" :methods}
  "SplitPane.SplitPaneStyle" {"style :split-pane" :constructors}
  "SpriteDrawable" {"drawable :sprite" :constructors}
