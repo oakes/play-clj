@@ -52,10 +52,9 @@
   [parsed-files]
   (html [:head
          [:link {:rel "stylesheet" :href "style.css"}]
-         [:link {:rel "stylesheet" :href "styles/default.css"}]
-         [:script (-> "highlight.pack.js" io/resource slurp)]
-         [:script (-> "zepto.min.js" io/resource slurp)]
-         [:script (-> "init.js" io/resource slurp)]]
+         [:link {:rel "stylesheet" :href "styles/default.css"}]]
         [:body
          (sidebar parsed-files)
-         (content parsed-files)]))
+         (content parsed-files)
+         [:script (-> "highlight.pack.js" io/resource slurp)]
+         [:script (-> "init.js" io/resource slurp)]]))
