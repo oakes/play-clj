@@ -11,34 +11,36 @@
            (for [g groups]
              [:div {:class "name"} (:name g)])))])
 
-(defn param
+(defn java-param
   [[type-name param-name]]
-  (html [:span {}
-         [:span {:class "type-name"} "^" type-name]
+  (html [:span {:class "j-arg"}
+         [:span {:class "j-type"} "^" type-name]
          " "
          param-name]))
 
-(defn item
+(defn java-item
   [{:keys [name text type args]}]
-  [:div {:class "item"}
-   [:span {:class "item-name"}
+  [:div {:class "j-item"}
+   [:span {:class "j-name"}
     (str name)]
-   [:span {:class "item-args"}
-    (string/join ", " (map param args))]
+   [:span {:class "j-args"}
+    (string/join ", " (map java-param args))]
    (when text
-     [:div {:class "item-doc"} text])])
+     [:div {:class "j-doc"} text])])
 
 (defn content
   [parsed-files]
   [:div {:class "content"}
    (for [{:keys [ns groups] :as pf} parsed-files]
      (for [{:keys [name docstring java] :as g} groups]
-       (concat [[:div {:class "header"} name]
-                [:div {:class "doc"} docstring]]
-               (for [[item-name items] java]
-                 (cons (when (not= name item-name)
-                         [:div {:class "sub-header"} item-name])
-                       (map item items))))))])
+       (list [:div {:class "clj"}
+              [:div {:class "c-header"} name]
+              [:div {:class "c-doc"} docstring]]
+             [:div {:class "java"}
+              (for [[item-name items] java]
+                (cons (when (not= name item-name)
+                        [:div {:class "j-header"} item-name])
+                      (map java-item items)))])))])
 
 (defn create
   [parsed-files]
