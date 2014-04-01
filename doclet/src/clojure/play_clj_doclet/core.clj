@@ -3,6 +3,7 @@
             [clojure.java.io :as io]
             [clojure.string :as string]
             [marginalia.core :as marg]
+            [markdown.core :as m]
             [play-clj-doclet.html :as html])
   (:import [com.sun.javadoc ClassDoc ConstructorDoc Doc ExecutableMemberDoc
             FieldDoc MethodDoc Parameter RootDoc]))
@@ -72,7 +73,7 @@
            (into {})))
 
 (defn process-group
-  [{:keys [type raw] :as group} doc-map]
+  [{:keys [type raw docstring] :as group} doc-map]
   (let [form (read-string raw)
         n (second form)]
     (when (and (contains? #{'defn 'defmacro} (first form))
@@ -82,7 +83,8 @@
              :java (->> doc-map
                         (filter #(.startsWith (first %) (str n)))
                         (sort-by first)
-                        vec)))))
+                        vec)
+             :docstring (m/md-to-html-string docstring)))))
 
 (defn merge-groups
   [groups]
