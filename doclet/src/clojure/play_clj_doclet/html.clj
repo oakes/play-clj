@@ -32,9 +32,10 @@
   [parsed-files]
   [:div {:class "content"}
    (for [{:keys [ns groups] :as pf} parsed-files]
-     (for [{:keys [name docstring java] :as g} groups]
+     (for [{:keys [name docstring arglists java] :as g} groups]
        (list [:div {:class "clj"}
-              [:div {:class "c-header"} name]
+              (for [args arglists]
+                [:div {:class "c-header"} (pr-str args)])
               [:div {:class "c-doc"} docstring]]
              [:div {:class "java"}
               (for [[item-name items] java]

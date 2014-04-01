@@ -72,6 +72,18 @@
            (map #(vector (first %) (parse-class-entry c (second %))))
            (into {})))
 
+(defn remove-destructuring
+  [arglist]
+  (map #(or (:as %) %) arglist))
+
+(defn arglists
+  [form]
+  (->> (or (some-> (some #(if (vector? %) %) form) list)
+           (map first (filter list? form)))
+       (map #(cons (second form) %))
+       (map remove-destructuring)
+       vec))
+
 (defn process-group
   [{:keys [type raw docstring] :as group} doc-map]
   (let [form (read-string raw)
@@ -84,6 +96,7 @@
                         (filter #(.startsWith (first %) (str n)))
                         (sort-by first)
                         vec)
+             :arglists (arglists form)
              :docstring (m/md-to-html-string docstring)))))
 
 (defn merge-groups
