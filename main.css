@@ -1,0 +1,90 @@
+body {
+	font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+	background-color: #293134;
+	color: #c1cbc2;
+}
+
+a {
+	color: #c1cbc2;
+}
+
+.sidebar {
+	width: 240px;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	position: fixed;
+	overflow: auto;
+	margin-left: 10px;
+}
+
+.sidebar a {
+	text-decoration: none;
+}
+
+.ns {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.name {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.content {
+	margin-left: 250px;
+}
+
+.item {
+	
+}
+
+.clj {
+	
+}
+
+.c-head {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.c-doc {
+	
+}
+
+.c-src {
+	
+}
+
+.java {
+	background: #444;
+}
+
+.j-text {
+	margin-bottom: 5px;
+}
+
+.j-item {
+	margin-bottom: 10px;
+}
+
+.j-name {
+	font-weight: bold;
+}
+
+.j-args {
+	margin-left: 5px;
+}
+
+.j-arg {
+	
+}
+
+.j-type {
+	opacity: 0.5;
+}
+
+.j-doc {
+}
