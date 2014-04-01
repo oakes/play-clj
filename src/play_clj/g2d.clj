@@ -166,7 +166,7 @@
 time the `screen` has been showing.
 
     (animation->texture screen anim)"
-  ([{:keys [total-time]} ^Animation animation]
+  ([{:keys [total-time] :as screen} ^Animation animation]
     (texture* (.getKeyFrame animation total-time true)))
-  ([{:keys [total-time]} ^Animation animation is-looping?]
+  ([{:keys [total-time] :as screen} ^Animation animation is-looping?]
     (texture* (.getKeyFrame animation total-time is-looping?))))

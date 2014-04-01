@@ -232,7 +232,8 @@
   "Runs the physics simulations for a single frame and optionally returns the
 `entities` with their positions updated."
   ([{:keys [world time-step velocity-iterations position-iterations]
-     :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}}]
+     :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}
+     :as screen}]
     (assert world)
     (cond
       (isa? (type world) World)
