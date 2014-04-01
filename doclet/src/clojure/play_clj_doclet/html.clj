@@ -61,9 +61,9 @@
      [:pre raw]]]])
 
 (defn create-file
-  [parsed-files content]
+  [parsed-files name content]
   (html [:head
-         [:title "play-clj docs"]
+         [:title name]
          [:link {:rel "stylesheet" :href "highlight.css"}]
          [:link {:rel "stylesheet" :href "main.css"}]]
         [:body
@@ -86,4 +86,6 @@
   (doseq [{:keys [groups] :as pf} parsed-files]
     (doseq [{:keys [name] :as group} groups]
       (spit (io/file dir (str->filename name))
-            (create-file parsed-files (content group))))))
+            (create-file parsed-files name (content group)))))
+  (spit (io/file dir "index.html")
+        (create-file parsed-files "play-clj docs" nil)))

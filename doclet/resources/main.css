@@ -18,6 +18,10 @@ a {
 	margin-left: 10px;
 }
 
+.sidebar a {
+	text-decoration: none;
+}
+
 .ns {
 	font-size: 24px;
 	font-weight: bold;
@@ -29,7 +33,7 @@ a {
 }
 
 .content {
-	margin-left: 250;
+	margin-left: 250px;
 }
 
 .item {
