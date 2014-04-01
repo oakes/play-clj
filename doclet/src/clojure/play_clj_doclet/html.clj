@@ -1,6 +1,7 @@
 (ns play-clj-doclet.html
   (:require [clojure.string :as string]
-            [hiccup.core :refer :all]))
+            [hiccup.core :refer :all]
+            [markdown.core :as m]))
 
 (defn param
   [[type-name param-name]]
@@ -25,7 +26,7 @@
    (for [group groups]
      [:div
       [:h2 {} (:name group)]
-      (:docstring group)
+      (m/md-to-html-string (:docstring group))
       (for [[name items] (:java group)]
         [:div
          (when (not= (:name group) name)
