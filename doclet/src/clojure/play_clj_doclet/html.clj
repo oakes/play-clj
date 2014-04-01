@@ -62,15 +62,16 @@
 
 (defn create-file
   [parsed-files name content]
-  (html [:head
-         [:title name]
-         [:link {:rel "stylesheet" :href "highlight.css"}]
-         [:link {:rel "stylesheet" :href "main.css"}]]
-        [:body
-         (sidebar parsed-files)
-         content
-         [:script {:src "highlight.js"}]
-         [:script {:src "main.js"}]]))
+  (html [:html
+         [:head
+          [:title name]
+          [:link {:rel "stylesheet" :href "highlight.css"}]
+          [:link {:rel "stylesheet" :href "main.css"}]]
+         [:body
+          (sidebar parsed-files)
+          content
+          [:script {:src "highlight.js"}]
+          [:script {:src "main.js"}]]]))
 
 (defn copy-from-res
   [dir file-name]
