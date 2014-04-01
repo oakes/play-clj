@@ -7,6 +7,7 @@
   [s]
   (-> s
       (string/replace "?" "_q")
+      (string/replace "->" "_")
       (string/replace ">" "_r")
       (string/replace "<" "_l")
       (str ".html")))
