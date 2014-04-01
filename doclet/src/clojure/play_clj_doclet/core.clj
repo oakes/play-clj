@@ -136,7 +136,7 @@
   [parsed-files]
   (let [dir "doc"]
     (.mkdir (io/file dir))
-    (->> parsed-files pr-str (spit (io/file "uberdoc.edn")))
+    (->> parsed-files pr-str (spit (io/file "doc.edn")))
     (html/create dir parsed-files)))
 
 (defn parse
@@ -146,4 +146,4 @@
        (apply concat)
        parse-clj
        save)
-  (println "Created uberdoc.html and uberdoc.edn."))
+  (println "Created doc/ and doc.edn."))
