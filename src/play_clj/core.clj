@@ -110,7 +110,6 @@
 
 (defmacro defgame
   "Defines a game. This should only be called once."
-  {:url ""}
   [n & {:keys [] :as options}]
   `(defonce ~n (defgame* ~options)))
 
