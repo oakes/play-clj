@@ -1,5 +1,12 @@
 (in-ns 'play-clj.core)
 
+(defmacro on-gl
+  "Runs the macro body on the GL thread.
+
+    (on-gl (set-screen! hello-world main-screen))"
+  [& body]
+  `(app! :post-runnable (fn [] ~@body)))
+
 ; static fields
 
 (defmacro scaling
