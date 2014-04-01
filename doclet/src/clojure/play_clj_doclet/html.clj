@@ -3,14 +3,24 @@
             [clojure.string :as string]
             [hiccup.core :refer :all]))
 
+(defn str->filename
+  [s]
+  (-> s
+      (string/replace "?" "_q")
+      (string/replace ">" "_r")
+      (string/replace "<" "_l")
+      (str ".html")))
+
 (defn sidebar
   [parsed-files]
   [:div {:class "sidebar"}
    (for [{:keys [ns groups] :as pf} parsed-files]
      (cons (when (> (count ns) 0)
              [:div {:class "ns"} ns])
-           (for [g groups]
-             [:div {:class "name"} (:name g)])))])
+           (for [{:keys [name]} groups]
+             [:div {:class "name"}
+              [:a {:href (str->filename name)}
+               name]])))])
 
 (defn java-param
   [[type-name param-name]]
@@ -30,34 +40,49 @@
      [:div {:class "j-doc"} text])])
 
 (defn content
-  [parsed-files]
+  [{:keys [name docstring arglists java raw raw*]}]
   [:div {:class "content"}
-   (for [{:keys [ns groups] :as pf} parsed-files]
-     (for [{:keys [name docstring arglists java raw raw*] :as g} groups]
-       [:div {:class "item"}
-        [:div {:class "clj"}
-         (for [args arglists]
-           [:div {:class "c-head"} (pr-str args)])
-         [:div {:class "c-doc"} docstring]]
-        (when (> (count java) 0)
-          (list [:div {:class "c-head"} "Options"]
-                (for [[item-name {:keys [text items]}] java]
-                  (list (when (> (count java) 1)
-                          [:div {:class "j-text"} text])
-                        [:div {:class "java"}
-                         (map java-item items)]))))
-        [:div {:class "c-head"} "Source"]
-        [:div {:class "c-src"}
-         (when raw* [:pre raw*])
-         [:pre raw]]]))])
+   [:div {:class "item"}
+    [:div {:class "clj"}
+     (for [args arglists]
+       [:div {:class "c-head"} (pr-str args)])
+     [:div {:class "c-doc"} docstring]]
+    (when (> (count java) 0)
+      (list [:div {:class "c-head"} "Options"]
+            (for [[item-name {:keys [text items]}] java]
+              (list (when (> (count java) 1)
+                      [:div {:class "j-text"} text])
+                    [:div {:class "java"}
+                     (map java-item items)]))))
+    [:div {:class "c-head"} "Source"]
+    [:div {:class "c-src"}
+     (when raw* [:pre raw*])
+     [:pre raw]]]])
 
-(defn create
-  [parsed-files]
+(defn create-file
+  [parsed-files content]
   (html [:head
-         [:link {:rel "stylesheet" :href "style.css"}]
-         [:link {:rel "stylesheet" :href "styles/default.css"}]]
+         [:title "play-clj docs"]
+         [:link {:rel "stylesheet" :href "highlight.css"}]
+         [:link {:rel "stylesheet" :href "main.css"}]]
         [:body
          (sidebar parsed-files)
-         (content parsed-files)
-         [:script (-> "highlight.pack.js" io/resource slurp)]
-         [:script (-> "init.js" io/resource slurp)]]))
+         content
+         [:script {:src "highlight.js"}]
+         [:script {:src "main.js"}]]))
+
+(defn copy-from-res
+  [dir file-name]
+  (spit (io/file dir file-name)
+        (-> file-name io/resource slurp)))
+
+(defn create
+  [dir parsed-files]
+  (copy-from-res dir "main.css")
+  (copy-from-res dir "main.js")
+  (copy-from-res dir "highlight.css")
+  (copy-from-res dir "highlight.js")
+  (doseq [{:keys [groups] :as pf} parsed-files]
+    (doseq [{:keys [name] :as group} groups]
+      (spit (io/file dir (str->filename name))
+            (create-file parsed-files (content group))))))

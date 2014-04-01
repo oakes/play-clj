@@ -1,0 +1,77 @@
+.sidebar {
+	width: 240px;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	position: fixed;
+	overflow: auto;
+	margin-left: 10px;
+}
+
+.ns {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.name {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.content {
+	margin-left: 250;
+}
+
+.item {
+	
+}
+
+.clj {
+	
+}
+
+.c-head {
+	font-size: 20px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.c-doc {
+	
+}
+
+.c-src {
+	
+}
+
+.java {
+	background: lightgray;
+}
+
+.j-text {
+	margin-bottom: 5px;
+}
+
+.j-item {
+	margin-bottom: 10px;
+}
+
+.j-name {
+	font-weight: bold;
+}
+
+.j-args {
+	margin-left: 5px;
+}
+
+.j-arg {
+	
+}
+
+.j-type {
+	opacity: 0.5;
+}
+
+.j-doc {
+	font-style: italic;
+}

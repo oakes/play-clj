@@ -71,7 +71,8 @@
 
 (defn parse-class
   [^ClassDoc c]
-  (some->> (get classes (.typeName c))
+  (some->> (or (get classes (.qualifiedTypeName c))
+               (get classes (.typeName c)))
            (map #(vector (first (string/split (first %) #" "))
                          {:text (.commentText c)
                           :items (parse-class-entry c %)}))))
@@ -133,8 +134,10 @@
 
 (defn save
   [parsed-files]
-  (->> parsed-files pr-str (spit (io/file "uberdoc.edn")))
-  (->> parsed-files html/create (spit (io/file "uberdoc.html"))))
+  (let [dir "doc"]
+    (.mkdir (io/file dir))
+    (->> parsed-files pr-str (spit (io/file "uberdoc.edn")))
+    (html/create dir parsed-files)))
 
 (defn parse
   [^RootDoc root]
