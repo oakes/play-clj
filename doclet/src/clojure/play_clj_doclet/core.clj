@@ -32,10 +32,12 @@
     (.name d)))
 
 (defn parse-doc
-  [^Doc d]
+  [^Doc d clj-name]
   (merge {}
-         (when-let [n (some-> (parse-doc-name d) camel->keyword)]
-           {:name n})
+         {:name (->> [(second (string/split clj-name #" "))
+                      (some-> (parse-doc-name d) camel->keyword)]
+                     (remove nil?)
+                     (string/join " "))}
          (when (> (count (.commentText d)) 0)
            {:text (.commentText d)})
          (when (and (isa? (type d) MethodDoc)
@@ -48,7 +50,7 @@
            {:args [[(-> d .type .typeName) "value"]]})))
 
 (defn parse-class-entry
-  [^ClassDoc c type]
+  [^ClassDoc c [clj-name type]]
   (some->> (case type
              :methods (filter #(-> % .isStatic not) (.methods c))
              :static-methods (filter #(.isStatic %) (.methods c))
@@ -59,19 +61,20 @@
              :constructors (filter #(-> % .isStatic not) (.constructors c))
              nil)
            (filter #(.isPublic %))
-           (map parse-doc)
+           (map #(parse-doc % clj-name))
            (concat (when-let [sc (.superclass c)]
                      (when (not= (.typeName sc) "Object")
-                       (parse-class-entry sc type))))
+                       (parse-class-entry sc [clj-name type]))))
+           distinct
            (sort-by :name)
-           vec
-           (hash-map :text (.commentText c) :items)))
+           vec))
 
 (defn parse-class
   [^ClassDoc c]
   (some->> (get classes (.typeName c))
-           (map #(vector (first %) (parse-class-entry c (second %))))
-           (into {})))
+           (map #(vector (first (string/split (first %) #" "))
+                         {:text (.commentText c)
+                          :items (parse-class-entry c %)}))))
 
 (defn remove-destructuring
   [arglist]
@@ -86,15 +89,15 @@
        vec))
 
 (defn process-group
-  [{:keys [type raw docstring] :as group} doc-map]
+  [{:keys [type raw docstring] :as group} java-docs]
   (let [form (read-string raw)
         n (second form)]
     (when (and (contains? #{'defn 'defmacro} (first form))
                (-> n meta :private not))
       (assoc group
              :name (str n)
-             :java (->> doc-map
-                        (filter #(.startsWith (first %) (str n)))
+             :java (->> java-docs
+                        (filter #(= (first %) (str n)))
                         (sort-by first)
                         vec)
              :arglists (arglists form)
@@ -110,22 +113,22 @@
            (assoc group :raw*)))))
 
 (defn process-groups
-  [{:keys [groups] :as parsed-file} doc-map]
+  [{:keys [groups] :as parsed-file} java-docs]
   (->> groups
-       (map #(process-group % doc-map))
+       (map #(process-group % java-docs))
        merge-groups
        (remove nil?)
        (assoc parsed-file :groups)))
 
 (defn parse-clj
-  [doc-map]
+  [java-docs]
   (->> (io/file "../src/")
        file-seq
        (filter #(-> % .getName (.endsWith ".clj")))
        (sort-by #(.getName %))
        (map #(.getCanonicalPath %))
        (map marg/path-to-doc)
-       (map #(process-groups % doc-map))
+       (map #(process-groups % java-docs))
        (filter #(> (count (:groups %)) 0))))
 
 (defn save
@@ -137,7 +140,7 @@
   [^RootDoc root]
   (->> (map parse-class (.classes root))
        (filter some?)
-       (into {})
+       (apply concat)
        parse-clj
        save)
   (println "Created uberdoc.html and uberdoc.edn."))
