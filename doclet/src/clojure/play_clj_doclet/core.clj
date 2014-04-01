@@ -90,13 +90,15 @@
   [groups]
   (for [{:keys [name] :as group} groups]
     (when (and name (not (.endsWith name "*")))
-      (->> (some #(if (= (:name %) (str name "*")) %) groups)
+      (->> groups
+           (some #(if (= (:name %) (str name "*")) %))
            :raw
            (assoc group :raw*)))))
 
 (defn process-groups
   [{:keys [groups] :as parsed-file} doc-map]
-  (->> (map #(process-group % doc-map) groups)
+  (->> groups
+       (map #(process-group % doc-map))
        merge-groups
        (remove nil?)
        (assoc parsed-file :groups)))
