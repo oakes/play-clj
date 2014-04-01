@@ -39,9 +39,10 @@
          (for [args arglists]
            [:div {:class "c-head"} (pr-str args)])
          [:div {:class "c-doc"} docstring]]
-        (for [[item-name items] java]
+        (for [[item-name {:keys [text items]}] java]
           (list (when (not= name item-name)
                   [:div {:class "j-head"} item-name])
+                [:div {:class "j-text"} text]
                 [:div {:class "java"}
                  (map java-item items)]))
         [:div {:class "c-src"}

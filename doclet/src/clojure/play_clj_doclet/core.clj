@@ -64,7 +64,8 @@
                      (when (not= (.typeName sc) "Object")
                        (parse-class-entry sc type))))
            (sort-by :name)
-           vec))
+           vec
+           (hash-map :text (.commentText c) :items)))
 
 (defn parse-class
   [^ClassDoc c]
