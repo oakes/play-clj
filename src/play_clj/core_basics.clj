@@ -116,6 +116,20 @@
   [k]
   `(key-pressed? ~k))
 
+(defmacro button-code
+  "Returns a static field from [Input.Buttons](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Buttons.html).
+
+    (button-code :left)"
+  [k]
+  `~(u/gdx-field "Input$Buttons" (u/key->upper k)))
+
+(defmacro button-pressed?
+  "Returns a boolean indicating if the button cooresponding to `k` is being pressed.
+
+    (button-pressed? :left)"
+  [k]
+  `(input! :is-button-pressed (button-code ~k)))
+
 (defn ^:private add-input!
   [^InputProcessor p]
   (let [^InputMultiplexer multi (input! :get-input-processor)]
