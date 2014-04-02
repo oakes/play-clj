@@ -81,20 +81,16 @@
 (defn game
   "Provides quick access to often-used functions.
 
-    (game :width) ; width of the window
-    (game :height) ; height of the window
-    (game :fps) ; frames per second
-    (game :is-fullscreen?) ; whether the window is fullscreen
-    (game :is-touched?) ; whether the window is being touched/clicked
-    (game :x) ; the x position of the touch/click
-    (game :y) ; the y position of the touch/click"
+    (game :width)"
   [k]
   (case k
     :width (graphics! :get-width)
     :height (graphics! :get-height)
     :fps (graphics! :get-frames-per-second)
-    :is-fullscreen? (graphics! :is-fullscreen)
-    :is-touched? (input! :is-touched)
+    :fullscreen? (graphics! :is-fullscreen)
+    :touched? (input! :is-touched)
+    :is-fullscreen? (graphics! :is-fullscreen) ; deprecated
+    :is-touched? (input! :is-touched) ; deprecated
     :x (input! :get-x)
     :y (input! :get-y)
     (u/throw-key-not-found k)))
@@ -107,13 +103,18 @@
   [k]
   `~(u/gdx-field "Input$Keys" (u/key->upper k)))
 
-(defmacro is-pressed?
+(defmacro pressed?
   "Returns a boolean indicating if the key cooresponding to `k` is being pressed.
 
-    (is-pressed? :a)
-    (is-pressed? :page-down)"
+    (pressed? :a)
+    (pressed? :page-down)"
   [k]
   `(input! :is-key-pressed (key-code ~k)))
+
+(defmacro is-pressed?
+  "Deprecated. Please us `pressed?` instead."
+  [k]
+  `(pressed? ~k))
 
 (defn ^:private add-input!
   [^InputProcessor p]
