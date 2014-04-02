@@ -146,6 +146,8 @@
                    "particle-effect!" :methods}
  "PerspectiveCamera" {"perspective" :methods
                       "perspective!" :methods}
+ "Pixmap" {"pixmap" :constructors
+           "pixmap!" :methods}
  "PixmapLoader" {"loader :pixmap" :methods
                  "loader! :pixmap" :methods}
  "Plane" {"plane" :methods
