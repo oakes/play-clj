@@ -3,7 +3,7 @@
   :dependencies [[com.badlogicgames.gdx/gdx "0.9.9"]
                  [com.badlogicgames.gdx/gdx-backend-robovm "0.9.9"]
                  [org.clojure/clojure "1.5.1"]
-                 [play-clj "0.2.3"]]
+                 [play-clj "0.2.4"]]
   :source-paths ["src/clojure" "../desktop/src-common"]
   :java-source-paths ["src/java"]
   :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
