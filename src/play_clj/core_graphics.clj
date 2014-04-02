@@ -1,5 +1,22 @@
 (in-ns 'play-clj.core)
 
+; pixmaps
+
+(defmacro pixmap
+  "Returns a [Pixmap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html).
+
+    (pixmap \"image.png\")"
+  [& args]
+  `~(if (string? (first args))
+      `(Pixmap. (files! :internal ~(first args)))
+      `(Pixmap. ~@args)))
+
+(defmacro pixmap!
+  "Calls a single method on a `pixmap`."
+  [object k & options]
+  `(let [^Pixmap object# (u/get-obj ~object :renderer)]
+     (u/call! object# ~k ~@options)))
+
 ; tiled maps
 
 (defn tiled-map*

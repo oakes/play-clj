@@ -7,7 +7,7 @@
            [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.assets AssetManager]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
-            PerspectiveCamera Texture VertexAttributes$Usage]
+            PerspectiveCamera Pixmap Texture VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d SpriteBatch]
            [com.badlogic.gdx.graphics.g3d ModelBatch]
            [com.badlogic.gdx.input GestureDetector
