@@ -39,7 +39,10 @@ based on the file at `path`.
 
     (skin \"uiskin.json\")"
   [path & options]
-  `(u/calls! ^Skin (Skin. (.internal ^Files (Gdx/files) ~path)) ~@options))
+  `(u/calls! ^Skin (Skin. (if (string? ~path)
+                            (.internal ^Files (Gdx/files) ~path)
+                            ~path))
+             ~@options))
 
 (defmacro align
   "Returns a static field from [Align](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/Align.html).
