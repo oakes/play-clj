@@ -112,7 +112,7 @@
   `(input! :is-key-pressed (key-code ~k)))
 
 (defmacro is-pressed?
-  "Deprecated. Please us `pressed?` instead."
+  "Deprecated. Please use `pressed?` instead."
   [k]
   `(pressed? ~k))
 

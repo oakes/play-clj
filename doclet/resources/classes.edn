@@ -100,7 +100,7 @@
  "ImageTextButton.ImageTextButtonStyle" {"style :image-text-button" :constructors}
  "Input" {"input!" :methods}
  "Input.Keys" {"key-code" :static-fields
-               "is-pressed?" :static-fields}
+               "pressed?" :static-fields}
  "Interpolation" {"interpolation" :static-classes}
  "Intersector" {"intersector!" :static-methods}
  "IntAttribute" {"attribute :int" :constructors
