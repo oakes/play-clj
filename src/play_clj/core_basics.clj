@@ -103,18 +103,18 @@
   [k]
   `~(u/gdx-field "Input$Keys" (u/key->upper k)))
 
-(defmacro pressed?
+(defmacro key-pressed?
   "Returns a boolean indicating if the key cooresponding to `k` is being pressed.
 
-    (pressed? :a)
-    (pressed? :page-down)"
+    (key-pressed? :a)
+    (key-pressed? :page-down)"
   [k]
   `(input! :is-key-pressed (key-code ~k)))
 
 (defmacro is-pressed?
-  "Deprecated. Please use `pressed?` instead."
+  "Deprecated. Please use `key-pressed?` instead."
   [k]
-  `(pressed? ~k))
+  `(key-pressed? ~k))
 
 (defn ^:private add-input!
   [^InputProcessor p]
