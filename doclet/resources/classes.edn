@@ -177,6 +177,7 @@
  "SelectBox.SelectBoxStyle" {"style :select-box" :constructors}
  "ShapeRenderer" {"shape" :methods
                   "shape!" :methods}
+ "ShapeRenderer.ShapeType" {"shape-type" :static-fields}
  "Skin" {"skin" :methods
          "skin!" :methods}
  "SkinLoader" {"loader :skin" :methods

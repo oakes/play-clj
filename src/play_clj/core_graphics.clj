@@ -14,7 +14,10 @@
   [object k & options]
   `(u/call! ^Pixmap ~object ~k ~@options))
 
-(defmacro shape-type*
+(defmacro shape-type
+  "Returns a static field from [ShapeRenderer.ShapeType](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.ShapeType.html).
+
+    (shape-type :filled)"
   [k]
   `~(u/gdx-field :graphics :glutils "ShapeRenderer$ShapeType" (u/key->pascal k)))
 
@@ -41,7 +44,7 @@
         Throwable.
         throw))
   `(let [entity# ~(if (keyword? type)
-                    `(assoc (shape*) :type (shape-type* ~type))
+                    `(assoc (shape*) :type (shape-type ~type))
                     type)
          ^ShapeRenderer object# (u/get-obj entity# :object)]
      (assoc entity# :draw! (fn [] (u/calls! object# ~@options)))))
