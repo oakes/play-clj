@@ -10,6 +10,7 @@
             PerspectiveCamera Pixmap Texture VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d SpriteBatch]
            [com.badlogic.gdx.graphics.g3d ModelBatch]
+           [com.badlogic.gdx.graphics.glutils ShapeRenderer]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
            [com.badlogic.gdx.maps MapLayer MapLayers MapProperties]

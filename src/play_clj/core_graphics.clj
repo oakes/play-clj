@@ -1,7 +1,5 @@
 (in-ns 'play-clj.core)
 
-; pixmaps
-
 (defmacro pixmap
   "Returns a [Pixmap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html).
 
@@ -14,8 +12,30 @@
 (defmacro pixmap!
   "Calls a single method on a `pixmap`."
   [object k & options]
-  `(let [^Pixmap object# (u/get-obj ~object :renderer)]
+  `(let [^Pixmap object# (u/get-obj ~object :object)]
      (u/call! object# ~k ~@options)))
+
+(defn shape
+  "Returns a [ShapeRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.html).
+
+    (shape)"
+  ([]
+    (ShapeRenderer.))
+  ([max-vertices]
+    (ShapeRenderer. max-vertices)))
+
+(defmacro shape!
+  "Calls a single method on a `shape`."
+  [screen k & options]
+  `(let [^ShapeRenderer object# (u/get-obj ~screen :renderer)]
+     (u/call! object# ~k ~@options)))
+
+(defmacro shape-type
+  "Returns a static field from [ShapeRenderer.ShapeType](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.ShapeType.html).
+
+    (shape-type :filled)"
+  [k]
+  `~(u/gdx-field :graphics :glutils "ShapeRenderer$ShapeType" (u/key->pascal k)))
 
 ; tiled maps
 
@@ -389,3 +409,21 @@ specify which layers to render with or without.
         (e/draw-entity! entity batch)))
     (.end batch))
   entities)
+
+(defmacro render-shapes!
+  "Draws shapes with a `shape` renderer.
+
+    (render-shapes! screen :filled
+                    :set-color (color :blue)
+                    :line 0 0 10 10
+                    :rect 10 10 20 20
+                    :circle 0 30 5)"
+  [screen type & options]
+  (when (seq (clojure.set/intersection #{:begin :end} (set options)))
+    (-> "No need to call :begin or :end, because it's done for you."
+        Throwable.
+        throw))
+  `(let [^ShapeRenderer object# (u/get-obj ~screen :renderer)]
+     (.begin object# (shape-type ~type))
+     (u/calls! object# ~@options)
+     (.end object#)))
