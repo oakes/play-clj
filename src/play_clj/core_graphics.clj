@@ -14,10 +14,7 @@
   [object k & options]
   `(u/call! ^Pixmap ~object ~k ~@options))
 
-(defmacro shape-type
-  "Returns a static field from [ShapeRenderer.ShapeType](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.ShapeType.html).
-
-    (shape-type :filled)"
+(defmacro shape-type*
   [k]
   `~(u/gdx-field :graphics :glutils "ShapeRenderer$ShapeType" (u/key->pascal k)))
 
@@ -30,14 +27,21 @@
 (defmacro shape
   "Returns an entity based on [ShapeRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.html).
 
-    (shape :filled)"
+    ; create a red rectangle
+    (shape :filled
+           :set-color (color :red)
+           :rect 0 0 10 30)
+    ; create an empty shape, then set it to a green rectangle
+    (shape (shape :filled)
+           :set-color (color :green)
+           :rect 0 0 10 30)"
   [type & options]
   (when (seq (clojure.set/intersection #{:begin :end} (set options)))
     (-> "No need to call :begin or :end, because it's done for you."
         Throwable.
         throw))
   `(let [entity# ~(if (keyword? type)
-                    `(assoc (shape*) :type (shape-type ~type))
+                    `(assoc (shape*) :type (shape-type* ~type))
                     type)
          ^ShapeRenderer object# (u/get-obj entity# :object)]
      (assoc entity# :draw! (fn [] (u/calls! object# ~@options)))))
