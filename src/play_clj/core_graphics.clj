@@ -20,10 +20,12 @@
 ; tiled maps
 
 (defn tiled-map*
-  [s]
-  (if (string? s)
-    (.load (TmxMapLoader.) s)
-    s))
+  ([]
+    (TiledMap.))
+  ([s]
+    (if (string? s)
+      (.load (TmxMapLoader.) s)
+      s)))
 
 (defmacro tiled-map
   "Returns a [TiledMap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMap.html).
@@ -51,12 +53,14 @@ objects cooresponding to each layer in the tiled map in `screen`.
       (.get layers i))))
 
 (defn tiled-map-layer*
-  [screen layer]
-  (if (isa? (type layer) MapLayer)
-    layer
-    (->> (tiled-map-layers screen)
-         (drop-while #(not= layer (.getName ^MapLayer %)))
-         first)))
+  ([width height tile-width tile-height]
+    (TiledMapTileLayer. width height tile-width tile-height))
+  ([screen layer]
+    (if (isa? (type layer) MapLayer)
+      layer
+      (->> (tiled-map-layers screen)
+           (drop-while #(not= layer (.getName ^MapLayer %)))
+           first))))
 
 (defmacro tiled-map-layer
   "Returns a [TiledMapTileLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
@@ -83,8 +87,10 @@ tiled map in `screen`."
     (tiled-map-layer! layer :get-name)))
 
 (defn tiled-map-cell*
-  [screen layer x y]
-  (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y))
+  ([]
+    (TiledMapTileLayer$Cell.))
+  ([screen layer x y]
+    (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y)))
 
 (defmacro tiled-map-cell
   "Returns a [TiledMapTileLayer.Cell](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.Cell.html)
