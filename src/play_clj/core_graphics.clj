@@ -386,29 +386,37 @@ specify which layers to render with or without.
                   y (range (- (.getHeight l) 1) -1 -1)]
               {:x x :y y}))))
 
-(defn render-sorted!
-  "Draws the supplied tiled-map layers and entities, sorted by latitude.
+(defn ^:private sort-by-y
+  [entities]
+  (sort-by :y #(compare %2 %1) entities))
 
-    (render-sorted! screen [\"walls\"] entities)"
-  [{:keys [^BatchTiledMapRenderer renderer
-           ^Camera camera
-           update-fn!]
-    :as screen}
-   layer-names entities]
-  (doseq [ln layer-names]
-    (when-not (get-in screen [:layers ln])
-      (update-fn! assoc-in [[:layers ln] (split-layer screen ln)])))
-  (when camera (.setView renderer camera))
-  (let [^SpriteBatch batch (.getSpriteBatch renderer)]
-    (.begin batch)
-    (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
-                        (apply concat entities)
-                        (sort-by :y #(compare %2 %1)))]
-      (if-let [layer (:layer entity)]
-        (.renderTileLayer renderer layer)
-        (e/draw-entity! entity batch)))
-    (.end batch))
-  entities)
+(defn render-sorted!
+  "Draws the supplied tiled-map layers and entities. If no sort function is
+supplied, they will be sorted by :y (latitude).
+
+    (render-sorted! screen [\"walls\"] entities)
+    (render-sorted! screen #(sort-by :x %) [\"walls\"] entities)"
+  ([screen layer-names entities]
+    (render-sorted! sort-by-y screen layer-names entities))
+  ([{:keys [^BatchTiledMapRenderer renderer
+            ^Camera camera
+            update-fn!]
+     :as screen}
+    sort-fn layer-names entities]
+    (doseq [ln layer-names]
+      (when-not (get-in screen [:layers ln])
+        (update-fn! assoc-in [[:layers ln] (split-layer screen ln)])))
+    (when camera (.setView renderer camera))
+    (let [^SpriteBatch batch (.getSpriteBatch renderer)]
+      (.begin batch)
+      (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
+                          (apply concat entities)
+                          sort-fn)]
+        (if-let [layer (:layer entity)]
+          (.renderTileLayer renderer layer)
+          (e/draw-entity! entity batch)))
+      (.end batch))
+    entities))
 
 (defmacro render-shapes!
   "Draws shapes with a `shape` renderer.
