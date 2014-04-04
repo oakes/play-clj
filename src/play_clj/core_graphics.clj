@@ -12,8 +12,7 @@
 (defmacro pixmap!
   "Calls a single method on a `pixmap`."
   [object k & options]
-  `(let [^Pixmap object# (u/get-obj ~object :object)]
-     (u/call! object# ~k ~@options)))
+  `(u/call! ^Pixmap ~object ~k ~@options))
 
 (defn shape
   "Returns a [ShapeRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.html).
