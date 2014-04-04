@@ -14,27 +14,39 @@
   [object k & options]
   `(u/call! ^Pixmap ~object ~k ~@options))
 
-(defn shape
-  "Returns a [ShapeRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.html).
-
-    (shape)"
-  ([]
-    (ShapeRenderer.))
-  ([max-vertices]
-    (ShapeRenderer. max-vertices)))
-
-(defmacro shape!
-  "Calls a single method on a `shape`."
-  [screen k & options]
-  `(let [^ShapeRenderer object# (u/get-obj ~screen :renderer)]
-     (u/call! object# ~k ~@options)))
-
 (defmacro shape-type
   "Returns a static field from [ShapeRenderer.ShapeType](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.ShapeType.html).
 
     (shape-type :filled)"
   [k]
   `~(u/gdx-field :graphics :glutils "ShapeRenderer$ShapeType" (u/key->pascal k)))
+
+(defn shape*
+  ([]
+    (ShapeEntity. (ShapeRenderer.)))
+  ([max-vertices]
+    (ShapeEntity. (ShapeRenderer. max-vertices))))
+
+(defmacro shape
+  "Returns an entity based on [ShapeRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.html).
+
+    (shape :filled)"
+  [type & options]
+  (when (seq (clojure.set/intersection #{:begin :end} (set options)))
+    (-> "No need to call :begin or :end, because it's done for you."
+        Throwable.
+        throw))
+  `(let [entity# ~(if (keyword? type)
+                    `(assoc (shape*) :type (shape-type ~type))
+                    type)
+         ^ShapeRenderer object# (u/get-obj entity# :object)]
+     (assoc entity# :draw! (fn [] (u/calls! object# ~@options)))))
+
+(defmacro shape!
+  "Calls a single method on a `shape`."
+  [entity k & options]
+  `(let [^ShapeRenderer object# (u/get-obj ~entity :object)]
+     (u/call! object# ~k ~@options)))
 
 ; tiled maps
 
@@ -274,20 +286,20 @@ with the tiled map file at `path` and `unit` scale.
   (fn [screen _] (-> screen :renderer class)))
 
 (defmethod draw! BatchTiledMapRenderer
-  [{:keys [^BatchTiledMapRenderer renderer]} entities]
+  [{:keys [^BatchTiledMapRenderer renderer] :as screen} entities]
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
-      (e/draw-entity! entity batch))
+      (e/draw-entity! entity screen batch))
     (.end batch))
   entities)
 
 (defmethod draw! Stage
-  [{:keys [^Stage renderer]} entities]
+  [{:keys [^Stage renderer] :as screen} entities]
   (let [^SpriteBatch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
-      (e/draw-entity! entity batch))
+      (e/draw-entity! entity screen batch))
     (.end batch))
   entities)
 
@@ -295,7 +307,7 @@ with the tiled map file at `path` and `unit` scale.
   [{:keys [^ModelBatch renderer ^Camera camera] :as screen} entities]
   (.begin renderer camera)
   (doseq [entity entities]
-    (e/draw-entity! entity screen))
+    (e/draw-entity! entity screen nil))
   (.end renderer)
   entities)
 
@@ -413,24 +425,6 @@ supplied, they will be sorted by :y (latitude).
                           sort-fn)]
         (if-let [layer (:layer entity)]
           (.renderTileLayer renderer layer)
-          (e/draw-entity! entity batch)))
+          (e/draw-entity! entity screen batch)))
       (.end batch))
     entities))
-
-(defmacro render-shapes!
-  "Draws shapes with a `shape` renderer.
-
-    (render-shapes! screen :filled
-                    :set-color (color :blue)
-                    :line 0 0 10 10
-                    :rect 10 10 20 20
-                    :circle 0 30 5)"
-  [screen type & options]
-  (when (seq (clojure.set/intersection #{:begin :end} (set options)))
-    (-> "No need to call :begin or :end, because it's done for you."
-        Throwable.
-        throw))
-  `(let [^ShapeRenderer object# (u/get-obj ~screen :renderer)]
-     (.begin object# (shape-type ~type))
-     (u/calls! object# ~@options)
-     (.end object#)))

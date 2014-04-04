@@ -205,9 +205,7 @@
           (.destroyJoint world joint))))))
 
 (defn ^:private update-screen!
-  ([{:keys [renderer ^Camera camera world g2dp-listener]}]
-    (when (and camera (isa? (type renderer) ShapeRenderer))
-      (.setProjectionMatrix ^ShapeRenderer renderer (. camera combined)))
+  ([{:keys [world g2dp-listener]}]
     (when (isa? (type world) World)
       (.setContactListener ^World world g2dp-listener)))
   ([{:keys [renderer world] :as screen} entities]
