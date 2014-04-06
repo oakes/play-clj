@@ -148,11 +148,11 @@
 ; animation
 
 (defmacro play-mode
-  "Returns a static field from [Animation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.html).
+  "Returns a static field from [Animation.PlayMode](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/Animation.PlayMode.html).
 
     (play-mode :loop)"
   [k]
-  `~(u/gdx-field :graphics :g2d :Animation (u/key->upper k)))
+  `~(u/gdx-field :graphics :g2d "Animation$PlayMode" (u/key->upper k)))
 
 (defn animation*
   [duration textures]

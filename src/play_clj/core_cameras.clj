@@ -39,13 +39,15 @@
      (u/call! object# ~k ~@options)))
 
 (defn size!
-  "Sets the size of the camera in `screen`.
+  "Sets the size of the camera in `screen` and recenters it.
 
     (size! screen 480 360)"
   [screen width height]
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. camera viewportWidth) width)
     (set! (. camera viewportHeight) height)
+    (set! (. (. camera position) x) (/ width 2))
+    (set! (. (. camera position) y) (/ height 2))
     (.update camera)))
 
 (defn width!

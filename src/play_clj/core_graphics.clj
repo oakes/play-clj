@@ -354,10 +354,7 @@ specify which layers to render with or without.
 
 (defn render-stage!
   "Calls the stage renderer from `screen`."
-  [{:keys [^Stage renderer ^Camera camera] :as screen}]
-  (when camera
-    (.setCamera renderer camera)
-    (.setViewport renderer (. camera viewportWidth) (. camera viewportHeight)))
+  [{:keys [^Stage renderer] :as screen}]
   (doto renderer .act .draw)
   nil)
 

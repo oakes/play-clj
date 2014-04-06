@@ -106,7 +106,6 @@
   [{:keys [on-create]}]
   (proxy [Game] []
     (create []
-      (Texture/setEnforcePotImages false)
       (when on-create
         (on-create this)))))
 
