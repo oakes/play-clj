@@ -48,6 +48,11 @@
   [entity k & options]
   `(u/call! ^TextureRegion (u/get-obj ~entity :object) ~k ~@options))
 
+(defn texture?
+  "Returns true if `entity` is a `texture`."
+  [entity]
+  (isa? (type entity) TextureEntity))
+
 ; nine-patch
 
 (defn nine-patch*
@@ -84,6 +89,11 @@
   [entity k & options]
   `(u/call! ^NinePatch (u/get-obj ~entity :object) ~k ~@options))
 
+(defn nine-patch?
+  "Returns true if `entity` is a `nine-patch`."
+  [entity]
+  (isa? (type entity) NinePatchEntity))
+
 ; particle-effect
 
 (defn particle-effect*
@@ -107,6 +117,11 @@
     (particle-effect! entity :set-position 10 10)"
   [entity k & options]
   `(u/call! ^ParticleEffect (u/get-obj ~entity :object) ~k ~@options))
+
+(defn particle-effect?
+  "Returns true if `entity` is a `particle-effect`."
+  [entity]
+  (isa? (type entity) ParticleEffectEntity))
 
 ; texture-atlas
 

@@ -91,6 +91,11 @@
   `(let [^ModelInstance object# (u/get-obj ~entity :object)]
      (u/call! object# ~k ~@options)))
 
+(defn model?
+  "Returns true if `entity` is a `model`."
+  [entity]
+  (isa? (type entity) ModelEntity))
+
 ; model-builder
 
 (defn model-builder*

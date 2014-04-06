@@ -14,6 +14,11 @@
            [com.esotericsoftware.tablelayout Cell]
            [play_clj.entities ActorEntity]))
 
+(defn actor?
+  "Returns true if `entity` is one of the UI entities."
+  [entity]
+  (isa? (type entity) ActorEntity))
+
 (defmacro drawable
   "Returns a subclass of [BaseDrawable](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/BaseDrawable.html).
 

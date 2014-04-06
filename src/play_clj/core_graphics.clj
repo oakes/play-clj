@@ -55,6 +55,11 @@
   `(let [^ShapeRenderer object# (u/get-obj ~entity :object)]
      (u/call! object# ~k ~@options)))
 
+(defn shape?
+  "Returns true if `entity` is a `shape`."
+  [entity]
+  (isa? (type entity) ShapeEntity))
+
 ; tiled maps
 
 (defn tiled-map*
