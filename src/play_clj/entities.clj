@@ -5,6 +5,7 @@
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
            [com.badlogic.gdx.graphics.glutils ShapeRenderer]
+           [com.badlogic.gdx.math Matrix4]
            [com.badlogic.gdx.scenes.scene2d Actor]))
 
 (defprotocol Entity
@@ -59,9 +60,14 @@
     (.render renderer object attributes)))
 
 (defrecord ShapeEntity [object] Entity
-  (draw-entity! [{:keys [^ShapeRenderer object type draw!]}
+  (draw-entity! [{:keys [^ShapeRenderer object type draw! x y z]}
                  {:keys [^Camera camera]}
                  _]
+    (let [^Matrix4 m (.getTransformMatrix object)
+          x (float (or x 0))
+          y (float (or y 0))
+          z (float (or z 0))]
+      (.setTranslation m x y z))
     (when camera
       (.setProjectionMatrix object (. camera combined)))
     (.begin object type)
