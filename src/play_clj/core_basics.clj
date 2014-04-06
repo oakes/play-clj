@@ -89,8 +89,6 @@
     :fps (graphics! :get-frames-per-second)
     :fullscreen? (graphics! :is-fullscreen)
     :touched? (input! :is-touched)
-    :is-fullscreen? (graphics! :is-fullscreen) ; deprecated
-    :is-touched? (input! :is-touched) ; deprecated
     :x (input! :get-x)
     :y (input! :get-y)
     (u/throw-key-not-found k)))
@@ -110,11 +108,6 @@
     (key-pressed? :page-down)"
   [k]
   `(input! :is-key-pressed (key-code ~k)))
-
-(defmacro is-pressed?
-  "Deprecated. Please use `key-pressed?` instead."
-  [k]
-  `(key-pressed? ~k))
 
 (defmacro button-code
   "Returns a static field from [Input.Buttons](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Buttons.html).
