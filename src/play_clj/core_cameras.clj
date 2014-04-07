@@ -50,14 +50,6 @@
     (set! (. (. camera position) y) (/ height 2))
     (.update camera)))
 
-(defn width!
-  "Sets the width of the camera in `screen`, adjusting the height so the ratio
-remains in tact.
-
-    (width! screen 480)"
-  [screen new-width]
-  (size! screen new-width (* new-width (/ (game :height) (game :width)))))
-
 (defn width
   "Returns the width of the camera in `screen`.
 
@@ -66,13 +58,13 @@ remains in tact.
   (let [^Camera camera (u/get-obj screen :camera)]
     (. camera viewportWidth)))
 
-(defn height!
-  "Sets the height of the camera in `screen`, adjusting the width so the ratio
+(defn width!
+  "Sets the width of the camera in `screen`, adjusting the height so the ratio
 remains in tact.
 
-    (height! screen 360)"
-  [screen new-height]
-  (size! screen (* new-height (/ (game :width) (game :height))) new-height))
+    (width! screen 480)"
+  [screen new-width]
+  (size! screen new-width (* new-width (/ (game :height) (game :width)))))
 
 (defn height
   "Returns the height of the camera in `screen`.
@@ -82,12 +74,13 @@ remains in tact.
   (let [^Camera camera (u/get-obj screen :camera)]
     (. camera viewportHeight)))
 
-(defn x!
-  "Sets only the x position of the camera in `screen`."
-  [screen x-val]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) x) x-val)
-    (.update camera)))
+(defn height!
+  "Sets the height of the camera in `screen`, adjusting the width so the ratio
+remains in tact.
+
+    (height! screen 360)"
+  [screen new-height]
+  (size! screen (* new-height (/ (game :width) (game :height))) new-height))
 
 (defn x
   "Returns the x position of the camera in `screen`."
@@ -95,11 +88,11 @@ remains in tact.
   (let [^Camera camera (u/get-obj screen :camera)]
     (. (. camera position) x)))
 
-(defn y!
-  "Sets only the y position of the camera in `screen`."
-  [screen y-val]
+(defn x!
+  "Sets only the x position of the camera in `screen`."
+  [screen x-val]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) y) y-val)
+    (set! (. (. camera position) x) x-val)
     (.update camera)))
 
 (defn y
@@ -108,11 +101,11 @@ remains in tact.
   (let [^Camera camera (u/get-obj screen :camera)]
     (. (. camera position) y)))
 
-(defn z!
-  "Sets only the z position of the camera in `screen`."
-  [screen z-val]
+(defn y!
+  "Sets only the y position of the camera in `screen`."
+  [screen y-val]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) z) z-val)
+    (set! (. (. camera position) y) y-val)
     (.update camera)))
 
 (defn z
@@ -120,6 +113,19 @@ remains in tact.
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
     (. (. camera position) z)))
+
+(defn z!
+  "Sets only the z position of the camera in `screen`."
+  [screen z-val]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (set! (. (. camera position) z) z-val)
+    (.update camera)))
+
+(defn position
+  "Returns the position of the camera in `screen`."
+  [screen]
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera position)))
 
 (defn position!
   "Sets the position of the camera in `screen`."
@@ -135,11 +141,11 @@ remains in tact.
       (when z-val (set! (. (. camera position) z) z-val))
       (.update camera))))
 
-(defn position
-  "Returns the position of the camera in `screen`."
+(defn direction
+  "Returns the direction of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (. camera position)))
+    (. camera direction)))
 
 (defn direction!
   "Sets the direction of the camera in `screen`."
@@ -148,11 +154,11 @@ remains in tact.
     (.lookAt camera x y z)
     (.update camera)))
 
-(defn direction
-  "Returns the direction of the camera in `screen`."
+(defn near
+  "Returns the near clipping plane distance of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (. camera direction)))
+    (. camera near)))
 
 (defn near!
   "Sets the near clipping plane distance of the camera in `screen`."
@@ -161,11 +167,11 @@ remains in tact.
     (set! (. camera near) n)
     (.update camera)))
 
-(defn near
-  "Returns the near clipping plane distance of the camera in `screen`."
+(defn far
+  "Returns the far clipping plane distance of the camera in `screen`."
   [screen]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (. camera near)))
+    (. camera far)))
 
 (defn far!
   "Sets the far clipping plane distance of the camera in `screen`."
@@ -173,9 +179,3 @@ remains in tact.
   (let [^Camera camera (u/get-obj screen :camera)]
     (set! (. camera far) n)
     (.update camera)))
-
-(defn far
-  "Returns the far clipping plane distance of the camera in `screen`."
-  [screen]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (. camera far)))
