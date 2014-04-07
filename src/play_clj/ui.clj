@@ -14,11 +14,6 @@
            [com.esotericsoftware.tablelayout Cell]
            [play_clj.entities ActorEntity]))
 
-(defn actor?
-  "Returns true if `entity` is one of the UI entities."
-  [entity]
-  (isa? (type entity) ActorEntity))
-
 (defmacro drawable
   "Returns a subclass of [BaseDrawable](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/BaseDrawable.html).
 
@@ -207,6 +202,11 @@ based on the file at `path`.
   [entity k & options]
   `(u/call! ^Dialog (u/get-obj ~entity :object) ~k ~@options))
 
+(defn dialog?
+  "Returns true if `entity` is a `dialog`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Dialog))
+
 ; horizontal
 
 (defn horizontal*
@@ -226,6 +226,11 @@ based on the file at `path`.
   "Calls a single method on a `horizontal`."
   [entity k & options]
   `(u/call! ^HorizontalGroup (u/get-obj ~entity :object) ~k ~@options))
+
+(defn horizontal?
+  "Returns true if `entity` is a `horizontal`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) HorizontalGroup))
 
 ; image
 
@@ -254,6 +259,11 @@ based on the file at `path`.
   [entity k & options]
   `(u/call! ^Image (u/get-obj ~entity :object) ~k ~@options))
 
+(defn image?
+  "Returns true if `entity` is an `image`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Image))
+
 ; image-button
 
 (defn image-button*
@@ -274,6 +284,11 @@ based on the file at `path`.
   "Calls a single method on a `image-button`."
   [entity k & options]
   `(u/call! ^ImageButton (u/get-obj ~entity :object) ~k ~@options))
+
+(defn image-button?
+  "Returns true if `entity` is an `image-button`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) ImageButton))
 
 ; image-text-button
 
@@ -296,6 +311,11 @@ based on the file at `path`.
   "Calls a single method on a `image-text-button`."
   [entity k & options]
   `(u/call! ^ImageTextButton (u/get-obj ~entity :object) ~k ~@options))
+
+(defn image-text-button?
+  "Returns true if `entity` is a `image-text-button`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) ImageTextButton))
 
 ; label
 
@@ -322,6 +342,11 @@ based on the file at `path`.
   [entity k & options]
   `(u/call! ^Label (u/get-obj ~entity :object) ~k ~@options))
 
+(defn label?
+  "Returns true if `entity` is a `label`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Label))
+
 ; scroll-pane
 
 (defn scroll-pane*
@@ -342,6 +367,11 @@ based on the file at `path`.
   "Calls a single method on a `scroll-pane`."
   [entity k & options]
   `(u/call! ^ScrollPane (u/get-obj ~entity :object) ~k ~@options))
+
+(defn scroll-pane?
+  "Returns true if `entity` is a `scroll-pane`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) ScrollPane))
 
 ; select-box
 
@@ -364,6 +394,11 @@ based on the file at `path`.
   "Calls a single method on a `select-box`."
   [entity k & options]
   `(u/call! ^SelectBox (u/get-obj ~entity :object) ~k ~@options))
+
+(defn select-box?
+  "Returns true if `entity` is a `select-box`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) SelectBox))
 
 ; slider
 
@@ -389,6 +424,11 @@ based on the file at `path`.
   [entity k & options]
   `(u/call! ^Slider (u/get-obj ~entity :object) ~k ~@options))
 
+(defn slider?
+  "Returns true if `entity` is a `slider`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Slider))
+
 ; stack
 
 (defn stack*
@@ -409,6 +449,11 @@ based on the file at `path`.
   [entity k & options]
   `(u/call! ^Stack (u/get-obj ~entity :object) ~k ~@options))
 
+(defn stack?
+  "Returns true if `entity` is a `stack`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Stack))
+
 ; table
 
 (defn table*
@@ -428,6 +473,11 @@ based on the file at `path`.
   "Calls a single method on a `table`."
   [entity k & options]
   `(u/call! ^Table (u/get-obj ~entity :object) ~k ~@options))
+
+(defn table?
+  "Returns true if `entity` is a `table`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Table))
 
 ; text-button
 
@@ -450,6 +500,11 @@ based on the file at `path`.
   [entity k & options]
   `(u/call! ^TextButton (u/get-obj ~entity :object) ~k ~@options))
 
+(defn text-button?
+  "Returns true if `entity` is a `text-button`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) TextButton))
+
 ; text-field
 
 (defn text-field*
@@ -470,6 +525,11 @@ based on the file at `path`.
   "Calls a single method on a `text-field`."
   [entity k & options]
   `(u/call! ^TextField (u/get-obj ~entity :object) ~k ~@options))
+
+(defn text-field?
+  "Returns true if `entity` is a `text-field`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) TextField))
 
 ; tree
 
@@ -492,6 +552,11 @@ based on the file at `path`.
   [entity k & options]
   `(u/call! ^Tree (u/get-obj ~entity :object) ~k ~@options))
 
+(defn tree?
+  "Returns true if `entity` is a `tree`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Tree))
+
 ; vertical
 
 (defn vertical*
@@ -511,6 +576,11 @@ based on the file at `path`.
   "Calls a single method on a `vertical`."
   [entity k & options]
   `(u/call! ^VerticalGroup (u/get-obj ~entity :object) ~k ~@options))
+
+(defn vertical?
+  "Returns true if `entity` is a `vertical`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) VerticalGroup))
 
 ; window
 
@@ -532,3 +602,8 @@ based on the file at `path`.
   "Calls a single method on a `window`."
   [entity k & options]
   `(u/call! ^Window (u/get-obj ~entity :object) ~k ~@options))
+
+(defn window?
+  "Returns true if `entity` is a `window`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Window))

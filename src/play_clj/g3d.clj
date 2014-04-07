@@ -94,7 +94,7 @@
 (defn model?
   "Returns true if `entity` is a `model`."
   [entity]
-  (isa? (type entity) ModelEntity))
+  (isa? (type (u/get-obj entity :object)) ModelInstance))
 
 ; model-builder
 

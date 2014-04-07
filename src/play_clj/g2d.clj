@@ -51,7 +51,7 @@
 (defn texture?
   "Returns true if `entity` is a `texture`."
   [entity]
-  (isa? (type entity) TextureEntity))
+  (isa? (type (u/get-obj entity :object)) TextureRegion))
 
 ; nine-patch
 
@@ -92,7 +92,7 @@
 (defn nine-patch?
   "Returns true if `entity` is a `nine-patch`."
   [entity]
-  (isa? (type entity) NinePatchEntity))
+  (isa? (type (u/get-obj entity :object)) NinePatch))
 
 ; particle-effect
 
@@ -121,7 +121,7 @@
 (defn particle-effect?
   "Returns true if `entity` is a `particle-effect`."
   [entity]
-  (isa? (type entity) ParticleEffectEntity))
+  (isa? (type (u/get-obj entity :object)) ParticleEffect))
 
 ; texture-atlas
 

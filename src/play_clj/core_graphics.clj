@@ -58,7 +58,7 @@
 (defn shape?
   "Returns true if `entity` is a `shape`."
   [entity]
-  (isa? (type entity) ShapeEntity))
+  (isa? (type (u/get-obj entity :object)) ShapeRenderer))
 
 ; tiled maps
 
