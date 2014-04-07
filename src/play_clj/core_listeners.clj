@@ -163,7 +163,8 @@
 ; g2d-physics
 
 (defn ^:private contact-listener
-  [{:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]} execute-fn!]
+  [{:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]}
+   execute-fn!]
   (reify ContactListener
     (beginContact [this c]
       (execute-fn! on-begin-contact :contact c))
@@ -180,7 +181,9 @@
   ([{:keys [^Stage renderer ^Camera camera] :as screen}]
     (when camera
       (doto (.getViewport renderer)
-        (.setCamera camera))))
+        (.setCamera camera)
+        (.setWorldSize (. camera viewportWidth) (. camera viewportHeight))
+        (.update (game :width) (game :height) true))))
   ([{:keys [^Stage renderer ui-listeners]} entities]
     (doseq [^Actor a (.getActors renderer)]
       (.remove a))
