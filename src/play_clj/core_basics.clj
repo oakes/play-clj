@@ -141,6 +141,8 @@
 
 (defmacro sound
   "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html).
+When no longer needed, you must call `(sound! object :dispose)` to free it from
+memory.
 
     (sound \"playerhurt.wav\")
     (sound \"playerhurt.wav\" :play)"
