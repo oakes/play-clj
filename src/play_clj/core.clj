@@ -6,8 +6,9 @@
             InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.assets AssetManager]
+           [com.badlogic.gdx.files FileHandle]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
-            PerspectiveCamera Pixmap Texture VertexAttributes$Usage]
+            PerspectiveCamera Pixmap Pixmap$Format PixmapIO Texture VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d SpriteBatch]
            [com.badlogic.gdx.graphics.g3d ModelBatch]
            [com.badlogic.gdx.graphics.glutils ShapeRenderer]
@@ -26,7 +27,7 @@
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener]
-           [com.badlogic.gdx.utils Timer$Task]
+           [com.badlogic.gdx.utils ScreenUtils Timer$Task]
            [play_clj.entities ShapeEntity]))
 
 (load "core_basics")
