@@ -16,7 +16,8 @@ memory.
 
     (pixmap! object :dispose)"
   [object k & options]
-  `(u/call! ^Pixmap ~object ~k ~@options))
+  `(let [^Pixmap object# ~object]
+     (u/call! object# ~k ~@options)))
 
 (defmacro shape-type
   "Returns a static field from [ShapeRenderer.ShapeType](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.ShapeType.html).
