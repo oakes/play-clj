@@ -7,6 +7,35 @@
   [& body]
   `(app! :post-runnable (fn [] ~@body)))
 
+(defn new-file!
+  "Creates a new [File](http://docs.oracle.com/javase/7/docs/api/java/io/File.html)"
+  ([name extension]
+     (new-file! "./" name extension))
+  ([path name extension]
+      (java.io.File. (str path name extension))))
+
+(defn capture-screen!
+  "Returns a [Pixmap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html) that contains a capture of the current screen.
+   Note that you must call [dispose](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html#dispose) on the Pixmap or you will cause a memory leak on the native heap.
+   screenshot! captures and disposes the Pixmap automatically."
+  []
+  (let [pixmap (Pixmap. (game :width) (game :height) (Pixmap$Format/RGBA8888))
+        pixel-data (ScreenUtils/getFrameBufferPixels true)
+        pixels (.getPixels pixmap)]
+    (doto pixels
+      (.clear)
+      (.put pixel-data)
+      (.position))
+    pixmap))
+
+(defn screenshot!
+  "Captures a screenshot and writes it to disk."
+  []
+  (let [pixmap (capture-screen!)
+        handle (FileHandle. (new-file! (str (System/currentTimeMillis)) ".png"))]
+    (do (PixmapIO/writePNG handle pixmap)
+        (.dispose pixmap))))
+
 ; static fields
 
 (defmacro scaling
