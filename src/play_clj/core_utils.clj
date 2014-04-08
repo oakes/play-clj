@@ -16,7 +16,8 @@ specified path. Note that when a `pixmap` is no longer needed, you must call
     (screenshot! \"out.png\")
     (screenshot! (files! :external \"out.png\"))"
   ([]
-    (let [pic (Pixmap. (game :width) (game :height) (Pixmap$Format/RGBA8888))
+    (let [^Pixmap$Format pic-f (Pixmap$Format/RGBA8888)
+          ^Pixmap pic (Pixmap. ^long (game :width) ^long (game :height) pic-f)
           pixel-data (ScreenUtils/getFrameBufferPixels true)
           pixels (.getPixels pic)]
       (doto pixels
@@ -30,7 +31,7 @@ specified path. Note that when a `pixmap` is no longer needed, you must call
                    (files! :local path)
                    path)]
       (PixmapIO/writePNG handle pic)
-      (.dispose pic))))
+      (pixmap! pic :dispose))))
 
 ; static fields
 
