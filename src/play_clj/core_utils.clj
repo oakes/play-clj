@@ -9,7 +9,8 @@
 
 (defn screenshot!
   "Captures a screenshot and either returns it as a `pixmap` or saves it to the
-specified path.
+specified path. Note that when a `pixmap` is no longer needed, you must call
+`(pixmap! object :dispose)` to clear it from memory.
 
     (screenshot!)
     (screenshot! \"out.png\")
