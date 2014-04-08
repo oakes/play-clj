@@ -21,7 +21,7 @@ specified path.
       (doto pixels
         (.clear)
         (.put pixel-data)
-        (.position))
+        (.position 0))
       pic))
   ([path]
     (let [pic (screenshot!)
