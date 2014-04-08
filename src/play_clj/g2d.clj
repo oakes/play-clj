@@ -1,6 +1,6 @@
 (ns play-clj.g2d
   (:require [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.graphics Texture]
+  (:import [com.badlogic.gdx.graphics Pixmap Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
             ParticleEffect TextureAtlas TextureRegion]
            [play_clj.entities TextureEntity NinePatchEntity
@@ -22,6 +22,8 @@
     (cond
       (string? arg)
       (-> ^String arg Texture. TextureRegion.)
+      (isa? (type arg) Pixmap)
+      (-> ^Pixmap arg Texture. TextureRegion.)
       (:object arg)
       (TextureRegion. ^TextureRegion (:object arg))
       :else
@@ -31,10 +33,10 @@
   "Returns an entity based on [TextureRegion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html).
 
     (texture \"image.png\")
-    (texture \"image.png\" :flip true false)
     (texture \"image.png\"
              :flip true false
-             :set-region 0 0 100 100)"
+             :set-region 0 0 100 100)
+    (texture (texture \"image.png\"))"
   [arg & options]
   `(let [entity# (texture* ~arg)]
      (u/calls! ^TextureRegion (u/get-obj entity# :object) ~@options)
