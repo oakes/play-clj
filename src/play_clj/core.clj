@@ -27,7 +27,7 @@
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener]
            [com.badlogic.gdx.utils ScreenUtils Timer$Task]
-           [play_clj.entities ShapeEntity]))
+           [play_clj.entities BundleEntity ShapeEntity]))
 
 (load "core_basics")
 (load "core_cameras")
