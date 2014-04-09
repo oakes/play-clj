@@ -16,7 +16,8 @@
  "Audio" {"audio!" :methods}
  "Bezier" {"bezier" :methods
            "bezier!" :methods}
- "BitmapFont" {"bitmap-font" :constructors}
+ "BitmapFont" {"bitmap-font" :constructors
+               "bitmap-font!" :methods}
  "BitmapFontLoader" {"loader :bitmap-font" :methods
                      "loader! :bitmap-font" :methods}
  "BlendingAttribute" {"attribute :blending" :constructors

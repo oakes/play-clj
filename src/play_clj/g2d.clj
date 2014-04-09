@@ -14,6 +14,11 @@
   [& options]
   `(BitmapFont. ~@options))
 
+(defmacro bitmap-font!
+  "Calls a single method on a `bitmap-font`."
+  [object k & options]
+  `(u/call! ^BitmapFont ~object ~k ~@options))
+
 ; texture
 
 (defn texture*
