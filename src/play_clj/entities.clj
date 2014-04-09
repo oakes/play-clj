@@ -75,6 +75,6 @@
     (.end object)))
 
 (defrecord BundleEntity [entities] Entity
-  (draw-entity! [{:keys [entities]} screen batch]
+  (draw-entity! [{:keys [entities] :as entity} screen batch]
     (doseq [e entities]
-      (draw-entity! e screen batch))))
+      (draw-entity! (merge e entity) screen batch))))
