@@ -166,7 +166,7 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`.
 from the tiled map in `screen` that matches `layer`. This is necessary for
 non-tile layers, like object and image layers.
 
-    (basic-map-layer screen \"water\")"
+    (basic-map-layer screen \"objects\")"
   [screen layer & options]
   `(let [^MapLayer object# (basic-map-layer* ~screen ~layer)]
      (u/calls! object# ~@options)))
@@ -174,7 +174,7 @@ non-tile layers, like object and image layers.
 (defmacro basic-map-layer!
   "Calls a single method on a `basic-map-layer`.
 
-    (basic-map-layer! (basic-map-layer screen \"water\")
+    (basic-map-layer! (basic-map-layer screen \"objects\")
                       :set-visible false)"
   [object k & options]
   `(u/call! ^MapLayer ~object ~k ~@options))
