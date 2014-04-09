@@ -2,8 +2,6 @@
 
 (defmacro pixmap
   "Returns a [Pixmap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html).
-When no longer needed, you must call `(pixmap! object :dispose)` to free it from
-memory.
 
     (pixmap \"image.png\")"
   [& args]
