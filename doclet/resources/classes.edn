@@ -118,6 +118,8 @@
           "joint!" :methods}
  "Label" {"label" :methods
           "label!" :methods}
+ "MapLayer" {"basic-map-layer" :methods
+             "basic-map-layer!" :methods}
  "Material" {"material" :methods
              "material!" :methods}
  "MathUtils" {"math!" :static-methods}

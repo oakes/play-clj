@@ -129,8 +129,8 @@ from the tiled map in `screen` that matches `layer`.
   "Returns a list with strings cooresponding to the name of each layer in the
 tiled map in `screen`."
   [screen]
-  (for [layer (tiled-map-layers screen)]
-    (tiled-map-layer! layer :get-name)))
+  (for [^MapLayer layer (tiled-map-layers screen)]
+    (.getName layer)))
 
 (defn tiled-map-cell*
   ([]
@@ -154,6 +154,30 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`.
                      :set-rotation 90)"
   [object k & options]
   `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
+
+(defn basic-map-layer*
+  ([]
+    (MapLayer.))
+  ([screen layer]
+    (tiled-map-layer* screen layer)))
+
+(defmacro basic-map-layer
+  "Returns a [MapLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapLayer.html)
+from the tiled map in `screen` that matches `layer`. This is necessary for
+non-tile layers, like object and image layers.
+
+    (basic-map-layer screen \"water\")"
+  [screen layer & options]
+  `(let [^MapLayer object# (basic-map-layer* ~screen ~layer)]
+     (u/calls! object# ~@options)))
+
+(defmacro basic-map-layer!
+  "Calls a single method on a `basic-map-layer`.
+
+    (basic-map-layer! (basic-map-layer screen \"water\")
+                      :set-visible false)"
+  [object k & options]
+  `(u/call! ^MapLayer ~object ~k ~@options))
 
 (defn ^:private tiled-map-prop
   [screen]
