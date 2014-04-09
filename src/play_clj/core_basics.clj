@@ -25,6 +25,11 @@
                                     (u/key->upper (first args))))
       `(Color. ~@args)))
 
+(defmacro color!
+  "Calls a single method on a `color`."
+  [object k & options]
+  `(u/call! ^Color ~object ~k ~@options))
+
 ; interop
 
 (defmacro app!

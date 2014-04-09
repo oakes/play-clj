@@ -35,7 +35,8 @@
                      "catmull-rom-spline!" :methods}
  "Circle" {"circle" :methods
            "circle!" :methods}
- "Color" {"color" :static-fields}
+ "Color" {"color" :static-fields
+          "color!" :methods}
  "ColorAttribute" {"attribute :color" :constructors
                    "attribute-type :color" :static-fields
                    "attribute! :color" :static-methods}
