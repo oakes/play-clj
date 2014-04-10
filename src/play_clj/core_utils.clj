@@ -19,6 +19,11 @@ override the equivalent keys in each entity when being drawn.
   [& entities]
   (BundleEntity. entities))
 
+(defn bundle?
+  "Returns true if `entity` is a `bundle`."
+  [entity]
+  (isa? (type entity) BundleEntity))
+
 (defn screenshot!
   "Captures a screenshot and either returns it as a `pixmap` or saves it to the
 specified path.
