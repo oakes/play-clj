@@ -121,8 +121,8 @@
  "Material" {"material" :methods
              "material!" :methods}
  "MathUtils" {"math!" :static-methods}
- "MapLayer" {"basic-map-layer" :methods
-             "basic-map-layer!" :methods}
+ "MapLayer" {"map-layer" :methods
+             "map-layer!" :methods}
  "Matrix3" {"matrix-3" :methods
             "matrix-3!" :methods}
  "Matrix4" {"matrix-4" :methods
