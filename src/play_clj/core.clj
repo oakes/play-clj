@@ -13,7 +13,8 @@
            [com.badlogic.gdx.graphics.glutils ShapeRenderer]
            [com.badlogic.gdx.input GestureDetector
             GestureDetector$GestureListener]
-           [com.badlogic.gdx.maps MapLayer MapLayers MapProperties]
+           [com.badlogic.gdx.maps MapLayer MapLayers MapObject MapObjects
+            MapProperties]
            [com.badlogic.gdx.maps.tiled TiledMap TiledMapTileLayer
             TiledMapTileLayer$Cell TmxMapLoader]
            [com.badlogic.gdx.maps.tiled.renderers

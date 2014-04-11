@@ -84,29 +84,20 @@ Normally, you don't need to use this directly."
 
     (tiled-map! screen :get-layers)"
   [screen k & options]
-  `(let [^BatchTiledMapRenderer object# (u/get-obj ~screen :renderer)]
-     (u/call! ^TiledMap (.getMap object#) ~k ~@options)))
-
-(defn tiled-map-layers
-  "Returns a list with [MapLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapLayer.html)
-objects cooresponding to each layer in the tiled map in `screen`.
-
-    (tiled-map-layers screen)"
-  [screen]
-  (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
-        ^MapLayers layers (-> renderer .getMap .getLayers)]
-    (for [^long i (range (.getCount layers))]
-      (.get layers i))))
+  `(let [^BatchTiledMapRenderer renderer# (u/get-obj ~screen :renderer)]
+     (u/call! ^TiledMap (.getMap renderer#) ~k ~@options)))
 
 (defn tiled-map-layer*
   ([width height tile-width tile-height]
     (TiledMapTileLayer. width height tile-width tile-height))
   ([screen layer]
     (if (isa? (type layer) MapLayer)
-      layer
-      (->> (tiled-map-layers screen)
-           (drop-while #(not= layer (.getName ^MapLayer %)))
-           first))))
+        layer
+        (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
+              ^TiledMap m (.getMap renderer)]
+          (->> (.getLayers m)
+               (drop-while #(not= layer (.getName ^MapLayer %)))
+               first)))))
 
 (defmacro tiled-map-layer
   "Returns a [TiledMapTileLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
@@ -129,8 +120,10 @@ from the tiled map in `screen` that matches `layer`.
   "Returns a list with strings cooresponding to the name of each layer in the
 tiled map in `screen`."
   [screen]
-  (for [^MapLayer layer (tiled-map-layers screen)]
-    (.getName layer)))
+  (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
+        ^TiledMap m (.getMap renderer)]
+    (for [^MapLayer layer (.getLayers m)]
+      (.getName layer))))
 
 (defn tiled-map-cell*
   ([]
@@ -155,6 +148,27 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`.
   [object k & options]
   `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
 
+(defn map-layers*
+  []
+  (MapLayers.))
+
+(defmacro map-layers
+  "Returns the [MapLayers](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapLayers.html)
+in the tiled map in `screen`.
+
+    (map-layers screen)"
+  [screen & options]
+  `(let [^BatchTiledMapRenderer renderer# (u/get-obj ~screen :renderer)
+         ^MapLayers layers# (-> renderer# .getMap .getLayers)]
+     (u/calls! layers# ~@options)))
+
+(defmacro map-layers!
+  "Calls a single method on a `map-layers`.
+
+    (map-layers! screen :remove (map-layer screen \"objects\"))"
+  [object k & options]
+  `(u/call! ^MapLayers ~object ~k ~@options))
+
 (defn map-layer*
   ([]
     (MapLayer.))
@@ -178,6 +192,49 @@ non-tile layers, like object and image layers.
                 :set-visible false)"
   [object k & options]
   `(u/call! ^MapLayer ~object ~k ~@options))
+
+(defn map-objects*
+  []
+  (MapObjects.))
+
+(defmacro map-objects
+  "Returns the [MapObjects](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapObjects.html)
+in the `layer`.
+
+    (map-objects layer)"
+  [^MapLayer layer & options]
+  `(let [^MapObjects objects# (.getObjects ~layer)]
+     (u/calls! objects# ~@options)))
+
+(defmacro map-objects!
+  "Calls a single method on a `map-objects`.
+
+    (map-objects! (map-objects layer) :remove (map-object layer 0))"
+  [object k & options]
+  `(u/call! ^MapObjects ~object ~k ~@options))
+
+(defn ^:private map-object-init
+  [k]
+  (u/gdx :maps :object (str (u/key->pascal k) "MapObject.")))
+
+(defn map-object*
+  []
+  (MapObject.))
+
+(defmacro map-object
+  "Returns a subclass of [MapObject](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapObject.html).
+
+    (map-object :circle)"
+  [k & options]
+  `(let [^MapObject object# (~(map-object-init k))]
+     (u/calls! object# ~@options)))
+
+(defmacro map-object!
+  "Calls a single method on a `map-object`.
+
+    (map-object! (map-object :rectangle) :get-rectangle)"
+  [object k & options]
+  `(u/call! ^MapObject ~object ~k ~@options))
 
 (defn ^:private tiled-map-prop
   [screen]

@@ -35,6 +35,7 @@
                      "catmull-rom-spline!" :methods}
  "Circle" {"circle" :methods
            "circle!" :methods}
+ "CircleMapObject" {"map-object :circle" :methods}
  "Color" {"color" :static-fields
           "color!" :methods}
  "ColorAttribute" {"attribute :color" :constructors
@@ -67,6 +68,7 @@
               "edge-shape!" :methods}
  "Ellipse" {"ellipse" :methods
             "ellipse!" :methods}
+ "EllipseMapObject" {"map-object :ellipse" :methods}
  "Environment" {"environment" :methods
                 "environment!" :methods}
  "Files" {"files!" :methods}
@@ -118,6 +120,13 @@
           "joint!" :methods}
  "Label" {"label" :methods
           "label!" :methods}
+ "MapLayer" {"map-layer" :methods
+             "map-layer!" :methods}
+ "MapLayers" {"map-layers" :methods
+              "map-layers!" :methods}
+ "MapObject" {"map-object!" :methods}
+ "MapObjects" {"map-objects" :methods
+               "map-objects!" :methods}
  "Material" {"material" :methods
              "material!" :methods}
  "MathUtils" {"math!" :static-methods}
@@ -159,6 +168,8 @@
  "Plane.PlaneSide" {"plane-side" :static-fields}
  "Polygon" {"polygon" :methods
             "polygon!" :methods}
+ "PolygonMapObject" {"map-object :polygon" :methods}
+ "PolylineMapObject" {"map-object :polyline" :methods}
  "PolygonShape" {"polygon-shape" :methods
                  "polygon-shape!" :methods}
  "Polyline" {"polyline" :methods
@@ -170,6 +181,7 @@
                "quaternion!" :methods}
  "Rectangle" {"rectangle" :methods
               "rectangle!" :methods}
+ "RectangleMapObject" {"map-object :rectangle" :methods}
  "RevoluteJointDef" {"joint-def :revolute" :fields}
  "RopeJointDef" {"joint-def :rope" :fields}
  "Scaling" {"scaling" :static-fields}
@@ -213,6 +225,7 @@
  "TextField.TextFieldStyle" {"style :text-field" :constructors}
  "TextureLoader" {"loader :texture" :methods
                   "loader! :texture" :methods}
+ "TextureMapObject" {"map-object :texture" :methods}
  "TextureRegion" {"texture" :methods
                   "texture!" :methods}
  "TextureRegionDrawable" {"drawable :texture-region" :constructors}
