@@ -119,23 +119,24 @@ from the tiled map in `screen` that matches `layer`.
 (defn tiled-map-cell*
   ([]
     (TiledMapTileLayer$Cell.))
-  ([screen layer x y]
-    (.getCell ^TiledMapTileLayer (tiled-map-layer screen layer) x y)))
+  ([^TiledMapTileLayer layer x y]
+    (.getCell layer x y)))
 
 (defmacro tiled-map-cell
   "Returns a [TiledMapTileLayer.Cell](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.Cell.html)
-from the tiled map in `screen` from the given `layer` and position `x` and `y`.
+from the `layer` at position `x` and `y`.
 
-    (tiled-map-cell screen \"water\" 0 0)"
-  [screen layer x y & options]
-  `(let [^TiledMapTileLayer$Cell object# (tiled-map-cell* ~screen ~layer ~x ~y)]
+    (tiled-map-cell (tiled-map-layer screen \"water\") 0 0)"
+  [layer x y & options]
+  `(let [^TiledMapTileLayer$Cell object# (tiled-map-cell* ~layer ~x ~y)]
      (u/calls! object# ~@options)))
 
 (defmacro tiled-map-cell!
   "Calls a single method on a `tiled-map-cell`.
 
-    (tiled-map-cell! (tiled-map-cell screen \"water\" 0 0)
-                     :set-rotation 90)"
+    (-> (tiled-map-layer screen \"water\")
+        (tiled-map-cell 0 0)
+        (tiled-map-cell! :set-rotation 90))"
   [object k & options]
   `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
 
