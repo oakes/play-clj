@@ -156,17 +156,10 @@ in the tiled map in `screen`.
   `(let [^MapLayers object# (map-layers* ~screen)]
      (u/calls! object# ~@options)))
 
-(defn map-layer-names
-  "Returns a list with strings cooresponding to the name of each layer in the
-tiled map in `screen`."
-  [screen]
-  (for [^MapLayer layer (map-layers screen)]
-    (.getName layer)))
-
 (defmacro map-layers!
   "Calls a single method on a `map-layers`.
 
-    (map-layers! screen :remove (map-layer screen \"objects\"))"
+    (map-layers! object :remove (map-layer screen \"objects\"))"
   [object k & options]
   `(u/call! ^MapLayers ~object ~k ~@options))
 
@@ -193,6 +186,13 @@ non-tile layers, like object and image layers.
                 :set-visible false)"
   [object k & options]
   `(u/call! ^MapLayer ~object ~k ~@options))
+
+(defn map-layer-names
+  "Returns a list with strings cooresponding to the name of each layer in the
+tiled map in `screen`."
+  [screen]
+  (for [^MapLayer layer (map-layers screen)]
+    (.getName layer)))
 
 (defn map-objects*
   ([]
