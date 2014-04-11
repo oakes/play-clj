@@ -116,15 +116,6 @@ from the tiled map in `screen` that matches `layer`.
   [object k & options]
   `(u/call! ^TiledMapTileLayer (cast TiledMapTileLayer ~object) ~k ~@options))
 
-(defn tiled-map-layer-names
-  "Returns a list with strings cooresponding to the name of each layer in the
-tiled map in `screen`."
-  [screen]
-  (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
-        ^TiledMap m (.getMap renderer)]
-    (for [^MapLayer layer (.getLayers m)]
-      (.getName layer))))
-
 (defn tiled-map-cell*
   ([]
     (TiledMapTileLayer$Cell.))
@@ -149,8 +140,11 @@ from the tiled map in `screen` from the given `layer` and position `x` and `y`.
   `(u/call! ^TiledMapTileLayer$Cell ~object ~k ~@options))
 
 (defn map-layers*
-  []
-  (MapLayers.))
+  ([]
+    (MapLayers.))
+  ([screen]
+    (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)]
+      (-> renderer .getMap .getLayers))))
 
 (defmacro map-layers
   "Returns the [MapLayers](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapLayers.html)
@@ -158,9 +152,15 @@ in the tiled map in `screen`.
 
     (map-layers screen)"
   [screen & options]
-  `(let [^BatchTiledMapRenderer renderer# (u/get-obj ~screen :renderer)
-         ^MapLayers layers# (-> renderer# .getMap .getLayers)]
-     (u/calls! layers# ~@options)))
+  `(let [^MapLayers object# (map-layers* ~screen)]
+     (u/calls! object# ~@options)))
+
+(defn map-layer-names
+  "Returns a list with strings cooresponding to the name of each layer in the
+tiled map in `screen`."
+  [screen]
+  (for [^MapLayer layer (map-layers screen)]
+    (.getName layer)))
 
 (defmacro map-layers!
   "Calls a single method on a `map-layers`.
@@ -194,8 +194,10 @@ non-tile layers, like object and image layers.
   `(u/call! ^MapLayer ~object ~k ~@options))
 
 (defn map-objects*
-  []
-  (MapObjects.))
+  ([]
+    (MapObjects.))
+  ([^MapLayer layer]
+    (.getObjects layer)))
 
 (defmacro map-objects
   "Returns the [MapObjects](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapObjects.html)
@@ -203,8 +205,8 @@ in the `layer`.
 
     (map-objects layer)"
   [^MapLayer layer & options]
-  `(let [^MapObjects objects# (.getObjects ~layer)]
-     (u/calls! objects# ~@options)))
+  `(let [^MapObjects object# (map-objects* ~layer)]
+     (u/calls! object# ~@options)))
 
 (defmacro map-objects!
   "Calls a single method on a `map-objects`.
@@ -419,7 +421,7 @@ specify which layers to render with or without.
    & [k & layer-names]]
   (when camera (.setView renderer camera))
   (if k
-    (let [all-layer-names (tiled-map-layer-names screen)]
+    (let [all-layer-names (map-layer-names screen)]
       ; make sure the layer names exist
       (doseq [n layer-names]
         (when-not (contains? (set all-layer-names) n)
