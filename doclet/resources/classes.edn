@@ -82,6 +82,8 @@
  "FrictionJointDef" {"joint-def :friction" :fields}
  "Frustum" {"frustum" :methods
             "frustum!" :methods}
+ "G3dModelLoader" {"loader :g3d-model" :methods
+                   "loader! :g3d-model" :methods}
  "GearJointDef" {"joint-def :gear" :fields}
  "GeometryUtils" {"geometry!" :static-methods}
  "Graphics" {"graphics!" :methods}
@@ -155,6 +157,8 @@
                                "orthogonal-tiled-map!" :methods}
  "OrthographicCamera" {"orthographic" :methods
                        "orthographic!" :methods}
+ "ObjLoader" {"loader :obj" :methods
+              "loader! :obj" :methods}
  "ParticleEffect" {"particle-effect" :methods
                    "particle-effect!" :methods}
  "PerspectiveCamera" {"perspective" :methods
