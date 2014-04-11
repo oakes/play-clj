@@ -125,28 +125,17 @@ found."
     (u/gdx :assets :loaders (str (u/key->pascal k) "Loader."))))
 
 (defmacro loader
-  "Returns a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html).
-
-    (loader :atlas-tmx-map \"map.atlas\")
-    (loader :tmx-map \"map.tmx\")
-    (loader :obj \"model.obj\")
-    (loader :g3d-model \"cube.g3dj\")
-    (loader :bitmap-font \"arial.fnt\")
-    (loader :music \"song.ogg\")
-    (loader :pixmap \"background.png\")
-    (loader :skin \"uiskin.json\")
-    (loader :sound \"hit.ogg\")
-    (loader :texture \"monster.png\")"
-  [type resolver & options]
-  `(let [object# (~(loader-init type) ~resolver)]
-     (u/calls! object# ~@options)))
+  "Returns a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html)."
+  [type & options]
+  `(~(loader-init type) ~@options))
 
 (defmacro loader!
   "Calls a single method in a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html).
 
     (loader! object :load \"map.tmx\")"
   [object & options]
-  `(u/call! ~object ~@options))
+  `(let [^AsynchronousAssetLoader object# ~object]
+     (u/call! object# ~@options)))
 
 (defn asset-manager*
   ([]

@@ -6,6 +6,7 @@
             InputMultiplexer InputProcessor Net Screen]
            [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.assets AssetManager]
+           [com.badlogic.gdx.assets.loaders AsynchronousAssetLoader]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Pixmap Pixmap$Format PixmapIO Texture VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d SpriteBatch]
