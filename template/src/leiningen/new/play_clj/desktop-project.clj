@@ -1,12 +1,12 @@
 (defproject {{app-name}} "0.0.1-SNAPSHOT"
   :description "FIXME: write description"
   
-  :dependencies [[com.badlogicgames.gdx/gdx "0.9.9"]
-                 [com.badlogicgames.gdx/gdx-backend-lwjgl "0.9.9"]
-                 [com.badlogicgames.gdx/gdx-platform "0.9.9"
+  :dependencies [[com.badlogicgames.gdx/gdx "1.0"]
+                 [com.badlogicgames.gdx/gdx-backend-lwjgl "1.0"]
+                 [com.badlogicgames.gdx/gdx-platform "1.0"
                   :classifier "natives-desktop"]
-                 [org.clojure/clojure "1.5.1"]
-                 [play-clj "0.2.4"]]
+                 [org.clojure/clojure "1.6.0"]
+                 [play-clj "0.3.0"]]
   
   :source-paths ["src" "src-common"]
   :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]

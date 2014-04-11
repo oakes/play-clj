@@ -6,5 +6,5 @@
 
 (defn -main
   []
-  (LwjglApplication. {{app-name}} "{{app-name}}" 800 600 true)
+  (LwjglApplication. {{app-name}} "{{app-name}}" 800 600)
   (Keyboard/enableRepeatEvents true))
