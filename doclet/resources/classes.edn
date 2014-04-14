@@ -85,7 +85,7 @@
  "G3dModelLoader" {"loader :g3d-model" :constructors
                    "loader! :g3d-model" :methods}
  "GearJointDef" {"joint-def :gear" :fields}
- "GeometryUtils" {"geometry!" :static-methods}
+ "GeometryUtils" {"geometry" :static-methods}
  "Graphics" {"graphics!" :methods}
  "GridPoint2" {"grid-point-2" :methods
                "grid-point-2!" :methods}
@@ -110,7 +110,7 @@
  "Input.Buttons" {"button-code" :static-fields
                   "button-pressed?" :static-fields}
  "Interpolation" {"interpolation" :static-classes}
- "Intersector" {"intersector!" :static-methods}
+ "Intersector" {"intersector" :static-methods}
  "IntAttribute" {"attribute :int" :constructors
                  "attribute-type :int" :static-fields
                  "attribute! :int" :static-methods}
@@ -131,7 +131,7 @@
                "map-objects!" :methods}
  "Material" {"material" :methods
              "material!" :methods}
- "MathUtils" {"math!" :static-methods}
+ "MathUtils" {"math" :static-methods}
  "MapLayer" {"map-layer" :methods
              "map-layer!" :methods}
  "Matrix3" {"matrix-3" :methods

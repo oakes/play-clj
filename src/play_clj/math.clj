@@ -8,7 +8,7 @@
 
 ; static methods/fields
 
-(defmacro geometry!
+(defmacro geometry
   "Calls a single static method on [GeometryUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/GeometryUtils.html)."
   [k & options]
   `(~(u/gdx-field :math :GeometryUtils (u/key->camel k)) ~@options))
@@ -20,17 +20,17 @@
   [k]
   `~(u/gdx-class :math :Interpolation (u/key->pascal k)))
 
-(defmacro intersector!
+(defmacro intersector
   "Calls a single static method on [Intersector](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Intersector.html).
 
-    (intersector! :is-point-in-triangle 0 1 0 0 1 2 3 0)"
+    (intersector :is-point-in-triangle 0 1 0 0 1 2 3 0)"
   [k & options]
   `(~(u/gdx-field :math :Intersector (u/key->camel k)) ~@options))
 
-(defmacro math!
+(defmacro math
   "Calls a single static method on [MathUtils](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/MathUtils.html).
 
-    (math! :ceil 0.1)"
+    (math :ceil 0.1)"
   [k & options]
   `(~(u/gdx-field :math :MathUtils (u/key->camel k)) ~@options))
 
