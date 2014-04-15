@@ -120,7 +120,7 @@
   "Creates and displays a screen for the `game` object, using one or more
 `screen` maps in the order they were provided.
 
-    (set-screen! hello-world main-screen text-screen)"
+    (set-screen! my-game main-screen text-screen)"
   [^Game game & screens]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
@@ -138,6 +138,23 @@
                        (resize [this w h] (run-fn! :resize w h))
                        (resume [this] (run-fn! :resume))
                        (dispose [this])))))
+
+(defn set-screen-wrapper!
+  "Sets a function that wraps around all screen functions, allowing you to
+handle errors and perform other custom actions each time they run.
+
+    ; default behavior
+    (set-screen-wrapper! (fn [screen screen-fn]
+                           (screen-fn)))
+    ; if there is an error, print it out and switch to a blank screen
+    ; (this is useful because it makes error recovery easier in a REPL)
+    (set-screen-wrapper! (fn [screen screen-fn]
+                           (try (screen-fn)
+                             (catch Exception e
+                               (.printStackTrace e)
+                               (set-screen! my-game blank-screen)))))"
+  [wrapper-fn]
+  (intern 'play-clj.core 'wrapper wrapper-fn))
 
 (defn update!
   "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`

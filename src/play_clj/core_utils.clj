@@ -3,7 +3,7 @@
 (defmacro on-gl
   "Runs the macro body on the GL thread.
 
-    (on-gl (set-screen! hello-world main-screen))"
+    (on-gl (set-screen! my-game main-screen))"
   [& body]
   `(app! :post-runnable (fn [] ~@body)))
 
