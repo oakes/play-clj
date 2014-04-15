@@ -43,8 +43,8 @@
     (compare-and-set! e-atom e-old e-new)))
 
 (defn ^:private wrapper
-  [screen f]
-  (f))
+  [screen screen-fn]
+  (screen-fn))
 
 (defn defscreen*
   [{:keys [screen entities
