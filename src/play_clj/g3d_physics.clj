@@ -214,9 +214,9 @@
           body (u/get-obj e :body)]
       (when (and object body)
         (cond
-          (isa? (type body) btRigidBody)
-          (when-not (rigid-body! body :get-motion-state)
-            (rigid-body! body
+          (isa? (type (:object body)) btRigidBody)
+          (when-not (rigid-body! e :get-motion-state)
+            (rigid-body! e
                          :set-motion-state
                          (proxy [btMotionState] []
                            (getWorldTransform [world-t])
