@@ -9,7 +9,7 @@
             btCollisionWorld btDefaultCollisionConfiguration btDbvtBroadphase
             btSphereShape]
            [com.badlogic.gdx.physics.bullet.dynamics btDiscreteDynamicsWorld
-            btRigidBody btRigidBody$btRigidBodyConstructionInfo
+            btDynamicsWorld btRigidBody btRigidBody$btRigidBodyConstructionInfo
             btSequentialImpulseConstraintSolver]
            [com.badlogic.gdx.physics.bullet.linearmath btMotionState]))
 
@@ -217,8 +217,8 @@
           (bullet-3d! screen :remove-collision-object body))))))
 
 (defmethod c/step!
-  btCollisionWorld
-  [{:keys [^btCollisionWorld world delta-time max-sub-steps time-step]
+  btDynamicsWorld
+  [{:keys [^btDynamicsWorld world delta-time max-sub-steps time-step]
      :or {max-sub-steps 5 time-step (/ 1 60)}
      :as screen}
    & [entities]]
