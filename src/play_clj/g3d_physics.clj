@@ -15,6 +15,9 @@
 
 (def ^:private init (delay (Bullet/init)))
 
+(defrecord World3D [object])
+(defrecord Body3D [object])
+
 ; world
 
 (defn ^:private discrete-dynamics
@@ -23,7 +26,11 @@
         dispatcher (btCollisionDispatcher. config)
         broad (btDbvtBroadphase.)
         solver (btSequentialImpulseConstraintSolver.)]
-    (btDiscreteDynamicsWorld. dispatcher broad solver config)))
+    (assoc (World3D. (btDiscreteDynamicsWorld. dispatcher broad solver config))
+           :config config
+           :dispatcher dispatcher
+           :broadphase broad
+           :solver solver)))
 
 (defn bullet-3d*
   [type]
@@ -33,48 +40,59 @@
     (u/throw-key-not-found type)))
 
 (defmacro bullet-3d
-  "Returns a subclass of btCollisionWorld.
+  "Returns a world based on btCollisionWorld.
 
     (bullet-3d :discrete-dynamics)"
   [type & options]
-  `(let [^btCollisionWorld object# (bullet-3d* ~type)]
-     (u/calls! object# ~@options)))
+  `(let [world# (bullet-3d* ~type)
+         ^btCollisionWorld object# (:object world#)]
+     (u/calls! object# ~@options)
+     world#))
 
 (defmacro bullet-3d!
   "Calls a single method on a `bullet-3d`."
   [screen k & options]
-  `(let [^btCollisionWorld object# (u/get-obj ~screen :world)]
+  `(let [^btCollisionWorld object# (:object (u/get-obj ~screen :world))]
      (u/call! object# ~k ~@options)))
 
 ; bodies
 
 (defn basic-body*
   []
-  (btCollisionObject.))
+  (Body3D. (btCollisionObject.)))
 
 (defmacro basic-body
-  "Returns a btCollisionObject."
+  "Returns a body based on btCollisionObject."
   [& options]
-  `(u/calls! ^btCollisionObject (basic-body*) ~@options))
+  `(let [body# (basic-body*)
+         ^btCollisionObject object# (:object body#)]
+     (u/calls! object# ~@options)
+     body#))
 
 (defmacro basic-body!
   "Calls a single method on a `basic-body`."
   [object k & options]
-  `(u/call! ^btCollisionObject (u/get-obj ~object :body) ~k ~@options))
+  `(let [^btCollisionObject object# (:object (u/get-obj ~object :body))]
+     (u/call! object# ~k ~@options)))
 
 (defn rigid-body*
   [info]
-  (btRigidBody. info))
+  (assoc (Body3D. (btRigidBody. info))
+         :info info))
 
 (defmacro rigid-body
-  "Returns a btRigidBody."
+  "Returns a body based on btRigidBody."
   [info & options]
-  `(u/calls! ^btRigidBody (rigid-body* ~info) ~@options))
+  `(let [body# (rigid-body* ~info)
+         ^btRigidBody object# (:object body#)]
+     (u/calls! object# ~@options)
+     body#))
 
 (defmacro rigid-body!
   "Calls a single method on a `rigid-body`."
   [object k & options]
-  `(u/call! ^btRigidBody (u/get-obj ~object :body) ~k ~@options))
+  `(let [^btRigidBody object# (:object (u/get-obj ~object :body))]
+     (u/call! object# ~k ~@options)))
 
 (defn rigid-body-info
   "Returns a btRigidBodyConstructionInfo."
@@ -89,39 +107,39 @@
 
 (defn ^:private body-x
   [entity]
-  (let [^btCollisionObject object (u/get-obj entity :body)]
+  (let [^btCollisionObject object (:object (u/get-obj entity :body))]
     (-> object .getWorldTransform (. val) (aget Matrix4/M03))))
 
 (defn ^:private body-y
   [entity]
-  (let [^btCollisionObject object (u/get-obj entity :body)]
+  (let [^btCollisionObject object (:object (u/get-obj entity :body))]
     (-> object .getWorldTransform (. val) (aget Matrix4/M13))))
 
 (defn ^:private body-z
   [entity]
-  (let [^btCollisionObject object (u/get-obj entity :body)]
+  (let [^btCollisionObject object (:object (u/get-obj entity :body))]
     (-> object .getWorldTransform (. val) (aget Matrix4/M23))))
 
 (defmethod c/body-position!
-  btCollisionObject
+  Body3D
   [entity x y z]
-  (let [^btCollisionObject object (u/get-obj entity :body)]
+  (let [^btCollisionObject object (:object (u/get-obj entity :body))]
     (.setWorldTransform object
       (doto (m/matrix-4*)
         (m/matrix-4! :set-translation x y z)))))
 
 (defmethod c/body-x!
-  btCollisionObject
+  Body3D
   [entity x]
   (c/body-position! entity x (body-y entity) (body-z entity)))
 
 (defmethod c/body-y!
-  btCollisionObject
+  Body3D
   [entity y]
   (c/body-position! entity (body-x entity) y (body-z entity)))
 
 (defmethod c/body-z!
-  btCollisionObject
+  Body3D
   [entity z]
   (c/body-position! entity (body-x entity) (body-y entity) z))
 
@@ -172,13 +190,13 @@
 ; misc
 
 (defmethod c/add-body!
-  btCollisionWorld
+  World3D
   [screen body]
   (cond
-    (isa? (type body) btRigidBody)
-    (bullet-3d! screen :add-rigid-body body)
+    (isa? (type (:object body)) btRigidBody)
+    (bullet-3d! screen :add-rigid-body (:object body))
     :else
-    (bullet-3d! screen :add-collision-object body))
+    (bullet-3d! screen :add-collision-object (:object body)))
   body)
 
 (defn ^:private get-bodies
@@ -188,7 +206,7 @@
       (.at arr i))))
 
 (defmethod c/update-physics!
-  btCollisionWorld
+  World3D
   [screen & [entities]]
   ; initialize bodies
   (doseq [e entities]
@@ -205,11 +223,11 @@
                            (setWorldTransform [world-t]
                              (m/matrix-4! (. object transform) :set world-t)))))
           :else
-          (.setWorldTransform body (. object transform))))))
+          (basic-body! e :set-world-transform (. object transform))))))
   ; remove bodies that no longer exist
   (when entities
     (doseq [body (get-bodies screen)]
-      (when-not (some #(= body (:body %)) entities)
+      (when-not (some #(= body (-> % :body :object)) entities)
         (cond
           (isa? (type body) btRigidBody)
           (bullet-3d! screen :remove-rigid-body body)
@@ -217,18 +235,19 @@
           (bullet-3d! screen :remove-collision-object body))))))
 
 (defmethod c/step!
-  btDynamicsWorld
-  [{:keys [^btDynamicsWorld world delta-time max-sub-steps time-step]
+  World3D
+  [{:keys [delta-time max-sub-steps time-step]
      :or {max-sub-steps 5 time-step (/ 1 60)}
      :as screen}
    & [entities]]
-  (.stepSimulation world delta-time max-sub-steps time-step)
-  (when entities
-    (map (fn [e]
-           (if (u/get-obj e :body)
-             (assoc e
-                    :x (body-x e)
-                    :y (body-y e)
-                    :z (body-z e))
-             e))
-         entities)))
+  (when (isa? (type (:object (u/get-obj screen :world))) btDynamicsWorld)
+    (bullet-3d! screen :step-simulation delta-time max-sub-steps time-step)
+    (when entities
+      (map (fn [e]
+             (if (u/get-obj e :body)
+               (assoc e
+                      :x (body-x e)
+                      :y (body-y e)
+                      :z (body-z e))
+               e))
+           entities))))
