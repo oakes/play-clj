@@ -11,6 +11,11 @@
 `basic-body` or a `rigid-body`."
   (fn [screen body] (-> screen (u/get-obj :world) class)))
 
+(defmulti add-joint!
+  "Adds the `joint` to the `screen` for physics simulations and returns it. For
+2D physics, `joint` should be a `joint-def`."
+  (fn [screen joint] (-> screen (u/get-obj :world) class)))
+
 (defmulti body-position!
   "Changes the position of the body in `entity`. For 2D physics, the arguments
 should be x, y, and angle, whereas for 3D physics they should be x, y, and z."

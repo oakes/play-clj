@@ -103,16 +103,6 @@
   [object k & options]
   `(u/call! ^Joint ~object ~k ~@options))
 
-(defn create-joint!*
-  [screen j-def]
-  (box-2d! screen :create-joint j-def))
-
-(defmacro create-joint!
-  "Returns a [Joint](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Joint.html)."
-  [screen j-def & options]
-  `(let [object# (create-joint!* ~screen ~j-def)]
-     (u/calls! object# ~@options)))
-
 ; fixtures
 
 (defmacro fixture-def
@@ -219,6 +209,11 @@
   World
   [screen b-def]
   (box-2d! screen :create-body b-def))
+
+(defmethod c/add-joint!
+  World
+  [screen j-def]
+  (box-2d! screen :create-joint j-def))
 
 (defmethod c/physics-listeners
   World
