@@ -8,7 +8,8 @@
            [com.badlogic.gdx.assets AssetManager]
            [com.badlogic.gdx.assets.loaders AsynchronousAssetLoader]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
-            PerspectiveCamera Pixmap Pixmap$Format PixmapIO Texture VertexAttributes$Usage]
+            PerspectiveCamera Pixmap Pixmap$Format PixmapIO Texture
+            VertexAttributes$Usage]
            [com.badlogic.gdx.graphics.g2d SpriteBatch]
            [com.badlogic.gdx.graphics.g3d ModelBatch]
            [com.badlogic.gdx.graphics.glutils ShapeRenderer]
@@ -24,7 +25,6 @@
             IsometricStaggeredTiledMapRenderer
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]
-           [com.badlogic.gdx.physics.box2d ContactListener Joint World]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener]
@@ -35,6 +35,7 @@
 (load "core_cameras")
 (load "core_graphics")
 (load "core_listeners")
+(load "core_physics")
 (load "core_utils")
 
 (defn ^:private reset-changed!
@@ -74,9 +75,11 @@
                     :update-fn! #(apply swap! screen %1 %2)
                     :execute-fn! execute-fn!
                     :on-timer on-timer
-                    :ui-listeners (ui-listeners options execute-fn!)
-                    :g2dp-listener (contact-listener options execute-fn!))
-             (execute-fn! on-show))
+                    :ui-listeners (ui-listeners options execute-fn!))
+             (execute-fn! on-show)
+             (swap! screen assoc
+                    :physics-listeners
+                    (physics-listeners @screen options execute-fn!)))
      :render (fn [d]
                (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
                (execute-fn! on-render :delta-time d))

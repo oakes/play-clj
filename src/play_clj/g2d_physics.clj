@@ -1,9 +1,10 @@
 (ns play-clj.g2d-physics
-  (:require [play-clj.math :as m]
+  (:require [play-clj.core :as c]
+            [play-clj.math :as m]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
-            Contact EdgeShape Fixture FixtureDef JointDef PolygonShape Transform
-            World]))
+            Contact ContactListener EdgeShape Fixture FixtureDef Joint JointDef
+            PolygonShape Transform World]))
 
 ; world
 
@@ -51,51 +52,37 @@
   `(let [^Body object# (u/get-obj ~entity :body)]
      (u/call! object# ~k ~@options)))
 
-(defn create-body!*
-  [screen b-def]
-  (box-2d! screen :create-body b-def))
-
-(defmacro create-body!
-  "Returns a [Body](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Body.html)."
-  [screen b-def & options]
-  `(let [^Body object# (create-body!* ~screen ~b-def)]
-     (u/calls! object# ~@options)))
-
-(defn body-x
-  "Returns the x position of the body in `entity`."
+(defn ^:private body-x
   [entity]
   (. (body! entity :get-position) x))
 
-(defn body-y
-  "Returns the y position of the body in `entity`."
+(defn ^:private body-y
   [entity]
   (. (body! entity :get-position) y))
 
-(defn body-angle
-  "Returns the angle of the body in `entity`."
+(defn ^:private body-angle
   [entity]
   (.getRotation ^Transform (body! entity :get-transform)))
 
-(defn body-transform!
-  "Changes the `x`, `y`, and `angle` of the body in `entity`."
+(defmethod c/body-position!
+  Body
   [entity x y angle]
-  (body! entity :set-transform x y angle)
-  entity)
+  (body! entity :set-transform x y angle))
 
-(defn body-x!
-  "Changes the `x` of the body in `entity`."
+(defmethod c/body-x!
+  Body
   [entity x]
-  (body-transform! entity x (body-y entity) (body-angle entity)))
+  (c/body-position! entity x (body-y entity) (body-angle entity)))
 
-(defn body-y!
-  "Changes the `y` of the body in `entity`."
+(defmethod c/body-y!
+  Body
   [entity y]
-  (body-transform! entity (body-x entity) y (body-angle entity)))
+  (c/body-position! entity (body-x entity) y (body-angle entity)))
 
-(defn body-angle!
-  "Changes the `angle` of the body in `entity`."
+(defmethod c/body-angle!
+  Body
   [entity angle]
-  (body-transform! entity (body-x entity) (body-y entity) angle))
+  (c/body-position! entity (body-x entity) (body-y entity) angle))
 
 ; joints
 
@@ -228,22 +215,56 @@
     (assert contact)
     (-> contact .getFixtureB .getBody)))
 
-(defn step!
-  "Runs the physics simulations for a single frame and optionally returns the
-`entities` with their positions updated."
-  ([{:keys [world time-step velocity-iterations position-iterations]
+(defmethod c/add-body!
+  World
+  [screen b-def]
+  (box-2d! screen :create-body b-def))
+
+(defmethod c/physics-listeners
+  World
+  [screen
+   {:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]}
+   execute-fn!]
+  {:contact (reify ContactListener
+              (beginContact [this c]
+                (execute-fn! on-begin-contact :contact c))
+              (endContact [this c]
+                (execute-fn! on-end-contact :contact c))
+              (postSolve [this c i]
+                (execute-fn! on-post-solve :contact c :impulse i))
+              (preSolve [this c m]
+                (execute-fn! on-pre-solve :contact c :old-manifold m)))})
+
+(defmethod c/update-physics!
+  World
+  [{:keys [^World world physics-listeners]} & [entities]]
+  (.setContactListener world (:contact physics-listeners))
+  (when (and entities (not (.isLocked world)))
+    (let [arr (u/gdx-array [])]
+      ; remove bodies that no longer exist
+      (.getBodies world arr)
+      (doseq [body arr]
+        (when-not (some #(= body (:body %)) entities)
+          (.destroyBody world body)))
+      ; remove joints whose bodies no longer exist
+      (.getJoints world arr)
+      (doseq [^Joint joint arr]
+        (when (and (not (some #(= (.getBodyA joint) (:body %)) entities))
+                   (not (some #(= (.getBodyB joint) (:body %)) entities)))
+          (.destroyJoint world joint))))))
+
+(defmethod c/step!
+  World
+  [{:keys [^World world time-step velocity-iterations position-iterations]
      :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}
-     :as screen}]
-    (assert world)
-    (cond
-      (isa? (type world) World)
-      (.step ^World world time-step velocity-iterations position-iterations)))
-  ([screen entities]
-    (step! screen)
-    (map (fn [entity]
-           (if-let [body (:body entity)]
-             (assoc entity
-                    :x (body-x body)
-                    :y (body-y body))
-             entity))
+     :as screen}
+   & [entities]]
+  (.step world time-step velocity-iterations position-iterations)
+  (when entities
+    (map (fn [e]
+           (if (u/get-obj e :body)
+             (assoc e
+                    :x (body-x e)
+                    :y (body-y e))
+             e))
          entities)))

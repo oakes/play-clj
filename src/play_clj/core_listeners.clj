@@ -160,20 +160,11 @@
    (drag-listener options execute-fn!)
    (focus-listener options execute-fn!)])
 
-; g2d-physics
+(defmulti physics-listeners
+  (fn [screen options execute-fn!] (-> screen :world class))
+  :default nil)
 
-(defn ^:private contact-listener
-  [{:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]}
-   execute-fn!]
-  (reify ContactListener
-    (beginContact [this c]
-      (execute-fn! on-begin-contact :contact c))
-    (endContact [this c]
-      (execute-fn! on-end-contact :contact c))
-    (postSolve [this c i]
-      (execute-fn! on-post-solve :contact c :impulse i))
-    (preSolve [this c m]
-      (execute-fn! on-pre-solve :contact c :old-manifold m))))
+(defmethod physics-listeners nil [_ _ _])
 
 ; update functions
 
@@ -195,32 +186,18 @@
     (remove-input! renderer)
     (add-input! renderer)))
 
-(defn ^:private update-box-2d!
-  ([{:keys [^World world g2dp-listener]}]
-    (.setContactListener world g2dp-listener))
-  ([{:keys [^World world]} entities]
-    (when-not (.isLocked world)
-      (let [arr (u/gdx-array [])]
-        ; remove bodies that no longer exist
-        (.getBodies world arr)
-        (doseq [body arr]
-          (when-not (some #(= body (:body %)) entities)
-            (.destroyBody world body)))
-        ; remove joints whose bodies no longer exist
-        (.getJoints world arr)
-        (doseq [^Joint joint arr]
-          (when (and (not (some #(= (.getBodyA joint) (:body %)) entities))
-                     (not (some #(= (.getBodyB joint) (:body %)) entities)))
-            (.destroyJoint world joint)))))))
+(defmulti update-physics!
+  (fn [screen & [entities]] (-> screen :world class))
+  :default nil)
+
+(defmethod update-physics! nil [_ & _])
 
 (defn ^:private update-screen!
   ([{:keys [renderer world] :as screen}]
     (when (isa? (type renderer) Stage)
       (update-stage! screen))
-    (when (isa? (type world) World)
-      (update-box-2d! screen)))
+    (update-physics! screen))
   ([{:keys [renderer world] :as screen} entities]
     (when (isa? (type renderer) Stage)
       (update-stage! screen entities))
-    (when (isa? (type world) World)
-      (update-box-2d! screen entities))))
+    (update-physics! screen entities)))

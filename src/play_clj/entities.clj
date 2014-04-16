@@ -54,9 +54,14 @@
     (.draw object ^SpriteBatch batch 1)))
 
 (defrecord ModelEntity [object] Entity
-  (draw-entity! [{:keys [^ModelInstance object]}
+  (draw-entity! [{:keys [^ModelInstance object x y z]}
                  {:keys [^ModelBatch renderer ^Environment attributes]}
                  _]
+    (let [^Matrix4 m (. object transform)
+          x (float (or x 0))
+          y (float (or y 0))
+          z (float (or z 0))]
+      (.setTranslation m x y z))
     (.render renderer object attributes)))
 
 (defrecord ShapeEntity [object] Entity

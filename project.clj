@@ -4,6 +4,7 @@
   :license {:name "Public Domain"
             :url "http://unlicense.org/UNLICENSE"}
   :dependencies [[com.badlogicgames.gdx/gdx "1.0-SNAPSHOT"]
+                 [com.badlogicgames.gdx/gdx-bullet "1.0-SNAPSHOT"]
                  [org.clojure/clojure "1.5.1"]]
   :repositories [["sonatype"
                   "https://oss.sonatype.org/content/repositories/snapshots/"]])

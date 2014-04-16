@@ -4,7 +4,8 @@
             Circle ConvexHull DelaunayTriangulator EarClippingTriangulator
             Ellipse FloatCounter Frustum GridPoint2 GridPoint3 Matrix3 Matrix4
             Plane Polygon Polyline Quaternion Rectangle Vector2 Vector3
-            WindowedMean]))
+            WindowedMean]
+           [com.badlogic.gdx.math.collision BoundingBox Ray Segment Sphere]))
 
 ; static methods/fields
 
@@ -436,3 +437,73 @@
   "Calls a single method on a `windowed-mean`."
   [object k & options]
   `(u/call! ^WindowedMean ~object ~k ~@options))
+
+; bounding-box
+
+(defn bounding-box*
+  ([]
+    (BoundingBox.))
+  ([box]
+    (BoundingBox. box))
+  ([min max]
+    (BoundingBox. min max)))
+
+(defmacro bounding-box
+  "Returns a [BoundingBox](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/collision/BoundingBox.html)."
+  [min max & options]
+  `(u/calls! ^BoundingBox (bounding-box* ~min ~max) ~@options))
+
+(defmacro bounding-box!
+  "Calls a single method on a `bounding-box`."
+  [object k & options]
+  `(u/call! ^BoundingBox ~object ~k ~@options))
+
+; ray
+
+(defn ray*
+  [origin direction]
+  (Ray. origin direction))
+
+(defmacro ray
+  "Returns a [Ray](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/collision/Ray.html)."
+  [origin direction & options]
+  `(u/calls! ^Ray (ray* ~origin ~direction) ~@options))
+
+(defmacro ray!
+  "Calls a single method on a `ray`."
+  [object k & options]
+  `(u/call! ^Ray ~object ~k ~@options))
+
+; segment
+
+(defn segment*
+  ([a-x a-y a-z b-x b-y b-z]
+    (Segment. a-x a-y a-z b-x b-y b-z))
+  ([a b]
+    (Segment. a b)))
+
+(defmacro segment
+  "Returns a [Segment](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/collision/Segment.html)."
+  [a b & options]
+  `(u/calls! ^Segment (segment* ~a ~b) ~@options))
+
+(defmacro segment!
+  "Calls a single method on a `segment`."
+  [object k & options]
+  `(u/call! ^Segment ~object ~k ~@options))
+
+; sphere
+
+(defn sphere*
+  [center radius]
+  (Sphere. center radius))
+
+(defmacro sphere
+  "Returns a [Sphere](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/collision/Sphere.html)."
+  [center radius & options]
+  `(u/calls! ^Sphere (sphere* ~center ~radius) ~@options))
+
+(defmacro sphere!
+  "Calls a single method on a `sphere`."
+  [object k & options]
+  `(u/call! ^Sphere ~object ~k ~@options))

@@ -23,9 +23,10 @@
  "BlendingAttribute" {"attribute :blending" :constructors
                       "attribute-type :blending" :static-fields
                       "attribute! :blending" :static-methods}
- "Body" {"create-body!" :methods
-         "body!" :methods}
+ "Body" {"body!" :methods}
  "BodyDef" {"body-def" :fields}
+ "BoundingBox" {"bounding-box" :methods
+                "bounding-box!" :methods}
  "Bresenham2" {"bresenham-2" :methods
                "bresenham-2!" :methods}
  "BSpline" {"b-spline" :methods
@@ -183,6 +184,8 @@
  "PulleyJointDef" {"joint-def :pulley" :fields}
  "Quaternion" {"quaternion" :methods
                "quaternion!" :methods}
+ "Ray" {"ray" :methods
+        "ray!" :methods}
  "Rectangle" {"rectangle" :methods
               "rectangle!" :methods}
  "RectangleMapObject" {"map-object :rectangle" :methods}
@@ -192,6 +195,8 @@
  "ScrollPane" {"scroll-pane" :methods
                "scroll-pane!" :methods}
  "ScrollPane.ScrollPaneStyle" {"style :scroll-pane" :constructors}
+ "Segment" {"segment" :methods
+            "segment!" :methods}
  "SelectBox" {"select-box" :methods
               "select-box!" :methods}
  "SelectBox.SelectBoxStyle" {"style :select-box" :constructors}
@@ -208,6 +213,8 @@
           "sound!" :methods}
  "SoundLoader" {"loader :sound" :constructors
                 "loader! :sound" :methods}
+ "Sphere" {"sphere" :methods
+           "sphere!" :methods}
  "SplitPane.SplitPaneStyle" {"style :split-pane" :constructors}
  "SpriteDrawable" {"drawable :sprite" :constructors}
  "Stack" {"stack" :methods
