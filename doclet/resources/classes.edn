@@ -119,8 +119,7 @@
                                        "isometric-staggered-tiled-map!" :methods}
  "IsometricTiledMapRenderer" {"isometric-tiled-map" :methods
                               "isometric-tiled-map!" :methods}
- "Joint" {"create-joint!" :methods
-          "joint!" :methods}
+ "Joint" {"joint!" :methods}
  "Label" {"label" :methods
           "label!" :methods}
  "MapLayer" {"map-layer" :methods
