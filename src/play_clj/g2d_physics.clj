@@ -1,7 +1,6 @@
 (ns play-clj.g2d-physics
   (:require [play-clj.core :as c]
             [play-clj.math :as m]
-            [play-clj.physics :as p]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
             Contact ContactListener EdgeShape Fixture FixtureDef Joint JointDef
@@ -53,8 +52,8 @@
   `(let [^Body object# (u/get-obj ~entity :body)]
      (u/call! object# ~k ~@options)))
 
-(defmethod p/add-body!
-  World
+(defn add-body!
+  "Adds the `body` to the `screen` for physics simulations and returns it."
   [screen b-def]
   (box-2d! screen :create-body b-def))
 
@@ -70,38 +69,40 @@
   [entity]
   (.getRotation ^Transform (body! entity :get-transform)))
 
-(defmethod p/body-position!
-  Body
+(defn body-position!
+  "Changes the position of the body in `entity`."
   [entity x y angle]
   (body! entity :set-transform x y angle))
 
-(defmethod p/body-x!
-  Body
+(defn body-x!
+  "Changes the `x` of the body in `entity`."
   [entity x]
-  (p/body-position! entity x (body-y entity) (body-angle entity)))
+  (body-position! entity x (body-y entity) (body-angle entity)))
 
-(defmethod p/body-y!
-  Body
+(defn body-y!
+  "Changes the `y` of the body in `entity`."
   [entity y]
-  (p/body-position! entity (body-x entity) y (body-angle entity)))
+  (body-position! entity (body-x entity) y (body-angle entity)))
 
-(defmethod p/body-angle!
-  Body
+(defn body-angle!
+  "Changes the `angle` of the body in `entity`."
   [entity angle]
-  (p/body-position! entity (body-x entity) (body-y entity) angle))
+  (body-position! entity (body-x entity) (body-y entity) angle))
 
 (defn ^:private find-body
   [body entities]
   (some #(if (= body (u/get-obj % :body)) %) entities))
 
-(defmethod p/first-entity
-  World
+(defn first-entity
+  "Returns the first entity in a contact. May only be used in contact functions
+such as :on-begin-contact."
   [screen entities]
   (let [^Contact contact (u/get-obj screen :contact)]
     (-> contact .getFixtureA .getBody (find-body entities))))
 
-(defmethod p/second-entity
-  World
+(defn second-entity
+  "Returns the second entity in a contact. May only be used in contact functions
+such as :on-begin-contact."
   [screen entities]
   (let [^Contact contact (u/get-obj screen :contact)]
     (-> contact .getFixtureB .getBody (find-body entities))))
@@ -125,8 +126,8 @@
   [object k & options]
   `(u/call! ^Joint ~object ~k ~@options))
 
-(defmethod p/add-joint!
-  World
+(defn add-joint!
+  "Adds the `joint` to the `screen` for physics simulations and returns it."
   [screen j-def]
   (box-2d! screen :create-joint j-def))
 
@@ -241,8 +242,9 @@
                    (not (some #(= (.getBodyB joint) (:body %)) entities)))
           (.destroyJoint world joint))))))
 
-(defmethod p/step!
-  World
+(defn step!
+  "Runs the physics simulations for a single frame and optionally returns the
+`entities` with their positions updated."
   [{:keys [^World world time-step velocity-iterations position-iterations]
      :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}
      :as screen}

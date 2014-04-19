@@ -1,7 +1,6 @@
 (ns play-clj.g3d-physics
   (:require [play-clj.core :as c]
             [play-clj.math :as m]
-            [play-clj.physics :as p]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.math Matrix4]
            [com.badlogic.gdx.physics.bullet Bullet]
@@ -125,8 +124,8 @@
   []
   (btSoftBodyWorldInfo.))
 
-(defmethod p/add-body!
-  World3D
+(defn add-body!
+  "Adds the `body` to the `screen` for physics simulations and returns it."
   [screen body]
   (cond
     (isa? (type (:object body)) btRigidBody)
@@ -150,41 +149,43 @@
   (let [^btCollisionObject object (:object (u/get-obj entity :body))]
     (-> object .getWorldTransform (. val) (aget Matrix4/M23))))
 
-(defmethod p/body-position!
-  Body3D
+(defn body-position!
+  "Changes the position of the body in `entity`."
   [entity x y z]
   (let [^btCollisionObject object (:object (u/get-obj entity :body))]
     (.setWorldTransform object
       (doto (m/matrix-4*)
         (m/matrix-4! :set-translation x y z)))))
 
-(defmethod p/body-x!
-  Body3D
+(defn body-x!
+  "Changes the `x` of the body in `entity`."
   [entity x]
-  (p/body-position! entity x (body-y entity) (body-z entity)))
+  (body-position! entity x (body-y entity) (body-z entity)))
 
-(defmethod p/body-y!
-  Body3D
+(defn body-y!
+  "Changes the `y` of the body in `entity`."
   [entity y]
-  (p/body-position! entity (body-x entity) y (body-z entity)))
+  (body-position! entity (body-x entity) y (body-z entity)))
 
-(defmethod p/body-z!
-  Body3D
+(defn body-z!
+  "Changes the `z` of the body in `entity`."
   [entity z]
-  (p/body-position! entity (body-x entity) (body-y entity) z))
+  (body-position! entity (body-x entity) (body-y entity) z))
 
 (defn ^:private find-body
   [body entities]
   (some #(if (= body (:object (u/get-obj % :body))) %) entities))
 
-(defmethod p/first-entity
-  World3D
+(defn first-entity
+  "Returns the first entity in a contact. May only be used in contact functions
+such as :on-begin-contact."
   [screen entities]
   (-> (u/get-obj screen :first-body)
       (find-body entities)))
 
-(defmethod p/second-entity
-  World3D
+(defn second-entity
+  "Returns the second entity in a contact. May only be used in contact functions
+such as :on-begin-contact."
   [screen entities]
   (-> (u/get-obj screen :second-body)
       (find-body entities)))
@@ -305,8 +306,9 @@
           (bullet-3d! screen :remove-soft-body body))
         (.dispose body)))))
 
-(defmethod p/step!
-  World3D
+(defn step!
+  "Runs the physics simulations for a single frame and optionally returns the
+`entities` with their positions updated."
   [{:keys [delta-time max-sub-steps time-step]
      :or {max-sub-steps 5 time-step (/ 1 60)}
      :as screen}
