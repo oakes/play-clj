@@ -17,7 +17,7 @@
             btSoftRigidDynamicsWorld]
            [play_clj.g3d_physics ContactListener3D]))
 
-(def ^:private init (delay (Bullet/init)))
+(def init-bullet (delay (Bullet/init)))
 
 (defrecord World3D [object])
 (defrecord Body3D [object])
@@ -50,7 +50,7 @@
 
 (defn bullet-3d*
   [type]
-  @init
+  @init-bullet
   (case type
     :rigid (discrete-dynamics)
     :soft-rigid (soft-rigid-dynamics)
