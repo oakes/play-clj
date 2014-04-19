@@ -239,6 +239,48 @@ in the `layer`.
   [object k & options]
   `(u/call! ^MapObject ~object ~k ~@options))
 
+; coordinates
+
+(defn screen->window
+  "Returns a map with the provided x,y,z values converted from screen to window
+coordinates.
+
+    (screen->window 10 10)
+    (screen->window 10 10 0)
+    (screen->window {:x 10 :y 10 :z 0})"
+  ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
+    (let [^Camera camera (u/get-obj screen :camera)
+          coords (m/vector-3 x y z)]
+      (.project camera coords)
+      (assoc entity
+             :x (. coords x)
+             :y (. coords y)
+             :z (. coords z))))
+  ([screen x y]
+    (screen->window screen {:x x :y y}))
+  ([screen x y z]
+    (screen->window screen {:x x :y y :z z})))
+
+(defn window->screen
+  "Returns a map with the provided x,y,z values converted from window to screen
+coordinates.
+
+    (window->screen 10 10)
+    (window->screen 10 10 0)
+    (window->screen {:x 10 :y 10 :z 0})"
+  ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
+    (let [^Camera camera (u/get-obj screen :camera)
+          coords (m/vector-3 x y z)]
+      (.unproject camera coords)
+      (assoc entity
+             :x (. coords x)
+             :y (. coords y)
+             :z (. coords z))))
+  ([screen x y]
+    (window->screen screen {:x x :y y}))
+  ([screen x y z]
+    (window->screen screen {:x x :y y :z z})))
+
 (defn ^:private tiled-map-prop
   [screen]
   (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)
@@ -250,36 +292,42 @@ in the `layer`.
      :height (.get prop "height")}))
 
 (defn screen->isometric
-  "Returns a copy of the provided map with x/y values converted from screen
-to isometric map coordinates.
+  "Returns a map with the provided x,y values converted from screen to isometric
+map coordinates.
 
-    (screen->isometric screen {:x 64 :y 32})"
-  [screen {:keys [x y] :as entity}]
-  (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
-        half-tile-width (/ (* tile-width unit-scale) 2)
-        half-tile-height (/ (* tile-height unit-scale) 2)]
-    (assoc entity
-           :x (/ (- (/ x half-tile-width)
-                    (/ y half-tile-height))
-                 2)
-           :y (/ (+ (/ y half-tile-height)
-                    (/ x half-tile-width))
-                 2))))
+    (screen->isometric screen {:x 64 :y 32})
+    (screen->isometric screen 64 32)"
+  ([screen {:keys [x y] :or {x 0 y 0} :as entity}]
+    (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
+          half-tile-width (/ (* tile-width unit-scale) 2)
+          half-tile-height (/ (* tile-height unit-scale) 2)]
+      (assoc entity
+             :x (/ (- (/ x half-tile-width)
+                      (/ y half-tile-height))
+                   2)
+             :y (/ (+ (/ y half-tile-height)
+                      (/ x half-tile-width))
+                   2))))
+  ([screen x y]
+    (screen->isometric screen {:x x :y y})))
 
 (defn isometric->screen
-  "Returns a copy of the provided map with x/y values converted from isometric
-map to screen coordinates.
+  "Returns a map with the provided x,y values converted from isometric map to
+screen coordinates.
 
-    (isometric->screen screen {:x 2 :y 1})"
-  [screen {:keys [x y] :as entity}]
-  (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
-        half-tile-width (/ (* tile-width unit-scale) 2)
-        half-tile-height (/ (* tile-height unit-scale) 2)]
-    (assoc entity
-           :x (+ (* x half-tile-width)
-                 (* y half-tile-width))
-           :y (+ (* -1 x half-tile-height)
-                 (* y half-tile-height)))))
+    (isometric->screen screen {:x 2 :y 1})
+    (isometric->screen screen 2 1)"
+  ([screen {:keys [x y] :as entity}]
+    (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
+          half-tile-width (/ (* tile-width unit-scale) 2)
+          half-tile-height (/ (* tile-height unit-scale) 2)]
+      (assoc entity
+             :x (+ (* x half-tile-width)
+                   (* y half-tile-width))
+             :y (+ (* -1 x half-tile-height)
+                   (* y half-tile-height)))))
+  ([screen x y]
+    (isometric->screen screen {:x x :y y})))
 
 ; renderers
 

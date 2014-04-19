@@ -1,6 +1,7 @@
 (ns play-clj.core
   (:require [clojure.set]
             [play-clj.entities :as e]
+            [play-clj.math :as m]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Screen]
