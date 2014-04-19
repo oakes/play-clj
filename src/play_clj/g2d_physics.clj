@@ -1,6 +1,7 @@
 (ns play-clj.g2d-physics
   (:require [play-clj.core :as c]
             [play-clj.math :as m]
+            [play-clj.physics :as p]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
             Contact ContactListener EdgeShape Fixture FixtureDef Joint JointDef
@@ -52,7 +53,7 @@
   `(let [^Body object# (u/get-obj ~entity :body)]
      (u/call! object# ~k ~@options)))
 
-(defmethod c/add-body!
+(defmethod p/add-body!
   World
   [screen b-def]
   (box-2d! screen :create-body b-def))
@@ -69,37 +70,37 @@
   [entity]
   (.getRotation ^Transform (body! entity :get-transform)))
 
-(defmethod c/body-position!
+(defmethod p/body-position!
   Body
   [entity x y angle]
   (body! entity :set-transform x y angle))
 
-(defmethod c/body-x!
+(defmethod p/body-x!
   Body
   [entity x]
-  (c/body-position! entity x (body-y entity) (body-angle entity)))
+  (p/body-position! entity x (body-y entity) (body-angle entity)))
 
-(defmethod c/body-y!
+(defmethod p/body-y!
   Body
   [entity y]
-  (c/body-position! entity (body-x entity) y (body-angle entity)))
+  (p/body-position! entity (body-x entity) y (body-angle entity)))
 
-(defmethod c/body-angle!
+(defmethod p/body-angle!
   Body
   [entity angle]
-  (c/body-position! entity (body-x entity) (body-y entity) angle))
+  (p/body-position! entity (body-x entity) (body-y entity) angle))
 
 (defn ^:private find-body
   [body entities]
   (some #(if (= body (u/get-obj % :body)) %) entities))
 
-(defmethod c/first-entity
+(defmethod p/first-entity
   World
   [screen entities]
   (let [^Contact contact (u/get-obj screen :contact)]
     (-> contact .getFixtureA .getBody (find-body entities))))
 
-(defmethod c/second-entity
+(defmethod p/second-entity
   World
   [screen entities]
   (let [^Contact contact (u/get-obj screen :contact)]
@@ -124,7 +125,7 @@
   [object k & options]
   `(u/call! ^Joint ~object ~k ~@options))
 
-(defmethod c/add-joint!
+(defmethod p/add-joint!
   World
   [screen j-def]
   (box-2d! screen :create-joint j-def))
@@ -240,7 +241,7 @@
                    (not (some #(= (.getBodyB joint) (:body %)) entities)))
           (.destroyJoint world joint))))))
 
-(defmethod c/step!
+(defmethod p/step!
   World
   [{:keys [^World world time-step velocity-iterations position-iterations]
      :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}

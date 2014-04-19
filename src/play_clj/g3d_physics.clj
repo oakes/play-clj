@@ -1,6 +1,7 @@
 (ns play-clj.g3d-physics
   (:require [play-clj.core :as c]
             [play-clj.math :as m]
+            [play-clj.physics :as p]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.math Matrix4]
            [com.badlogic.gdx.physics.bullet Bullet]
@@ -15,7 +16,7 @@
            [com.badlogic.gdx.physics.bullet.softbody btSoftBody
             btSoftBodyRigidBodyCollisionConfiguration btSoftBodyWorldInfo
             btSoftRigidDynamicsWorld]
-           [play_clj.g3d_physics ContactListener]))
+           [play_clj.g3d_physics ContactListener3D]))
 
 (def ^:private init (delay (Bullet/init)))
 
@@ -124,7 +125,7 @@
   []
   (btSoftBodyWorldInfo.))
 
-(defmethod c/add-body!
+(defmethod p/add-body!
   World3D
   [screen body]
   (cond
@@ -149,7 +150,7 @@
   (let [^btCollisionObject object (:object (u/get-obj entity :body))]
     (-> object .getWorldTransform (. val) (aget Matrix4/M23))))
 
-(defmethod c/body-position!
+(defmethod p/body-position!
   Body3D
   [entity x y z]
   (let [^btCollisionObject object (:object (u/get-obj entity :body))]
@@ -157,32 +158,32 @@
       (doto (m/matrix-4*)
         (m/matrix-4! :set-translation x y z)))))
 
-(defmethod c/body-x!
+(defmethod p/body-x!
   Body3D
   [entity x]
-  (c/body-position! entity x (body-y entity) (body-z entity)))
+  (p/body-position! entity x (body-y entity) (body-z entity)))
 
-(defmethod c/body-y!
+(defmethod p/body-y!
   Body3D
   [entity y]
-  (c/body-position! entity (body-x entity) y (body-z entity)))
+  (p/body-position! entity (body-x entity) y (body-z entity)))
 
-(defmethod c/body-z!
+(defmethod p/body-z!
   Body3D
   [entity z]
-  (c/body-position! entity (body-x entity) (body-y entity) z))
+  (p/body-position! entity (body-x entity) (body-y entity) z))
 
 (defn ^:private find-body
   [body entities]
   (some #(if (= body (:object (u/get-obj % :body))) %) entities))
 
-(defmethod c/first-entity
+(defmethod p/first-entity
   World3D
   [screen entities]
   (-> (u/get-obj screen :first-body)
       (find-body entities)))
 
-(defmethod c/second-entity
+(defmethod p/second-entity
   World3D
   [screen entities]
   (-> (u/get-obj screen :second-body)
@@ -267,7 +268,7 @@
   [screen
    {:keys [on-begin-contact on-end-contact]}
    execute-fn!]
-  (ContactListener.
+  (ContactListener3D.
     (fn [a b]
       (execute-fn! on-begin-contact :first-body a :second-body b))
     (fn [a b]
@@ -304,7 +305,7 @@
           (bullet-3d! screen :remove-soft-body body))
         (.dispose body)))))
 
-(defmethod c/step!
+(defmethod p/step!
   World3D
   [{:keys [delta-time max-sub-steps time-step]
      :or {max-sub-steps 5 time-step (/ 1 60)}

@@ -1,12 +1,12 @@
 package play_clj.g3d_physics;
 
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import clojure.lang.IFn;
+import com.badlogic.gdx.physics.bullet.collision.*;
 
-public class ContactListener extends com.badlogic.gdx.physics.bullet.collision.ContactListener {
+public class ContactListener3D extends ContactListener {
 	IFn started, ended;
 	
-	public ContactListener(IFn started, IFn ended) {
+	public ContactListener3D(IFn started, IFn ended) {
 		this.started = started;
 		this.ended = ended;
 	}

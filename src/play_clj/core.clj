@@ -36,7 +36,6 @@
 (load "core_cameras")
 (load "core_graphics")
 (load "core_listeners")
-(load "core_physics")
 (load "core_utils")
 
 (defn ^:private reset-changed!

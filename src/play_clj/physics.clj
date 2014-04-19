@@ -1,4 +1,5 @@
-(in-ns 'play-clj.core)
+(ns play-clj.physics
+  (:require [play-clj.utils :as u]))
 
 (defmulti step!
   "Runs the physics simulations for a single frame and optionally returns the
