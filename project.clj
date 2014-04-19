@@ -7,4 +7,6 @@
                  [com.badlogicgames.gdx/gdx-bullet "1.0-SNAPSHOT"]
                  [org.clojure/clojure "1.6.0"]]
   :repositories [["sonatype"
-                  "https://oss.sonatype.org/content/repositories/snapshots/"]])
+                  "https://oss.sonatype.org/content/repositories/snapshots/"]]
+  :source-paths ["src"]
+  :java-source-paths ["src-java"])

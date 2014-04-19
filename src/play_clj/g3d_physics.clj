@@ -14,7 +14,8 @@
            [com.badlogic.gdx.physics.bullet.linearmath btMotionState]
            [com.badlogic.gdx.physics.bullet.softbody btSoftBody
             btSoftBodyRigidBodyCollisionConfiguration btSoftBodyWorldInfo
-            btSoftRigidDynamicsWorld]))
+            btSoftRigidDynamicsWorld]
+           [play_clj.g3d_physics ContactListener]))
 
 (def ^:private init (delay (Bullet/init)))
 
@@ -123,6 +124,16 @@
   []
   (btSoftBodyWorldInfo.))
 
+(defmethod c/add-body!
+  World3D
+  [screen body]
+  (cond
+    (isa? (type (:object body)) btRigidBody)
+    (bullet-3d! screen :add-rigid-body (:object body))
+    (isa? (type (:object body)) btSoftBody)
+    (bullet-3d! screen :add-soft-body (:object body)))
+  body)
+
 (defn ^:private body-x
   [entity]
   (let [^btCollisionObject object (:object (u/get-obj entity :body))]
@@ -160,6 +171,22 @@
   Body3D
   [entity z]
   (c/body-position! entity (body-x entity) (body-y entity) z))
+
+(defn ^:private find-body
+  [body entities]
+  (some #(if (= body (:object (u/get-obj % :body))) %) entities))
+
+(defmethod c/first-entity
+  World3D
+  [screen entities]
+  (-> (u/get-obj screen :first-body)
+      (find-body entities)))
+
+(defmethod c/second-entity
+  World3D
+  [screen entities]
+  (-> (u/get-obj screen :second-body)
+      (find-body entities)))
 
 ; shapes
 
@@ -235,15 +262,16 @@
 
 ; misc
 
-(defmethod c/add-body!
+(defmethod c/contact-listener
   World3D
-  [screen body]
-  (cond
-    (isa? (type (:object body)) btRigidBody)
-    (bullet-3d! screen :add-rigid-body (:object body))
-    (isa? (type (:object body)) btSoftBody)
-    (bullet-3d! screen :add-soft-body (:object body)))
-  body)
+  [screen
+   {:keys [on-begin-contact on-end-contact]}
+   execute-fn!]
+  (ContactListener.
+    (fn [a b]
+      (execute-fn! on-begin-contact :first-body a :second-body b))
+    (fn [a b]
+      (execute-fn! on-end-contact :first-body a :second-body b))))
 
 (defn ^:private get-bodies
   [screen]

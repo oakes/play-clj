@@ -52,6 +52,11 @@
   `(let [^Body object# (u/get-obj ~entity :body)]
      (u/call! object# ~k ~@options)))
 
+(defmethod c/add-body!
+  World
+  [screen b-def]
+  (box-2d! screen :create-body b-def))
+
 (defn ^:private body-x
   [entity]
   (. (body! entity :get-position) x))
@@ -84,6 +89,22 @@
   [entity angle]
   (c/body-position! entity (body-x entity) (body-y entity) angle))
 
+(defn ^:private find-body
+  [body entities]
+  (some #(if (= body (u/get-obj % :body)) %) entities))
+
+(defmethod c/first-entity
+  World
+  [screen entities]
+  (let [^Contact contact (u/get-obj screen :contact)]
+    (-> contact .getFixtureA .getBody (find-body entities))))
+
+(defmethod c/second-entity
+  World
+  [screen entities]
+  (let [^Contact contact (u/get-obj screen :contact)]
+    (-> contact .getFixtureB .getBody (find-body entities))))
+
 ; joints
 
 (defn ^:private joint-init
@@ -102,6 +123,11 @@
   "Calls a single method on a joint."
   [object k & options]
   `(u/call! ^Joint ~object ~k ~@options))
+
+(defmethod c/add-joint!
+  World
+  [screen j-def]
+  (box-2d! screen :create-joint j-def))
 
 ; fixtures
 
@@ -181,59 +207,25 @@
 
 ; misc
 
-(defmacro contact!
-  "Calls a single method on a [Contact](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html)."
-  [screen k & options]
-  `(u/call! ^Contact (u/get-obj ~screen :contact) ~k ~@options))
-
-(defn find-body
-  "Returns the first entity in `entities` whose body matches `body`."
-  [body entities]
-  (some #(if (= body (:body %)) %) entities))
-
-(defn first-body
-  "Returns the first body in a contact."
-  [screen]
-  (let [^Contact contact (u/get-obj screen :contact)]
-    (assert contact)
-    (-> contact .getFixtureA .getBody)))
-
-(defn second-body
-  "Returns the second body in a contact."
-  [screen]
-  (let [^Contact contact (u/get-obj screen :contact)]
-    (assert contact)
-    (-> contact .getFixtureB .getBody)))
-
-(defmethod c/add-body!
-  World
-  [screen b-def]
-  (box-2d! screen :create-body b-def))
-
-(defmethod c/add-joint!
-  World
-  [screen j-def]
-  (box-2d! screen :create-joint j-def))
-
-(defmethod c/physics-listeners
+(defmethod c/contact-listener
   World
   [screen
    {:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]}
    execute-fn!]
-  {:contact (reify ContactListener
-              (beginContact [this c]
-                (execute-fn! on-begin-contact :contact c))
-              (endContact [this c]
-                (execute-fn! on-end-contact :contact c))
-              (postSolve [this c i]
-                (execute-fn! on-post-solve :contact c :impulse i))
-              (preSolve [this c m]
-                (execute-fn! on-pre-solve :contact c :old-manifold m)))})
+  (reify ContactListener
+    (beginContact [this c]
+      (execute-fn! on-begin-contact :contact c))
+    (endContact [this c]
+      (execute-fn! on-end-contact :contact c))
+    (postSolve [this c i]
+      (execute-fn! on-post-solve :contact c :impulse i))
+    (preSolve [this c m]
+      (execute-fn! on-pre-solve :contact c :old-manifold m))))
 
 (defmethod c/update-physics!
   World
-  [{:keys [^World world physics-listeners]} & [entities]]
-  (.setContactListener world (:contact physics-listeners))
+  [{:keys [^World world contact-listener]} & [entities]]
+  (.setContactListener world contact-listener)
   (when (and entities (not (.isLocked world)))
     (let [arr (u/gdx-array [])]
       ; remove bodies that no longer exist

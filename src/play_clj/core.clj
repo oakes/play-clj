@@ -77,9 +77,9 @@
                     :on-timer on-timer
                     :ui-listeners (ui-listeners options execute-fn!))
              (execute-fn! on-show)
-             (swap! screen assoc
-                    :physics-listeners
-                    (physics-listeners @screen options execute-fn!)))
+             (when-not (:contact-listener @screen)
+               (->> (contact-listener @screen options execute-fn!)
+                    (swap! screen assoc :contact-listener))))
      :render (fn [d]
                (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
                (execute-fn! on-render :delta-time d))

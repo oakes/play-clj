@@ -42,7 +42,6 @@
  "ColorAttribute" {"attribute :color" :constructors
                    "attribute-type :color" :static-fields
                    "attribute! :color" :static-methods}
- "Contact" {"contact!" :methods}
  "ConvexHull" {"convex-hull" :methods
                "convex-hull!" :methods}
  "ChainShape" {"chain-shape" :methods

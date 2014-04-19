@@ -160,11 +160,11 @@
    (drag-listener options execute-fn!)
    (focus-listener options execute-fn!)])
 
-(defmulti physics-listeners
+(defmulti contact-listener
   (fn [screen options execute-fn!] (-> screen :world class))
   :default nil)
 
-(defmethod physics-listeners nil [_ _ _])
+(defmethod contact-listener nil [_ _ _])
 
 ; update functions
 

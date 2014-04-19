@@ -36,3 +36,13 @@ should be x, y, and angle, whereas for 3D physics they should be x, y, and z."
 (defmulti body-angle!
   "Changes the `angle` of the body in `entity`. Only works with 2D physics."
   (fn [entity angle] (-> entity (u/get-obj :body) class)))
+
+(defmulti first-entity
+  "Returns the first entity in a contact. May only be used in contact functions,
+such as :on-begin-contact."
+  (fn [screen entities] (-> screen (u/get-obj :world) class)))
+
+(defmulti second-entity
+  "Returns the second entity in a contact. May only be used in contact functions,
+such as :on-begin-contact."
+  (fn [screen entities] (-> screen (u/get-obj :world) class)))
