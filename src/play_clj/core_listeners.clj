@@ -17,19 +17,19 @@
       (execute-fn! on-key-up :keycode k)
       false)
     (mouseMoved [this sx sy]
-      (execute-fn! on-mouse-moved :x sx :y sy)
+      (execute-fn! on-mouse-moved :input-x sx :input-y sy)
       false)
     (scrolled [this a]
       (execute-fn! on-scrolled :amount a)
       false)
     (touchDown [this sx sy p b]
-      (execute-fn! on-touch-down :x sx :y sy :pointer p :button b)
+      (execute-fn! on-touch-down :input-x sx :input-y sy :pointer p :button b)
       false)
     (touchDragged [this sx sy p]
-      (execute-fn! on-touch-dragged :x sx :y sy :pointer p)
+      (execute-fn! on-touch-dragged :input-x sx :input-y sy :pointer p)
       false)
     (touchUp [this sx sy p b]
-      (execute-fn! on-touch-up :x sx :y sy :pointer p :button b)
+      (execute-fn! on-touch-up :input-x sx :input-y sy :pointer p :button b)
       false)))
 
 (defn ^:private gesture-listener
@@ -40,13 +40,13 @@
       (execute-fn! on-fling :velocity-x vx :velocity-y vy :button b)
       false)
     (longPress [this x y]
-      (execute-fn! on-long-press :x x :y y)
+      (execute-fn! on-long-press :input-x x :input-y y)
       false)
     (pan [this x y dx dy]
-      (execute-fn! on-pan :x x :y y :delta-x dx :delta-y dy)
+      (execute-fn! on-pan :input-x x :input-y y :delta-x dx :delta-y dy)
       false)
     (panStop [this x y p b]
-      (execute-fn! on-pan-stop :x x :y y :pointer p :button b)
+      (execute-fn! on-pan-stop :input-x x :input-y y :pointer p :button b)
       false)
     (pinch [this ip1 ip2 p1 p2]
       (execute-fn! on-pinch
@@ -54,7 +54,7 @@
                    :pointer1 p1 :pointer2 p2)
       false)
     (tap [this x y c b]
-      (execute-fn! on-tap :x x :y y :count c :button b)
+      (execute-fn! on-tap :input-x x :input-y y :count c :button b)
       false)
     (touchDown [this x y p b]
       false)
@@ -82,20 +82,24 @@
       (execute-fn! on-ui-fling
                    :event e :velocity-x vx :velocity-y vy :button b))
     (longPress [a x y]
-      (execute-fn! on-ui-long-press :actor a :x x :y y)
+      (execute-fn! on-ui-long-press :actor a :input-x x :input-y y)
       false)
     (pan [e x y dx dy]
-      (execute-fn! on-ui-pan :event e :x x :y y :delta-x dx :delta-y dy))
+      (execute-fn! on-ui-pan
+                   :event e :input-x x :input-y y :delta-x dx :delta-y dy))
     (pinch [e ip1 ip2 p1 p2]
       (execute-fn! on-ui-pinch
                    :event e :initial-pointer-1 ip1 :initial-pointer-2 ip2
                    :pointer1 p1 :pointer2 p2))
     (tap [e x y p b]
-      (execute-fn! on-ui-tap :event e :x x :y y :pointer p :button b))
+      (execute-fn! on-ui-tap
+                   :event e :input-x x :input-y y :pointer p :button b))
     (touchDown [e x y p b]
-      (execute-fn! on-ui-touch-down :event e :x x :y y :pointer p :button b))
+      (execute-fn! on-ui-touch-down
+                   :event e :input-x x :input-y y :pointer p :button b))
     (touchUp [e x y p b]
-      (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))
+      (execute-fn! on-ui-touch-up
+                   :event e :input-x x :input-y y :pointer p :button b))
     (zoom [e id d]
       (execute-fn! on-ui-zoom :event e :initial-distance id :distance d))))
 
@@ -111,18 +115,23 @@
    execute-fn!]
   (proxy [ClickListener] []
     (clicked [e x y]
-      (execute-fn! on-ui-clicked :event e :x x :y y))
+      (execute-fn! on-ui-clicked :event e :input-x x :input-y y))
     (enter [e x y p a]
-      (execute-fn! on-ui-enter :event e :x x :y y :pointer p :from-actor a))
+      (execute-fn! on-ui-enter
+                   :event e :input-x x :input-y y :pointer p :from-actor a))
     (exit [e x y p a]
-      (execute-fn! on-ui-exit :event e :x x :y y :pointer p :to-actor a))
+      (execute-fn! on-ui-exit
+                   :event e :input-x x :input-y y :pointer p :to-actor a))
     (touchDown [e x y p b]
-      (execute-fn! on-ui-touch-down :event e :x x :y y :pointer p :button b)
+      (execute-fn! on-ui-touch-down
+                   :event e :input-x x :input-y y :pointer p :button b)
       false)
     (touchDragged [e x y p]
-      (execute-fn! on-ui-touch-dragged :event e :x x :y y :pointer p))
+      (execute-fn! on-ui-touch-dragged
+                   :event e :input-x x :input-y y :pointer p))
     (touchUp [e x y p b]
-      (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))))
+      (execute-fn! on-ui-touch-up
+                   :event e :input-x x :input-y y :pointer p :button b))))
 
 (defn ^:private drag-listener
   [{:keys [on-ui-drag on-ui-drag-start on-ui-drag-stop
@@ -130,18 +139,21 @@
    execute-fn!]
   (proxy [DragListener] []
     (touchDown [e x y p b]
-      (execute-fn! on-ui-touch-down :event e :x x :y y :pointer p :button b)
+      (execute-fn! on-ui-touch-down
+                   :event e :input-x x :input-y y :pointer p :button b)
       false)
     (touchDragged [e x y p]
-      (execute-fn! on-ui-touch-dragged :event e :x x :y y :pointer p))
+      (execute-fn! on-ui-touch-dragged
+                   :event e :input-x x :input-y y :pointer p))
     (touchUp [e x y p b]
-      (execute-fn! on-ui-touch-up :event e :x x :y y :pointer p :button b))
+      (execute-fn! on-ui-touch-up
+                   :event e :input-x x :input-y y :pointer p :button b))
     (drag [e x y p]
-      (execute-fn! on-ui-drag :event e :x x :y y :pointer p))
+      (execute-fn! on-ui-drag :event e :input-x x :input-y y :pointer p))
     (dragStart [e x y p]
-      (execute-fn! on-ui-drag-start :event e :x x :y y :pointer p))
+      (execute-fn! on-ui-drag-start :event e :input-x x :input-y y :pointer p))
     (dragStop [e x y p]
-      (execute-fn! on-ui-drag-stop :event e :x x :y y :pointer p))))
+      (execute-fn! on-ui-drag-stop :event e :input-x x :input-y y :pointer p))))
 
 (defn ^:private focus-listener
   [{:keys [on-ui-keyboard-focus-changed on-ui-scroll-focus-changed]}

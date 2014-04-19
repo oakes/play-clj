@@ -241,13 +241,13 @@ in the `layer`.
 
 ; coordinates
 
-(defn screen->window
-  "Returns a map with the provided x,y,z values converted from screen to window
+(defn screen->input
+  "Returns a map with the provided x,y,z values converted from screen to input
 coordinates.
 
-    (screen->window screen 10 10)
-    (screen->window screen 10 10 0)
-    (screen->window screen {:x 10 :y 10 :z 0})"
+    (screen->input screen 10 10)
+    (screen->input screen 10 10 0)
+    (screen->input screen {:x 10 :y 10 :z 0})"
   ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
     (let [^Camera camera (u/get-obj screen :camera)
           coords (m/vector-3 x y z)]
@@ -257,17 +257,17 @@ coordinates.
              :y (. coords y)
              :z (. coords z))))
   ([screen x y]
-    (screen->window screen {:x x :y y}))
+    (screen->input screen {:x x :y y}))
   ([screen x y z]
-    (screen->window screen {:x x :y y :z z})))
+    (screen->input screen {:x x :y y :z z})))
 
-(defn window->screen
-  "Returns a map with the provided x,y,z values converted from window to screen
+(defn input->screen
+  "Returns a map with the provided x,y,z values converted from input to screen
 coordinates.
 
-    (window->screen screen 10 10)
-    (window->screen screen 10 10 0)
-    (window->screen screen {:x 10 :y 10 :z 0})"
+    (input->screen screen 10 10)
+    (input->screen screen 10 10 0)
+    (input->screen screen {:x 10 :y 10 :z 0})"
   ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
     (let [^Camera camera (u/get-obj screen :camera)
           coords (m/vector-3 x y z)]
@@ -277,9 +277,9 @@ coordinates.
              :y (. coords y)
              :z (. coords z))))
   ([screen x y]
-    (window->screen screen {:x x :y y}))
+    (input->screen screen {:x x :y y}))
   ([screen x y z]
-    (window->screen screen {:x x :y y :z z})))
+    (input->screen screen {:x x :y y :z z})))
 
 (defn ^:private tiled-map-prop
   [screen]
