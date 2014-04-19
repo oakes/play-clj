@@ -5,8 +5,8 @@
   (:import [com.badlogic.gdx.math Matrix4]
            [com.badlogic.gdx.physics.bullet Bullet]
            [com.badlogic.gdx.physics.bullet.collision btBoxShape
-            btCollisionDispatcher btCylinderShape btCollisionObject
-            btDefaultCollisionConfiguration btDbvtBroadphase
+            btCollisionDispatcher btCylinderShape btCapsuleShape btConeShape
+            btCollisionObject btDefaultCollisionConfiguration btDbvtBroadphase
             btSphereShape]
            [com.badlogic.gdx.physics.bullet.dynamics btDiscreteDynamicsWorld
             btDynamicsWorld btRigidBody btRigidBody$btRigidBodyConstructionInfo
@@ -176,6 +176,34 @@
   "Calls a single method on a `box-shape`."
   [object k & options]
   `(u/call! ^btBoxShape ~object ~k ~@options))
+
+(defn capsule-shape*
+  [radius height]
+  (btCapsuleShape. radius height))
+
+(defmacro capsule-shape
+  "Returns a btCapsuleShape."
+  [radius height & options]
+  `(u/calls! ^btCapsuleShape (capsule-shape* ~radius ~height) ~@options))
+
+(defmacro capsule-shape!
+  "Calls a single method on a `capsule-shape`."
+  [object k & options]
+  `(u/call! ^btCapsuleShape ~object ~k ~@options))
+
+(defn cone-shape*
+  [radius height]
+  (btConeShape. radius height))
+
+(defmacro cone-shape
+  "Returns a btConeShape."
+  [radius height & options]
+  `(u/calls! ^btConeShape (cone-shape* ~radius ~height) ~@options))
+
+(defmacro cone-shape!
+  "Calls a single method on a `cone-shape`."
+  [object k & options]
+  `(u/call! ^btConeShape ~object ~k ~@options))
 
 (defn cylinder-shape*
   [half-extents]
