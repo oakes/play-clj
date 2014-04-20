@@ -146,6 +146,8 @@
 (defmacro polygon-shape [& body] `(p2d/polygon-shape ~@body))
 (defmacro polygon-shape! [& body] `(p2d/polygon-shape! ~@body))
 
+
+(def init-bullet p3d/init-bullet)
 (def bullet-3d* p3d/bullet-3d*)
 (defmacro bullet-3d [& body] `(p3d/bullet-3d ~@body))
 (defmacro bullet-3d! [& body] `(p3d/bullet-3d! ~@body))
@@ -173,7 +175,3 @@
 (def sphere-shape* p3d/sphere-shape*)
 (defmacro sphere-shape [& body] `(p3d/sphere-shape ~@body))
 (defmacro sphere-shape! [& body] `(p3d/sphere-shape! ~@body))
-
-(defn init-bullet!
-  []
-  @p3d/init-bullet)
