@@ -191,8 +191,9 @@ non-tile layers, like object and image layers.
   "Returns a list with strings cooresponding to the name of each layer in the
 tiled map in `screen`."
   [screen]
-  (for [^MapLayer layer (map-layers screen)]
-    (.getName layer)))
+  (doall
+    (for [^MapLayer layer (map-layers screen)]
+      (.getName layer))))
 
 (defn map-objects*
   ([]

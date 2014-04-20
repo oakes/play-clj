@@ -377,17 +377,18 @@ based on the file at `path`.
 ; select-box
 
 (defn select-box*
-  [items arg]
-  (ActorEntity. (SelectBox. (into-array items) arg)))
+  [arg]
+  (ActorEntity. (SelectBox. arg)))
 
 (defmacro select-box
   "Returns an entity based on [SelectBox](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html).
 
-    (select-box [\"Item 1\" \"Item 2\" \"Item 3\"]
-                (style :select-box font color back scroll-style list-style))
-    (select-box [\"Item 1\" \"Item 2\" \"Item 3\"] (skin \"uiskin.json\"))"
-  [items arg & options]
-  `(let [entity# (select-box* ~items ~arg)]
+    (select-box (style :select-box font color back scroll-style list-style)
+                :set-items [\"Item 1\" \"Item 2\" \"Item 3\"])
+    (select-box (skin \"uiskin.json\")
+                :set-items [\"Item 1\" \"Item 2\" \"Item 3\"])"
+  [arg & options]
+  `(let [entity# (select-box* ~arg)]
      (u/calls! ^SelectBox (u/get-obj entity# :object) ~@options)
      entity#))
 
