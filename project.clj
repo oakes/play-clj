@@ -10,4 +10,5 @@
   :repositories [["sonatype"
                   "https://oss.sonatype.org/content/repositories/snapshots/"]]
   :source-paths ["src"]
-  :java-source-paths ["src-java"])
+  :java-source-paths ["src-java"]
+  :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"])
