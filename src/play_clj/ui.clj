@@ -384,9 +384,9 @@ based on the file at `path`.
   "Returns an entity based on [SelectBox](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html).
 
     (select-box (style :select-box font color back scroll-style list-style)
-                :set-items [\"Item 1\" \"Item 2\" \"Item 3\"])
+                :set-items (into-array [\"Item 1\" \"Item 2\" \"Item 3\"]))
     (select-box (skin \"uiskin.json\")
-                :set-items [\"Item 1\" \"Item 2\" \"Item 3\"])"
+                :set-items (into-array [\"Item 1\" \"Item 2\" \"Item 3\"]))"
   [arg & options]
   `(let [entity# (select-box* ~arg)]
      (u/calls! ^SelectBox (u/get-obj entity# :object) ~@options)
