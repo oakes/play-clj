@@ -1,5 +1,6 @@
 (ns play-clj.g2d
-  (:require [play-clj.utils :as u])
+  (:require [play-clj.entities]
+            [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Pixmap Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
             ParticleEffect TextureAtlas TextureRegion]

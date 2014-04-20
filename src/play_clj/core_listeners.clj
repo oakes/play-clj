@@ -173,7 +173,7 @@
    (focus-listener options execute-fn!)])
 
 (defmulti contact-listener
-  (fn [screen options execute-fn!] (-> screen :world class))
+  (fn [screen options execute-fn!] (some-> screen :world class .getName))
   :default nil)
 
 (defmethod contact-listener nil [_ _ _])
@@ -199,7 +199,7 @@
     (add-input! renderer)))
 
 (defmulti update-physics!
-  (fn [screen & [entities]] (-> screen :world class))
+  (fn [screen & [entities]] (some-> screen :world class .getName))
   :default nil)
 
 (defmethod update-physics! nil [_ & _])

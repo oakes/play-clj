@@ -1,5 +1,6 @@
 (ns play-clj.ui
-  (:require [play-clj.g2d :as g2d]
+  (:require [play-clj.entities]
+            [play-clj.g2d :as g2d]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx Files Gdx]
            [com.badlogic.gdx.graphics Color Texture]

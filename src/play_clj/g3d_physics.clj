@@ -267,7 +267,7 @@ such as :on-begin-contact."
 ; misc
 
 (defmethod c/contact-listener
-  World3D
+  "play_clj.g3d_physics.World3D"
   [screen
    {:keys [on-begin-contact on-end-contact]}
    execute-fn!]
@@ -284,7 +284,7 @@ such as :on-begin-contact."
       (.at arr i))))
 
 (defmethod c/update-physics!
-  World3D
+  "play_clj.g3d_physics.World3D"
   [screen & [entities]]
   ; initialize bodies if necessary
   (doseq [e entities]

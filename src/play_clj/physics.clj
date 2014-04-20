@@ -1,125 +1,123 @@
 (ns play-clj.physics
   (:require [play-clj.g2d-physics :as p2d]
             [play-clj.g3d-physics :as p3d]
-            [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.physics.box2d Body World]
-           [play_clj.g3d_physics Body3D World3D]))
+            [play-clj.utils :as u]))
 
 ; this namespace is for internal use only. you should use the g2d-physics and
 ; g3d-physics namespaces directly, instead.
 
 (defmulti add-body!
-  (fn [screen body] (-> screen (u/get-obj :world) class)))
+  (fn [screen body] (some-> screen (u/get-obj :world) class .getName)))
 
 (defmethod add-body!
-  World
+  "com.badlogic.gdx.physics.box2d.World"
   [screen b-def]
   (p2d/add-body! screen b-def))
 
 (defmethod add-body!
-  World3D
+  "play_clj.g3d_physics.World3D"
   [screen body]
   (p3d/add-body! screen body))
 
 (defmulti body-position!
-  (fn [entity a1 a2 a3] (-> entity (u/get-obj :body) class)))
+  (fn [entity a1 a2 a3] (some-> entity (u/get-obj :body) class .getName)))
 
 (defmethod body-position!
-  Body
+  "com.badlogic.gdx.physics.box2d.Body"
   [entity x y angle]
   (p2d/body-position! entity x y angle))
 
 (defmethod body-position!
-  Body3D
+  "play_clj.g3d_physics.Body3D"
   [entity x y z]
   (p3d/body-position! entity x y z))
 
 (defmulti body-x!
-  (fn [entity x] (-> entity (u/get-obj :body) class)))
+  (fn [entity x] (some-> entity (u/get-obj :body) class .getName)))
 
 (defmethod body-x!
-  Body
+  "com.badlogic.gdx.physics.box2d.Body"
   [entity x]
   (p2d/body-x! entity x))
 
 (defmethod body-x!
-  Body3D
+  "play_clj.g3d_physics.Body3D"
   [entity x]
   (p3d/body-x! entity x))
 
 (defmulti body-y!
-  (fn [entity y] (-> entity (u/get-obj :body) class)))
+  (fn [entity y] (some-> entity (u/get-obj :body) class .getName)))
 
 (defmethod body-y!
-  Body
+  "com.badlogic.gdx.physics.box2d.Body"
   [entity y]
   (p2d/body-y! entity y))
 
 (defmethod body-y!
-  Body3D
+  "play_clj.g3d_physics.Body3D"
   [entity y]
   (p3d/body-y! entity y))
 
 (defmulti body-z!
-  (fn [entity z] (-> entity (u/get-obj :body) class)))
+  (fn [entity z] (some-> entity (u/get-obj :body) class .getName)))
 
 (defmethod body-z!
-  Body3D
+  "play_clj.g3d_physics.Body3D"
   [entity z]
   (p3d/body-z! entity z))
 
 (defmulti body-angle!
-  (fn [entity angle] (-> entity (u/get-obj :body) class)))
+  (fn [entity angle] (some-> entity (u/get-obj :body) class .getName)))
 
 (defmethod body-angle!
-  Body
+  "com.badlogic.gdx.physics.box2d.Body"
   [entity angle]
   (p2d/body-angle! entity angle))
 
 (defmulti first-entity
-  (fn [screen entities] (-> screen (u/get-obj :world) class)))
+  (fn [screen entities] (some-> screen (u/get-obj :world) class .getName)))
 
 (defmethod first-entity
-  World
+  "com.badlogic.gdx.physics.box2d.World"
   [screen entities]
   (p2d/first-entity screen entities))
 
 (defmethod first-entity
-  World3D
+  "play_clj.g3d_physics.World3D"
   [screen entities]
   (p3d/first-entity screen entities))
 
 (defmulti second-entity
-  (fn [screen entities] (-> screen (u/get-obj :world) class)))
+  (fn [screen entities] (some-> screen (u/get-obj :world) class .getName)))
 
 (defmethod second-entity
-  World
+  "com.badlogic.gdx.physics.box2d.World"
   [screen entities]
   (p2d/second-entity screen entities))
 
 (defmethod second-entity
-  World3D
+  "play_clj.g3d_physics.World3D"
   [screen entities]
   (p3d/second-entity screen entities))
 
 (defmulti add-joint!
-  (fn [screen joint] (-> screen (u/get-obj :world) class)))
+  (fn [screen joint] (some-> screen (u/get-obj :world) class .getName)))
 
 (defmethod add-joint!
-  World
+  "com.badlogic.gdx.physics.box2d.World"
   [screen j-def]
   (p2d/add-joint! screen j-def))
 
 (defmulti step!
-  (fn [screen & [entities]] (-> screen (u/get-obj :world) class)))
+  (fn [screen & [entities]] (some-> screen (u/get-obj :world) class .getName)))
 
 (defmethod step!
-  World
+  "com.badlogic.gdx.physics.box2d.World"
   [screen & [entities]]
   (p2d/step! screen entities))
 
 (defmethod step!
-  World3D
+  "play_clj.g3d_physics.World3D"
   [screen & [entities]]
   (p3d/step! screen entities))
 

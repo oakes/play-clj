@@ -2,9 +2,10 @@
   (:require [play-clj.core :as c]
             [play-clj.math :as m]
             [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
+  (:import [com.badlogic.gdx.math Vector2]
+           [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
             Contact ContactListener EdgeShape Fixture FixtureDef Joint JointDef
-            PolygonShape Transform World]))
+            PolygonShape Transform]))
 
 ; world
 
@@ -14,20 +15,26 @@
   ([gravity-x gravity-y]
     (box-2d* gravity-x gravity-y true))
   ([gravity-x gravity-y sleep?]
-    (World. (m/vector-2 gravity-x gravity-y) sleep?)))
+    ; use reflection to instantiate in order to avoid the static initializer
+    (some-> (try (Class/forName "com.badlogic.gdx.physics.box2d.World")
+              (catch Exception _))
+            .getDeclaredConstructors
+            first
+            (.newInstance
+              (object-array [(m/vector-2 gravity-x gravity-y) sleep?])))))
 
 (defmacro box-2d
   "Returns a [World](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/World.html).
 
     (box-2d 0 0)"
   [gravity-x gravity-y & options]
-  `(let [^World object# (box-2d* ~gravity-x ~gravity-y)]
+  `(let [object# (box-2d* ~gravity-x ~gravity-y)]
      (u/calls! object# ~@options)))
 
 (defmacro box-2d!
   "Calls a single method on a `box-2d`."
   [screen k & options]
-  `(let [^World object# (u/get-obj ~screen :world)]
+  `(let [object# (u/get-obj ~screen :world)]
      (u/call! object# ~k ~@options)))
 
 ; bodies
@@ -213,7 +220,7 @@ such as :on-begin-contact."
 ; misc
 
 (defmethod c/contact-listener
-  World
+  "com.badlogic.gdx.physics.box2d.World"
   [screen
    {:keys [on-begin-contact on-end-contact on-post-solve on-pre-solve]}
    execute-fn!]
@@ -228,8 +235,8 @@ such as :on-begin-contact."
       (execute-fn! on-pre-solve :contact c :old-manifold m))))
 
 (defmethod c/update-physics!
-  World
-  [{:keys [^World world contact-listener]} & [entities]]
+  "com.badlogic.gdx.physics.box2d.World"
+  [{:keys [world contact-listener]} & [entities]]
   (.setContactListener world contact-listener)
   (when (and entities (not (.isLocked world)))
     (let [arr (u/gdx-array [])]
@@ -248,7 +255,7 @@ such as :on-begin-contact."
 (defn step!
   "Runs the physics simulations for a single frame and optionally returns the
 `entities` with their positions updated."
-  [{:keys [^World world time-step velocity-iterations position-iterations]
+  [{:keys [world time-step velocity-iterations position-iterations]
      :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}
      :as screen}
    & [entities]]
