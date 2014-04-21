@@ -54,12 +54,13 @@
   (let [execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
                         (let [old-entities @entities]
-                          (some->> #(func (merge @screen options) old-entities)
+                          (some->> #(some->> (func (merge @screen options)
+                                                   old-entities)
+                                             list
+                                             flatten
+                                             (remove nil?)
+                                             vec)
                                    (wrapper screen)
-                                   list
-                                   flatten
-                                   (remove nil?)
-                                   vec
                                    (reset-changed! entities old-entities)))))]
     ; update screen when either the screen or entities are changed
     (add-watch screen :changed (fn [_ _ _ new-screen]
