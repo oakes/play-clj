@@ -32,11 +32,19 @@
 
 (defmacro shape
   "Returns an entity based on [ShapeRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.html).
+You may pass in a type (see `shape-type`) or an existing `shape` entity that you
+want to modify.
 
-    ; create a red rectangle
+A `shape` can draw multiple sub-shapes internally, allowing you to create more
+complicated shapes. If you use `assoc` to set the overall :x and :y of the
+`shape`, each sub-shape's x and y position will be relative to it.
+
+    ; create a green and red rectangle
     (shape :filled
+           :set-color (color :green)
+           :rect 0 0 10 30
            :set-color (color :red)
-           :rect 0 0 10 30)
+           :rect 10 0 10 30)
     ; create an empty shape, then set it to a green rectangle
     (shape (shape :filled)
            :set-color (color :green)
