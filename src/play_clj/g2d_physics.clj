@@ -254,16 +254,17 @@ such as :on-begin-contact."
 (defn step!
   "Runs the physics simulations for a single frame and optionally returns the
 `entities` with their positions updated."
-  [{:keys [world time-step velocity-iterations position-iterations]
+  ([{:keys [world time-step velocity-iterations position-iterations]
      :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}
-     :as screen}
-   & [entities]]
-  (.step world time-step velocity-iterations position-iterations)
-  (when entities
-    (map (fn [e]
-           (if (u/get-obj e :body)
-             (assoc e
-                    :x (body-x e)
-                    :y (body-y e))
-             e))
-         entities)))
+     :as screen}]
+    (.step world time-step velocity-iterations position-iterations))
+  ([screen entities]
+    (step! screen)
+    (when entities
+      (map (fn [e]
+             (if (u/get-obj e :body)
+               (assoc e
+                      :x (body-x e)
+                      :y (body-y e))
+               e))
+           entities))))

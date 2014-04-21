@@ -311,17 +311,18 @@ such as :on-begin-contact."
 (defn step!
   "Runs the physics simulations for a single frame and optionally returns the
 `entities` with their positions updated."
-  [{:keys [delta-time max-sub-steps time-step]
+  ([{:keys [delta-time max-sub-steps time-step]
      :or {max-sub-steps 5 time-step (/ 1 60)}
-     :as screen}
-   & [entities]]
-  (bullet-3d! screen :step-simulation delta-time max-sub-steps time-step)
-  (when entities
-    (map (fn [e]
-           (if (u/get-obj e :body)
-             (assoc e
-                    :x (body-x e)
-                    :y (body-y e)
-                    :z (body-z e))
-             e))
-         entities)))
+     :as screen}]
+    (bullet-3d! screen :step-simulation delta-time max-sub-steps time-step))
+  ([screen entities]
+    (step! screen)
+    (when entities
+      (map (fn [e]
+             (if (u/get-obj e :body)
+               (assoc e
+                      :x (body-x e)
+                      :y (body-y e)
+                      :z (body-z e))
+               e))
+           entities))))
