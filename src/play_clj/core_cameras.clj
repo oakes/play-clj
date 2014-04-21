@@ -27,9 +27,10 @@
 (defmacro perspective
   "Returns a [PerspectiveCamera](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/PerspectiveCamera.html).
 
-    (perspective)"
-  [fov vw vh & options]
-  `(let [^PerspectiveCamera object# (perspective* ~fov ~vw ~vh)]
+    (perspective 75 (game :width) (game :height))"
+  [field-of-view viewport-width viewport-height & options]
+  `(let [^PerspectiveCamera object#
+         (perspective* ~field-of-view ~viewport-width ~viewport-height)]
      (u/calls! object# ~@options)))
 
 (defmacro perspective!

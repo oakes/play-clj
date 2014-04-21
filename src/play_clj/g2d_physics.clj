@@ -60,8 +60,7 @@
      (u/call! object# ~k ~@options)))
 
 (defn add-body!
-  "Creates a body from the `b-def`, adds it to the `screen` for physics
-simulations and returns it.
+  "Creates a body from `b-def`, adds it to the `screen` and returns it.
 
     (add-body! screen (body-def :dynamic))"
   [screen b-def]

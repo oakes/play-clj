@@ -125,7 +125,7 @@
   (btSoftBodyWorldInfo.))
 
 (defn add-body!
-  "Adds the `body` to the `screen` for physics simulations and returns it.
+  "Adds the `body` to the `screen` and returns it.
 
     (add-body! screen (rigid-body info))"
   [screen body]

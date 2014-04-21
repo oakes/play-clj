@@ -246,9 +246,9 @@ in the `layer`.
   "Returns a map with the provided x,y,z values converted from screen to input
 coordinates.
 
+    (screen->input screen {:x 10 :y 10 :z 0})
     (screen->input screen 10 10)
-    (screen->input screen 10 10 0)
-    (screen->input screen {:x 10 :y 10 :z 0})"
+    (screen->input screen 10 10 0)"
   ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
     (let [^Camera camera (u/get-obj screen :camera)
           coords (m/vector-3 x y z)]
@@ -266,9 +266,9 @@ coordinates.
   "Returns a map with the provided x,y,z values converted from input to screen
 coordinates.
 
+    (input->screen screen {:x 10 :y 10 :z 0})
     (input->screen screen 10 10)
-    (input->screen screen 10 10 0)
-    (input->screen screen {:x 10 :y 10 :z 0})"
+    (input->screen screen 10 10 0)"
   ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
     (let [^Camera camera (u/get-obj screen :camera)
           coords (m/vector-3 x y z)]

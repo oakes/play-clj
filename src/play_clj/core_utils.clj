@@ -132,8 +132,8 @@ found."
 (defmacro loader!
   "Calls a single method in a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html).
 
-    (loader! object :load \"map.tmx\")"
-  [object & options]
+    (loader! object :tmx-map :load \"map.tmx\")"
+  [object type & options]
   `(let [^AsynchronousAssetLoader object# ~object]
      (u/call! object# ~@options)))
 
