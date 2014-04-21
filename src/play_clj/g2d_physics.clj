@@ -39,7 +39,7 @@
 
 ; bodies
 
-(defn ^:private body-type
+(defn body-type
   [k]
   (u/gdx-class :physics :box2d :BodyDef
                (str "BodyType/" (u/key->pascal k) "Body")))
@@ -50,8 +50,7 @@
     (body-def :dynamic)"
   [k & options]
   `(let [^BodyDef object# (BodyDef.)]
-     (set! (. object# type) ~(body-type k))
-     (u/fields! object# ~@options)))
+     (u/fields! object# :type ~(body-type k) ~@options)))
 
 (defmacro body!
   "Calls a single method on a body."
