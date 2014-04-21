@@ -4,8 +4,12 @@
             [hiccup.core :refer :all]))
 
 (defn str->filename
-  [s]
-  (-> s
+  [ns s]
+  (-> (or (let [dot-pos (.lastIndexOf ns ".")]
+            (when-not (= dot-pos -1)
+              (subs ns (+ 1 dot-pos))))
+          "core")
+      (str "." s)
       (string/replace "?" "_q")
       (string/replace "->" "_")
       (string/replace ">" "_r")
@@ -20,7 +24,7 @@
              [:div {:class "ns"} ns])
            (for [{:keys [name]} groups]
              [:div {:class "name"}
-              [:a {:href (str->filename name)}
+              [:a {:href (str->filename ns name)}
                name]])))])
 
 (defn java-param
@@ -80,13 +84,14 @@
 
 (defn create
   [dir parsed-files]
+  (.mkdir (io/file dir))
   (copy-from-res dir "main.css")
   (copy-from-res dir "main.js")
   (copy-from-res dir "highlight.css")
   (copy-from-res dir "highlight.js")
-  (doseq [{:keys [groups] :as pf} parsed-files]
+  (doseq [{:keys [ns groups] :as pf} parsed-files]
     (doseq [{:keys [name] :as group} groups]
-      (spit (io/file dir (str->filename name))
+      (spit (io/file dir (str->filename ns name))
             (create-file parsed-files name (content group)))))
   (spit (io/file dir "index.html")
         (create-file parsed-files "play-clj docs" nil)))

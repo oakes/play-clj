@@ -126,6 +126,8 @@
   (->> (io/file "../src/")
        file-seq
        (filter #(-> % .getName (.endsWith ".clj")))
+       (remove #(contains? #{"physics.clj" "utils.clj"}
+                           (-> % .getName)))
        (sort-by #(.getName %))
        (map #(.getCanonicalPath %))
        (map marg/path-to-doc)
@@ -134,10 +136,8 @@
 
 (defn save
   [parsed-files]
-  (let [dir "doc"]
-    (.mkdir (io/file dir))
-    (->> parsed-files pr-str (spit (io/file "doc.edn")))
-    (html/create dir parsed-files)))
+  (->> parsed-files pr-str (spit (io/file "doc.edn")))
+  (html/create "doc" parsed-files))
 
 (defn parse
   [^RootDoc root]
