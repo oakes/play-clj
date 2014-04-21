@@ -103,19 +103,19 @@ Now, what about mobile devices? We may not have a keyboard, so let's create an `
     )
 ```
 
-In this case, the screen map will contain an `:x` and `:y` for the point on the screen that was touched. We can simply check to see what part of the screen this point is by using `game` to get the overall game's width and height.
+In this case, the screen map will contain an `:input-x` and `:input-y` for the point on the screen that was touched. We can simply check to see what part of the screen this point is by using `game` to get the overall game's width and height.
 
 ```clojure
   :on-touch-down
   (fn [screen entities]
     (cond
-      (> (:y screen) (* (game :height) (/ 2 3)))
+      (> (:input-y screen) (* (game :height) (/ 2 3)))
       (println "down")
-      (< (:y screen) (/ (game :height) 3))
+      (< (:input-y screen) (/ (game :height) 3))
       (println "up")
-      (> (:x screen) (* (game :width) (/ 2 3)))
+      (> (:input-x screen) (* (game :width) (/ 2 3)))
       (println "right")
-      (< (:x screen) (/ (game :width) 3))
+      (< (:input-x screen) (/ (game :width) 3))
       (println "left")))
 ```
 
@@ -153,13 +153,13 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
   :on-touch-down
   (fn [screen entities]
     (cond
-      (> (:y screen) (* (game :height) (/ 2 3)))
+      (> (:input-y screen) (* (game :height) (/ 2 3)))
       (move (first entities) :down)
-      (< (:y screen) (/ (game :height) 3))
+      (< (:input-y screen) (/ (game :height) 3))
       (move (first entities) :up)
-      (> (:x screen) (* (game :width) (/ 2 3)))
+      (> (:input-x screen) (* (game :width) (/ 2 3)))
       (move (first entities) :right)
-      (< (:x screen) (/ (game :width) 3))
+      (< (:input-x screen) (/ (game :width) 3))
       (move (first entities) :left)))
 ```
 
