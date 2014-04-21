@@ -363,6 +363,21 @@ That should print out a vector with a single map inside of it. Now try moving yo
 
 `(-> main-screen :entities (swap! #(vector (assoc (first %) :x 200 :y 200))))`
 
+Lastly, one common issue people have with play-clj in a REPL is that it if you make an error that causes an exception, it's difficult to restart the game after fixing it. To deal with this, there is the `set-screen-wrapper!` function, which lets you catch errors that occur in any screen function and handle them gracefully. For example, here we make it switch to a blank screen if any error occurs:
+
+```clojure
+(defscreen blank-screen
+  :on-render
+  (fn [screen entities]
+    (clear!)))
+
+(set-screen-wrapper! (fn [screen screen-fn]
+                       (try (screen-fn)
+                         (catch Exception e
+                           (.printStackTrace e)
+                           (set-screen! my-game blank-screen)))))
+```
+
 ## Building for Android
 
 1. Make sure you have JDK 7 installed (for Windows/OSX, you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), and for Linux you can get it from [apt-get](http://openjdk.java.net/install/)).
