@@ -260,11 +260,10 @@ such as :on-begin-contact."
     (.step world time-step velocity-iterations position-iterations))
   ([screen entities]
     (step! screen)
-    (when entities
-      (map (fn [e]
-             (if (u/get-obj e :body)
-               (assoc e
-                      :x (body-x e)
-                      :y (body-y e))
-               e))
-           entities))))
+    (map (fn [e]
+           (if (u/get-obj e :body)
+             (assoc e
+                    :x (body-x e)
+                    :y (body-y e))
+             e))
+         entities)))

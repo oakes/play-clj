@@ -317,12 +317,11 @@ such as :on-begin-contact."
     (bullet-3d! screen :step-simulation delta-time max-sub-steps time-step))
   ([screen entities]
     (step! screen)
-    (when entities
-      (map (fn [e]
-             (if (u/get-obj e :body)
-               (assoc e
-                      :x (body-x e)
-                      :y (body-y e)
-                      :z (body-z e))
-               e))
-           entities))))
+    (map (fn [e]
+           (if (u/get-obj e :body)
+             (assoc e
+                    :x (body-x e)
+                    :y (body-y e)
+                    :z (body-z e))
+             e))
+         entities)))
