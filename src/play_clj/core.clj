@@ -43,6 +43,14 @@
   (when (not= e-old e-new)
     (compare-and-set! e-atom e-old e-new)))
 
+(defn ^:private normalize
+  [entities]
+  (some->> entities
+           list
+           flatten
+           (remove nil?)
+           vec))
+
 (defn ^:private wrapper
   [screen screen-fn]
   (screen-fn))
@@ -53,13 +61,10 @@
     :as options}]
   (let [execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
-                        (let [old-entities @entities]
-                          (some->> #(some->> (func (merge @screen options)
-                                                   old-entities)
-                                             list
-                                             flatten
-                                             (remove nil?)
-                                             vec)
+                        (let [screen-map (merge @screen options)
+                              old-entities @entities]
+                          (some->> (fn []
+                                     (normalize (func screen-map old-entities)))
                                    (wrapper screen)
                                    (reset-changed! entities old-entities)))))]
     ; update screen when either the screen or entities are changed
