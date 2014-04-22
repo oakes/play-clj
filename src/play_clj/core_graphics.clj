@@ -258,13 +258,17 @@ coordinates.
     (screen->input screen 10 10)
     (screen->input screen 10 10 0)"
   ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
-    (let [^Camera camera (u/get-obj screen :camera)
-          coords (m/vector-3 x y z)]
-      (.project camera coords)
-      (assoc entity
-             :x (. coords x)
-             :y (. coords y)
-             :z (. coords z))))
+    (try
+      (let [^Camera camera (u/get-obj screen :camera)
+            coords (m/vector-3 x y z)]
+        (.project camera coords)
+        (assoc entity
+               :x (. coords x)
+               :y (. coords y)
+               :z (. coords z)))
+      ; if there's no camera, just flip the y axis
+      (catch Exception _
+        (assoc entity :y (- (game :height) y)))))
   ([screen x y]
     (screen->input screen {:x x :y y}))
   ([screen x y z]
@@ -278,13 +282,17 @@ coordinates.
     (input->screen screen 10 10)
     (input->screen screen 10 10 0)"
   ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
-    (let [^Camera camera (u/get-obj screen :camera)
-          coords (m/vector-3 x y z)]
-      (.unproject camera coords)
-      (assoc entity
-             :x (. coords x)
-             :y (. coords y)
-             :z (. coords z))))
+    (try
+      (let [^Camera camera (u/get-obj screen :camera)
+            coords (m/vector-3 x y z)]
+        (.unproject camera coords)
+        (assoc entity
+               :x (. coords x)
+               :y (. coords y)
+               :z (. coords z)))
+      ; if there's no camera, just flip the y axis
+      (catch Exception _
+        (assoc entity :y (- (game :height) y)))))
   ([screen x y]
     (input->screen screen {:x x :y y}))
   ([screen x y z]
