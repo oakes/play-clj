@@ -67,17 +67,21 @@
 (defrecord ShapeEntity [object] Entity
   (draw-entity! [{:keys [^ShapeRenderer object type draw! x y z]}
                  {:keys [^Camera camera]}
-                 _]
+                 batch]
     (let [^Matrix4 m (.getTransformMatrix object)
           x (float (or x 0))
           y (float (or y 0))
           z (float (or z 0))]
       (.setTranslation m x y z))
+    (when batch
+      (.end ^SpriteBatch batch))
     (when camera
       (.setProjectionMatrix object (. camera combined)))
     (.begin object type)
     (draw!)
-    (.end object)))
+    (.end object)
+    (when batch
+      (.begin ^SpriteBatch batch))))
 
 (defrecord BundleEntity [entities] Entity
   (draw-entity! [{:keys [entities] :as entity} screen batch]
