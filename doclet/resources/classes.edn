@@ -1,7 +1,7 @@
 {"Align" {"align" :static-fields}
- "com.badlogic.gdx.graphics.g2d.Animation" {"play-mode" :static-fields
-                                            "animation" :methods
+ "com.badlogic.gdx.graphics.g2d.Animation" {"animation" :methods
                                             "animation!" :methods}
+ "Animation.PlayMode" {"play-mode" :static-fields}
  "AnimationController" {"animation-controller" :methods
                         "animation-controller!" :methods}
  "Application" {"app!" :methods}
