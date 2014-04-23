@@ -375,8 +375,10 @@ Lastly, one common issue people have with play-clj in a REPL is that it if you m
                        (try (screen-fn)
                          (catch Exception e
                            (.printStackTrace e)
-                           (set-screen! my-game blank-screen)))))
+                           (set-screen! hello-world blank-screen)))))
 ```
+
+Note that this will only catch runtime errors, not compile errors such as misspelled symbols (which don't affect your game when they occur). After fixing the issue, you can switch back to `main-screen` from your REPL with `(on-gl (set-screen! hello-world main-screen))`.
 
 ## Building for Android
 
