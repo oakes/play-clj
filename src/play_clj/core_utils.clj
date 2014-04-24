@@ -60,7 +60,7 @@ specified path.
     (pref! pref-name :put {\"player-health\" 40
                            \"player-x\" 20
                            \"player-y\" 50})
-    ; you may want to call this to make sure it's stored on disk
+    ; save the changes to the disk
     (pref! pref-name :flush)
     ; retrieve a single preference
     (pref! pref-name :get-float \"player-health\")"
