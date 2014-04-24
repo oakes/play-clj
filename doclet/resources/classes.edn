@@ -175,6 +175,7 @@
                  "polygon-shape!" :methods}
  "Polyline" {"polyline" :methods
              "polyline!" :methods}
+ "Preferences" {"pref!" :methods}
  "PrismaticJointDef" {"joint-def :prismatic" :fields}
  "ProgressBar.ProgressBarStyle" {"style :progress-bar" :constructors}
  "PulleyJointDef" {"joint-def :pulley" :fields}

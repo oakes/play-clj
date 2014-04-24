@@ -49,6 +49,27 @@ specified path.
       (PixmapIO/writePNG handle pic)
       (pixmap! pic :dispose))))
 
+(defmacro pref!
+  "Retrieves and stores preferences. The `name` should be a unique string.
+
+    ; define the name we'll be using
+    (def ^:const pref-name \"my-game.settings\")
+    ; store a single preference
+    (pref! pref-name :put-float \"player-health\" 40)
+    ; store multiple preferences
+    (pref! pref-name :put {\"player-health\" 40
+                           \"player-x\" 20
+                           \"player-y\" 50})
+    ; you may want to call this to make sure it's stored on disk
+    (pref! pref-name :flush)
+    ; retrieve a single preference
+    (pref! pref-name :get-float \"player-health\")"
+  [name k & options]
+  `(let [^Preferences p# (if (string? ~name)
+                           (app! :get-preferences ~name)
+                           ~name)]
+     (u/call! p# ~k ~@options)))
+
 ; static fields
 
 (defmacro scaling
