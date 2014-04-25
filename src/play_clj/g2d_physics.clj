@@ -39,7 +39,7 @@
 
 ; bodies
 
-(defn body-type
+(defn ^:private body-type
   [k]
   (u/gdx-class :physics :box2d :BodyDef
                (str "BodyType/" (u/key->pascal k) "Body")))
