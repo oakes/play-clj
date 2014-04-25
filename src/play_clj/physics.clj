@@ -124,7 +124,6 @@
 (def box-2d* p2d/box-2d*)
 (defmacro box-2d [& body] `(p2d/box-2d ~@body))
 (defmacro box-2d! [& body] `(p2d/box-2d! ~@body))
-(def body-type p2d/body-type)
 (defmacro body-def [& body] `(p2d/body-def ~@body))
 (defmacro body! [& body] `(p2d/body! ~@body))
 (defmacro joint-def [& body] `(p2d/joint-def ~@body))
