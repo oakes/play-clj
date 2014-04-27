@@ -18,12 +18,19 @@
   (draw-entity! [this screen batch]))
 
 (defrecord TextureEntity [object] Entity
-  (draw-entity! [{:keys [^TextureRegion object x y width height]} _ batch]
+  (draw-entity! [{:keys [^TextureRegion object x y width height scale-x scale-y angle origin-x origin-y]} _ batch]
     (let [x (float (or x 0))
           y (float (or y 0))
           width (float (or width (.getRegionWidth object)))
           height (float (or height (.getRegionHeight object)))]
-      (.draw ^SpriteBatch batch object x y width height))))
+      (if (or scale-x scale-y angle)
+        (let [scale-x (or scale-x 1)
+              scale-y (or scale-y 1)
+              origin-x (or origin-x (/ width 2))
+              origin-y (or origin-y (/ width 2))
+              angle (or angle 0)]
+          (.draw ^SpriteBatch batch object x y origin-x origin-y width height scale-x scale-y angle))
+        (.draw ^SpriteBatch batch object x y width height)))))
 
 (defrecord NinePatchEntity [object] Entity
   (draw-entity! [{:keys [^NinePatch object x y width height]} _ batch]
