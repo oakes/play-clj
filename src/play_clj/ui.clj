@@ -45,6 +45,11 @@ based on the file at `path`.
                             ~path))
              ~@options))
 
+(defmacro skin!
+  "Calls a single method on a `skin`."
+  [object k & options]
+  `(u/call! ^Skin ~object ~k ~@options))
+
 (defmacro align
   "Returns a static field from [Align](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/Align.html).
 
