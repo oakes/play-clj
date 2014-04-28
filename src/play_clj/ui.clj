@@ -6,10 +6,10 @@
            [com.badlogic.gdx.graphics Color Texture]
            [com.badlogic.gdx.graphics.g2d TextureRegion]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
-           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Dialog
-            HorizontalGroup Image ImageButton ImageTextButton Label ScrollPane
-            SelectBox Skin Slider Stack Table TextButton TextField Tree
-            Tree$Node VerticalGroup WidgetGroup Window]
+           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Container
+            Dialog HorizontalGroup Image ImageButton ImageTextButton Label
+            ScrollPane SelectBox Skin Slider Stack Table TextButton TextField
+            Tree Tree$Node VerticalGroup WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
             SpriteDrawable TextureRegionDrawable TiledDrawable]
            [com.esotericsoftware.tablelayout Cell]
@@ -186,6 +186,31 @@ based on the file at `path`.
   "Calls a single method on a `check-box`."
   [entity k & options]
   `(u/call! ^Checkbox (u/get-obj ~entity :object) ~k ~@options))
+
+; container
+
+(defn container*
+  [child]
+  (ActorEntity. (Table. child)))
+
+(defmacro container
+  "Returns an entity based on [Container](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Container.html).
+
+    (container entity)"
+  [child & options]
+  `(let [entity# (container* ~child)]
+     (u/calls! ^Container (u/get-obj entity# :object) ~@options)
+     entity#))
+
+(defmacro container!
+  "Calls a single method on a `container`."
+  [entity k & options]
+  `(u/call! ^Container (u/get-obj ~entity :object) ~k ~@options))
+
+(defn container?
+  "Returns true if `entity` is a `container`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Container))
 
 ; dialog
 
