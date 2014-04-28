@@ -191,7 +191,7 @@ based on the file at `path`.
 
 (defn container*
   [child]
-  (ActorEntity. (Table. child)))
+  (ActorEntity. (Container. (u/get-obj child :object))))
 
 (defmacro container
   "Returns an entity based on [Container](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Container.html).
