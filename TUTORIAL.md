@@ -65,6 +65,16 @@ A `texture` contains the underlying Java object. By default, it will be drawn at
            :x 50 :y 50 :width 100 :height 100)
 ```
 
+You can also set scaling and rotation on a texture using :scale-x, :scale-y, and :angle, which all use either (:origin-x, :origin-y) as the center, or calculate it from the size of the texture: 
+```clojure
+    (assoc (texture "clojure.png")
+           :x 50 :y 50 :width 100 :height 100
+           :scale-x 1.5 :scale-y 0.75 :angle 30
+           :origin-x 50 :origin-y 0)
+```
+
+Note: if you're not rotating/scaling, try to set the angle and scale keys to nil, so that the simpler drawing function will be used.
+
 ## Input
 
 Let's add a new function at the end of `defscreen` called `:on-key-down`, which runs when a key is pressed:
