@@ -1,5 +1,6 @@
 (ns play-clj.g2d
   (:require [play-clj.entities]
+            [play-clj.assets :as assets]
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx.graphics Pixmap Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
@@ -13,7 +14,9 @@
     (bitmap-font)
     (bitmap-font (files! :internal \"default.fnt\"))"
   [& options]
-  `(BitmapFont. ~@options))
+  (if (seq options)
+    `(assets/bitmap-font-asset ~@options)
+    `(BitmapFont.)))
 
 (defmacro bitmap-font!
   "Calls a single method on a `bitmap-font`."
@@ -27,7 +30,7 @@
   (TextureEntity.
     (cond
       (string? arg)
-      (-> ^String arg Texture. TextureRegion.)
+      (-> ^String arg assets/texture-asset TextureRegion.)
       (isa? (type arg) Pixmap)
       (-> ^Pixmap arg Texture. TextureRegion.)
       (isa? (type arg) TextureRegion)
@@ -137,7 +140,7 @@
 
 (defn texture-atlas*
   [^String path]
-  (TextureAtlas. path))
+  (assets/texture-atlas-asset path))
 
 (defmacro texture-atlas
   "Returns a [TextureAtlas](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureAtlas.html).
