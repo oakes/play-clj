@@ -18,6 +18,9 @@
                          (.setErrorListener (error-logger))))]
   (defn get-asset-mgr [] @asset-mgr)
   (defn clear [] (println "Clearing asset manager") (.clear @asset-mgr))
+  (defn unload
+    [filename]
+    (.unload @asset-mgr filename))
   (defn load-asset
     [filename asset-type]
     (try
