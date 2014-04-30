@@ -172,7 +172,7 @@ be manually disposed, such as `texture` entities and `pixmap` objects. The
 asset manager will then allow you to dispose them all at once.
 
     ; create an asset manager
-    (def manager (asset-manager))
+    (defonce manager (asset-manager))
     ; set it to be used by play-clj
     (set-asset-manager! manager)
     ; dispose all assets at once
