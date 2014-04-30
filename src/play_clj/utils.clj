@@ -1,8 +1,18 @@
 (ns play-clj.utils
   (:require [clojure.string :as s])
-  (:import [com.badlogic.gdx.utils Array ArrayMap]))
+  (:import [com.badlogic.gdx.assets AssetManager]
+           [com.badlogic.gdx.utils Array ArrayMap]))
 
 ; misc
+
+(def ^:dynamic *asset-manager* nil)
+
+(defn load-asset
+  [path type]
+  (when-let [^AssetManager am *asset-manager*]
+    (.load am path type)
+    (.finishLoading am)
+    (.get am path type)))
 
 (defn throw-key-not-found
   [k]

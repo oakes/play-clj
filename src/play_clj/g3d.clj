@@ -73,12 +73,19 @@
 
 ; model
 
+(defn model*
+  [^String path]
+  (or (u/load-asset path Model)
+      (throw (Exception. "Asset manager not found. See set-asset-manager!"))))
+
 (defmacro model
   "Returns an entity based on [ModelInstance](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html)."
   [& args]
   `(ModelEntity.
      (let [arg1# ~(first args)]
        (cond
+         (string? arg1#)
+         (ModelInstance. (model* arg1#))
          (:object arg1#)
          (ModelInstance. ^ModelInstance (:object arg1#))
          (isa? arg1# ModelData)

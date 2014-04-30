@@ -1,19 +1,33 @@
 (ns play-clj.g2d
   (:require [play-clj.entities]
             [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.graphics Pixmap Texture]
+  (:import [com.badlogic.gdx Files Gdx]
+           [com.badlogic.gdx.files FileHandle]
+           [com.badlogic.gdx.graphics Pixmap Texture]
            [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
             ParticleEffect TextureAtlas TextureRegion]
            [play_clj.entities TextureEntity NinePatchEntity
             ParticleEffectEntity]))
 
+(defn bitmap-font*
+  [path]
+  (if (nil? path)
+    (BitmapFont.)
+    (let [^Files files (Gdx/files)
+          ^FileHandle fh (if (string? path)
+                           (.internal files path)
+                           path)]
+      (or (u/load-asset (.path fh) BitmapFont)
+          (BitmapFont. fh)))))
+
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html).
 
     (bitmap-font)
-    (bitmap-font (files! :internal \"default.fnt\"))"
-  [& options]
-  `(BitmapFont. ~@options))
+    (bitmap-font \"default.fnt\")"
+  [& [path & options]]
+  `(let [^BitmapFont object# (bitmap-font* ~path)]
+     (u/calls! object# ~@options)))
 
 (defmacro bitmap-font!
   "Calls a single method on a `bitmap-font`."
@@ -27,7 +41,9 @@
   (TextureEntity.
     (cond
       (string? arg)
-      (-> ^String arg Texture. TextureRegion.)
+      (-> (or (u/load-asset arg Texture)
+              (Texture. ^String arg))
+          TextureRegion.)
       (isa? (type arg) Pixmap)
       (-> ^Pixmap arg Texture. TextureRegion.)
       (isa? (type arg) TextureRegion)
@@ -70,12 +86,14 @@
   (NinePatchEntity.
     (cond
       (string? arg)
-      (-> ^String arg Texture. TextureRegion. NinePatch.)
+      (-> (or (u/load-asset arg Texture)
+              (Texture. ^String arg))
+          TextureRegion.
+          NinePatch.)
       (:object arg)
       (NinePatch. (:object arg))
       (map? arg)
       (let [{:keys [region left right top bottom]} arg]
-        (assert (and region left right top bottom))
         (NinePatch. region left right top bottom))
       :else
       arg)))
@@ -84,8 +102,7 @@
   "Returns an entity based on [NinePatch](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/NinePatch.html).
 
     (nine-patch \"image.png\")
-    (nine-patch \"image.png\" :set-color (color :blue))
-    (nine-patch {:image \"image.png\" :left 10 :right 10 :top 10 :bottom 10})"
+    (nine-patch \"image.png\" :set-color (color :blue))"
   [arg & options]
   `(let [entity# (nine-patch* ~arg)]
      (u/calls! ^NinePatch (u/get-obj entity# :object) ~@options)
@@ -107,17 +124,25 @@
 ; particle-effect
 
 (defn particle-effect*
-  []
-  (ParticleEffectEntity. (ParticleEffect.)))
+  [path]
+  (ParticleEffectEntity.
+    (if (nil? path)
+      (ParticleEffect.)
+      (let [^Files files (Gdx/files)
+            ^FileHandle fh (if (string? path)
+                             (.internal files path)
+                             path)]
+        (or (u/load-asset (.path fh) ParticleEffect)
+            (doto (ParticleEffect.)
+              (.load fh (.parent fh))))))))
 
 (defmacro particle-effect
   "Returns an entity based on [ParticleEffect](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html).
 
-    (particle-effect :load
-                     (files! :internal \"fire.p\")
-                     (files! :internal \"fire-images\"))"
-  [& options]
-  `(let [entity# (particle-effect*)]
+    (particle-effect)
+    (particle-effect \"particles/fire.p\")"
+  [& [path & options]]
+  `(let [entity# (particle-effect* ~path)]
      (u/calls! ^ParticleEffect (u/get-obj entity# :object) ~@options)
      entity#))
 
@@ -137,7 +162,8 @@
 
 (defn texture-atlas*
   [^String path]
-  (TextureAtlas. path))
+  (or (u/load-asset path TextureAtlas)
+      (TextureAtlas. path)))
 
 (defmacro texture-atlas
   "Returns a [TextureAtlas](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureAtlas.html).

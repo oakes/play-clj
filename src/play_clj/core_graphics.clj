@@ -1,13 +1,20 @@
 (in-ns 'play-clj.core)
 
+(defn pixmap*
+  [path]
+  (let [^FileHandle fh (if (string? path)
+                         (files! :internal path)
+                         path)]
+    (or (u/load-asset (.path fh) Pixmap)
+        (Pixmap. fh))))
+
 (defmacro pixmap
   "Returns a [Pixmap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html).
 
     (pixmap \"image.png\")"
-  [& args]
-  `~(if (string? (first args))
-      `(Pixmap. (files! :internal ~(first args)))
-      `(Pixmap. ~@args)))
+  [path & options]
+  `(let [^Pixmap object# (pixmap* ~path)]
+     (u/calls! object# ~@options)))
 
 (defmacro pixmap!
   "Calls a single method on a `pixmap`.
@@ -78,7 +85,8 @@ complicated shapes. If you use `assoc` to set the overall :x and :y of the
     (TiledMap.))
   ([s]
     (if (string? s)
-      (.load (TmxMapLoader.) s)
+      (or (u/load-asset s TiledMap)
+          (.load (TmxMapLoader.) s))
       s)))
 
 (defmacro tiled-map
@@ -237,8 +245,8 @@ in the `layer`.
   "Returns a subclass of [MapObject](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapObject.html).
 
     (map-object :circle)"
-  [k & options]
-  `(let [^MapObject object# (~(map-object-init k))]
+  [type & options]
+  `(let [^MapObject object# (~(map-object-init type))]
      (u/calls! object# ~@options)))
 
 (defmacro map-object!

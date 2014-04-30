@@ -140,19 +140,20 @@
 
 (defn sound*
   [path]
-  (audio! :new-sound (if (string? path)
-                       (files! :internal path)
-                       path)))
+  (let [^FileHandle fh (if (string? path)
+                         (files! :internal path)
+                         path)]
+    (or (u/load-asset (.path fh) Sound)
+        (audio! :new-sound fh))))
 
 (defmacro sound
   "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html).
-When no longer needed, you must call `(sound! object :dispose)` to free it from
-memory.
 
     (sound \"playerhurt.wav\")
     (sound \"playerhurt.wav\" :play)"
   [path & options]
-  `(u/calls! ^Sound (sound* ~path) ~@options))
+  `(let [^Sound object# (sound* ~path)]
+     (u/calls! object# ~@options)))
 
 (defmacro sound!
   "Calls a single method on a `sound`.
