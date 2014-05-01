@@ -187,7 +187,7 @@ found."
   [type & options]
   `(proxy [~(resolver-class type)] [] ~@options))
 
-(defn ^:private set-loaders
+(defn ^:private set-loaders!
   [^AssetManager am]
   (->> (loader :tmx-map (resolver :internal-file-handle))
        (.setLoader am TiledMap))
@@ -200,9 +200,9 @@ found."
 
 (defn asset-manager*
   ([]
-    (doto (AssetManager.) set-loaders))
+    (doto (AssetManager.) set-loaders!))
   ([resolver]
-    (doto (AssetManager. resolver) set-loaders)))
+    (doto (AssetManager. resolver) set-loaders!)))
 
 (defmacro asset-manager
   "Returns an [AssetManager](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/AssetManager.html).
