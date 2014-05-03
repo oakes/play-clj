@@ -1,12 +1,6 @@
-target
-lib
-classes
-checkouts
+**/target
 pom.xml
 pom.xml.asc
-*.jar
-*.class
-.lein-deps-sum
-.lein-failures
-.lein-plugins
-.lein-repl-history
+/hs_err_pid*.log
+*~
+.*
