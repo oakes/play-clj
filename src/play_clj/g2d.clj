@@ -56,11 +56,19 @@
 (defmacro texture
   "Returns an entity based on [TextureRegion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html).
 
+    ; load image.png
     (texture \"image.png\")
+    ; load image.png, flip it, and only display the specified region
     (texture \"image.png\"
              :flip true false
              :set-region 0 0 100 100)
-    (texture (texture \"image.png\"))"
+    ; create a new texture based on an existing one
+    (texture (texture \"image.png\"))
+    ; rotate a texture 45 degress counterclockwise around the bottom-left corner
+    (assoc (texture \"image.png\")
+           :angle 45
+           :origin-x 0
+           :origin-y 0)"
   [arg & options]
   `(let [entity# (texture* ~arg)]
      (u/calls! ^TextureRegion (u/get-obj entity# :object) ~@options)
