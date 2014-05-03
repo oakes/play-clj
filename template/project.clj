@@ -1,8 +1,8 @@
-(defproject play-clj/lein-template "0.3.1"
+(defproject play-clj/lein-template "0.3.2"
   :description "A template for making play-clj projects"
   :url "https://github.com/oakes/play-clj"
   :license {:name "Public Domain"
             :url "http://unlicense.org/UNLICENSE"}
-  :dependencies [[lein-droid "0.2.2"]]
+  :dependencies [[lein-droid "0.2.3"]]
   :resource-paths ["resources"]
   :eval-in-leiningen true)
