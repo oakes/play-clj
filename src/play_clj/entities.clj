@@ -30,7 +30,7 @@
         (let [scale-x (float (or scale-x 1))
               scale-y (float (or scale-y 1))
               origin-x (float (or origin-x (/ width 2)))
-              origin-y (float (or origin-y (/ width 2)))
+              origin-y (float (or origin-y (/ height 2)))
               angle (float (or angle 0))]
           (.draw ^SpriteBatch batch object x y origin-x origin-y width height
             scale-x scale-y angle))
