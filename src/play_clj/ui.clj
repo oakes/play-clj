@@ -185,12 +185,12 @@ based on the file at `path`.
 (defmacro check-box!
   "Calls a single method on a `check-box`."
   [entity k & options]
-  `(u/call! ^Checkbox (u/get-obj ~entity :object) ~k ~@options))
+  `(u/call! ^CheckBox (u/get-obj ~entity :object) ~k ~@options))
 
 (defn check-box?
   "Returns true if `entity` is a `check-box`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Checkbox))
+  (isa? (type (u/get-obj entity :object)) CheckBox))
 
 ; container
 
