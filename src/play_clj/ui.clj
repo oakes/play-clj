@@ -187,6 +187,11 @@ based on the file at `path`.
   [entity k & options]
   `(u/call! ^Checkbox (u/get-obj ~entity :object) ~k ~@options))
 
+(defn check-box?
+  "Returns true if `entity` is a `check-box`."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Checkbox))
+
 ; container
 
 (defn container*
