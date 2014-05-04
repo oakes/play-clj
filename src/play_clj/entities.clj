@@ -83,7 +83,8 @@
           x (float (or x 0))
           y (float (or y 0))
           z (float (or z 0))]
-      (.setTranslation m x y z))
+      (.setTranslation m x y z)
+      (.setTransformMatrix object m))
     (when batch
       (.end ^SpriteBatch batch))
     (when camera
