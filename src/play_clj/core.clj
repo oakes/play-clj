@@ -166,20 +166,6 @@ handle errors and perform other custom actions each time they run.
   [wrapper-fn]
   (intern 'play-clj.core 'wrapper wrapper-fn))
 
-(defn set-asset-manager!
-  "Sets a global asset manager, which will keep track of objects that need to
-be manually disposed, such as `texture` entities and `pixmap` objects. The
-asset manager will then allow you to dispose them all at once.
-
-    ; create an asset manager
-    (defonce manager (asset-manager))
-    ; set it to be used by play-clj
-    (set-asset-manager! manager)
-    ; dispose all assets at once
-    (asset-manager! manager :clear)"
-  [am]
-  (intern 'play-clj.utils '*asset-manager* am))
-
 (defn update!
   "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`
 is the atom storing the screen map behind the scenes. Returns the updated

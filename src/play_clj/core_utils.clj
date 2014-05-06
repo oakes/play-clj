@@ -219,3 +219,17 @@ found."
   [object k & options]
   `(let [^AssetManager object# ~object]
      (u/call! object# ~k ~@options)))
+
+(defn set-asset-manager!
+  "Sets a global asset manager, which will keep track of objects that need to
+be manually disposed, such as `texture` entities and `pixmap` objects. The
+asset manager will then allow you to dispose them all at once.
+
+    ; create an asset manager
+    (defonce manager (asset-manager))
+    ; set it to be used by play-clj
+    (set-asset-manager! manager)
+    ; dispose all assets at once
+    (asset-manager! manager :clear)"
+  [am]
+  (intern 'play-clj.utils '*asset-manager* am))
