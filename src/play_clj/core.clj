@@ -97,7 +97,308 @@
      :input-listeners (global-listeners options execute-fn!)}))
 
 (defmacro defscreen
-  "Defines a screen, and creates vars for all the functions inside of it."
+  "Defines a screen, and creates vars for all the functions inside of it. All
+functions take a screen map and entities vector as arguments, and return the
+entities list at the end with any desired changes. If a function returns nil,
+the entities list is not changed.
+
+Below are all the possible screen functions. Some of them get special arguments
+via the screen map.
+
+    ; main screen functions
+    (defscreen my-screen
+      :on-show ; the screen first shows
+      (fn [screen entities]
+        entities)
+      :on-render ; the screen must be rendered (many times per second)
+      (fn [screen entities]
+        (println (:delta-time screen)) ; time (ms) elapsed since last frame
+        entities)
+      :on-hide ; the screen was replaced
+      (fn [screen entities]
+        entities)
+      :on-resize ; the screen was resized
+      (fn [screen entities]
+        (println (:width screen)) ; the new width of the screen
+        (println (:height screen)) ; the new height of the screen
+        entities)
+      :on-resume ; the screen resumed from a paused state (mobile only)
+      (fn [screen entities]
+        entities)
+      :on-pause ; the screen paused (mobile only)
+      (fn [screen entities]
+        entities))
+
+    ; input functions
+    (defscreen my-screen
+      :on-key-down ; a key was pressed
+      (fn [screen entities]
+        (println (:keycode screen)) ; the code of the key (see key-code)
+        entities)
+      :on-key-typed ; a key was typed
+      (fn [screen entities]
+        (println (:character screen)) ; the character that was pressed
+        entities)
+      :on-key-up ; a key was released
+      (fn [screen entities]
+        (println (:keycode screen)) ; the code of the key (see key-code)
+        entities)
+      :on-mouse-moved ; the mouse was moved without pressing any buttons
+      (fn [screen entities]
+        (println (:input-x screen)) ; the x position of the mouse
+        (println (:input-y screen)) ; the y position of the mouse
+        entities)
+      :on-scrolled ; the mouse wheel was scrolled
+      (fn [screen entities]
+        (println (:amount screen)) ; the amount scrolled
+        entities)
+      :on-touch-down ; the screen was touched or a mouse button was pressed
+      (fn [screen entities]
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities)
+      :on-touch-dragged ; a finger or the mouse was dragged
+      (fn [screen entities]
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        entities)
+      :on-touch-up ; a finger was lifted or a mouse button was released
+      (fn [screen entities]
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities))
+
+    ; gesture functions
+    (defscreen my-screen
+      :on-fling ; the user dragged a finger over the screen and lifted it
+      (fn [screen entities]
+        (println (:velocity-x screen)) ; the x-axis velocity (s)
+        (println (:velocity-y screen)) ; the y-axis velocity (s)
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities)
+      :on-long-press ; the user pressed
+      (fn [screen entities]
+        (println (:input-x screen)) ; the x position of the finger
+        (println (:input-y screen)) ; the y position of the finger
+        entities)
+      :on-pan ; the user dragged a finger over the screen
+      (fn [screen entities]
+        (println (:input-x screen)) ; the x position of the finger
+        (println (:input-y screen)) ; the y position of the finger
+        (println (:delta-x screen)) ; the x-axis distance moved
+        (println (:delta-y screen)) ; the y-axis distance moved
+        entities)
+      :on-pan-stop ; the user is no longer panning
+      (fn [screen entities]
+        (println (:input-x screen)) ; the x position of the finger
+        (println (:input-y screen)) ; the y position of the finger
+        (println (:pointer screen)) ; the pointer for the event
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities)
+      :on-pinch ; the user performed a pinch zoom gesture
+      (fn [screen entities]
+        (println (:initial-pointer-1 screen)) ; the x/y start position of finger 1
+        (println (:initial-pointer-2 screen)) ; the x/y start position of finger 2
+        (println (:pointer-1 screen)) ; the x/y end position of finger 1
+        (println (:pointer-2 screen)) ; the x/y end position of finger 2
+        entities)
+      :on-tap ; the user tapped
+      (fn [screen entities]
+        (println (:input-x screen)) ; the x position of the finger
+        (println (:input-y screen)) ; the y position of the finger
+        (println (:count screen)) ; the number of taps
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities)
+      :on-zoom ; the user performed a pinch zoom gesture
+      (fn [screen entities]
+        (println (:initial-distance screen)) ; the start distance between fingers
+        (println (:distance screen)) ; the end distance between fingers
+        entities))
+
+    ; 2D physics contact (for play-clj.g2d-physics)
+    (defscreen my-screen
+      :on-begin-contact ; two bodies began to touch
+      (fn [screen entities]
+        (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
+        entities)
+      :on-end-contact ; two bodies ceased to touch
+      (fn [screen entities]
+        (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
+        entities)
+      :on-post-solve
+      (fn [screen entities]
+        (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
+        (println (:impulse screen)) ; the ContactImpulse - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactImpulse.html
+        entities)
+      :on-pre-solve
+      (fn [screen entities]
+        (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
+        (println (:old-manifold screen)) ; the Manifold - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Manifold.html
+        entities))
+
+    ; 3D physics contact (for play-clj.g3d-physics)
+    (defscreen my-screen
+      :on-begin-contact ; two bodies began to touch
+      (fn [screen entities]
+        (println (:first-body screen)) ; the first btCollisionObject - http://bulletphysics.org/Bullet/BulletFull/classbtCollisionObject.html
+        (println (:second-body screen)) ; the second btCollisionObject - http://bulletphysics.org/Bullet/BulletFull/classbtCollisionObject.html
+        entities)
+      :on-end-contact ; two bodies ceased to touch
+      (fn [screen entities]
+        (println (:first-body screen)) ; the first btCollisionObject - http://bulletphysics.org/Bullet/BulletFull/classbtCollisionObject.html
+        (println (:second-body screen)) ; the second btCollisionObject - http://bulletphysics.org/Bullet/BulletFull/classbtCollisionObject.html
+        entities))
+
+    ; ui input functions (for play-clj.ui)
+    (defscreen my-screen
+      :on-ui-changed ; the ui entity was changed
+      (fn [screen entities]
+        (println (:event screen)) ; the ChangeListener.ChangeEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/ChangeListener.ChangeEvent.html
+        (println (:actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+        entities)
+      :on-ui-clicked ; the ui entity was clicked
+      (fn [screen entities]
+        (println (:event screen)) ; the [InputEvent](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html)
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        entities)
+      :on-ui-enter ; the finger/mouse moved over the ui entity
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:from-actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        entities)
+      :on-ui-exit ; the finger/mouse moved out of the ui entity
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:to-actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        entities)
+      :on-ui-touch-down ; the finger/mouse went down on the ui entity
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities)
+      :on-ui-touch-dragged ; the finger/mouse moved anywhere
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        entities)
+      :on-ui-touch-up ; the finger/mouse went up anywhere
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities))
+
+    ; ui drag functions (for play-clj.ui)
+    (defscreen my-screen
+      :on-ui-drag
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        entities)
+      :on-ui-drag-start
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        entities)
+      :on-ui-drag-stop
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
+        (println (:pointer screen)) ; the pointer for the event
+        entities))
+
+    ; ui focus functions (for play-clj.ui)
+    (defscreen my-screen
+      :on-ui-keyboard-focus-changed
+      (fn [screen entities]
+        (println (:event screen)) ; the FocusListener.FocusEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/FocusListener.FocusEvent.html
+        (println (:actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+        (println (:focused? screen)) ; whether it is focused
+        entities)
+      :on-ui-scroll-focus-changed
+      (fn [screen entities]
+        (println (:event screen)) ; the FocusListener.FocusEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/FocusListener.FocusEvent.html
+        (println (:actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+        (println (:focused? screen)) ; whether it is focused
+        entities))
+
+    ; ui gesture functions (for play-clj.ui)
+    (defscreen my-screen
+      :on-ui-fling ; the user dragged a finger over the screen and lifted it
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:velocity-x screen)) ; the x-axis velocity (s)
+        (println (:velocity-y screen)) ; the y-axis velocity (s)
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities)
+      :on-ui-long-press ; the user pressed
+      (fn [screen entities]
+        (println (:actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+        (println (:input-x screen)) ; the x position of the finger
+        (println (:input-y screen)) ; the y position of the finger
+        entities)
+      :on-ui-pan ; the user dragged a finger over the screen
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger
+        (println (:input-y screen)) ; the y position of the finger
+        (println (:delta-x screen)) ; the x-axis distance moved
+        (println (:delta-y screen)) ; the y-axis distance moved
+        entities)
+      :on-ui-pan-stop ; the user is no longer panning
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger
+        (println (:input-y screen)) ; the y position of the finger
+        (println (:pointer screen)) ; the pointer for the event
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities)
+      :on-ui-pinch ; the user performed a pinch zoom gesture
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:initial-pointer-1 screen)) ; the x/y start position of finger 1
+        (println (:initial-pointer-2 screen)) ; the x/y start position of finger 2
+        (println (:pointer-1 screen)) ; the x/y end position of finger 1
+        (println (:pointer-2 screen)) ; the x/y end position of finger 2
+        entities)
+      :on-ui-tap ; the user tapped
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:input-x screen)) ; the x position of the finger
+        (println (:input-y screen)) ; the y position of the finger
+        (println (:count screen)) ; the number of taps
+        (println (:button screen)) ; the mouse button (see button-code)
+        entities)
+      :on-ui-zoom ; the user performed a pinch zoom gesture
+      (fn [screen entities]
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
+        (println (:initial-distance screen)) ; the start distance between fingers
+        (println (:distance screen)) ; the end distance between fingers
+        entities))"
   [n & {:keys [] :as options}]
   `(let [fn-syms# (->> (for [[k# v#] ~options]
                          [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
