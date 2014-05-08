@@ -51,7 +51,7 @@
     (pinch [this ip1 ip2 p1 p2]
       (execute-fn! on-pinch
                    :initial-pointer-1 ip1 :initial-pointer-2 ip2
-                   :pointer1 p1 :pointer2 p2)
+                   :pointer-1 p1 :pointer-2 p2)
       false)
     (tap [this x y c b]
       (execute-fn! on-tap :input-x x :input-y y :count c :button b)
