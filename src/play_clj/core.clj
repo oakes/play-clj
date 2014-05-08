@@ -270,7 +270,7 @@ via the screen map.
       :on-ui-enter ; the finger/mouse moved over the ui entity
       (fn [screen entities]
         (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
-        (println (:from-actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+        (println (:actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
         (println (:input-x screen)) ; the x position of the finger/mouse
         (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:pointer screen)) ; the pointer for the event
@@ -278,7 +278,7 @@ via the screen map.
       :on-ui-exit ; the finger/mouse moved out of the ui entity
       (fn [screen entities]
         (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
-        (println (:to-actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
+        (println (:actor screen)) ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
         (println (:input-x screen)) ; the x position of the finger/mouse
         (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:pointer screen)) ; the pointer for the event

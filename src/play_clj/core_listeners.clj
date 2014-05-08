@@ -118,10 +118,10 @@
       (execute-fn! on-ui-clicked :event e :input-x x :input-y y))
     (enter [e x y p a]
       (execute-fn! on-ui-enter
-                   :event e :input-x x :input-y y :pointer p :from-actor a))
+                   :event e :input-x x :input-y y :pointer p :actor a))
     (exit [e x y p a]
       (execute-fn! on-ui-exit
-                   :event e :input-x x :input-y y :pointer p :to-actor a))
+                   :event e :input-x x :input-y y :pointer p :actor a))
     (touchDown [e x y p b]
       (execute-fn! on-ui-touch-down
                    :event e :input-x x :input-y y :pointer p :button b)
