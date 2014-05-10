@@ -24,7 +24,7 @@ Let's look at the basic structure of your game. It starts out with a call to `de
 
 In `defscreen`, you'll find that a few simple functions are defined: `:on-show` and `:on-render`. The first only runs when the screen is first shown, and the second is run every single time your game wants to draw on the screen (which is ideally 60 times per second).
 
-There are many other functions you can put inside `defscreen`, each letting you run code when certain important events happen. For now, we'll stick to the two we started with, because they are the most fundamental, but you can read the documentation to learn about the others.
+There are many other functions you can put inside `defscreen`, each letting you run code when certain important events happen. For now, we'll stick to the two we started with, because they are the most fundamental, but you can read [the documentation](http://oakes.github.io/play-clj/core.defscreen.html) to learn about the others.
 
 ## Entity System
 
