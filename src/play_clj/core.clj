@@ -133,7 +133,7 @@ via the screen map.
     (defscreen my-screen
       :on-key-down ; a key was pressed
       (fn [screen entities]
-        (println (:keycode screen)) ; the code of the key (see key-code)
+        (println (:key screen)) ; the code of the key (see key-code)
         entities)
       :on-key-typed ; a key was typed
       (fn [screen entities]
@@ -141,7 +141,7 @@ via the screen map.
         entities)
       :on-key-up ; a key was released
       (fn [screen entities]
-        (println (:keycode screen)) ; the code of the key (see key-code)
+        (println (:key screen)) ; the code of the key (see key-code)
         entities)
       :on-mouse-moved ; the mouse was moved without pressing any buttons
       (fn [screen entities]
