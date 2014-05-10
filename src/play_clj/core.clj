@@ -27,6 +27,7 @@
             IsometricStaggeredTiledMapRenderer
             IsometricTiledMapRenderer
             OrthogonalTiledMapRenderer]
+           [com.badlogic.gdx.math Vector2 Vector3]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
             ChangeListener ClickListener DragListener FocusListener]
@@ -202,10 +203,10 @@ via the screen map.
         entities)
       :on-pinch ; the user performed a pinch zoom gesture
       (fn [screen entities]
-        (println (:initial-pointer-1 screen)) ; the x/y start position of finger 1
-        (println (:initial-pointer-2 screen)) ; the x/y start position of finger 2
-        (println (:pointer-1 screen)) ; the x/y end position of finger 1
-        (println (:pointer-2 screen)) ; the x/y end position of finger 2
+        (println (:initial-pointer-1 screen)) ; the start position of finger 1 (see the x and y functions)
+        (println (:initial-pointer-2 screen)) ; the start position of finger 2 (see the x and y functions)
+        (println (:pointer-1 screen)) ; the end position of finger 1 (see the x and y functions)
+        (println (:pointer-2 screen)) ; the end position of finger 2 (see the x and y functions)
         entities)
       :on-tap ; the user tapped
       (fn [screen entities]
@@ -380,10 +381,10 @@ via the screen map.
       :on-ui-pinch ; the user performed a pinch zoom gesture
       (fn [screen entities]
         (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
-        (println (:initial-pointer-1 screen)) ; the x/y start position of finger 1
-        (println (:initial-pointer-2 screen)) ; the x/y start position of finger 2
-        (println (:pointer-1 screen)) ; the x/y end position of finger 1
-        (println (:pointer-2 screen)) ; the x/y end position of finger 2
+        (println (:initial-pointer-1 screen)) ; the start position of finger 1 (see the x and y functions)
+        (println (:initial-pointer-2 screen)) ; the start position of finger 2 (see the x and y functions)
+        (println (:pointer-1 screen)) ; the end position of finger 1 (see the x and y functions)
+        (println (:pointer-2 screen)) ; the end position of finger 2 (see the x and y functions)
         entities)
       :on-ui-tap ; the user tapped
       (fn [screen entities]

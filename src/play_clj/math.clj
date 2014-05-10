@@ -395,12 +395,14 @@
     (Vector2. x y)))
 
 (defmacro vector-2
-  "Returns a [Vector2](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Vector2.html)."
+  "Returns a [Vector2](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Vector2.html).
+The values can be retrieved with `x` and `y`, and modified with `x!` and `y!`."
   [x y & options]
   `(u/calls! ^Vector2 (vector-2* ~x ~y) ~@options))
 
 (defmacro vector-2!
-  "Calls a single method on a `vector-2`."
+  "Calls a single method on a `vector-2`. If you're trying to modify the values,
+see `x!` and `y!`."
   [object k & options]
   `(u/call! ^Vector2 ~object ~k ~@options))
 
@@ -413,12 +415,15 @@
     (Vector3. x y z)))
 
 (defmacro vector-3
-  "Returns a [Vector3](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Vector3.html)."
+  "Returns a [Vector3](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Vector3.html).
+The values can be retrieved with `x`, `y` and `z`, and modified with `x!`, `y!`,
+and `z!`."
   [x y z & options]
   `(u/calls! ^Vector3 (vector-3* ~x ~y ~z) ~@options))
 
 (defmacro vector-3!
-  "Calls a single method on a `vector-3`."
+  "Calls a single method on a `vector-3`. If you're trying to modify the values,
+see `x!`, `y!`, and `z!`."
   [object k & options]
   `(u/call! ^Vector3 ~object ~k ~@options))
 

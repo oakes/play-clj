@@ -82,43 +82,70 @@ remains in tact.
   (size! screen (* new-height (/ (game :width) (game :height))) new-height))
 
 (defn x
-  "Returns the x position of the camera in `screen`."
-  [screen]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (. (. camera position) x)))
+  "Returns the x position of `object`. If `object` is a screen, the x position
+of the camera will be returned."
+  [object]
+  (cond
+    (isa? (type object) Vector2) (. ^Vector2 object x)
+    (isa? (type object) Vector3) (. ^Vector3 object x)
+    :else (let [^Camera camera (u/get-obj object :camera)]
+            (. (. camera position) x))))
 
 (defn x!
-  "Sets only the x position of the camera in `screen`."
-  [screen x-val]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) x) x-val)
-    (.update camera)))
+  "Sets only the x position of `object`. If `object` is a screen, the x position
+of the camera will be set."
+  [object x-val]
+  (cond
+    (isa? (type object) Vector2) (let [^Vector2 v object]
+                                   (.set v x-val (. v y)))
+    (isa? (type object) Vector3) (let [^Vector3 v object]
+                                   (.set v x-val (. v y) (. v z)))
+    :else (let [^Camera camera (u/get-obj object :camera)]
+            (set! (. (. camera position) x) x-val)
+            (.update camera))))
 
 (defn y
-  "Returns the y position of the camera in `screen`."
-  [screen]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (. (. camera position) y)))
+  "Returns the y position of `object`. If `object` is a screen, the y position
+of the camera will be returned."
+  [object]
+  (cond
+    (isa? (type object) Vector2) (. ^Vector2 object y)
+    (isa? (type object) Vector3) (. ^Vector3 object y)
+    :else (let [^Camera camera (u/get-obj object :camera)]
+            (. (. camera position) y))))
 
 (defn y!
-  "Sets only the y position of the camera in `screen`."
-  [screen y-val]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) y) y-val)
-    (.update camera)))
+  "Sets only the y position of `object`. If `object` is a screen, the y position
+of the camera will be set."
+  [object y-val]
+  (cond
+    (isa? (type object) Vector2) (let [^Vector2 v object]
+                                   (.set v (. v x) y-val))
+    (isa? (type object) Vector3) (let [^Vector3 v object]
+                                   (.set v (. v x) y-val (. v z)))
+    :else (let [^Camera camera (u/get-obj object :camera)]
+            (set! (. (. camera position) y) y-val)
+            (.update camera))))
 
 (defn z
-  "Returns the z position of the camera in `screen`."
-  [screen]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (. (. camera position) z)))
+  "Returns the z position of `object`. If `object` is a screen, the z position
+of the camera will be returned."
+  [object]
+  (cond
+    (isa? (type object) Vector3) (. ^Vector3 object z)
+    :else (let [^Camera camera (u/get-obj object :camera)]
+            (. (. camera position) z))))
 
 (defn z!
-  "Sets only the z position of the camera in `screen`."
-  [screen z-val]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (set! (. (. camera position) z) z-val)
-    (.update camera)))
+  "Sets only the z position of `object`. If `object` is a screen, the z position
+of the camera will be set."
+  [object z-val]
+  (cond
+    (isa? (type object) Vector3) (let [^Vector3 v object]
+                                   (.set v (. v x) (. v y) z-val))
+    :else (let [^Camera camera (u/get-obj object :camera)]
+            (set! (. (. camera position) z) z-val)
+            (.update camera))))
 
 (defn position
   "Returns the position of the camera in `screen`."
@@ -127,18 +154,17 @@ remains in tact.
     (. camera position)))
 
 (defn position!
-  "Sets the position of the camera in `screen`."
-  ([screen pos]
-    (let [^Camera camera (u/get-obj screen :camera)]
-      (set! (. camera position) pos)))
-  ([screen x-val y-val]
-    (position! screen x-val y-val nil))
-  ([screen x-val y-val z-val]
-    (let [^Camera camera (u/get-obj screen :camera)]
-      (when x-val (set! (. (. camera position) x) x-val))
-      (when y-val (set! (. (. camera position) y) y-val))
-      (when z-val (set! (. (. camera position) z) z-val))
-      (.update camera))))
+  "Sets the position of `object`. If `object` is a screen, the position of the
+camera will be set."
+  ([object vec-3]
+    (let [^Camera camera (u/get-obj object :camera)]
+      (set! (. camera position) vec-3)))
+  ([object x-val y-val]
+    (position! object x-val y-val nil))
+  ([object x-val y-val z-val]
+    (when x-val (x! object x-val))
+    (when y-val (y! object y-val))
+    (when z-val (z! object z-val))))
 
 (defn direction
   "Returns the direction of the camera in `screen`."
