@@ -138,10 +138,11 @@ via the screen map.
         entities))
 
     ; input functions
+    ; Tip: use input-processor! to run these functions manually
     (defscreen my-screen
       :on-key-down ; a key was pressed
       (fn [screen entities]
-        (println (:key screen)) ; the code of the key (see key-code)
+        (println (:key screen)) ; the key that was pressed (see key-code)
         entities)
       :on-key-typed ; a key was typed
       (fn [screen entities]
@@ -149,7 +150,7 @@ via the screen map.
         entities)
       :on-key-up ; a key was released
       (fn [screen entities]
-        (println (:key screen)) ; the code of the key (see key-code)
+        (println (:key screen)) ; the key that was released (see key-code)
         entities)
       :on-mouse-moved ; the mouse was moved without pressing any buttons
       (fn [screen entities]
@@ -165,7 +166,7 @@ via the screen map.
         (println (:input-x screen)) ; the x position of the finger/mouse
         (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:pointer screen)) ; the pointer for the event
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was pressed (see button-code)
         entities)
       :on-touch-dragged ; a finger or the mouse was dragged
       (fn [screen entities]
@@ -178,35 +179,36 @@ via the screen map.
         (println (:input-x screen)) ; the x position of the finger/mouse
         (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:pointer screen)) ; the pointer for the event
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was released (see button-code)
         entities))
 
     ; gesture functions
+    ; Tip: use gesture-detector! to configure these functions and run them manually
     (defscreen my-screen
-      :on-fling ; the user dragged a finger over the screen and lifted it
+      :on-fling ; the user dragged over the screen and lifted
       (fn [screen entities]
         (println (:velocity-x screen)) ; the x-axis velocity (s)
         (println (:velocity-y screen)) ; the y-axis velocity (s)
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was pressed (see button-code)
         entities)
-      :on-long-press ; the user pressed
+      :on-long-press ; the user pressed for a long time
       (fn [screen entities]
-        (println (:input-x screen)) ; the x position of the finger
-        (println (:input-y screen)) ; the y position of the finger
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
         entities)
       :on-pan ; the user dragged a finger over the screen
       (fn [screen entities]
-        (println (:input-x screen)) ; the x position of the finger
-        (println (:input-y screen)) ; the y position of the finger
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:delta-x screen)) ; the x-axis distance moved
         (println (:delta-y screen)) ; the y-axis distance moved
         entities)
       :on-pan-stop ; the user is no longer panning
       (fn [screen entities]
-        (println (:input-x screen)) ; the x position of the finger
-        (println (:input-y screen)) ; the y position of the finger
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:pointer screen)) ; the pointer for the event
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was pressed (see button-code)
         entities)
       :on-pinch ; the user performed a pinch zoom gesture
       (fn [screen entities]
@@ -217,10 +219,10 @@ via the screen map.
         entities)
       :on-tap ; the user tapped
       (fn [screen entities]
-        (println (:input-x screen)) ; the x position of the finger
-        (println (:input-y screen)) ; the y position of the finger
+        (println (:input-x screen)) ; the x position of the finger/mouse
+        (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:count screen)) ; the number of taps
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was pressed (see button-code)
         entities)
       :on-zoom ; the user performed a pinch zoom gesture
       (fn [screen entities]
@@ -255,6 +257,7 @@ via the screen map.
         entities))
 
     ; ui input functions (for play-clj.ui)
+    ; Tip: use change-listener! and click-listener! to configure these functions and run them manually
     (defscreen my-screen
       :on-ui-changed ; the ui entity was changed
       (fn [screen entities]
@@ -289,7 +292,7 @@ via the screen map.
         (println (:input-x screen)) ; the x position of the finger/mouse
         (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:pointer screen)) ; the pointer for the event
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was pressed (see button-code)
         entities)
       :on-ui-touch-dragged ; the finger/mouse moved anywhere
       (fn [screen entities]
@@ -304,10 +307,11 @@ via the screen map.
         (println (:input-x screen)) ; the x position of the finger/mouse
         (println (:input-y screen)) ; the y position of the finger/mouse
         (println (:pointer screen)) ; the pointer for the event
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was released (see button-code)
         entities))
 
     ; ui drag functions (for play-clj.ui)
+    ; Tip: use drag-listener! to configure these functions and run them manually
     (defscreen my-screen
       :on-ui-drag
       (fn [screen entities]
@@ -332,6 +336,7 @@ via the screen map.
         entities))
 
     ; ui focus functions (for play-clj.ui)
+    ; Tip: use focus-listener! to run these functions manually
     (defscreen my-screen
       :on-ui-keyboard-focus-changed
       (fn [screen entities]
@@ -347,13 +352,14 @@ via the screen map.
         entities))
 
     ; ui gesture functions (for play-clj.ui)
+    ; Tip: use actor-gesture-listener! to configure these functions and run them manually
     (defscreen my-screen
       :on-ui-fling ; the user dragged a finger over the screen and lifted it
       (fn [screen entities]
         (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
         (println (:velocity-x screen)) ; the x-axis velocity (s)
         (println (:velocity-y screen)) ; the y-axis velocity (s)
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was pressed (see button-code)
         entities)
       :on-ui-long-press ; the user pressed
       (fn [screen entities]
@@ -375,7 +381,7 @@ via the screen map.
         (println (:input-x screen)) ; the x position of the finger
         (println (:input-y screen)) ; the y position of the finger
         (println (:pointer screen)) ; the pointer for the event
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was pressed (see button-code)
         entities)
       :on-ui-pinch ; the user performed a pinch zoom gesture
       (fn [screen entities]
@@ -391,7 +397,7 @@ via the screen map.
         (println (:input-x screen)) ; the x position of the finger
         (println (:input-y screen)) ; the y position of the finger
         (println (:count screen)) ; the number of taps
-        (println (:button screen)) ; the mouse button (see button-code)
+        (println (:button screen)) ; the mouse button that was pressed (see button-code)
         entities)
       :on-ui-zoom ; the user performed a pinch zoom gesture
       (fn [screen entities]
