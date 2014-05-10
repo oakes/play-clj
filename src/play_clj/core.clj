@@ -226,6 +226,7 @@ via the screen map.
         entities))
 
     ; 2D physics contact (for play-clj.g2d-physics)
+    ; Tip: use first-entity and second-entity to get the get the entities that are contacting
     (defscreen my-screen
       :on-begin-contact ; two bodies began to touch
       (fn [screen entities]
@@ -234,19 +235,10 @@ via the screen map.
       :on-end-contact ; two bodies ceased to touch
       (fn [screen entities]
         (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
-        entities)
-      :on-post-solve
-      (fn [screen entities]
-        (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
-        (println (:impulse screen)) ; the ContactImpulse - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactImpulse.html
-        entities)
-      :on-pre-solve
-      (fn [screen entities]
-        (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
-        (println (:old-manifold screen)) ; the Manifold - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Manifold.html
         entities))
 
     ; 3D physics contact (for play-clj.g3d-physics)
+    ; Tip: use first-entity and second-entity to get the get the entities that are contacting
     (defscreen my-screen
       :on-begin-contact ; two bodies began to touch
       (fn [screen entities]
@@ -268,7 +260,7 @@ via the screen map.
         entities)
       :on-ui-clicked ; the ui entity was clicked
       (fn [screen entities]
-        (println (:event screen)) ; the [InputEvent](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html)
+        (println (:event screen)) ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
         (println (:input-x screen)) ; the x position of the finger/mouse
         (println (:input-y screen)) ; the y position of the finger/mouse
         entities)
