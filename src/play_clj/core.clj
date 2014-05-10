@@ -70,7 +70,9 @@
                                    (wrapper screen)
                                    (reset-changed! entities old-entities)))))]
     ; add the input listeners to the screen atom
-    (swap! screen assoc :input-listeners (input-listeners options execute-fn!))
+    (when-not (:input-listeners @screen)
+      (->> (input-listeners options execute-fn!)
+           (swap! screen assoc :input-listeners)))
     ; update screen when either the screen or entities are changed
     (add-watch screen :changed (fn [_ _ _ new-screen]
                                  (update-screen! new-screen)))
