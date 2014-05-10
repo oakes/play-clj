@@ -128,6 +128,10 @@ via the screen map.
         entities)
       :on-pause ; the screen paused (mobile only)
       (fn [screen entities]
+        entities)
+      :on-timer ; a timer created with add-timer! executed
+      (fn [screen entities]
+        (println (:id screen)) ; the id supplied when the timer was created
         entities))
 
     ; input functions
