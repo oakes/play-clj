@@ -69,6 +69,8 @@
                                      (normalize (func screen-map old-entities)))
                                    (wrapper screen)
                                    (reset-changed! entities old-entities)))))]
+    ; add the input listeners to the screen atom
+    (swap! screen assoc :input-listeners (input-listeners options execute-fn!))
     ; update screen when either the screen or entities are changed
     (add-watch screen :changed (fn [_ _ _ new-screen]
                                  (update-screen! new-screen)))
@@ -94,8 +96,7 @@
      :hide #(execute-fn! on-hide)
      :pause #(execute-fn! on-pause)
      :resize #(execute-fn! on-resize :width %1 :height %2)
-     :resume #(execute-fn! on-resume)
-     :input-listeners (global-listeners options execute-fn!)}))
+     :resume #(execute-fn! on-resume)}))
 
 (defmacro defscreen
   "Defines a screen, and creates vars for all the functions inside of it. All
@@ -432,8 +433,8 @@ via the screen map.
   [^Game game & screens]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
-                      (doseq [{:keys [input-listeners]} screens]
-                        (doseq [listener input-listeners]
+                      (doseq [{:keys [screen]} screens]
+                        (doseq [[_ listener] (:input-listeners @screen)]
                           (add-input! listener))))
         run-fn! (fn [k & args]
                   (doseq [screen screens]

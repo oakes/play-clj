@@ -1,4 +1,5 @@
-{"Align" {"align" :static-fields}
+{"ActorGestureListener" {"actor-gesture-listener!" :methods}
+ "Align" {"align" :static-fields}
  "com.badlogic.gdx.graphics.g2d.Animation" {"animation" :methods
                                             "animation!" :methods}
  "Animation.PlayMode" {"play-mode" :static-fields}
@@ -35,6 +36,8 @@
  "Circle" {"circle" :methods
            "circle!" :methods}
  "CircleMapObject" {"map-object :circle" :methods}
+ "ChangeListener" {"change-listener!" :methods}
+ "ClickListener" {"click-listener!" :methods}
  "Color" {"color" :static-fields
           "color!" :methods}
  "ColorAttribute" {"attribute :color" :constructors
@@ -60,6 +63,7 @@
  "Dialog" {"dialog" :methods
            "dialog!" :methods}
  "DistanceJointDef" {"joint-def :distance" :fields}
+ "DragListener" {"drag-listener!" :methods}
  "EarClippingTriangulator" {"ear-clipping-triangulator" :methods
                             "ear-clipping-triangulator!" :methods}
  "EdgeShape" {"edge-shape" :methods
@@ -77,12 +81,14 @@
                    "attribute! :float" :static-methods}
  "FloatCounter" {"float-counter" :methods
                  "float-counter!" :methods}
+ "FocusListener" {"focus-listener!" :methods}
  "FrictionJointDef" {"joint-def :friction" :fields}
  "Frustum" {"frustum" :methods
             "frustum!" :methods}
  "G3dModelLoader" {"loader! :g3d-model" :methods}
  "GearJointDef" {"joint-def :gear" :fields}
  "GeometryUtils" {"geometry!" :static-methods}
+ "GestureDetector" {"gesture-detector!" :methods}
  "Graphics" {"graphics!" :methods}
  "GridPoint2" {"grid-point-2" :methods
                "grid-point-2!" :methods}
@@ -106,6 +112,7 @@
                "key-pressed?" :static-fields}
  "Input.Buttons" {"button-code" :static-fields
                   "button-pressed?" :static-fields}
+ "InputProcessor" {"input-processor!" :methods}
  "Interpolation" {"interpolation" :static-classes}
  "Intersector" {"intersector!" :static-methods}
  "IntAttribute" {"attribute :int" :constructors
