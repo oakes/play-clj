@@ -83,9 +83,7 @@ Let's add a new function at the end of `defscreen` called `:on-key-down`, which 
     )
 ```
 
-If takes the same form as the other functions, expecting a new entities vector to be returned at the end. The first argument, `screen`, which we haven't talked about yet, is a Clojure map containing various important values. In the `:on-key-down` function, it will contain a `:keycode` which indicates what key was pressed.
-
-You can reference the [LibGDX documentation](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html) to see all the possible keys. To get a key's code, just pass the name as a keyword into the `key-code` function. For example, `(key-code :PAGE_DOWN)` will return the number associated with that key. You can also write the keyword in a more Clojuresque way, using lower-case with hyphens, like this: `(key-code :page-down)`.
+If takes the same form as the other functions, expecting a new entities vector to be returned at the end. The first argument, `screen`, which we haven't talked about yet, is a Clojure map containing various important values. In the `:on-key-down` function, it will contain a `:keycode` which indicates what key was pressed. See the [documentation](http://oakes.github.io/play-clj/core.key-code.html) to for all the possible keys.
 
 Let's write a conditional statement that prints out which arrow key you pressed. Note that if a `defscreen` function returns `nil`, it leaves the entities vector unchanged, so the code below won't wipe out the entities vector.
 
