@@ -29,7 +29,7 @@
             OrthogonalTiledMapRenderer]
            [com.badlogic.gdx.math Vector2 Vector3]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
-           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener Align
+           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
             ChangeListener ClickListener DragListener FocusListener]
            [com.badlogic.gdx.utils ScreenUtils Timer$Task]
            [play_clj.entities BundleEntity ShapeEntity]))

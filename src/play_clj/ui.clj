@@ -10,8 +10,10 @@
             Dialog HorizontalGroup Image ImageButton ImageTextButton Label
             ScrollPane SelectBox Skin Slider Stack Table TextButton TextField
             Tree Tree$Node VerticalGroup WidgetGroup Window]
-           [com.badlogic.gdx.scenes.scene2d.utils NinePatchDrawable
-            SpriteDrawable TextureRegionDrawable TiledDrawable]
+           [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
+            ChangeListener ClickListener DragListener FocusListener
+            NinePatchDrawable SpriteDrawable TextureRegionDrawable
+            TiledDrawable]
            [com.esotericsoftware.tablelayout Cell]
            [play_clj.entities ActorEntity]))
 
@@ -56,6 +58,47 @@ based on the file at `path`.
     (align :center)"
   [k]
   `~(u/gdx-field :scenes :scene2d :utils :Align (u/key->camel k)))
+
+(defmacro actor-gesture-listener!
+  "Calls a single method on the [ActorGestureListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/ActorGestureListener.html)
+in the `screen`."
+  [screen k & options]
+  `(let [listeners# (u/get-obj ~screen :ui-listeners)
+         ^ActorGestureListener object#
+         (u/get-obj listeners# :actor-gesture-listener)]
+     (u/call! object# ~k ~@options)))
+
+(defmacro change-listener!
+  "Calls a single method on the [ChangeListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/ChangeListener.html)
+in the `screen`."
+  [screen k & options]
+  `(let [listeners# (u/get-obj ~screen :ui-listeners)
+         ^ChangeListener object# (u/get-obj listeners# :change-listener)]
+     (u/call! object# ~k ~@options)))
+
+(defmacro click-listener!
+  "Calls a single method on the [ClickListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/ClickListener.html)
+in the `screen`."
+  [screen k & options]
+  `(let [listeners# (u/get-obj ~screen :ui-listeners)
+         ^ClickListener object# (u/get-obj listeners# :click-listener)]
+     (u/call! object# ~k ~@options)))
+
+(defmacro drag-listener!
+  "Calls a single method on the [DragListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/DragListener.html)
+in the `screen`."
+  [screen k & options]
+  `(let [listeners# (u/get-obj ~screen :ui-listeners)
+         ^DragListener object# (u/get-obj listeners# :drag-listener)]
+     (u/call! object# ~k ~@options)))
+
+(defmacro focus-listener!
+  "Calls a single method on the [FocusListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/FocusListener.html)
+in the `screen`."
+  [screen k & options]
+  `(let [listeners# (u/get-obj ~screen :ui-listeners)
+         ^FocusListener object# (u/get-obj listeners# :focus-listener)]
+     (u/call! object# ~k ~@options)))
 
 (defn cell!
   "Calls a single method on a [Cell](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/esotericsoftware/tablelayout/Cell.java)."

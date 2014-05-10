@@ -119,28 +119,11 @@ in the `screen`."
     (zoom [e id d]
       (execute-fn! on-ui-zoom :event e :initial-distance id :distance d))))
 
-(defmacro actor-gesture-listener!
-  "Calls a single method on the [ActorGestureListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/ActorGestureListener.html)
-in the `screen`."
-  [screen k & options]
-  `(let [listeners# (u/get-obj ~screen :ui-listeners)
-         ^ActorGestureListener object#
-         (u/get-obj listeners# :actor-gesture-listener)]
-     (u/call! object# ~k ~@options)))
-
 (defn ^:private change-listener
   [{:keys [on-ui-changed]} execute-fn!]
   (proxy [ChangeListener] []
     (changed [e a]
       (execute-fn! on-ui-changed :event e :actor a))))
-
-(defmacro change-listener!
-  "Calls a single method on the [ChangeListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/ChangeListener.html)
-in the `screen`."
-  [screen k & options]
-  `(let [listeners# (u/get-obj ~screen :ui-listeners)
-         ^ChangeListener object# (u/get-obj listeners# :change-listener)]
-     (u/call! object# ~k ~@options)))
 
 (defn ^:private click-listener
   [{:keys [on-ui-clicked on-ui-enter on-ui-exit
@@ -166,14 +149,6 @@ in the `screen`."
       (execute-fn! on-ui-touch-up
                    :event e :input-x x :input-y y :pointer p :button b))))
 
-(defmacro click-listener!
-  "Calls a single method on the [ClickListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/ClickListener.html)
-in the `screen`."
-  [screen k & options]
-  `(let [listeners# (u/get-obj ~screen :ui-listeners)
-         ^ClickListener object# (u/get-obj listeners# :click-listener)]
-     (u/call! object# ~k ~@options)))
-
 (defn ^:private drag-listener
   [{:keys [on-ui-drag on-ui-drag-start on-ui-drag-stop
            on-ui-touch-down on-ui-touch-dragged on-ui-touch-up]}
@@ -196,14 +171,6 @@ in the `screen`."
     (dragStop [e x y p]
       (execute-fn! on-ui-drag-stop :event e :input-x x :input-y y :pointer p))))
 
-(defmacro drag-listener!
-  "Calls a single method on the [DragListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/DragListener.html)
-in the `screen`."
-  [screen k & options]
-  `(let [listeners# (u/get-obj ~screen :ui-listeners)
-         ^DragListener object# (u/get-obj listeners# :drag-listener)]
-     (u/call! object# ~k ~@options)))
-
 (defn ^:private focus-listener
   [{:keys [on-ui-keyboard-focus-changed on-ui-scroll-focus-changed]}
    execute-fn!]
@@ -212,14 +179,6 @@ in the `screen`."
       (execute-fn! on-ui-keyboard-focus-changed :event e :actor a :focused? f))
     (scrollFocusChanged [e a f]
       (execute-fn! on-ui-scroll-focus-changed :event e :actor a :focused? f))))
-
-(defmacro focus-listener!
-  "Calls a single method on the [FocusListener](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/FocusListener.html)
-in the `screen`."
-  [screen k & options]
-  `(let [listeners# (u/get-obj ~screen :ui-listeners)
-         ^FocusListener object# (u/get-obj listeners# :focus-listener)]
-     (u/call! object# ~k ~@options)))
 
 (defn ^:private ui-listeners
   [options execute-fn!]
