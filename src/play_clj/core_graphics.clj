@@ -571,11 +571,13 @@ specify which layers to render with or without.
   (sort-by :y #(compare %2 %1) entities))
 
 (defn render-sorted!
-  "Draws the supplied tiled-map layers and entities. If no sort function is
-supplied, they will be sorted by :y (latitude).
+  "Draws the specified layer tiles and entities sorted by their position on the
+y axis. A custom sort function may be provided. This is primarily intended for
+games with isometric tiled maps, where the layer tiles often need to be sorted
+to overlap correctly with the entities.
 
     (render-sorted! screen [\"walls\"] entities)
-    (render-sorted! screen #(sort-by :x %) [\"walls\"] entities)"
+    (render-sorted! screen #(sort-by :y %) [\"walls\"] entities)"
   ([screen layer-names entities]
     (render-sorted! sort-by-y screen layer-names entities))
   ([{:keys [^BatchTiledMapRenderer renderer
