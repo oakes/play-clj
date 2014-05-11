@@ -318,7 +318,7 @@ such as :on-begin-contact."
   ([screen entities]
     (step! screen)
     (map (fn [e]
-           (if (u/get-obj e :body)
+           (if (:body e)
              (assoc e
                     :x (body-x e)
                     :y (body-y e)
