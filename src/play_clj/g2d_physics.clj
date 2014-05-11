@@ -2,7 +2,7 @@
   (:require [play-clj.core :as c]
             [play-clj.math :as m]
             [play-clj.utils :as u])
-  (:import [com.badlogic.gdx.math Vector2]
+  (:import [com.badlogic.gdx.math MathUtils Vector2]
            [com.badlogic.gdx.physics.box2d Body BodyDef ChainShape CircleShape
             Contact ContactListener EdgeShape Fixture FixtureDef Joint JointDef
             PolygonShape Transform]))
@@ -75,12 +75,20 @@
 
 (defn ^:private body-angle
   [entity]
-  (.getRotation ^Transform (body! entity :get-transform)))
+  (* (body! entity :get-angle) MathUtils/radiansToDegrees))
+
+(defn ^:private body-origin-x
+  [entity]
+  (. ^Vector2 (body! entity :get-local-center) x))
+
+(defn ^:private body-origin-y
+  [entity]
+  (. ^Vector2 (body! entity :get-local-center) y))
 
 (defn body-position!
-  "Changes the position of the body in `entity`."
+  "Changes the position of the body in `entity`. The angle is in degrees."
   [entity x y angle]
-  (body! entity :set-transform x y angle))
+  (body! entity :set-transform x y (* angle MathUtils/degreesToRadians)))
 
 (defn body-x!
   "Changes the `x` of the body in `entity`."
@@ -93,7 +101,7 @@
   (body-position! entity (body-x entity) y (body-angle entity)))
 
 (defn body-angle!
-  "Changes the `angle` of the body in `entity`."
+  "Changes the `angle` (degrees) of the body in `entity`."
   [entity angle]
   (body-position! entity (body-x entity) (body-y entity) angle))
 
@@ -264,6 +272,8 @@ such as :on-begin-contact."
              (assoc e
                     :x (body-x e)
                     :y (body-y e)
-                    :angle (body-angle e))
+                    :angle (body-angle e)
+                    :origin-x (body-origin-x e)
+                    :origin-y (body-origin-y e))
              e))
          entities)))
