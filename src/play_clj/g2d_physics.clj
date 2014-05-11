@@ -263,6 +263,7 @@ such as :on-begin-contact."
            (if (u/get-obj e :body)
              (assoc e
                     :x (body-x e)
-                    :y (body-y e))
+                    :y (body-y e)
+                    :angle (body-angle e))
              e))
          entities)))
