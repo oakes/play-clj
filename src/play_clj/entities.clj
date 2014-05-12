@@ -18,8 +18,8 @@
   (draw-entity! [this screen batch]))
 
 (defrecord TextureEntity [object] Entity
-  (draw-entity! [{:keys [^TextureRegion object x y width height scale-x scale-y
-                         angle origin-x origin-y]}
+  (draw-entity! [{:keys [^TextureRegion object x y width height
+                         scale-x scale-y angle origin-x origin-y]}
                  _
                  batch]
     (let [x (float (or x 0))
@@ -54,14 +54,23 @@
       (.draw object ^SpriteBatch batch delta-time))))
 
 (defrecord ActorEntity [object] Entity
-  (draw-entity! [{:keys [^Actor object] :as entity} _ batch]
-    (doseq [[k v] entity]
-      (case k
-        :x (.setX object v)
-        :y (.setY object v)
-        :width (.setWidth object v)
-        :height (.setHeight object v)
-        nil))
+  (draw-entity! [{:keys [^Actor object x y width height
+                         scale-x scale-y angle origin-x origin-y]} _ batch]
+    (some->> x (.setX object))
+    (some->> y (.setY object))
+    (some->> width (.setWidth object))
+    (some->> height (.setHeight object))
+    (when (or scale-x scale-y angle)
+      (let [scale-x (float (or scale-x 1))
+            scale-y (float (or scale-y 1))
+            origin-x (float (or origin-x (/ (.getWidth object) 2)))
+            origin-y (float (or origin-y (/ (.getHeight object) 2)))
+            angle (float (or angle 0))]
+        (.setScaleX object scale-x)
+        (.setScaleY object scale-y)
+        (.setOriginX object origin-x)
+        (.setOriginY object origin-y)
+        (.setRotation object angle)))
     (.draw object ^SpriteBatch batch 1)))
 
 (defrecord ModelEntity [object] Entity
@@ -76,20 +85,30 @@
     (.render renderer object attributes)))
 
 (defrecord ShapeEntity [object] Entity
-  (draw-entity! [{:keys [^ShapeRenderer object type draw! x y z]}
+  (draw-entity! [{:keys [^ShapeRenderer object type draw! x y width height
+                         angle origin-x origin-y]}
                  {:keys [^Camera camera]}
                  batch]
-    (let [^Matrix4 m (.getTransformMatrix object)
-          x (float (or x 0))
-          y (float (or y 0))
-          z (float (or z 0))]
-      (.setTranslation m x y z)
-      (.setTransformMatrix object m))
+    (when (or x y)
+      (let [^Matrix4 m (.getTransformMatrix object)
+            x (float (or x 0))
+            y (float (or y 0))]
+        (.setTranslation m x y 0)
+        (.setTransformMatrix object m)))
     (when batch
       (.end ^SpriteBatch batch))
     (when camera
       (.setProjectionMatrix object (. camera combined)))
     (.begin object type)
+    (when angle
+      (let [x (float (or x 0))
+            y (float (or y 0))
+            origin-x (float (or origin-x (/ (or width 0) 2)))
+            origin-y (float (or origin-y (/ (or height 0) 2)))
+            angle (float (or angle 0))]
+        (.identity object)
+        (.translate object (+ x origin-x) (+ y origin-y) 0)
+        (.rotate object 0 0 1 angle)))
     (draw!)
     (.end object)
     (when batch
