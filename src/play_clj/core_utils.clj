@@ -188,21 +188,23 @@ found."
   `(proxy [~(resolver-class type)] [] ~@options))
 
 (defn ^:private set-loaders!
-  [^AssetManager am]
-  (->> (loader :tmx-map (resolver :internal-file-handle))
-       (.setLoader am TiledMap))
-  (->> (loader :particle-effect
-               (resolver :internal-file-handle)
-               (load [am file-name fh param]
-                     (doto (ParticleEffect.)
-                       (.load fh (.parent fh)))))
-       (.setLoader am ParticleEffect)))
+  ([am]
+    (set-loaders! am (resolver :internal-file-handle)))
+  ([^AssetManager am res]
+    (->> (loader :tmx-map res)
+         (.setLoader am TiledMap))
+    (->> (loader :particle-effect
+                 res
+                 (load [am file-name fh param]
+                       (doto (ParticleEffect.)
+                         (.load fh (.parent fh)))))
+         (.setLoader am ParticleEffect))))
 
 (defn asset-manager*
   ([]
     (doto (AssetManager.) set-loaders!))
   ([resolver]
-    (doto (AssetManager. resolver) set-loaders!)))
+    (doto (AssetManager. resolver) (set-loaders! resolver))))
 
 (defmacro asset-manager
   "Returns an [AssetManager](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/AssetManager.html).
