@@ -83,7 +83,7 @@ Let's add a new function at the end of `defscreen` called `:on-key-down`, which 
     )
 ```
 
-If takes the same form as the other functions, expecting a new entities vector to be returned at the end. The first argument, `screen`, which we haven't talked about yet, is a Clojure map containing various important values. In the `:on-key-down` function, it will contain a `:keycode` which indicates what key was pressed.
+If takes the same form as the other functions, expecting a new entities vector to be returned at the end. The first argument, `screen`, which we haven't talked about yet, is a Clojure map containing various important values. In the `:on-key-down` function, it will contain a `:key` which indicates what key was pressed.
 
 To figure out what key it refers to, you'll need to compare it to a known key code, which you can get with `key-code`. See [the documentation](http://oakes.github.io/play-clj/core.key-code.html) or the example below to learn how to use it.
 
@@ -93,13 +93,13 @@ Let's write a conditional statement that prints out which arrow key you pressed.
   :on-key-down
   (fn [screen entities]
     (cond
-      (= (:keycode screen) (key-code :dpad-down))
+      (= (:key screen) (key-code :dpad-down))
       (println "down")
-      (= (:keycode screen) (key-code :dpad-up))
+      (= (:key screen) (key-code :dpad-up))
       (println "up")
-      (= (:keycode screen) (key-code :dpad-right))
+      (= (:key screen) (key-code :dpad-right))
       (println "right")
-      (= (:keycode screen) (key-code :dpad-left))
+      (= (:key screen) (key-code :dpad-left))
       (println "left")))
 ```
 
@@ -150,13 +150,13 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
   :on-key-down
   (fn [screen entities]
     (cond
-      (= (:keycode screen) (key-code :dpad-down))
+      (= (:key screen) (key-code :dpad-down))
       (move (first entities) :down)
-      (= (:keycode screen) (key-code :dpad-up))
+      (= (:key screen) (key-code :dpad-up))
       (move (first entities) :up)
-      (= (:keycode screen) (key-code :dpad-right))
+      (= (:key screen) (key-code :dpad-right))
       (move (first entities) :right)
-      (= (:keycode screen) (key-code :dpad-left))
+      (= (:key screen) (key-code :dpad-left))
       (move (first entities) :left)))
   :on-touch-down
   (fn [screen entities]
@@ -349,9 +349,9 @@ It is much faster to develop a game while it's running, and that's what the Cloj
 Then, switch back to your code while the game is still running. Let's modify `:on-key-down` so the left arrow makes it go right, and vice versa, by swiching the keyword you pass into `move`:
 
 ```clojure
-      (= (:keycode screen) (key-code :dpad-right))
+      (= (:key screen) (key-code :dpad-right))
       (move (first entities) :left)
-      (= (:keycode screen) (key-code :dpad-left))
+      (= (:key screen) (key-code :dpad-left))
       (move (first entities) :right)
 ```
 
