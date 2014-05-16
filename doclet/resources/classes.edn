@@ -13,13 +13,11 @@
              "gdx-array-map!" :methods}
  "AssetManager" {"asset-manager" :methods
                  "asset-manager!" :methods}
- "AtlasTmxMapLoader" {"loader! :atlas-tmx-map" :methods}
  "Audio" {"audio!" :methods}
  "Bezier" {"bezier" :methods
            "bezier!" :methods}
  "BitmapFont" {"bitmap-font" :methods
                "bitmap-font!" :methods}
- "BitmapFontLoader" {"loader! :bitmap-font" :methods}
  "BlendingAttribute" {"attribute :blending" :constructors
                       "attribute-type :blending" :static-fields
                       "attribute! :blending" :static-methods}
@@ -86,7 +84,6 @@
  "FrictionJointDef" {"joint-def :friction" :fields}
  "Frustum" {"frustum" :methods
             "frustum!" :methods}
- "G3dModelLoader" {"loader! :g3d-model" :methods}
  "GearJointDef" {"joint-def :gear" :fields}
  "GeometryUtils" {"geometry!" :static-methods}
  "GestureDetector" {"gesture-detector!" :methods}
@@ -146,9 +143,7 @@
                  "model-builder!" :methods}
  "ModelInstance" {"model" :methods
                   "model!" :methods}
- "ModelLoader" {"loader! :model" :methods}
  "MouseJointDef" {"joint-def :mouse" :fields}
- "MusicLoader" {"loader! :music" :methods}
  "Net" {"net!" :methods}
  "NinePatch" {"nine-patch" :methods
               "nine-patch!" :methods}
@@ -157,14 +152,12 @@
                                "orthogonal-tiled-map!" :methods}
  "OrthographicCamera" {"orthographic" :methods
                        "orthographic!" :methods}
- "ObjLoader" {"loader! :obj" :methods}
  "ParticleEffect" {"particle-effect" :methods
                    "particle-effect!" :methods}
  "PerspectiveCamera" {"perspective" :methods
                       "perspective!" :methods}
  "Pixmap" {"pixmap" :methods
            "pixmap!" :methods}
- "PixmapLoader" {"loader! :pixmap" :methods}
  "Plane" {"plane" :methods
           "plane!" :methods}
  "Plane.PlaneSide" {"plane-side" :static-fields}
@@ -203,12 +196,10 @@
  "ShapeRenderer.ShapeType" {"shape-type" :static-fields}
  "Skin" {"skin" :methods
          "skin!" :methods}
- "SkinLoader" {"loader! :skin" :methods}
  "Slider" {"slider" :methods
            "slider!" :methods}
  "Sound" {"sound" :methods
           "sound!" :methods}
- "SoundLoader" {"loader! :sound" :methods}
  "Sphere" {"sphere" :methods
            "sphere!" :methods}
  "SplitPane.SplitPaneStyle" {"style :split-pane" :constructors}
@@ -230,14 +221,12 @@
  "TextField" {"text-field" :methods
               "text-field!" :methods}
  "TextField.TextFieldStyle" {"style :text-field" :constructors}
- "TextureLoader" {"loader! :texture" :methods}
  "TextureMapObject" {"map-object :texture" :methods}
  "TextureRegion" {"texture" :methods
                   "texture!" :methods}
  "TextureRegionDrawable" {"drawable :texture-region" :constructors}
  "Tree" {"tree" :methods
          "tree!" :methods}
- "TmxMapLoader" {"loader! :tmx-map" :methods}
  "Touchpad.TouchpadStyle" {"style :touchpad" :constructors}
  "TiledMap" {"tiled-map" :methods
              "tiled-map!" :methods}

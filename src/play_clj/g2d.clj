@@ -64,11 +64,9 @@
              :set-region 0 0 100 100)
     ; create a new texture based on an existing one
     (texture (texture \"image.png\"))
-    ; rotate a texture 45 degress counterclockwise around the bottom-left corner
+    ; rotate a texture 45 degress
     (assoc (texture \"image.png\")
-           :angle 45
-           :origin-x 0
-           :origin-y 0)"
+           :angle 45)"
   [arg & options]
   `(let [entity# (texture* ~arg)]
      (u/calls! ^TextureRegion (u/get-obj entity# :object) ~@options)

@@ -135,70 +135,15 @@ found."
 
 ; assets
 
-(defn ^:private loader-class
-  [k]
-  (cond
-    (contains? #{:atlas-tmx-map :tmx-map} k)
-    (u/gdx :maps :tiled (str (u/key->pascal k) "Loader"))
-    (contains? #{:g3d-model :obj} k)
-    (u/gdx :graphics :g3d :loader (str (u/key->pascal k) "Loader"))
-    :else
-    (u/gdx :assets :loaders (str (u/key->pascal k) "Loader"))))
-
-(defmacro loader
-  "Returns a subclass of [AssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AssetLoader.html).
-
-    (loader :atlas-tmx-map (resolver :internal-file-handle))
-    (loader :bitmap-font (resolver :internal-file-handle))
-    (loader :g3d-model (resolver :internal-file-handle))
-    (loader :model (resolver :internal-file-handle))
-    (loader :music (resolver :internal-file-handle))
-    (loader :obj (resolver :internal-file-handle))
-    (loader :pixmap (resolver :internal-file-handle))
-    (loader :skin (resolver :internal-file-handle))
-    (loader :sound (resolver :internal-file-handle))
-    (loader :texture (resolver :internal-file-handle))
-    (loader :tmx-map (resolver :internal-file-handle))
-    (loader :tmx-map
-            (resolver :internal-file-handle)
-            (load [file-name] nil))"
-  [type resolver & options]
-  `(proxy [~(loader-class type)] [~resolver] ~@options))
-
-(defmacro loader!
-  "Calls a single method in a subclass of [AsynchronousAssetLoader](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/AsynchronousAssetLoader.html).
-
-    (loader! object :tmx-map :load \"map.tmx\")"
-  [object type & options]
-  `(let [^AsynchronousAssetLoader object# ~object]
-     (u/call! object# ~@options)))
-
-(defn ^:private resolver-class
-  [k]
-  (u/gdx :assets :loaders :resolvers (str (u/key->pascal k) "Resolver")))
-
-(defmacro resolver
-  "Returns an implementation of [FileHandleResolver](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/loaders/FileHandleResolver.html).
-
-    (resolver :internal-file-handle)
-    (resolver :internal-file-handle
-              (resolve [file-name]
-                (files! :internal file-name)))"
-  [type & options]
-  `(proxy [~(resolver-class type)] [] ~@options))
-
 (defn ^:private set-loaders!
   ([am]
-    (set-loaders! am (resolver :internal-file-handle)))
+    (set-loaders! am (InternalFileHandleResolver.)))
   ([^AssetManager am res]
-    (->> (loader :tmx-map res)
-         (.setLoader am TiledMap))
-    (->> (loader :particle-effect
-                 res
-                 (load [am file-name fh param]
-                       (doto (ParticleEffect.)
-                         (.load fh (.parent fh)))))
-         (.setLoader am ParticleEffect))))
+    (.setLoader am TiledMap (TmxMapLoader. res))
+    (.setLoader am ParticleEffect (proxy [ParticleEffectLoader] [res]
+                                    (load [am file-name fh param]
+                                      (doto (ParticleEffect.)
+                                        (.load fh (.parent fh))))))))
 
 (defn asset-manager*
   ([]

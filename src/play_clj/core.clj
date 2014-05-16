@@ -7,7 +7,10 @@
             InputMultiplexer InputProcessor Net Preferences Screen]
            [com.badlogic.gdx.audio Sound]
            [com.badlogic.gdx.assets AssetManager]
-           [com.badlogic.gdx.assets.loaders AsynchronousAssetLoader]
+           [com.badlogic.gdx.assets.loaders AsynchronousAssetLoader
+            ParticleEffectLoader]
+           [com.badlogic.gdx.assets.loaders.resolvers
+            InternalFileHandleResolver]
            [com.badlogic.gdx.files FileHandle]
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Pixmap Pixmap$Format PixmapIO Texture

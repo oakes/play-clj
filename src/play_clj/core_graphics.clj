@@ -55,7 +55,14 @@ complicated shapes. If you use `assoc` to set the overall :x and :y of the
     ; create an empty shape, then set it to a green rectangle
     (shape (shape :filled)
            :set-color (color :green)
-           :rect 0 0 10 30)"
+           :rect 0 0 10 30)
+    ; create a green rectangle at 10,10 and rotate it 45 degrees
+    (assoc (shape :filled
+                  :set-color (color :green)
+                  :rect 0 0 10 30)
+           :x 10
+           :y 10
+           :angle 45)"
   [type & options]
   (when (seq (clojure.set/intersection #{:begin :end} (set options)))
     (-> "No need to call :begin or :end, because it's done for you."
