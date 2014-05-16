@@ -168,6 +168,18 @@ based on the file at `path`.
   [^WidgetGroup group children]
   (apply add! (ActorEntity. group) children))
 
+; actor
+
+(defmacro actor!
+  "Calls a single method on an actor."
+  [entity k & options]
+  `(u/call! ^Actor (u/get-obj ~entity :object) ~k ~@options))
+
+(defn actor?
+  "Returns true if `entity` is an actor."
+  [entity]
+  (isa? (type (u/get-obj entity :object)) Actor))
+
 ; check-box
 
 (defn check-box*

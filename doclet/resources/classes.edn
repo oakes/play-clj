@@ -1,4 +1,5 @@
-{"ActorGestureListener" {"actor-gesture-listener!" :methods}
+{"Actor" {"actor!" :methods}
+ "ActorGestureListener" {"actor-gesture-listener!" :methods}
  "Align" {"align" :static-fields}
  "com.badlogic.gdx.graphics.g2d.Animation" {"animation" :methods
                                             "animation!" :methods}
