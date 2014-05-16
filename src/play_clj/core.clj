@@ -234,7 +234,7 @@ via the screen map.
         entities))
 
     ; 2D physics contact (for play-clj.g2d-physics)
-    ; Tip: use first-entity and second-entity to get the get the entities that are contacting
+    ; Tip: use first-entity and second-entity to get the entities that are contacting
     (defscreen my-screen
       :on-begin-contact ; two bodies began to touch
       (fn [screen entities]
@@ -246,7 +246,7 @@ via the screen map.
         entities))
 
     ; 3D physics contact (for play-clj.g3d-physics)
-    ; Tip: use first-entity and second-entity to get the get the entities that are contacting
+    ; Tip: use first-entity and second-entity to get the entities that are contacting
     (defscreen my-screen
       :on-begin-contact ; two bodies began to touch
       (fn [screen entities]
