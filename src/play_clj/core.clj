@@ -68,8 +68,9 @@
                       (when func
                         (let [screen-map (merge @screen options)
                               old-entities @entities]
-                          (some->> (fn []
-                                     (normalize (func screen-map old-entities)))
+                          (some->> (with-meta
+                                     #(normalize (func screen-map old-entities))
+                                     (meta func))
                                    (wrapper screen)
                                    (reset-changed! entities old-entities)))))]
     ; add the input listeners to the screen atom
