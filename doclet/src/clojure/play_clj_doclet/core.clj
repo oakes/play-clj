@@ -8,6 +8,9 @@
   (:import [com.sun.javadoc ClassDoc ConstructorDoc Doc ExecutableMemberDoc
             FieldDoc MethodDoc Parameter RootDoc]))
 
+(def ^:const default-ns "play-clj.core")
+(def ^:const ignore-files #{"physics.clj" "utils.clj"})
+
 (def classes (-> "classes.edn" io/resource slurp edn/read-string))
 
 (defn camel->keyword
@@ -90,12 +93,13 @@
        vec))
 
 (defn process-group
-  [{:keys [type raw docstring] :as group} java-docs]
+  [ns {:keys [type raw docstring] :as group} java-docs]
   (let [form (read-string raw)
         n (second form)]
     (when (and (contains? #{'defn 'defmacro} (first form))
                (-> n meta :private not))
       (assoc group
+             :ns (if (> (count ns) 0) ns default-ns)
              :name (str n)
              :java (->> java-docs
                         (filter #(= (first %) (str n)))
@@ -114,30 +118,29 @@
            (assoc group :raw*)))))
 
 (defn process-groups
-  [{:keys [groups] :as parsed-file} java-docs]
+  [{:keys [ns groups] :as parsed-file} java-docs]
   (->> groups
-       (map #(process-group % java-docs))
+       (map #(process-group ns % java-docs))
        merge-groups
-       (remove nil?)
-       (assoc parsed-file :groups)))
+       (remove nil?)))
 
 (defn parse-clj
   [java-docs]
   (->> (io/file "../src/")
        file-seq
        (filter #(-> % .getName (.endsWith ".clj")))
-       (remove #(contains? #{"physics.clj" "utils.clj"}
-                           (-> % .getName)))
+       (remove #(contains? ignore-files (.getName %)))
        (sort-by #(.getName %))
        (map #(.getCanonicalPath %))
        (map marg/path-to-doc)
        (map #(process-groups % java-docs))
-       (filter #(> (count (:groups %)) 0))))
+       (apply concat)
+       (group-by :ns)))
 
-(defn save
+(defn save!
   [parsed-files]
-  (->> parsed-files pr-str (spit (io/file "doc.edn")))
-  (html/create "doc" parsed-files))
+  (html/create-site! "site" parsed-files)
+  (html/create-embed! "embed" parsed-files))
 
 (defn parse
   [^RootDoc root]
@@ -145,5 +148,5 @@
        (filter some?)
        (apply concat)
        parse-clj
-       save)
-  (println "Created doc/ and doc.edn."))
+       save!)
+  (println "Created site/ and embed/"))

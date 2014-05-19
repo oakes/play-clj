@@ -5,10 +5,7 @@
 
 (defn str->filename
   [ns s]
-  (-> (or (let [dot-pos (.lastIndexOf ns ".")]
-            (when-not (= dot-pos -1)
-              (subs ns (+ 1 dot-pos))))
-          "core")
+  (-> (subs ns (+ (.lastIndexOf ns ".") 1))
       (str "." s)
       (string/replace "?" "_q")
       (string/replace "->" "_")
@@ -19,9 +16,8 @@
 (defn sidebar
   [parsed-files]
   [:div {:class "sidebar"}
-   (for [{:keys [ns groups] :as pf} parsed-files]
-     (cons (when (> (count ns) 0)
-             [:div {:class "ns"} ns])
+   (for [[ns groups] parsed-files]
+     (cons [:div {:class "ns"} ns]
            (for [{:keys [name]} groups]
              [:div {:class "name"}
               [:a {:href (str->filename ns name)}
@@ -64,34 +60,56 @@
      (when raw* [:pre raw*])
      [:pre raw]]]])
 
-(defn create-file
-  [parsed-files name content]
+(defn create-site-file
+  [name sidebar content]
   (html [:html
          [:head
           [:title name]
           [:link {:rel "stylesheet" :href "highlight.css"}]
           [:link {:rel "stylesheet" :href "main.css"}]]
          [:body
-          (sidebar parsed-files)
+          sidebar
           content
           [:script {:src "highlight.js"}]
           [:script {:src "main.js"}]]]))
+
+(defn create-embed-file
+  [content]
+  (html [:html [:body content]]))
 
 (defn copy-from-res
   [dir file-name]
   (spit (io/file dir file-name)
         (-> file-name io/resource slurp)))
 
-(defn create
+(defn create-site!
   [dir parsed-files]
   (.mkdir (io/file dir))
   (copy-from-res dir "main.css")
   (copy-from-res dir "main.js")
   (copy-from-res dir "highlight.css")
   (copy-from-res dir "highlight.js")
-  (doseq [{:keys [ns groups] :as pf} parsed-files]
+  (doseq [[ns groups] parsed-files]
     (doseq [{:keys [name] :as group} groups]
       (spit (io/file dir (str->filename ns name))
-            (create-file parsed-files name (content group)))))
+            (create-site-file name (sidebar parsed-files) (content group)))))
   (spit (io/file dir "index.html")
-        (create-file parsed-files "play-clj docs" nil)))
+        (create-site-file "play-clj docs" (sidebar parsed-files) nil)))
+
+(defn create-embed!
+  [dir parsed-files]
+  (.mkdir (io/file dir))
+  (doseq [[ns groups] parsed-files]
+    (doseq [{:keys [name] :as group} groups]
+      (spit (io/file dir (str->filename ns name))
+            (create-embed-file (content group)))))
+  (spit (io/file dir "index.edn")
+        (->> parsed-files
+             (map (fn [[ns groups]]
+                    (for [{:keys [name]} groups]
+                      {:ns ns
+                       :name name
+                       :file (str->filename ns name)})))
+             (apply concat)
+             vec
+             pr-str)))
