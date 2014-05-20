@@ -100,13 +100,17 @@ specified path.
 
 (defn ^:private create-and-add-timer!
   [{:keys [update-fn!] :as screen} id]
-  (when-let [timer (timer*)]
+  (some-> (get-in screen [:timers id]) .stop)
+  (let [timer (timer*)]
     (update-fn! assoc-in [[:timers id] timer])
     timer))
 
 (defn add-timer!
   "Returns a [Timer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Timer.html)
-that runs the :on-timer function according to the given arguments.
+which runs which will fire the :on-timer function one or more times (depending
+on the given arguments). In the :on-timer function, the id will be passed in the
+screen map. If a timer with that id already exists in the screen, it will be
+stopped and replaced with a new timer.
 
     ; wait 2 seconds and run once
     (add-timer! screen :spawn-enemy 2)
