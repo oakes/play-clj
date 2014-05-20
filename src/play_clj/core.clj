@@ -85,6 +85,7 @@
     ; return a map with all values related to the screen
     {:screen screen
      :entities entities
+     :options options
      :show (fn []
              (swap! screen assoc
                     :total-time 0
@@ -442,14 +443,14 @@ via the screen map.
 `screen` maps in the order they were provided.
 
     (set-screen! my-game main-screen text-screen)"
-  [^Game game & screens]
+  [^Game game & screen-objects]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
-                      (doseq [{:keys [screen]} screens]
+                      (doseq [{:keys [screen]} screen-objects]
                         (doseq [[_ listener] (:input-listeners @screen)]
                           (add-input! listener))))
         run-fn! (fn [k & args]
-                  (doseq [screen screens]
+                  (doseq [screen screen-objects]
                     (apply (get screen k) args)))]
     (.setScreen game (reify Screen
                        (show [this] (add-inputs!) (run-fn! :show))
@@ -465,11 +466,11 @@ via the screen map.
 handle errors and perform other custom actions each time they run.
 
     ; default behavior
-    (set-screen-wrapper! (fn [screen screen-fn]
+    (set-screen-wrapper! (fn [screen-atom screen-fn]
                            (screen-fn)))
     ; if there is an error, print it out and switch to a blank screen
     ; (this is useful because it makes error recovery easier in a REPL)
-    (set-screen-wrapper! (fn [screen screen-fn]
+    (set-screen-wrapper! (fn [screen-atom screen-fn]
                            (try (screen-fn)
                              (catch Exception e
                                (.printStackTrace e)
@@ -485,3 +486,15 @@ is the atom storing the screen map behind the scenes. Returns the updated
     (update! screen :renderer (stage))"
   [{:keys [update-fn!] :as screen} & args]
   (update-fn! assoc args))
+
+(defn run!
+  "Runs a function defined in another screen. You may optionally pass a series
+of key-value pairs, which will be given to the function via its screen map.
+
+    (run! my-other-screen :on-show)
+    (run! my-other-screen :on-change-color :color :blue)"
+  [screen-object fn-name & options]
+  (let [execute-fn! (-> screen-object :screen deref :execute-fn!)
+        screen-fn (-> screen-object :options (get fn-name))]
+    (apply execute-fn! screen-fn options)
+    nil))
