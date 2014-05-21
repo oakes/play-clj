@@ -5,15 +5,6 @@
 
 ; misc
 
-(def ^:dynamic *asset-manager* nil)
-
-(defn load-asset
-  [path type]
-  (when-let [^AssetManager am *asset-manager*]
-    (.load am path type)
-    (.finishLoading am)
-    (.get am path type)))
-
 (defn throw-key-not-found
   [k]
   (throw (Exception. (str "The keyword " k " is not found."))))
@@ -24,6 +15,32 @@
     (or (get obj k)
         (throw-key-not-found k))
     obj))
+
+; assets
+
+(def ^:dynamic *asset-manager* nil)
+
+(defn load-asset
+  [path type]
+  (when-let [^AssetManager am *asset-manager*]
+    (.load am path type)
+    (.finishLoading am)
+    (.get am path type)))
+
+; timers
+
+(def ^:dynamic *timers* nil)
+
+(defn track-timers!
+  []
+  (intern 'play-clj.utils '*timers* (atom #{})))
+
+(defn stop-timers!
+  []
+  (when *timers*
+    (doseq [t (deref *timers*)]
+      (.stop t))
+    (reset! *timers* #{})))
 
 ; converting keys
 

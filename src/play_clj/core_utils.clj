@@ -100,10 +100,15 @@ specified path.
 
 (defn ^:private create-and-add-timer!
   [{:keys [update-fn!] :as screen} id]
-  (some-> (get-in screen [:timers id]) .stop)
-  (let [timer (timer*)]
-    (update-fn! assoc-in [[:timers id] timer])
-    timer))
+  ; remove timer if it already exists
+  (when-let [old-timer (get-in screen [:timers id])]
+    (.stop old-timer)
+    (some-> u/*timers* (swap! disj old-timer)))
+  ; create timer, add to screen map, and return it
+  (let [new-timer (timer*)]
+    (update-fn! assoc-in [[:timers id] new-timer])
+    (some-> u/*timers* (swap! conj new-timer))
+    new-timer))
 
 (defn add-timer!
   "Returns a [Timer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Timer.html)
