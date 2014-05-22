@@ -77,11 +77,12 @@
   (draw-entity! [{:keys [^ModelInstance object x y z]}
                  {:keys [^ModelBatch renderer ^Environment attributes]}
                  _]
-    (let [^Matrix4 m (. object transform)
-          x (float (or x 0))
-          y (float (or y 0))
-          z (float (or z 0))]
-      (.setTranslation m x y z))
+    (when (or x y z)
+      (let [^Matrix4 m (. object transform)
+            x (float (or x 0))
+            y (float (or y 0))
+            z (float (or z 0))]
+        (.setTranslation m x y z)))
     (.render renderer object attributes)))
 
 (defrecord ShapeEntity [object] Entity
