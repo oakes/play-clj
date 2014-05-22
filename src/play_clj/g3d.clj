@@ -86,9 +86,9 @@
        (cond
          (string? arg1#)
          (ModelInstance. (model* arg1#))
-         (:object arg1#)
-         (ModelInstance. ^ModelInstance (:object arg1#))
-         (isa? arg1# ModelData)
+         (isa? (type arg1#) ModelEntity)
+         (ModelInstance. (. ^ModelInstance (:object arg1#) model) ~@(rest args))
+         (isa? (type arg1#) ModelData)
          (ModelInstance. ^Model (Model. ~@args))
          :else
          (ModelInstance. ~@args)))))
