@@ -48,7 +48,7 @@
       (-> ^Pixmap arg Texture. TextureRegion.)
       (isa? (type arg) TextureRegion)
       arg
-      (:object arg)
+      (isa? (type arg) TextureEntity)
       (TextureRegion. ^TextureRegion (:object arg))
       :else
       (TextureRegion. arg))))
@@ -96,7 +96,7 @@
               (Texture. ^String arg))
           TextureRegion.
           NinePatch.)
-      (:object arg)
+      (isa? (type arg) NinePatchEntity)
       (NinePatch. (:object arg))
       (map? arg)
       (let [{:keys [region left right top bottom]} arg]
