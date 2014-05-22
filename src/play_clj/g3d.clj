@@ -79,7 +79,17 @@
       (throw (Exception. "Asset manager not found. See set-asset-manager!"))))
 
 (defmacro model
-  "Returns an entity based on [ModelInstance](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html)."
+  "Returns an entity based on [ModelInstance](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/ModelInstance.html).
+In addition to the listed options, you may also pass an internal path to a model
+object created by an external application.
+
+    ; load a model from a file
+    (model \"knight.g3dj\")
+    ; create a model from an existing model
+    (model (model \"knight.g3dj\"))
+    ; set the position of a model
+    (assoc (model \"knight.g3dj\")
+           :x 0 :y 0 :z 0)"
   [& args]
   `(ModelEntity.
      (let [arg1# ~(first args)]

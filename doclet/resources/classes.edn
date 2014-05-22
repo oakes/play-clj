@@ -141,7 +141,7 @@
                "model-batch!" :methods}
  "ModelBuilder" {"model-builder" :methods
                  "model-builder!" :methods}
- "ModelInstance" {"model" :methods
+ "ModelInstance" {"model" :constructors
                   "model!" :methods}
  "MouseJointDef" {"joint-def :mouse" :fields}
  "Net" {"net!" :methods}
