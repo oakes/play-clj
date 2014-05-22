@@ -99,9 +99,9 @@ object created by an external application.
          (isa? (type arg1#) ModelEntity)
          (ModelInstance. (. ^ModelInstance (:object arg1#) model) ~@(rest args))
          (isa? (type arg1#) ModelData)
-         (ModelInstance. ^Model (Model. ~@args))
+         (ModelInstance. ^Model (Model. arg1# ~@(rest args)))
          :else
-         (ModelInstance. ~@args)))))
+         (ModelInstance. arg1# ~@(rest args))))))
 
 (defmacro model!
   "Calls a single method on a `model`."
