@@ -86,27 +86,29 @@
     (.render renderer object attributes)))
 
 (defrecord ShapeEntity [object] Entity
-  (draw-entity! [{:keys [^ShapeRenderer object type draw! x y
-                         scale-x scale-y angle]}
+  (draw-entity! [{:keys [^ShapeRenderer object type draw! x y width height
+                         angle origin-x origin-y]}
                  {:keys [^Camera camera]}
                  batch]
-    (when batch
-      (.end ^SpriteBatch batch))
     (when (or x y)
       (let [^Matrix4 m (.getTransformMatrix object)
             x (float (or x 0))
             y (float (or y 0))]
         (.setTranslation m x y 0)
         (.setTransformMatrix object m)))
+    (when batch
+      (.end ^SpriteBatch batch))
     (when camera
       (.setProjectionMatrix object (. camera combined)))
     (.begin object type)
-    (when (or scale-x scale-y angle)
-      (let [scale-x (float (or scale-x 1))
-            scale-y (float (or scale-y 1))
+    (when angle
+      (let [x (float (or x 0))
+            y (float (or y 0))
+            origin-x (float (or origin-x (/ (or width 0) 2)))
+            origin-y (float (or origin-y (/ (or height 0) 2)))
             angle (float (or angle 0))]
         (.identity object)
-        (.scale object scale-x scale-y 1)
+        (.translate object (+ x origin-x) (+ y origin-y) 0)
         (.rotate object 0 0 1 angle)))
     (draw!)
     (.end object)
