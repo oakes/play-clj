@@ -143,7 +143,6 @@ via the screen map.
         entities))
 
     ; input functions
-    ; Tip: use input-processor! to run these functions manually
     (defscreen my-screen
       :on-key-down ; a key was pressed
       (fn [screen entities]
@@ -188,7 +187,7 @@ via the screen map.
         entities))
 
     ; gesture functions
-    ; Tip: use gesture-detector! to configure these functions and run them manually
+    ; Tip: use gesture-detector! to configure these functions
     (defscreen my-screen
       :on-fling ; the user dragged over the screen and lifted
       (fn [screen entities]
@@ -262,7 +261,7 @@ via the screen map.
         entities))
 
     ; ui input functions (for play-clj.ui)
-    ; Tip: use change-listener! and click-listener! to configure these functions and run them manually
+    ; Tip: use click-listener! to configure these functions
     (defscreen my-screen
       :on-ui-changed ; the ui entity was changed
       (fn [screen entities]
@@ -316,7 +315,7 @@ via the screen map.
         entities))
 
     ; ui drag functions (for play-clj.ui)
-    ; Tip: use drag-listener! to configure these functions and run them manually
+    ; Tip: use drag-listener! to configure these functions
     (defscreen my-screen
       :on-ui-drag
       (fn [screen entities]
@@ -341,7 +340,6 @@ via the screen map.
         entities))
 
     ; ui focus functions (for play-clj.ui)
-    ; Tip: use focus-listener! to run these functions manually
     (defscreen my-screen
       :on-ui-keyboard-focus-changed
       (fn [screen entities]
@@ -357,7 +355,6 @@ via the screen map.
         entities))
 
     ; ui gesture functions (for play-clj.ui)
-    ; Tip: use actor-gesture-listener! to configure these functions and run them manually
     (defscreen my-screen
       :on-ui-fling ; the user dragged a finger over the screen and lifted it
       (fn [screen entities]
@@ -439,11 +436,11 @@ via the screen map.
   `(defonce ~n (defgame* ~options)))
 
 (defn set-screen!
-  "Creates and displays a screen for the `game` object, using one or more
-`screen` maps in the order they were provided.
+  "Creates and displays a screen for the `game-object`, using one or more
+`screen-objects` in the order they were provided.
 
     (set-screen! my-game main-screen text-screen)"
-  [^Game game & screen-objects]
+  [^Game game-object & screen-objects]
   (let [add-inputs! (fn []
                       (input! :set-input-processor (InputMultiplexer.))
                       (doseq [{:keys [screen]} screen-objects]
@@ -452,14 +449,14 @@ via the screen map.
         run-fn! (fn [k & args]
                   (doseq [screen screen-objects]
                     (apply (get screen k) args)))]
-    (.setScreen game (reify Screen
-                       (show [this] (add-inputs!) (run-fn! :show))
-                       (render [this d] (run-fn! :render d))
-                       (hide [this] (run-fn! :hide))
-                       (pause [this] (run-fn! :pause))
-                       (resize [this w h] (run-fn! :resize w h))
-                       (resume [this] (run-fn! :resume))
-                       (dispose [this])))))
+    (.setScreen game-object (reify Screen
+                              (show [this] (add-inputs!) (run-fn! :show))
+                              (render [this d] (run-fn! :render d))
+                              (hide [this] (run-fn! :hide))
+                              (pause [this] (run-fn! :pause))
+                              (resize [this w h] (run-fn! :resize w h))
+                              (resume [this] (run-fn! :resume))
+                              (dispose [this])))))
 
 (defn set-screen-wrapper!
   "Sets a function that wraps around all screen functions, allowing you to
