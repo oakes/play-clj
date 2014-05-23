@@ -50,12 +50,16 @@
     (.update camera)))
 
 (defn width
-  "Returns the width of the camera in `screen`.
+  "Returns the width of the camera in `screen`. If there is no camera, it
+returns the overall width.
 
     (width screen)"
   [screen]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (. camera viewportWidth)))
+  (try
+    (let [^Camera camera (u/get-obj screen :camera)]
+      (. camera viewportWidth))
+    (catch Exception _
+      (game :width))))
 
 (defn width!
   "Sets the width of the camera in `screen`, adjusting the height so the ratio
@@ -66,12 +70,16 @@ remains in tact.
   (size! screen new-width (* new-width (/ (game :height) (game :width)))))
 
 (defn height
-  "Returns the height of the camera in `screen`.
+  "Returns the height of the camera in `screen`. If there is no camera, it
+returns the overall height.
 
     (height screen)"
   [screen]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (. camera viewportHeight)))
+  (try
+    (let [^Camera camera (u/get-obj screen :camera)]
+      (. camera viewportHeight))
+    (catch Exception _
+      (game :height))))
 
 (defn height!
   "Sets the height of the camera in `screen`, adjusting the width so the ratio
