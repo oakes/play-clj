@@ -342,6 +342,14 @@ Then, in `defgame`, set the screens in the order in which you'd like them to app
 
 Make sure you add `play-clj.ui` back to your `ns` declaration, so you can use the label again. Also, note that only the first screen, which in this case is `main-screen`, calls `(clear!)` in its `:on-render` function. If `text-screen` called it as well, it would clear whatever was drawn by `main-screen`.
 
+With multiple screens being displayed, it will often be important to make them interact. For example, you may want to place a button on `text-screen` that causes a character on `main-screen` to change color. You can do this with the [run!](http://oakes.github.io/play-clj/core.run!.html) function.
+
+First, define a custom screen function in `main-screen` with a name such as `:on-change-color`, where you can write the code that changes the character's color. Then, in `text-screen`, listen for the button click (using the `:on-ui-changed` screen function) and manually run the custom function. You may optionally provide key-value pairs that will be passed into its screen map:
+
+```clojure
+(run! main-screen :on-change-color :color :blue)
+```
+
 ## Using the REPL
 
 It is much faster to develop a game while it's running, and that's what the Clojure REPL lets you do. To get started, just hit the _Run with REPL_ button in the build pane. When it launches, type `(-main)` into the prompt and hit enter, and your game will launch.
