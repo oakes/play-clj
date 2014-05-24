@@ -113,4 +113,4 @@
 (defrecord BundleEntity [entities] Entity
   (draw-entity! [{:keys [entities] :as entity} screen batch]
     (doseq [e entities]
-      (draw-entity! (merge e entity) screen batch))))
+      (draw-entity! (merge e (dissoc entity :entities)) screen batch))))
