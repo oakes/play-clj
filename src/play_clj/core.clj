@@ -90,8 +90,9 @@
                           :input-listeners (input-listeners options execute-fn!)
                           :ui-listeners (ui-listeners options execute-fn!)])
              (execute-fn! on-show)
-             (->> (contact-listener @screen options execute-fn!)
-                  (swap! screen assoc :contact-listener)))
+             (some->> (contact-listener @screen options execute-fn!)
+                      (vector :contact-listener)
+                      (update-fn! assoc)))
      :render (fn [d]
                (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
                (execute-fn! on-render :delta-time d))
