@@ -82,6 +82,13 @@
      :entities entities
      :options options
      :show (fn []
+             ; if using a physics engine in a REPL, we need to forcibly remove
+             ; the entities and world so they are cleaned up properly
+             (when (:world @screen)
+               (update-screen! @screen (reset! entities []))
+               (some-> @screen :world :object .dispose)
+               (update-fn! dissoc [:world]))
+             ; set the initial values in the screen map
              (update-fn! assoc
                          [:total-time 0
                           :update-fn! update-fn!
@@ -89,7 +96,9 @@
                           :on-timer on-timer
                           :input-listeners (input-listeners options execute-fn!)
                           :ui-listeners (ui-listeners options execute-fn!)])
+             ; run :on-show
              (execute-fn! on-show)
+             ; update the physics contact listener if a :world was created
              (some->> (contact-listener @screen options execute-fn!)
                       (vector :contact-listener)
                       (update-fn! assoc)))
