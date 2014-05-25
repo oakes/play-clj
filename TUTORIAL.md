@@ -159,6 +159,7 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
       (move (first entities) :right)
       (= (:key screen) (key-code :dpad-left))
       (move (first entities) :left)))
+      
   :on-touch-down
   (fn [screen entities]
     (let [pos (input->screen screen (:input-x screen) (:input-y screen))]
@@ -321,6 +322,7 @@ You may want to display two different screens at once. This is useful in situati
     (assoc (label "0" (color :white))
            :id :fps
            :x 5))
+           
   :on-render
   (fn [screen entities]
     (->> (for [entity entities]
@@ -328,6 +330,7 @@ You may want to display two different screens at once. This is useful in situati
              :fps (doto entity (label! :set-text (str (game :fps))))
              entity))
          (render! screen)))
+         
   :on-resize
   (fn [screen entities]
     (height! screen 300)))
