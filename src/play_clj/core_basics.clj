@@ -130,12 +130,12 @@
 
 (defn ^:private add-input!
   [^InputProcessor p]
-  (let [^InputMultiplexer multi (input! :get-input-processor)]
+  (when-let [^InputMultiplexer multi (input! :get-input-processor)]
     (.addProcessor multi p)))
 
 (defn ^:private remove-input!
   [^InputProcessor p]
-  (let [^InputMultiplexer multi (input! :get-input-processor)]
+  (when-let [^InputMultiplexer multi (input! :get-input-processor)]
     (.removeProcessor multi p)))
 
 (defn sound*

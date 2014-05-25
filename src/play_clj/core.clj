@@ -72,13 +72,10 @@
                                      #(normalize (func screen-map old-entities))
                                      (meta func))
                                    (wrapper screen)
-                                   (reset-changed! entities old-entities)))))]
-    ; add the input listeners to the screen atom
-    (when-not (:input-listeners @screen)
-      (->> (input-listeners options execute-fn!)
-           (swap! screen assoc :input-listeners)))
+                                   (reset-changed! entities old-entities)))))
+        total-time (atom 0)]
     ; update screen when either the screen or entities are changed
-    (add-watch screen :changed (fn [_ _ _ new-screen]
+    (add-watch screen :changed (fn [_ _ old-screen new-screen]
                                  (update-screen! new-screen)))
     (add-watch entities :changed (fn [_ _ _ new-entities]
                                    (update-screen! @screen new-entities)))
@@ -92,14 +89,14 @@
                     :update-fn! #(apply swap! screen %1 %2)
                     :execute-fn! execute-fn!
                     :on-timer on-timer
+                    :input-listeners (input-listeners options execute-fn!)
                     :ui-listeners (ui-listeners options execute-fn!))
              (execute-fn! on-show)
-             (when-not (:contact-listener @screen)
-               (->> (contact-listener @screen options execute-fn!)
-                    (swap! screen assoc :contact-listener))))
+             (->> (contact-listener @screen options execute-fn!)
+                  (swap! screen assoc :contact-listener)))
      :render (fn [d]
-               (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
-               (execute-fn! on-render :delta-time d))
+               (swap! total-time + d)
+               (execute-fn! on-render :delta-time d :total-time @total-time))
      :hide #(execute-fn! on-hide)
      :pause #(execute-fn! on-pause)
      :resize #(execute-fn! on-resize :width %1 :height %2)
@@ -450,7 +447,7 @@ via the screen map.
                   (doseq [screen screen-objects]
                     (apply (get screen k) args)))]
     (.setScreen game-object (reify Screen
-                              (show [this] (add-inputs!) (run-fn! :show))
+                              (show [this] (run-fn! :show) (add-inputs!))
                               (render [this d] (run-fn! :render d))
                               (hide [this] (run-fn! :hide))
                               (pause [this] (run-fn! :pause))
