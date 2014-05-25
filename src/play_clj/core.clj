@@ -82,12 +82,9 @@
      :entities entities
      :options options
      :show (fn []
-             ; if using a physics engine in a REPL, we need to forcibly remove
-             ; the entities and world so they are cleaned up properly
-             (when (:world @screen)
-               (update-screen! @screen (reset! entities []))
-               (some-> @screen :world :object .dispose)
-               (update-fn! dissoc [:world]))
+             ; if using a physics engine in a REPL, we need to forcibly dispose
+             ; the world so it is cleaned up properly
+             (some-> @screen :world :object .dispose)
              ; set the initial values in the screen map
              (update-fn! assoc
                          [:total-time 0
