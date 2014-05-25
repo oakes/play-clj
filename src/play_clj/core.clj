@@ -45,8 +45,9 @@
 
 (defn ^:private reset-changed!
   [e-atom e-old e-new]
-  (when (not= e-old e-new)
-    (compare-and-set! e-atom e-old e-new)))
+  (when (and (not= e-old e-new)
+             (compare-and-set! e-atom e-old e-new))
+    e-new))
 
 (defn ^:private normalize
   [entities]
@@ -72,34 +73,33 @@
                                      #(normalize (func screen-map old-entities))
                                      (meta func))
                                    (wrapper screen)
-                                   (reset-changed! entities old-entities)))))
-        total-time (atom 0)]
-    ; update screen when either the screen or entities are changed
-    (add-watch screen :changed (fn [_ _ old-screen new-screen]
-                                 (update-screen! new-screen)))
-    (add-watch entities :changed (fn [_ _ _ new-entities]
-                                   (update-screen! @screen new-entities)))
-    ; return a map with all values related to the screen
+                                   (reset-changed! entities old-entities)
+                                   (update-screen! @screen)))))
+        update-fn! (fn [func args]
+                     (doto (apply swap! screen func args)
+                       update-screen!))]
     {:screen screen
      :entities entities
      :options options
      :show (fn []
-             (swap! screen assoc
-                    :total-time 0
-                    :update-fn! #(apply swap! screen %1 %2)
-                    :execute-fn! execute-fn!
-                    :on-timer on-timer
-                    :input-listeners (input-listeners options execute-fn!)
-                    :ui-listeners (ui-listeners options execute-fn!))
+             (update-fn! assoc
+                         [:total-time 0
+                          :update-fn! update-fn!
+                          :execute-fn! execute-fn!
+                          :on-timer on-timer
+                          :input-listeners (input-listeners options execute-fn!)
+                          :ui-listeners (ui-listeners options execute-fn!)])
              (execute-fn! on-show)
              (->> (contact-listener @screen options execute-fn!)
                   (swap! screen assoc :contact-listener)))
      :render (fn [d]
-               (swap! total-time + d)
-               (execute-fn! on-render :delta-time d :total-time @total-time))
+               (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
+               (execute-fn! on-render :delta-time d))
      :hide #(execute-fn! on-hide)
      :pause #(execute-fn! on-pause)
-     :resize #(execute-fn! on-resize :width %1 :height %2)
+     :resize (fn [w h]
+               (execute-fn! on-resize :width w :height h)
+               (update-screen! @screen))
      :resume #(execute-fn! on-resume)}))
 
 (defmacro defscreen
@@ -119,6 +119,7 @@ via the screen map.
       :on-render ; the screen must be rendered (many times per second)
       (fn [screen entities]
         (println (:delta-time screen)) ; time (ms) elapsed since last frame
+        (println (:total-time screen)) ; time (ms) elapsed since :on-show
         entities)
       :on-hide ; the screen was replaced
       (fn [screen entities]
@@ -438,22 +439,23 @@ via the screen map.
 
     (set-screen! my-game main-screen text-screen)"
   [^Game game-object & screen-objects]
-  (let [add-inputs! (fn []
-                      (input! :set-input-processor (InputMultiplexer.))
-                      (doseq [{:keys [screen]} screen-objects]
-                        (doseq [[_ listener] (:input-listeners @screen)]
-                          (add-input! listener))))
-        run-fn! (fn [k & args]
+  (let [run-fn! (fn [k & args]
                   (doseq [screen screen-objects]
                     (apply (get screen k) args)))]
-    (.setScreen game-object (reify Screen
-                              (show [this] (run-fn! :show) (add-inputs!))
-                              (render [this d] (run-fn! :render d))
-                              (hide [this] (run-fn! :hide))
-                              (pause [this] (run-fn! :pause))
-                              (resize [this w h] (run-fn! :resize w h))
-                              (resume [this] (run-fn! :resume))
-                              (dispose [this])))))
+    (.setScreen game-object
+      (reify Screen
+        (show [this]
+          (input! :set-input-processor (InputMultiplexer.))
+          (run-fn! :show)
+          (doseq [{:keys [screen]} screen-objects]
+            (doseq [[_ listener] (:input-listeners @screen)]
+              (add-input! listener))))
+        (render [this d] (run-fn! :render d))
+        (hide [this] (run-fn! :hide))
+        (pause [this] (run-fn! :pause))
+        (resize [this w h] (run-fn! :resize w h))
+        (resume [this] (run-fn! :resume))
+        (dispose [this])))))
 
 (defn set-screen-wrapper!
   "Sets a function that wraps around all screen functions, allowing you to
