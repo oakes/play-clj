@@ -7,6 +7,7 @@
   :on-render ; the screen must be rendered &#40;many times per second&#41;
   &#40;fn &#91;screen entities&#93;
     &#40;println &#40;:delta-time screen&#41;&#41; ; time &#40;ms&#41; elapsed since last frame
+    &#40;println &#40;:total-time screen&#41;&#41; ; time &#40;ms&#41; elapsed since :on-show
     entities&#41;
   :on-hide ; the screen was replaced
   &#40;fn &#91;screen entities&#93;
@@ -304,37 +305,40 @@
                                      #(normalize (func screen-map old-entities))
                                      (meta func))
                                    (wrapper screen)
-                                   (reset-changed! entities old-entities)))))]
-    ; add the input listeners to the screen atom
-    (when-not (:input-listeners @screen)
-      (->> (input-listeners options execute-fn!)
-           (swap! screen assoc :input-listeners)))
-    ; update screen when either the screen or entities are changed
-    (add-watch screen :changed (fn [_ _ _ new-screen]
-                                 (update-screen! new-screen)))
-    (add-watch entities :changed (fn [_ _ _ new-entities]
-                                   (update-screen! @screen new-entities)))
-    ; return a map with all values related to the screen
+                                   (reset-changed! entities old-entities)
+                                   (update-screen! @screen)))))
+        update-fn! (fn [func args]
+                     (doto (apply swap! screen func args)
+                       update-screen!))]
     {:screen screen
      :entities entities
      :options options
      :show (fn []
-             (swap! screen assoc
-                    :total-time 0
-                    :update-fn! #(apply swap! screen %1 %2)
-                    :execute-fn! execute-fn!
-                    :on-timer on-timer
-                    :ui-listeners (ui-listeners options execute-fn!))
+             ; if using a physics engine in a REPL, we need to forcibly dispose
+             ; the world so it is cleaned up properly
+             (some-> @screen :world :object .dispose)
+             ; set the initial values in the screen map
+             (update-fn! assoc
+                         [:total-time 0
+                          :update-fn! update-fn!
+                          :execute-fn! execute-fn!
+                          :on-timer on-timer
+                          :input-listeners (input-listeners options execute-fn!)
+                          :ui-listeners (ui-listeners options execute-fn!)])
+             ; run :on-show
              (execute-fn! on-show)
-             (when-not (:contact-listener @screen)
-               (->> (contact-listener @screen options execute-fn!)
-                    (swap! screen assoc :contact-listener))))
+             ; update the physics contact listener if a :world was created
+             (some->> (contact-listener @screen options execute-fn!)
+                      (vector :contact-listener)
+                      (update-fn! assoc)))
      :render (fn [d]
                (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
                (execute-fn! on-render :delta-time d))
      :hide #(execute-fn! on-hide)
      :pause #(execute-fn! on-pause)
-     :resize #(execute-fn! on-resize :width %1 :height %2)
+     :resize (fn [w h]
+               (execute-fn! on-resize :width w :height h)
+               (update-screen! @screen))
      :resume #(execute-fn! on-resume)}))</pre><pre>(defmacro defscreen
   [n & {:keys [] :as options}]
   `(let [fn-syms# (->> (for [[k# v#] ~options]
