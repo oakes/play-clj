@@ -306,7 +306,7 @@ If you try that, you'll get the dreaded error: `java.lang.RuntimeException: Can'
 
 ## Multiple Screens
 
-It is possible to have multiple screens for your game. You may want a title screen at first, and then go to your game when an item is clicked. You can do this by simply calling the same `set-screen!` function that is run in `defgame`. You'll need to pass the game object as the first parameter, so to do that you'll need to declare your symbols at the top of your file:
+It is possible to have multiple screens for your game. You may want a title screen at first, and then go to your game when an item is clicked. You can do this by simply calling the same `set-screen!` function that is run in `defgame`. You'll need to declare your symbols at the top of your file, so you can refer to them from anywhere below.
 
 `(declare hello-world title-screen main-screen)`
 
