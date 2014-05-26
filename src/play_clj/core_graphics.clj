@@ -586,7 +586,7 @@ to overlap correctly with the entities.
     (render-sorted! screen [\"walls\"] entities)
     (render-sorted! screen #(sort-by :y %) [\"walls\"] entities)"
   ([screen layer-names entities]
-    (render-sorted! sort-by-y screen layer-names entities))
+    (render-sorted! screen sort-by-y layer-names entities))
   ([{:keys [^BatchTiledMapRenderer renderer
             ^Camera camera
             update-fn!]
