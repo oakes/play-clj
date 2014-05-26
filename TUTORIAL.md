@@ -93,10 +93,10 @@ Let's write a conditional statement that prints out which arrow key you pressed.
   :on-key-down
   (fn [screen entities]
     (cond
-      (= (:key screen) (key-code :dpad-down))
-      (println "down")
       (= (:key screen) (key-code :dpad-up))
       (println "up")
+      (= (:key screen) (key-code :dpad-down))
+      (println "down")
       (= (:key screen) (key-code :dpad-right))
       (println "right")
       (= (:key screen) (key-code :dpad-left))
@@ -118,13 +118,13 @@ In this case, the screen map will contain an `:input-x` and `:input-y` for the p
   (fn [screen entities]
     (let [pos (input->screen screen (:input-x screen) (:input-y screen))]
       (cond
-        (> (:y pos) (* (game :height) (/ 2 3)))
+        (> (:y pos) (* (height screen) (/ 2 3)))
         (println "up")
-        (< (:y pos) (/ (game :height) 3))
+        (< (:y pos) (/ (height screen) 3))
         (println "down")
-        (> (:x pos) (* (game :width) (/ 2 3)))
+        (> (:x pos) (* (width screen) (/ 2 3)))
         (println "right")
-        (< (:x pos) (/ (game :width) 3))
+        (< (:x pos) (/ (width screen) 3))
         (println "left"))))
 ```
 
@@ -151,10 +151,10 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
   :on-key-down
   (fn [screen entities]
     (cond
-      (= (:key screen) (key-code :dpad-down))
-      (move (first entities) :down)
       (= (:key screen) (key-code :dpad-up))
       (move (first entities) :up)
+      (= (:key screen) (key-code :dpad-down))
+      (move (first entities) :down)
       (= (:key screen) (key-code :dpad-right))
       (move (first entities) :right)
       (= (:key screen) (key-code :dpad-left))
@@ -164,13 +164,13 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
   (fn [screen entities]
     (let [pos (input->screen screen (:input-x screen) (:input-y screen))]
       (cond
-        (> (:y pos) (* (game :height) (/ 2 3)))
+        (> (:y pos) (* (height screen) (/ 2 3)))
         (move (first entities) :up)
-        (< (:y pos) (/ (game :height) 3))
+        (< (:y pos) (/ (height screen) 3))
         (move (first entities) :down)
-        (> (:x pos) (* (game :width) (/ 2 3)))
+        (> (:x pos) (* (width screen) (/ 2 3)))
         (move (first entities) :right)
-        (< (:x pos) (/ (game :width) 3))
+        (< (:x pos) (/ (width screen) 3))
         (move (first entities) :left))))
 ```
 
