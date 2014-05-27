@@ -111,11 +111,11 @@ specified path.
     new-timer))
 
 (defn add-timer!
-  "Returns a [Timer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Timer.html)
-which runs which will fire the :on-timer function one or more times (depending
-on the given arguments). In the :on-timer function, the id will be passed in the
-screen map. If a timer with that id already exists in the screen, it will be
-stopped and replaced with a new timer.
+  "Creates a [Timer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Timer.html)
+which will fire the :on-timer function one or more times (depending on the given
+arguments). In the :on-timer function, the id will be passed in the screen map.
+If a timer with that id already exists in the screen, it will be stopped and
+replaced with a new timer.
 
     ; wait 2 seconds and run once
     (add-timer! screen :spawn-enemy 2)
@@ -124,14 +124,14 @@ stopped and replaced with a new timer.
     ; wait 2 seconds, run once, and then run 3 more times at 10 second intervals
     (add-timer! screen :spawn-enemy 2 10 3)"
   ([screen id delay]
-    (doto (create-and-add-timer! screen id)
-      (.scheduleTask (task* screen id) delay)))
+    (-> (create-and-add-timer! screen id)
+        (.scheduleTask (task* screen id) delay)))
   ([screen id delay interval]
-    (doto (create-and-add-timer! screen id)
-      (.scheduleTask (task* screen id) delay interval)))
+    (-> (create-and-add-timer! screen id)
+        (.scheduleTask (task* screen id) delay interval)))
   ([screen id delay interval repeat]
-    (doto (create-and-add-timer! screen id)
-      (.scheduleTask (task* screen id) delay interval repeat))))
+    (-> (create-and-add-timer! screen id)
+        (.scheduleTask (task* screen id) delay interval repeat))))
 
 (defn remove-timer!
   "Stops and removes the timer associated with `id`, returning it or nil if not
