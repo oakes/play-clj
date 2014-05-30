@@ -8,7 +8,7 @@ There are several different ways to create a project:
 
 * [Leiningen](https://github.com/technomancy/leiningen): `lein new play-clj hello-world`
 * [Nightcode](https://nightcode.info/): Click "New Project", provide a name, and choose the "Game" option
-* [Nightmod](https://nightmod.net/) (easier but less flexible)
+* [Nightmod](https://nightmod.net/): Easiest option for beginners
 
 ## Justification
 
