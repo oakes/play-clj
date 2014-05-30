@@ -4,11 +4,11 @@ A Clojure library that provides a wrapper for [LibGDX](http://libgdx.badlogicgam
 
 ## Getting Started
 
-There are several different ways to get started:
+There are several different ways to create a project:
 
-* Create a project with [Leiningen](https://github.com/technomancy/leiningen): `lein new play-clj hello-world`
-* Create a project with [Nightcode](https://nightcode.info/) by clicking "New Project", providing a name, and choosing the "Game" option
-* Create a project with [Nightmod](https://nightmod.net/) (easiest and most restrictive way)
+* [Leiningen](https://github.com/technomancy/leiningen): `lein new play-clj hello-world`
+* [Nightcode](https://nightcode.info/): Click "New Project", provide a name, and choose the "Game" option
+* [Nightmod](https://nightmod.net/) (easier but less flexible)
 
 ## Justification
 
