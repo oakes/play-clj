@@ -4,11 +4,11 @@ A Clojure library that provides a wrapper for [LibGDX](http://libgdx.badlogicgam
 
 ## Getting Started
 
-You can easily get started with play-clj by creating a new project with [Nightcode](https://nightcode.info/) and choosing the Clojure game option. You may also create a project on the command line with [Leiningen](https://github.com/technomancy/leiningen):
+There are several different ways to get started:
 
-    lein new play-clj hello-world
-
-Either way, you'll get three separate projects for desktop, Android, and iOS, all pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
+* Create a project with [Leiningen](https://github.com/technomancy/leiningen): `lein new play-clj hello-world`
+* Create a project with [Nightcode](https://nightcode.info/) by clicking "New Project", providing a name, and choosing the "Game" option
+* Create a project with [Nightmod](https://nightmod.net/) (easiest and most restrictive way)
 
 ## Justification
 
