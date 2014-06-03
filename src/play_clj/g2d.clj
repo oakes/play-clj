@@ -46,12 +46,12 @@
           TextureRegion.)
       (isa? (type arg) Pixmap)
       (-> ^Pixmap arg Texture. TextureRegion.)
-      (isa? (type arg) TextureRegion)
-      arg
+      (isa? (type arg) Texture)
+      (-> ^Texture arg TextureRegion.)
       (isa? (type arg) TextureEntity)
-      (TextureRegion. ^TextureRegion (:object arg))
+      (-> ^TextureRegion (:object arg) TextureRegion.)
       :else
-      (TextureRegion. arg))))
+      arg)))
 
 (defmacro texture
   "Returns an entity based on [TextureRegion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html).
