@@ -123,6 +123,7 @@
  "Joint" {"joint!" :methods}
  "Label" {"label" :methods
           "label!" :methods}
+ "Label.LabelStyle" {"style :label" :constructors}
  "MapLayer" {"map-layer" :methods
              "map-layer!" :methods}
  "MapLayers" {"map-layers" :methods
