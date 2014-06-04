@@ -15,6 +15,8 @@
   clojure.lang.PersistentArrayMap
   (draw-entity! [this screen batch])
   clojure.lang.PersistentHashMap
+  (draw-entity! [this screen batch])
+  nil
   (draw-entity! [this screen batch]))
 
 (defrecord TextureEntity [object] Entity
