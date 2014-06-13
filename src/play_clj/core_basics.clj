@@ -60,6 +60,13 @@
   [k & options]
   `(u/call! ^GL20 (Gdx/gl20) ~k ~@options))
 
+(defmacro gl
+  "Returns a static field from [Gdx.gl20](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/GL20.html).
+
+    (gl :gl-triangles)"
+  [k]
+  `~(u/gdx-field :graphics :GL20 (u/key->upper k)))
+
 (defmacro graphics!
   "Calls a single method on [Gdx.graphics](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Graphics.html).
 

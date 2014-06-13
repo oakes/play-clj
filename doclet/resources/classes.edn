@@ -92,7 +92,8 @@
                "grid-point-2!" :methods}
  "GridPoint3" {"grid-point-3" :methods
                "grid-point-3!" :methods}
- "GL20" {"gl!" :methods}
+ "GL20" {"gl!" :methods
+         "gl" :static-fields}
  "HexagonalTiledMapRenderer" {"hexagonal-tiled-map" :methods
                               "hexagonal-tiled-map!" :methods}
  "HorizontalGroup" {"horizontal" :methods
