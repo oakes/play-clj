@@ -148,6 +148,7 @@ via the screen map.
         entities))
 
     ; input functions
+    ; Tip: convert :input-x and :input-y to screen coordinates with input->screen
     (defscreen my-screen
       :on-key-down ; a key was pressed
       (fn [screen entities]
