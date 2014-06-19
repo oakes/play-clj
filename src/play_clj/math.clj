@@ -19,7 +19,7 @@
 
     (interpolation :bounce)"
   [k]
-  `~(u/gdx-class :math :Interpolation (u/key->pascal k)))
+  (u/gdx-class :math :Interpolation (u/key->pascal k)))
 
 (defmacro intersector!
   "Calls a single static method on [Intersector](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Intersector.html).
@@ -40,7 +40,7 @@
 
     (plane-side :back)"
   [k]
-  `~(u/gdx-field :math "Plane$PlaneSide" (u/key->pascal k)))
+  (u/gdx-field :math "Plane$PlaneSide" (u/key->pascal k)))
 
 ; bezier
 

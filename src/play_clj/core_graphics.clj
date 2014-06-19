@@ -29,7 +29,7 @@
 
     (shape-type :filled)"
   [k]
-  `~(u/gdx-field :graphics :glutils "ShapeRenderer$ShapeType" (u/key->pascal k)))
+  (u/gdx-field :graphics :glutils "ShapeRenderer$ShapeType" (u/key->pascal k)))
 
 (defn shape*
   ([]

@@ -57,7 +57,7 @@ based on the file at `path`.
 
     (align :center)"
   [k]
-  `~(u/gdx-field :scenes :scene2d :utils :Align (u/key->camel k)))
+  (u/gdx-field :scenes :scene2d :utils :Align (u/key->camel k)))
 
 (defn cell!
   "Calls a single method on a [Cell](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/esotericsoftware/tablelayout/Cell.java)."

@@ -20,10 +20,10 @@
     (color :white)
     (color 1 1 1 1)"
   [& args]
-  `~(if (keyword? (first args))
-      `(Color. ^Color ~(u/gdx-field :graphics :Color
-                                    (u/key->upper (first args))))
-      `(Color. ~@args)))
+  (if (keyword? (first args))
+    `(Color. ^Color ~(u/gdx-field :graphics :Color
+                                  (u/key->upper (first args))))
+    `(Color. ~@args)))
 
 (defmacro color!
   "Calls a single method on a `color`."
@@ -65,7 +65,7 @@
 
     (gl :gl-triangles)"
   [k]
-  `~(u/gdx-field :graphics :GL20 (u/key->upper k)))
+  (u/gdx-field :graphics :GL20 (u/key->upper k)))
 
 (defmacro graphics!
   "Calls a single method on [Gdx.graphics](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Graphics.html).
@@ -111,7 +111,7 @@
     (key-code :a)
     (key-code :page-down)"
   [k]
-  `~(u/gdx-field "Input$Keys" (u/key->upper k)))
+  (u/gdx-field "Input$Keys" (u/key->upper k)))
 
 (defmacro key-pressed?
   "Returns a boolean indicating if the key cooresponding to `k` is being pressed.
@@ -126,7 +126,7 @@
 
     (button-code :left)"
   [k]
-  `~(u/gdx-field "Input$Buttons" (u/key->upper k)))
+  (u/gdx-field "Input$Buttons" (u/key->upper k)))
 
 (defmacro button-pressed?
   "Returns a boolean indicating if the button cooresponding to `k` is being pressed.

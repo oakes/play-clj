@@ -170,9 +170,9 @@ object created by an external application.
 
     (attribute-type :color :diffuse)"
   [type k]
-  `~(u/gdx-field :graphics :g3d :attributes
-                 (str (u/key->pascal type) "Attribute")
-                 (u/key->pascal k)))
+  (u/gdx-field :graphics :g3d :attributes
+               (str (u/key->pascal type) "Attribute")
+               (u/key->pascal k)))
 
 (defmacro attribute!
   "Calls a static method in a subclass of [Attribute](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g3d/Attribute.html).

@@ -194,7 +194,7 @@
 
     (play-mode :loop)"
   [k]
-  `~(u/gdx-field :graphics :g2d "Animation$PlayMode" (u/key->upper k)))
+  (u/gdx-field :graphics :g2d "Animation$PlayMode" (u/key->upper k)))
 
 (defn animation*
   [duration textures]

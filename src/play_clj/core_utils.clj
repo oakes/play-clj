@@ -77,12 +77,12 @@ specified path.
 
     (scaling :fill)"
   [k]
-  `~(u/gdx-field :utils :Scaling k))
+  (u/gdx-field :utils :Scaling k))
 
 (defmacro usage
   "Returns a static field in [VertexAttributes.Usage](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/VertexAttributes.Usage.html)."
   [k]
-  `~(u/gdx-field :graphics "VertexAttributes$Usage" (u/key->pascal k)))
+  (u/gdx-field :graphics "VertexAttributes$Usage" (u/key->pascal k)))
 
 ; timers
 
