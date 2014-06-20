@@ -17,7 +17,7 @@ override the equivalent keys in each entity when being drawn.
     (assoc (bundle (shape :filled) (shape :line))
            :x 100 :y 100)"
   [& entities]
-  (BundleEntity. entities))
+  (BundleEntity. (vec entities)))
 
 (defn bundle?
   "Returns true if `entity` is a `bundle`."
