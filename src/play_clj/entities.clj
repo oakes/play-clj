@@ -11,20 +11,11 @@
 (defprotocol Entity
   (draw-entity! [this screen batch] "Draws the entity"))
 
-(defn draw-map!
-  [m screen batch]
-  (doseq [[k v] m]
-    (try
-      (draw-entity! v screen batch)
-      (catch Exception _))))
-
 (extend-protocol Entity
   clojure.lang.PersistentArrayMap
-  (draw-entity! [this screen batch]
-    (draw-map! this screen batch))
+  (draw-entity! [this screen batch])
   clojure.lang.PersistentHashMap
-  (draw-entity! [this screen batch]
-    (draw-map! this screen batch))
+  (draw-entity! [this screen batch])
   nil
   (draw-entity! [this screen batch]))
 
