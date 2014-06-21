@@ -11,7 +11,7 @@
   "Returns an entity containing other entities. This is a useful way to keep
 related entities together. They will be drawn in the order they appear in the
 internal :entities vector. Any keys in the bundle, such as :x and :y, will
-override the equivalent keys in each entity when being drawn.
+be passed down to all the internal entities unless they already have those keys.
 
     (bundle (shape :filled) (shape :line))
     (assoc (bundle (shape :filled) (shape :line))
