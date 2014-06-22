@@ -6,15 +6,14 @@
            [com.badlogic.gdx.graphics Color Texture]
            [com.badlogic.gdx.graphics.g2d TextureRegion]
            [com.badlogic.gdx.scenes.scene2d Actor Stage]
-           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup CheckBox Container
-            Dialog HorizontalGroup Image ImageButton ImageTextButton Label
-            ScrollPane SelectBox Skin Slider Stack Table TextButton TextField
-            Tree Tree$Node VerticalGroup WidgetGroup Window]
+           [com.badlogic.gdx.scenes.scene2d.ui ButtonGroup Cell CheckBox
+            Container Dialog HorizontalGroup Image ImageButton ImageTextButton
+            Label ScrollPane SelectBox Skin Slider Stack Table TextButton
+            TextField Tree Tree$Node VerticalGroup WidgetGroup Window]
            [com.badlogic.gdx.scenes.scene2d.utils ActorGestureListener
             ChangeListener ClickListener DragListener FocusListener
             NinePatchDrawable SpriteDrawable TextureRegionDrawable
             TiledDrawable]
-           [com.esotericsoftware.tablelayout Cell]
            [play_clj.entities ActorEntity]))
 
 (defmacro drawable
