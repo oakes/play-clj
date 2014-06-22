@@ -2,4 +2,4 @@
 &#40;play-mode :loop&#41;
 </pre></div></div><div class="c-head">Options</div><div class="java"><div class="j-item"><span class="j-name">:loop</span><span class="j-args"></span></div><div class="j-item"><span class="j-name">:loop-pingpong</span><span class="j-args"></span></div><div class="j-item"><span class="j-name">:loop-random</span><span class="j-args"></span></div><div class="j-item"><span class="j-name">:loop-reversed</span><span class="j-args"></span></div><div class="j-item"><span class="j-name">:normal</span><span class="j-args"></span></div><div class="j-item"><span class="j-name">:reversed</span><span class="j-args"></span></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defmacro play-mode
   [k]
-  `~(u/gdx-field :graphics :g2d "Animation$PlayMode" (u/key->upper k)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+  (u/gdx-field :graphics :g2d "Animation$PlayMode" (u/key->upper k)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

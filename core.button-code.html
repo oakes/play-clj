@@ -2,4 +2,4 @@
 &#40;button-code :left&#41;
 </pre></div></div><div class="c-head">Options</div><div class="java"><div class="j-item"><span class="j-name">:left</span><span class="j-args"></span></div><div class="j-item"><span class="j-name">:middle</span><span class="j-args"></span></div><div class="j-item"><span class="j-name">:right</span><span class="j-args"></span></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defmacro button-code
   [k]
-  `~(u/gdx-field "Input$Buttons" (u/key->upper k)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+  (u/gdx-field "Input$Buttons" (u/key->upper k)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
