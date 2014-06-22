@@ -59,7 +59,7 @@ based on the file at `path`.
   (u/gdx-field :scenes :scene2d :utils :Align (u/key->camel k)))
 
 (defn cell!
-  "Calls a single method on a [Cell](https://github.com/libgdx/libgdx/blob/master/gdx/src/com/esotericsoftware/tablelayout/Cell.java)."
+  "Calls methods on a [Cell](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Cell.html)."
   [^Cell cell & args]
   (let [method (first args)
         [[a1 a2 a3 a4] rest-args] (split-with #(not (keyword? %)) (rest args))]
