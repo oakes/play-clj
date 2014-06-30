@@ -13,9 +13,16 @@
 
 (def classes (-> "classes.edn" io/resource slurp edn/read-string))
 
+(defn split-string
+  [s]
+  (if (= s (string/upper-case s))
+    [s]
+    (string/split s #"(?=[A-Z])")))
+
 (defn camel->keyword
   [s]
-  (->> (string/split (string/replace s "_" "-") #"(?=[A-Z])")
+  (->> (string/replace s "_" "-")
+       split-string
        (map string/lower-case)
        (string/join "-")
        keyword))
