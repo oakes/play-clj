@@ -15,7 +15,7 @@
 
 (defn camel->keyword
   [s]
-  (->> (string/split (string/replace s "_" "-") #"(?<=[a-z])(?=[A-Z])")
+  (->> (string/split (string/replace s "_" "-") #"(?=[A-Z])")
        (map string/lower-case)
        (string/join "-")
        keyword))
