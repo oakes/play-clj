@@ -1,6 +1,5 @@
 (ns play-clj.repl
-  (:require [clojure.pprint :refer :all]
-            [play-clj.core :refer :all]))
+  (:require [play-clj.core :refer :all]))
 
 (defn entities
   "Returns the entities in `screen-object`, optionally filtered by a supplied
