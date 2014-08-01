@@ -1,5 +1,13 @@
 (in-ns 'play-clj.core)
 
+(defn find-first
+  "Finds the first entity in `entities` for which `match-fn` returns true.
+
+    (find-first :player? entities)
+    (find-first #(= :menu (:id %)) entities)"
+  [match-fn entities]
+  (some #(if (match-fn %) %) entities))
+
 (defmacro on-gl
   "Runs the macro body on the GL thread.
 
