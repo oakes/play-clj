@@ -24,7 +24,7 @@ function.
   ([screen-object]
     (-> screen-object :entities deref))
   ([screen-object filter-fn]
-    (filter filter-fn (e screen-object))))
+    (vec (filter filter-fn (e screen-object)))))
 
 (defn e!
   "Resets the entities in `screen-object`, or associates values to the entities
@@ -38,8 +38,8 @@ were changed.
   ([screen-object filter-fn & args]
     (swap! (:entities screen-object)
            (fn [entities]
-             (for [e entities]
-               (if (filter-fn e)
-                 (apply assoc e args)
-                 e))))
+             (vec (for [e entities]
+                    (if (filter-fn e)
+                      (apply assoc e args)
+                      e)))))
     (e screen-object filter-fn)))
