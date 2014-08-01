@@ -20,7 +20,7 @@ screen map.
   "Returns the entities in `screen-object`, optionally filtered by a supplied
 function.
 
-    (e main-screen :player)"
+    (e main-screen :player?)"
   ([screen-object]
     (-> screen-object :entities deref))
   ([screen-object filter-fn]
@@ -32,7 +32,7 @@ in `screen-object` that match the supplied function. Returns the entities that
 were changed.
 
     (e! main-screen [])
-    (e! main-screen :player :health 10)"
+    (e! main-screen :player? :health 10)"
   ([screen-object new-entities]
     (reset! (:entities screen-object) new-entities))
   ([screen-object filter-fn & args]
