@@ -2,7 +2,7 @@ This doclet generates the play-clj doc site.
 
 ## Directions
 
-1. Download and extract the [LibGDX source code](https://github.com/libgdx/libgdx/releases)
+1. Download and extract the [libGDX source code](https://github.com/libgdx/libgdx/releases)
 2. Run `lein uberjar` in this directory
 3. Run the following command in this directory:
 

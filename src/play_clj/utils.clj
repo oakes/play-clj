@@ -90,17 +90,17 @@
     (conj (vec (drop-last 2 args)) (str (name a1) divider (name a2)))))
 
 (defn gdx
-  "Returns a fully-qualified LibGDX symbol."
+  "Returns a fully-qualified libGDX symbol."
   [& args]
   (symbol (str main-package "." (join-keys args))))
 
 (defn gdx-field
-  "Returns a fully-qualified LibGDX static method or field."
+  "Returns a fully-qualified libGDX static method or field."
   [& args]
   (apply gdx (add-divider args "/")))
 
 (defn gdx-class
-  "Returns a fully-qualified LibGDX static class."
+  "Returns a fully-qualified libGDX static class."
   [& args]
   (apply gdx (add-divider args "$")))
 

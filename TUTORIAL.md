@@ -249,7 +249,7 @@ Lastly, at any time you can remove a timer:
 
 ## Java Interop
 
-At some point, you will need to do more than simple positioning and sizing. For that, you'll need to call LibGDX methods directly. You could, of course, use Clojure's [Java interop](http://clojure.org/java_interop) syntax on the `:object` contained within the entity. This is a bit ugly, though, and requires you to do all the importing and type hinting yourself.
+At some point, you will need to do more than simple positioning and sizing. For that, you'll need to call libGDX methods directly. You could, of course, use Clojure's [Java interop](http://clojure.org/java_interop) syntax on the `:object` contained within the entity. This is a bit ugly, though, and requires you to do all the importing and type hinting yourself.
 
 In play-clj, many different calls, such as `texture`, are actually macros that allow you to call the underlying Java methods after the required argument(s). In this case, the underlying class is called [TextureRegion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html). Consider this:
 
