@@ -1,7 +1,7 @@
 (in-ns 'play-clj.core)
 
 (defn find-first
-  "Finds the first entity in `entities` for which `match-fn` returns true.
+  "Returns the first entity in `entities` for which `match-fn` returns true.
 
     (find-first :player? entities)
     (find-first #(= :menu (:id %)) entities)"
