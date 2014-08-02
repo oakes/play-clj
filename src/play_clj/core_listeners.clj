@@ -8,13 +8,13 @@
    execute-fn!]
   (reify InputProcessor
     (keyDown [this k]
-      (execute-fn! on-key-down :key k :keycode k)
+      (execute-fn! on-key-down :key k)
       false)
     (keyTyped [this c]
       (execute-fn! on-key-typed :character c)
       false)
     (keyUp [this k]
-      (execute-fn! on-key-up :key k :keycode k)
+      (execute-fn! on-key-up :key k)
       false)
     (mouseMoved [this sx sy]
       (execute-fn! on-mouse-moved :input-x sx :input-y sy)
