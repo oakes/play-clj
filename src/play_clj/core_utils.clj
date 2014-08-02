@@ -6,7 +6,7 @@
     (find-first :player? entities)
     (find-first #(= :menu (:id %)) entities)"
   [match-fn entities]
-  (some #(if (match-fn %) %) entities))
+  (some #(when (match-fn %) %) entities))
 
 (defmacro on-gl
   "Runs the macro body on the GL thread.
