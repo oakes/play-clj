@@ -91,7 +91,7 @@ in the `screen`."
 
 (defn ^:private actor-gesture-listener
   [{:keys [on-ui-fling on-ui-long-press on-ui-pan on-ui-pinch
-           on-ui-tap on-ui-touch-down on-ui-touch-up on-ui-zoom]}
+           on-ui-tap on-ui-zoom]}
    execute-fn!]
   (proxy [ActorGestureListener] []
     (fling [e vx vy b]
@@ -110,12 +110,8 @@ in the `screen`."
     (tap [e x y p b]
       (execute-fn! on-ui-tap
                    :event e :input-x x :input-y y :pointer p :button b))
-    (touchDown [e x y p b]
-      (execute-fn! on-ui-touch-down
-                   :event e :input-x x :input-y y :pointer p :button b))
-    (touchUp [e x y p b]
-      (execute-fn! on-ui-touch-up
-                   :event e :input-x x :input-y y :pointer p :button b))
+    ;(touchDown [e x y p b])
+    ;(touchUp [e x y p b])
     (zoom [e id d]
       (execute-fn! on-ui-zoom :event e :initial-distance id :distance d))))
 
@@ -150,20 +146,12 @@ in the `screen`."
                    :event e :input-x x :input-y y :pointer p :button b))))
 
 (defn ^:private drag-listener
-  [{:keys [on-ui-drag on-ui-drag-start on-ui-drag-stop
-           on-ui-touch-down on-ui-touch-dragged on-ui-touch-up]}
+  [{:keys [on-ui-drag on-ui-drag-start on-ui-drag-stop]}
    execute-fn!]
   (proxy [DragListener] []
-    (touchDown [e x y p b]
-      (execute-fn! on-ui-touch-down
-                   :event e :input-x x :input-y y :pointer p :button b)
-      (some? on-ui-touch-down))
-    (touchDragged [e x y p]
-      (execute-fn! on-ui-touch-dragged
-                   :event e :input-x x :input-y y :pointer p))
-    (touchUp [e x y p b]
-      (execute-fn! on-ui-touch-up
-                   :event e :input-x x :input-y y :pointer p :button b))
+    ;(touchDown [e x y p b])
+    ;(touchDragged [e x y p])
+    ;(touchUp [e x y p b])
     (drag [e x y p]
       (execute-fn! on-ui-drag :event e :input-x x :input-y y :pointer p))
     (dragStart [e x y p]
