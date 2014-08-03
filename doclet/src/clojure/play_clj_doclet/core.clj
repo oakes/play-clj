@@ -157,13 +157,15 @@
 (defn save!
   [parsed-files]
   (html/create-site! "site" parsed-files)
-  (html/create-embed! "embed" parsed-files))
+  (html/create-embed! "embed" parsed-files)
+  (println "Created site/ and embed/"))
 
 (defn parse
   [^RootDoc root]
-  (->> (map parse-class (.classes root))
-       (filter some?)
-       (apply concat)
-       parse-clj
-       save!)
-  (println "Created site/ and embed/"))
+  (if (= 0 (count (.classes root)))
+    (println "No Java classes found")
+    (->> (map parse-class (.classes root))
+         (filter some?)
+         (apply concat)
+         parse-clj
+         save!)))

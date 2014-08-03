@@ -11,6 +11,6 @@ public class Start {
 		RT.var("clojure.core", "require").invoke(Symbol.intern("play-clj-doclet.core"));
 		Var parse = RT.var("play-clj-doclet.core", "parse");
 		parse.invoke(root);
-        return true;
+		return true;
 	}
 }
