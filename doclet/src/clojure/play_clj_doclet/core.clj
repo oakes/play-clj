@@ -16,36 +16,46 @@
 (defn split-string
   [s]
   (if (= s (string/upper-case s))
-    [s]
+    (string/split s #"_")
     (string/split s #"(?=[A-Z])")))
 
-(defn camel->keyword
+(defn string->keyword
   [s]
-  (->> (string/replace s "_" "-")
-       split-string
+  (->> (split-string s)
        (map string/lower-case)
        (string/join "-")
        keyword))
 
 (defn parse-param
   [^Parameter p]
-  [(.typeName p) (-> (.name p) camel->keyword name)])
+  [(.typeName p) (-> (.name p) string->keyword name)])
 
 (defn parse-doc-name
   [^Doc d]
   (cond
     (isa? (type d) ConstructorDoc)
     nil
+
     (isa? (type d) ClassDoc)
-    (subs (.name d) (+ 1 (.lastIndexOf (.name d) ".")))
+    (->> (+ 1 (.lastIndexOf (.name d) "."))
+         (subs (.name d))
+         string->keyword)
+
+    (isa? (type d) FieldDoc)
+    (let [k (string->keyword (.name d))
+          s (name k)]
+      (if (= \- (first s))
+        (keyword (subs s 1))
+        k))
+
     :else
-    (.name d)))
+    (string->keyword (.name d))))
 
 (defn parse-doc
   [^Doc d clj-name]
   (merge {}
          {:name (->> [(second (string/split clj-name #" "))
-                      (some-> (parse-doc-name d) camel->keyword)]
+                      (parse-doc-name d)]
                      (remove nil?)
                      (string/join " "))}
          (when (> (count (.commentText d)) 0)
