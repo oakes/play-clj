@@ -189,6 +189,7 @@ based on the file at `path`.
   "Returns an entity based on [CheckBox](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/CheckBox.html).
 
     (check-box \"I'm a check box\" (style :check-box off on font color))
+    (check-box \"I'm a check box\" (style :check-box nil nil (bitmap-font) (color :white)))
     (check-box \"I'm a check box\" (skin \"uiskin.json\"))"
   [text arg & options]
   `(let [entity# (check-box* ~text ~arg)]
@@ -240,6 +241,7 @@ based on the file at `path`.
   "Returns an entity based on [Dialog](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Dialog.html).
 
     (dialog \"I'm a dialog\" (style :window font font-color background))
+    (dialog \"I'm a dialog\" (style :window (bitmap-font) (color :white) nil))
     (dialog \"I'm a dialog\" (skin \"uiskin.json\"))"
   [text arg & options]
   `(let [entity# (dialog* ~text ~arg)]
@@ -323,6 +325,7 @@ based on the file at `path`.
   "Returns an entity based on [ImageButton](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ImageButton.html).
 
     (image-button (style :image-button up dn check img-up img-dn img-check))
+    (image-button (style :image-button nil nil nil nil nil nil))
     (image-button (skin \"uiskin.json\"))"
   [arg & options]
   `(let [entity# (image-button* ~arg)]
@@ -350,6 +353,8 @@ based on the file at `path`.
 
     (image-text-button \"I'm an image text button\"
                        (style :image-text-button up down checked font))
+    (image-text-button \"I'm an image text button\"
+                       (style :image-text-button nil nil nil (bitmap-font)))
     (image-text-button \"I'm an image text button\" (skin \"uiskin.json\"))"
   [text arg & options]
   `(let [entity# (image-text-button* ~text ~arg)]
@@ -379,7 +384,7 @@ based on the file at `path`.
   "Returns an entity based on [Label](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Label.html).
 
     (label \"I'm a label\" (color :white))
-    (label \"I'm a label\" (style :label (g2d/bitmap-font) (color :white)))
+    (label \"I'm a label\" (style :label (bitmap-font) (color :white)))
     (label \"I'm a label\" (skin \"uiskin.json\"))"
   [text arg & options]
   `(let [entity# (label* ~text ~arg)]
@@ -406,6 +411,7 @@ based on the file at `path`.
   "Returns an entity based on [ScrollPane](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/ScrollPane.html).
 
     (scroll-pane table-entity (style :scroll-pane back h h-knob v v-knob))
+    (scroll-pane table-entity (style :scroll-pane nil nil nil nil nil))
     (scroll-pane table-entity (skin \"uiskin.json\"))"
   [child arg & options]
   `(let [entity# (scroll-pane* ~child ~arg)]
@@ -432,6 +438,10 @@ based on the file at `path`.
   "Returns an entity based on [SelectBox](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/SelectBox.html).
 
     (select-box (style :select-box font color back scroll-style list-style)
+                :set-items (into-array [\"Item 1\" \"Item 2\" \"Item 3\"]))
+    (select-box (style :select-box (bitmap-font) (color :white) nil
+                       (style :scroll-pane nil nil nil nil nil)
+                       (style :list (bitmap-font) (color :white) (color :black) nil))
                 :set-items (into-array [\"Item 1\" \"Item 2\" \"Item 3\"]))
     (select-box (skin \"uiskin.json\")
                 :set-items (into-array [\"Item 1\" \"Item 2\" \"Item 3\"]))"
@@ -463,6 +473,7 @@ based on the file at `path`.
   "Returns an entity based on [Slider](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Slider.html).
 
     (slider {:min 0 :max 10 :step 1 :vertical? false} (style :slider back knob))
+    (slider {:min 0 :max 10 :step 1 :vertical? false} (style :slider nil nil))
     (slider {:min 0 :max 10 :step 1 :vertical? false} (skin \"uiskin.json\"))"
   [attrs arg & options]
   `(let [entity# (slider* ~attrs ~arg)]
@@ -539,6 +550,7 @@ based on the file at `path`.
   "Returns an entity based on [TextButton](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextButton.html).
 
     (text-button \"I'm a text button\" (style :text-button up dn checked font))
+    (text-button \"I'm a text button\" (style :text-button nil nil nil (bitmap-font)))
     (text-button \"I'm a text button\" (skin \"uiskin.json\"))"
   [text arg & options]
   `(let [entity# (text-button* ~text ~arg)]
@@ -564,7 +576,8 @@ based on the file at `path`.
 (defmacro text-field
   "Returns an entity based on [TextField](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/TextField.html).
 
-    (text-field \"I'm a text field\" (style :text-field font col cur sel back))
+    (text-field \"I'm a text field\" (style :text-field font color cur sel back))
+    (text-field \"I'm a text field\" (style :text-field (bitmap-font) (color :white) nil nil nil))
     (text-field \"I'm a text field\" (skin \"uiskin.json\"))"
   [text arg & options]
   `(let [entity# (text-field* ~text ~arg)]
@@ -591,6 +604,7 @@ based on the file at `path`.
   "Returns an entity based on [Tree](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Tree.html).
 
     (tree [entity-1 entity-2] (style :tree plus minus selection))
+    (tree [entity-1 entity-2] (style :tree nil nil nil))
     (tree [entity-1 entity-2] (skin \"uiskin.json\"))"
   [children arg & options]
   `(let [entity# (tree* ~children ~arg)]
@@ -641,7 +655,8 @@ based on the file at `path`.
 (defmacro window
   "Returns an entity based on [Window](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Window.html).
 
-    (window [entity-1 entity-2] \"I'm a window\" (style :window title font col))
+    (window [entity-1 entity-2] \"I'm a window\" (style :window font color background))
+    (window [entity-1 entity-2] \"I'm a window\" (style :window (bitmap-font) (color :white) nil))
     (window [entity-1 entity-2] \"I'm a window\" (skin \"uiskin.json\"))"
   [children title arg & options]
   `(let [entity# (window* ~children ~title ~arg)]
