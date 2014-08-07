@@ -5,11 +5,11 @@
                  [com.badlogicgames.gdx/gdx-backend-android "1.2.0"]
                  [com.badlogicgames.gdx/gdx-box2d "1.2.0"]
                  [com.badlogicgames.gdx/gdx-bullet "1.2.0"]
-                 [neko/neko "3.0.1"]
+                 [neko/neko "3.0.2"]
                  [org.clojure-android/clojure "1.6.0-RC1" :use-resources true]
-                 [play-clj "0.3.8"]]
+                 [play-clj "0.3.9"]]
   :profiles {:dev {:dependencies [[android/tools.nrepl "0.2.0-bigstack"]
-                                  [compliment "0.1.0"]]
+                                  [compliment "0.1.3"]]
                    :android {:aot :all-with-unused}}
              :release {:android
                        {;; Specify the path to your private
