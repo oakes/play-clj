@@ -1,7 +1,7 @@
 (ns play-clj.entities
   (:import [com.badlogic.gdx Gdx Graphics]
            [com.badlogic.gdx.graphics Camera]
-           [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect SpriteBatch
+           [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect Batch
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
            [com.badlogic.gdx.graphics.glutils ShapeRenderer]
@@ -34,9 +34,9 @@
               origin-x (float (or origin-x (/ width 2)))
               origin-y (float (or origin-y (/ height 2)))
               angle (float (or angle 0))]
-          (.draw ^SpriteBatch batch object x y origin-x origin-y width height
+          (.draw ^Batch batch object x y origin-x origin-y width height
             scale-x scale-y angle))
-        (.draw ^SpriteBatch batch object x y width height)))))
+        (.draw ^Batch batch object x y width height)))))
 
 (defrecord NinePatchEntity [object] Entity
   (draw-entity! [{:keys [^NinePatch object x y width height]} _ batch]
@@ -44,7 +44,7 @@
           y (float (or y 0))
           width (float (or width (.getTotalWidth object)))
           height (float (or height (.getTotalHeight object)))]
-      (.draw object ^SpriteBatch batch x y width height))))
+      (.draw object ^Batch batch x y width height))))
 
 (defrecord ParticleEffectEntity [object] Entity
   (draw-entity! [{:keys [^ParticleEffect object x y delta-time]} _ batch]
@@ -53,7 +53,7 @@
           ^Graphics g (Gdx/graphics)
           delta-time (float (or delta-time (.getDeltaTime g)))]
       (.setPosition object x y)
-      (.draw object ^SpriteBatch batch delta-time))))
+      (.draw object ^Batch batch delta-time))))
 
 (defrecord ActorEntity [object] Entity
   (draw-entity! [{:keys [^Actor object x y width height
@@ -73,7 +73,7 @@
         (.setOriginX object origin-x)
         (.setOriginY object origin-y)
         (.setRotation object angle)))
-    (.draw object ^SpriteBatch batch 1)))
+    (.draw object ^Batch batch 1)))
 
 (defrecord ModelEntity [object] Entity
   (draw-entity! [{:keys [^ModelInstance object x y z]}
@@ -93,7 +93,7 @@
                  {:keys [^Camera camera]}
                  batch]
     (when batch
-      (.end ^SpriteBatch batch))
+      (.end ^Batch batch))
     (when camera
       (.setProjectionMatrix object (. camera combined)))
     (.begin object type)
@@ -110,7 +110,7 @@
     (draw!)
     (.end object)
     (when batch
-      (.begin ^SpriteBatch batch))))
+      (.begin ^Batch batch))))
 
 (defrecord BundleEntity [entities] Entity
   (draw-entity! [{:keys [entities] :as entity} screen batch]
