@@ -1,7 +1,7 @@
 (ns play-clj.entities
   (:import [com.badlogic.gdx Gdx Graphics]
            [com.badlogic.gdx.graphics Camera]
-           [com.badlogic.gdx.graphics.g2d NinePatch ParticleEffect Batch
+           [com.badlogic.gdx.graphics.g2d Batch NinePatch ParticleEffect
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
            [com.badlogic.gdx.graphics.glutils ShapeRenderer]

@@ -15,7 +15,7 @@
            [com.badlogic.gdx.graphics Camera Color GL20 OrthographicCamera
             PerspectiveCamera Pixmap Pixmap$Format PixmapIO Texture
             VertexAttributes$Usage]
-           [com.badlogic.gdx.graphics.g2d ParticleEffect Batch]
+           [com.badlogic.gdx.graphics.g2d Batch ParticleEffect]
            [com.badlogic.gdx.graphics.g3d ModelBatch]
            [com.badlogic.gdx.graphics.glutils ShapeRenderer]
            [com.badlogic.gdx.input GestureDetector
