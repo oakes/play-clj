@@ -292,7 +292,8 @@ based on the file at `path`.
       (map? arg)
       (Image. ^TextureRegion (:object arg))
       (string? arg)
-      (Image. (Texture. ^String arg))
+      (Image. (or (u/load-asset arg Texture)
+                  (Texture. ^String arg)))
       :else
       (Image. arg))))
 
