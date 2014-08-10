@@ -152,7 +152,8 @@
        (map marg/path-to-doc)
        (map #(process-groups % java-docs))
        (apply concat)
-       (group-by :ns)))
+       (group-by :ns)
+       (into (sorted-map))))
 
 (defn save!
   [parsed-files]

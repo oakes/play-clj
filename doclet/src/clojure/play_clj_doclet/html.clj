@@ -105,7 +105,6 @@
             (create-embed-file (content group)))))
   (spit (io/file dir "index.edn")
         (->> parsed-files
-             sort
              (map (fn [[ns groups]]
                     (for [{:keys [name]} groups]
                       {:ns ns
