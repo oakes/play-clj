@@ -376,13 +376,13 @@ First, switch the REPL into the right namespace by typing `(in-ns 'hello-world.c
 
 `(on-gl (set-screen! hello-world main-screen))`
 
-The next thing to try is reading and modifying state. Let's peek into the entities vector by typing the following into the REPL:
+The next thing to try is reading and modifying state. We'll be using some REPL-specific functions, so type `(use 'play-clj.repl)` to bring them in. Let's peek into the entities vector by typing the following into the REPL:
 
-`(-> main-screen :entities deref)`
+`(e main-screen)`
 
 That should print out a vector with a single map inside of it. Now try moving your image and then run the command again. The `:x` and `:y` values should now be updated. You're looking at your game in real-time! Lastly, let's try moving the entity from the REPL:
 
-`(-> main-screen :entities (swap! #(vector (assoc (first %) :x 200 :y 200))))`
+`(e! identity main-screen :x 200 :y 200)`
 
 Lastly, one common issue people have with play-clj in a REPL is that it if you make an error that causes an exception, it's difficult to restart the game after fixing it. To deal with this, there is the `set-screen-wrapper!` function, which lets you catch errors that occur in any screen function and handle them gracefully. For example, here we make it switch to a blank screen if any error occurs:
 
