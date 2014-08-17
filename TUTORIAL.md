@@ -418,4 +418,4 @@ Note that this will only catch runtime errors, not compile errors such as misspe
 3. Install Xcode from the Mac App Store.
 4. Download and extract [the latest RoboVM](http://download.robovm.org/).
 5. In Nightcode, click on the `ios` folder for your project in the sidebar. You should see a red-colored button called _RoboVM_. Click that, and find the folder you extracted the SDK to.
-6. Click _Run_ and wait for the app to be built and run in the iOS simulator (the _Build_ button will send it to your device, but you need the certificates set up for that and may need to edit `ios/project.clj` to pass the appropriate values to RoboVM).
+6. Click _Run_ and wait for the app to be built and run in the iOS simulator (the _Build_ button will build an ipa, but you need the certificates set up for that and may need to edit `ios/project.clj` to pass the appropriate values to RoboVM).
