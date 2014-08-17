@@ -409,7 +409,7 @@ Note that this will only catch runtime errors, not compile errors such as misspe
 4. Run the executable called `android` which is located in the `tools` folder of that archive. This executable will display the SDK Manager with several things checked by default. We want to at least support Ice Cream Sandwich, so check the box next to _Android 4.0.3 (API 15)_ and click _Install_.
 5. In Nightcode, click on the `android` folder for your project in the sidebar. You should see a red-colored button called _Android SDK_. Click that, and find the folder you extracted the SDK to.
 6. Connect your Android device to your computer and make sure USB debugging is enabled.
-7. Click _Run_ and wait for the app to be built and installed on your device.
+7. Click _Run_ and wait for the app to be built and installed on your device (the _Build_ button will build an apk, but you need to edit `android/project.clj` to pass the keystore path and alias so it can be digitally signed).
 
 ## Building for iOS
 
@@ -418,4 +418,4 @@ Note that this will only catch runtime errors, not compile errors such as misspe
 3. Install Xcode from the Mac App Store.
 4. Download and extract [the latest RoboVM](http://download.robovm.org/).
 5. In Nightcode, click on the `ios` folder for your project in the sidebar. You should see a red-colored button called _RoboVM_. Click that, and find the folder you extracted the SDK to.
-6. Click _Run_ and wait for the app to be built and run in the iOS simulator (the _Build_ button will build an ipa, but you need the certificates set up for that and may need to edit `ios/project.clj` to pass the appropriate values to RoboVM).
+6. Click _Run_ and wait for the app to be built and run in the iOS simulator (the _Build_ button will build an ipa, but you need edit `ios/project.clj` to pass the appropriate info to RoboVM so it can be digitally signed).
