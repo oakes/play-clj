@@ -83,25 +83,25 @@
                 (lein-droid-render "SplashActivity.java" data)]
                ; android libgdx.so
                ["android/libs/armeabi/libgdx.so"
-                (-> (io/resource "armeabi/libgdx.so") io/input-stream)]
+                (io/input-stream (io/resource "armeabi/libgdx.so"))]
                ["android/libs/armeabi-v7a/libgdx.so"
-                (-> (io/resource "armeabi-v7a/libgdx.so") io/input-stream)]
+                (io/input-stream (io/resource "armeabi-v7a/libgdx.so"))]
                ["android/libs/x86/libgdx.so"
-                (-> (io/resource "x86/libgdx.so") io/input-stream)]
+                (io/input-stream (io/resource "x86/libgdx.so"))]
                ; android libgdx-box2d.so
                ["android/libs/armeabi/libgdx-box2d.so"
-                (-> (io/resource "armeabi/libgdx-box2d.so") io/input-stream)]
+                (io/input-stream (io/resource "armeabi/libgdx-box2d.so"))]
                ["android/libs/armeabi-v7a/libgdx-box2d.so"
-                (-> (io/resource "armeabi-v7a/libgdx-box2d.so") io/input-stream)]
+                (io/input-stream (io/resource "armeabi-v7a/libgdx-box2d.so"))]
                ["android/libs/x86/libgdx-box2d.so"
-                (-> (io/resource "x86/libgdx-box2d.so") io/input-stream)]
+                (io/input-stream (io/resource "x86/libgdx-box2d.so"))]
                ; android libgdx-bullet.so
                ["android/libs/armeabi/libgdx-bullet.so"
-                (-> (io/resource "armeabi/libgdx-bullet.so") io/input-stream)]
+                (io/input-stream (io/resource "armeabi/libgdx-bullet.so"))]
                ["android/libs/armeabi-v7a/libgdx-bullet.so"
-                (-> (io/resource "armeabi-v7a/libgdx-bullet.so") io/input-stream)]
+                (io/input-stream (io/resource "armeabi-v7a/libgdx-bullet.so"))]
                ["android/libs/x86/libgdx-bullet.so"
-                (-> (io/resource "x86/libgdx-bullet.so") io/input-stream)]
+                (io/input-stream (io/resource "x86/libgdx-bullet.so"))]
                ; ios
                ["ios/project.clj" (render "ios-project.clj" data)]
                ["ios/Info.plist.xml" (render "Info.plist.xml" data)]
@@ -110,12 +110,12 @@
                 (render "IOSLauncher.java" data)]
                ; ios libObjectAL.a and libgdx.a
                ["ios/libs/libObjectAL.a"
-                (-> (io/resource "ios/libObjectAL.a") io/input-stream)]
+                (io/input-stream (io/resource "ios/libObjectAL.a"))]
                ["ios/libs/libgdx.a"
-                (-> (io/resource "ios/libgdx.a") io/input-stream)]
+                (io/input-stream (io/resource "ios/libgdx.a"))]
                ; ios libgdx-box2d.a
                ["ios/libs/libgdx-box2d.a"
-                (-> (io/resource "ios/libgdx-box2d.a") io/input-stream)]
+                (io/input-stream (io/resource "ios/libgdx-box2d.a"))]
                ; ios libgdx-bullet.a
                ["ios/libs/libgdx-bullet.a"
-                (-> (io/resource "ios/libgdx-bullet.a") io/input-stream)])))
+                (io/input-stream (io/resource "ios/libgdx-bullet.a"))])))
