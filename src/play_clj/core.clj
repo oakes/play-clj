@@ -140,11 +140,11 @@ via the screen map.
         (println (:width screen)) ; the new width of the screen
         (println (:height screen)) ; the new height of the screen
         entities)
-      ; the screen resumed from a paused state (mobile only)
+      ; the screen resumed from a paused state
       :on-resume
       (fn [screen entities]
         entities)
-      ; the screen paused (mobile only)
+      ; the screen paused
       :on-pause
       (fn [screen entities]
         entities)
