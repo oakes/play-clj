@@ -274,6 +274,18 @@ via the screen map.
       :on-end-contact
       (fn [screen entities]
         (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
+        entities)
+      ; called between each use of `step!` before the collision is processed
+      :on-pre-solve
+      (fn [screen entities]
+        (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
+        (println (:impulse screen)) ; the ContactImpulse - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/ContactImpulse.html
+        entities)
+      ; called between each use of `step!` after the collision is processed
+      :on-post-solve
+      (fn [screen entities]
+        (println (:contact screen)) ; the Contact - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Contact.html
+        (println (:old-manifold screen)) ; the Manifold - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/Manifold.html
         entities))
 
     ; 3D physics contact (for play-clj.g3d-physics)
