@@ -466,13 +466,11 @@ via the screen map.
         (println (:distance screen)) ; the end distance between fingers
         entities))"
   [n & options]
-  ; make sure the options are valid
-  (let [s (format "Unexpected value in (defscreen %s). Make sure you give it
+  (let [s (format "Unexpected value in (defscreen %s). You need to give it
 keywords and functions in pairs."
                   (str n))]
     (assert (even? (count options)) s)
     (assert (= 0 (count (remove keyword? (keys (apply hash-map options))))) s))
-  ; return form calling defscreen*
   `(let [fn-syms# (->> (for [[k# v#] ~(apply hash-map options)]
                          [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
                        flatten
@@ -506,6 +504,8 @@ keywords and functions in pairs."
 
     (set-screen! my-game main-screen text-screen)"
   [^Game game-object & screen-objects]
+  (assert (isa? (type game-object) Game) "The first argument in set-screen!
+must be the defgame object.")
   (let [run-fn! (fn [k & args]
                   (doseq [screen screen-objects]
                     (apply (get screen k) args)))]
@@ -547,8 +547,13 @@ is the atom storing the screen map behind the scenes. Returns the updated
 `screen` map.
 
     (update! screen :renderer (stage))"
-  [{:keys [update-fn!] :as screen} & args]
-  (update-fn! assoc args))
+  [screen & args]
+  (assert (some? (:update-fn! screen)) "The first argument in update! must be
+the screen map.")
+  (assert (even? (count args)) "You need to give update! your screen followed by
+pairs of values, such as
+(update! screen :renderer (stage) :camera (orthographic)).")
+  ((:update-fn! screen) assoc args))
 
 (defn run!
   "Runs a function defined in another screen. You may optionally pass a series
@@ -557,6 +562,10 @@ of key-value pairs, which will be given to the function via its screen map.
     (run! my-other-screen :on-show)
     (run! my-other-screen :on-change-color :color :blue)"
   [screen-object fn-name & options]
+  (assert (some? (:screen screen-object)) "The first argument in run! must be
+a defscreen object, such as main-screen.")
+  (assert (keyword? fn-name) "The second argument in run! must be a keyword.")
+  (assert (even? (count options)) "Unexpected argument count in run!.")
   (let [execute-fn! (-> screen-object :screen deref :execute-fn!)
         screen-fn (-> screen-object :options (get fn-name))]
     (apply execute-fn! screen-fn options)
