@@ -563,7 +563,7 @@ of key-value pairs, which will be given to the function via its screen map.
     (run! my-other-screen :on-change-color :color :blue)"
   [screen-object fn-name & options]
   (assert (some? (:screen screen-object)) "The first argument in run! must be
-a defscreen object, such as main-screen.")
+a defscreen object.")
   (assert (keyword? fn-name) "The second argument in run! must be a keyword.")
   (assert (even? (count options)) "Unexpected argument count in run!.")
   (let [execute-fn! (-> screen-object :screen deref :execute-fn!)
