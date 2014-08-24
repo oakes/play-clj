@@ -465,8 +465,15 @@ via the screen map.
         (println (:initial-distance screen)) ; the start distance between fingers
         (println (:distance screen)) ; the end distance between fingers
         entities))"
-  [n & {:keys [] :as options}]
-  `(let [fn-syms# (->> (for [[k# v#] ~options]
+  [n & options]
+  ; make sure the options are valid
+  (let [s (format "Unexpected value in (defscreen %s). Make sure you give it
+keywords and functions in pairs."
+                  (str n))]
+    (assert (even? (count options)) s)
+    (assert (= 0 (count (remove keyword? (keys (apply hash-map options))))) s))
+  ; return form calling defscreen*
+  `(let [fn-syms# (->> (for [[k# v#] ~(apply hash-map options)]
                          [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
                        flatten
                        (apply hash-map))
