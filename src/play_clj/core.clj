@@ -61,13 +61,19 @@
   [screen screen-fn]
   (screen-fn))
 
+(defn ^:private add-coords
+  [{:keys [input-x input-y] :as screen}]
+  (if (and input-x input-y)
+    (merge screen (input->screen screen input-x input-y))
+    screen))
+
 (defn defscreen*
   [{:keys [screen entities
            on-show on-render on-hide on-pause on-resize on-resume on-timer]
     :as options}]
   (let [execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
-                        (let [screen-map (merge @screen options)
+                        (let [screen-map (add-coords (merge @screen options))
                               old-entities @entities]
                           (some->> (with-meta
                                      #(normalize (func screen-map old-entities))
