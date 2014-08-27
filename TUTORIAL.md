@@ -111,21 +111,20 @@ Now, what about mobile devices? We may not have a keyboard, so let's create an `
     )
 ```
 
-In this case, the screen map will contain an `:input-x` and `:input-y` for the point on the screen that was touched. These are input coordinates, so normally it is best to convert them into screen coordinates with [input->screen](http://oakes.github.io/play-clj/core.input_screen.html) so they're using the same coordinate system as the entities.
+The [game](http://oakes.github.io/play-clj/core.game.html) function gives you convenient access to the window dimensions and the x/y position of the pointer:
 
 ```clojure
   :on-touch-down
   (fn [screen entities]
-    (let [pos (input->screen screen (:input-x screen) (:input-y screen))]
-      (cond
-        (> (:y pos) (* (height screen) (/ 2 3)))
-        (println "up")
-        (< (:y pos) (/ (height screen) 3))
-        (println "down")
-        (> (:x pos) (* (width screen) (/ 2 3)))
-        (println "right")
-        (< (:x pos) (/ (width screen) 3))
-        (println "left"))))
+    (cond
+      (> (game :point-y) (* (game :height) (/ 2 3)))
+      (println "up")
+      (< (game :point-y) (/ (game :height) 3))
+      (println "down")
+      (> (game :point-x) (* (game :width) (/ 2 3)))
+      (println "right")
+      (< (game :point-x) (/ (game :width) 3))
+      (println "left")))
 ```
 
 Conveniently, the `:on-touch-down` function also runs when a mouse is clicked on the screen, so we are adding mouse support to the game as well!
@@ -162,16 +161,15 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
       
   :on-touch-down
   (fn [screen entities]
-    (let [pos (input->screen screen (:input-x screen) (:input-y screen))]
-      (cond
-        (> (:y pos) (* (height screen) (/ 2 3)))
-        (move (first entities) :up)
-        (< (:y pos) (/ (height screen) 3))
-        (move (first entities) :down)
-        (> (:x pos) (* (width screen) (/ 2 3)))
-        (move (first entities) :right)
-        (< (:x pos) (/ (width screen) 3))
-        (move (first entities) :left))))
+    (cond
+      (> (game :point-y) (* (game :height) (/ 2 3)))
+      (println "up")
+      (< (game :point-y) (/ (game :height) 3))
+      (println "down")
+      (> (game :point-x) (* (game :width) (/ 2 3)))
+      (println "right")
+      (< (game :point-x) (/ (game :width) 3))
+      (println "left")))
 ```
 
 ## Camera
