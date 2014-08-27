@@ -548,11 +548,6 @@ is the atom storing the screen map behind the scenes. Returns the updated
 
     (update! screen :renderer (stage))"
   [screen & args]
-  (assert (some? (:update-fn! screen)) "The first argument in update! must be
-the screen map.")
-  (assert (even? (count args)) "You need to give update! your screen followed by
-pairs of values, such as
-(update! screen :renderer (stage) :camera (orthographic)).")
   ((:update-fn! screen) assoc args))
 
 (defn run!
@@ -562,10 +557,6 @@ of key-value pairs, which will be given to the function via its screen map.
     (run! my-other-screen :on-show)
     (run! my-other-screen :on-change-color :color :blue)"
   [screen-object fn-name & options]
-  (assert (some? (:screen screen-object)) "The first argument in run! must be
-a defscreen object.")
-  (assert (keyword? fn-name) "The second argument in run! must be a keyword.")
-  (assert (even? (count options)) "Unexpected argument count in run!.")
   (let [execute-fn! (-> screen-object :screen deref :execute-fn!)
         screen-fn (-> screen-object :options (get fn-name))]
     (apply execute-fn! screen-fn options)
