@@ -102,7 +102,7 @@
     :fullscreen? (graphics! :is-fullscreen)
     :touched? (input! :is-touched)
     :x (input! :get-x)
-    :y (input! :get-y)
+    :y (- (graphics! :get-height) (input! :get-y))
     (u/throw-key-not-found k)))
 
 (defmacro key-code
