@@ -94,15 +94,17 @@
   "Provides quick access to often-used functions.
 
     (game :width)"
-  [k]
+  [k & [arg]]
   (case k
     :width (graphics! :get-width)
     :height (graphics! :get-height)
     :fps (graphics! :get-frames-per-second)
     :fullscreen? (graphics! :is-fullscreen)
     :touched? (input! :is-touched)
-    :x (input! :get-x)
-    :y (- (graphics! :get-height) (input! :get-y))
+    :x (input! :get-x) ; deprecated, use :point-x instead
+    :y (input! :get-y) ; deprecated, use :point-y instead (it is flipped)
+    :point-x (input! :get-x (or arg 0))
+    :point-y (- (graphics! :get-height) (input! :get-y (or arg 0)))
     (u/throw-key-not-found k)))
 
 (defmacro key-code
