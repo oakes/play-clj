@@ -163,13 +163,13 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
   (fn [screen entities]
     (cond
       (> (game :point-y) (* (game :height) (/ 2 3)))
-      (println "up")
+      (move (first entities) :up)
       (< (game :point-y) (/ (game :height) 3))
-      (println "down")
+      (move (first entities) :down)
       (> (game :point-x) (* (game :width) (/ 2 3)))
-      (println "right")
+      (move (first entities) :right)
       (< (game :point-x) (/ (game :width) 3))
-      (println "left")))
+      (move (first entities) :left)))
 ```
 
 ## Camera
