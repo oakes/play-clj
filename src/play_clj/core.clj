@@ -62,8 +62,8 @@
   (screen-fn))
 
 (defn defscreen*
-  [{:keys [screen entities
-           on-show on-render on-hide on-pause on-resize on-resume on-timer]
+  [screen entities
+   {:keys [on-show on-render on-hide on-pause on-resize on-resume on-timer]
     :as options}]
   (let [execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
@@ -88,8 +88,8 @@
              ; set the initial values in the screen map
              (update-fn! assoc
                          [:total-time 0
-                          :update-fn! update-fn!
                           :execute-fn! execute-fn!
+                          :update-fn! update-fn!
                           :on-timer on-timer
                           :input-listeners (input-listeners options execute-fn!)
                           :ui-listeners (ui-listeners options execute-fn!)])
@@ -473,18 +473,14 @@ keywords and functions in pairs."
     (assert (= 0 (count (remove keyword? (keys (apply hash-map options))))) s))
   `(let [fn-syms# (->> (for [[k# v#] ~(apply hash-map options)]
                          [k# (intern *ns* (symbol (str '~n "-" (name k#))) v#)])
-                       flatten
-                       (apply hash-map))
+                       (into {}))
          map-sym# (symbol (str '~n "-map"))
+         screen# (deref (or (resolve map-sym#)
+                            (intern *ns* map-sym# (atom {}))))
          entities-sym# (symbol (str '~n "-entities"))
-         syms# (assoc fn-syms#
-                      :screen (deref
-                                (or (resolve map-sym#)
-                                    (intern *ns* map-sym# (atom {}))))
-                      :entities (deref
-                                  (or (resolve entities-sym#)
-                                      (intern *ns* entities-sym# (atom [])))))]
-     (def ~n (defscreen* syms#))))
+         entities# (deref (or (resolve entities-sym#)
+                              (intern *ns* entities-sym# (atom []))))]
+     (def ~n (defscreen* screen# entities# fn-syms#))))
 
 (defn defgame*
   [{:keys [on-create]}]
