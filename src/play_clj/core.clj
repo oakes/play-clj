@@ -80,6 +80,8 @@
                        update-screen!))]
     {:screen screen
      :entities entities
+     :execute-fn! execute-fn!
+     :update-fn! update-fn!
      :options options
      :show (fn []
              ; if using a physics engine in a REPL, we need to forcibly dispose
