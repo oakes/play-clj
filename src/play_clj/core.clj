@@ -553,7 +553,7 @@ of key-value pairs, which will be given to the function via its screen map.
     (run! my-other-screen :on-show)
     (run! my-other-screen :on-change-color :color :blue)"
   [screen-object fn-name & options]
-  (let [execute-fn! (-> screen-object :screen deref :execute-fn!)
+  (let [execute-fn! (:execute-fn! screen-object)
         screen-fn (-> screen-object :options (get fn-name))]
     (apply execute-fn! screen-fn options)
     nil))
