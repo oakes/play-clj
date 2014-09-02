@@ -76,12 +76,15 @@
                                    (wrapper screen)
                                    (reset-changed! entities old-entities)
                                    (update-screen! @screen)))))
+        execute-fn-on-gl! (fn [& args]
+                            (on-gl (apply execute-fn! args)))
         update-fn! (fn [func args]
                      (doto (apply swap! screen func args)
                        update-screen!))]
     {:screen screen
      :entities entities
      :execute-fn! execute-fn!
+     :execute-fn-on-gl! execute-fn-on-gl!
      :update-fn! update-fn!
      :options options
      :show (fn []
@@ -92,6 +95,7 @@
              (update-fn! assoc
                          [:total-time 0
                           :execute-fn! execute-fn!
+                          :execute-fn-on-gl! execute-fn-on-gl!
                           :update-fn! update-fn!
                           :options options
                           :on-timer on-timer
