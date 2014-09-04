@@ -63,8 +63,7 @@
 
 (defn defscreen*
   [screen entities
-   {:keys [on-show on-render on-hide on-pause
-           on-resize on-resume on-dispose on-timer]
+   {:keys [on-show on-render on-hide on-pause on-resize on-resume on-timer]
     :as options}]
   (let [execute-fn! (fn [func & {:keys [] :as options}]
                       (when func
@@ -115,8 +114,7 @@
      :resize (fn [w h]
                (execute-fn! on-resize :width w :height h)
                (update-screen! @screen))
-     :resume #(execute-fn! on-resume)
-     :dispose #(execute-fn! on-dispose)}))
+     :resume #(execute-fn! on-resume)}))
 
 (defmacro defscreen
   "Defines a screen, and creates vars for all the functions inside of it. All
@@ -512,7 +510,6 @@ keywords and functions in pairs."
   (let [run-fn! (fn [k & args]
                   (doseq [screen screen-objects]
                     (apply (get screen k) args)))]
-    (some-> game-object .getScreen .dispose)
     (.setScreen game-object
       (reify Screen
         (show [this]
@@ -526,7 +523,7 @@ keywords and functions in pairs."
         (pause [this] (run-fn! :pause))
         (resize [this w h] (run-fn! :resize w h))
         (resume [this] (run-fn! :resume))
-        (dispose [this] (run-fn! :dispose))))))
+        (dispose [this])))))
 
 (defn set-screen-wrapper!
   "Sets a function that wraps around all screen functions, allowing you to
