@@ -94,7 +94,8 @@
       (spit (io/file dir (str->filename ns name))
             (create-site-file name (sidebar parsed-files) (content group)))))
   (spit (io/file dir "index.html")
-        (create-site-file "play-clj docs" (sidebar parsed-files) nil)))
+        (create-site-file "play-clj docs" (sidebar parsed-files) nil))
+  (println "Created" (str dir "/")))
 
 (defn create-embed!
   [dir parsed-files]
@@ -112,4 +113,5 @@
                        :file (str->filename ns name)})))
              (apply concat)
              vec
-             pr-str)))
+             pr-str))
+  (println "Created" (str dir "/")))

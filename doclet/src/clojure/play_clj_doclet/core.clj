@@ -142,9 +142,8 @@
        (remove nil?)))
 
 (defn parse-clj
-  [java-docs]
-  (->> (io/file "../src/")
-       file-seq
+  [java-docs files]
+  (->> files
        (filter #(-> % .getName (.endsWith ".clj")))
        (remove #(contains? ignore-files (.getName %)))
        (sort-by #(.getName %))
@@ -155,18 +154,25 @@
        (group-by :ns)
        (into (sorted-map))))
 
-(defn save!
-  [parsed-files]
-  (html/create-site! "site" parsed-files)
-  (html/create-embed! "embed" parsed-files)
-  (println "Created site/ and embed/"))
+(defn generate!
+  [java-docs]
+  (let [play-clj-files (file-seq (io/file "../src/"))
+        nightmod-file (io/file "../../nightmod/src/clojure/nightmod/game.clj")
+        net-file (io/file "../../play-clj.net/src/play_clj/net.clj")]
+    (->> play-clj-files
+         (parse-clj java-docs)
+         (html/create-site! "site"))
+    (when (and (.exists nightmod-file) (.exists net-file))
+      (->> play-clj-files
+           (concat [nightmod-file net-file])
+           (parse-clj java-docs)
+           (html/create-embed! "embed")))))
 
-(defn parse
+(defn generate-all!
   [^RootDoc root]
   (if (= 0 (count (.classes root)))
     (println "No Java classes found")
     (->> (map parse-class (.classes root))
          (filter some?)
          (apply concat)
-         parse-clj
-         save!)))
+         generate!)))
