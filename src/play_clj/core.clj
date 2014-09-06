@@ -551,14 +551,19 @@ is the atom storing the screen map behind the scenes. Returns the updated
   [screen & args]
   ((:update-fn! screen) assoc args))
 
-(defn run!
+(defn screen!
   "Runs a function defined in another screen. You may optionally pass a series
 of key-value pairs, which will be given to the function via its screen map.
 
-    (run! my-other-screen :on-show)
-    (run! my-other-screen :on-change-color :color :blue)"
+    (screen! my-other-screen :on-show)
+    (screen! my-other-screen :on-change-color :color :blue)"
   [screen-object fn-name & options]
   (let [execute-fn! (:execute-fn! screen-object)
         screen-fn (-> screen-object :options (get fn-name))]
     (apply execute-fn! screen-fn options)
     nil))
+
+(defn run!
+  "Deprecated. Please use `screen!` instead."
+  [& args]
+  (apply screen! args))
