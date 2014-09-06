@@ -98,6 +98,7 @@
                           :update-fn! update-fn!
                           :options options
                           :on-timer on-timer
+                          :layers nil
                           :input-listeners (input-listeners options execute-fn!)
                           :ui-listeners (ui-listeners options execute-fn!)])
              ; run :on-show
