@@ -345,12 +345,12 @@ Then, in `defgame`, set the screens in the order in which you'd like them to app
 
 Make sure you add `play-clj.ui` back to your `ns` declaration, so you can use the label again. Also, note that only the first screen, which in this case is `main-screen`, calls `(clear!)` in its `:on-render` function. If `text-screen` called it as well, it would clear whatever was drawn by `main-screen`.
 
-With multiple screens being displayed, it will often be important to make them interact. For example, you may want to place a button on `text-screen` that causes a character on `main-screen` to change color. You can do this with the [run!](http://oakes.github.io/play-clj/core.run!.html) function.
+With multiple screens being displayed, it will often be important to make them interact. For example, you may want to place a button on `text-screen` that causes a character on `main-screen` to change color. You can do this with the [screen!](http://oakes.github.io/play-clj/core.screen!.html) function.
 
 First, define a custom screen function in `main-screen` with a name such as `:on-change-color`, where you can write the code that changes the character's color. Then, in `text-screen`, listen for the button click (using the `:on-ui-changed` screen function) and manually run the custom function. You may optionally provide key-value pairs that will be passed into its screen map:
 
 ```clojure
-(run! main-screen :on-change-color :color :blue)
+(screen! main-screen :on-change-color :color :blue)
 ```
 
 ## Using the REPL
