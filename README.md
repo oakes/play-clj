@@ -1,6 +1,6 @@
 ## Introduction
 
-A Clojure library that provides a wrapper for [libGDX](http://libgdx.badlogicgames.com/), allowing you to write 2D and 3D games that run on desktop OSes (Windows, OS X, and Linux) and mobile OSes (Android and iOS) with the same Clojure codebase.
+A Clojure library that provides a wrapper for [libGDX](http://libgdx.badlogicgames.com/), allowing you to write 2D and 3D games that run on desktop OSes (Windows, OS X, and Linux) and mobile OSes (Android and iOS) with the same Clojure codebase. The mobile support is currently experimental, and may have poor performance or even fail to run on some devices.
 
 ## Getting Started
 
