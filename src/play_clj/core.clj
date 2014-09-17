@@ -567,4 +567,4 @@ of key-value pairs, which will be given to the function via its screen map.
 (defn run!
   "Deprecated. Please use `screen!` instead."
   [& args]
-  (apply screen! args))
+  (throw (Exception. "Replace run! with screen!")))

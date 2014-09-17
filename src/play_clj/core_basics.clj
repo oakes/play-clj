@@ -101,8 +101,8 @@
     :fps (graphics! :get-frames-per-second)
     :fullscreen? (graphics! :is-fullscreen)
     :touched? (input! :is-touched)
-    :x (input! :get-x) ; deprecated, use :point-x instead
-    :y (input! :get-y) ; deprecated, use :point-y instead (it is flipped)
+    :x (throw (Exception. "Replace (game :x) with (input! :get-x)"))
+    :y (throw (Exception. "Replace (game :y) with (input! :get-y)"))
     :point-x (input! :get-x (or arg 0))
     :point-y (- (graphics! :get-height) (input! :get-y (or arg 0)))
     (u/throw-key-not-found k)))
