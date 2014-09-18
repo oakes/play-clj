@@ -176,7 +176,7 @@
 
     (texture-atlas \"packed.txt\")"
   [path & options]
-  `(let [^TextureAtlas object# (texture-atlas* path)]
+  `(let [^TextureAtlas object# (texture-atlas* ~path)]
      (u/calls! object# ~@options)
      object#))
 
