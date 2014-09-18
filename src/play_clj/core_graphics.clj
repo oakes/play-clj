@@ -591,7 +591,7 @@ to overlap correctly with the entities.
     sort-fn layer-names entities]
     (doseq [ln layer-names]
       (when-not (get-in screen [:layers ln])
-        (update-fn! assoc-in [[:layers ln] (split-layer screen ln)])))
+        (update-fn! assoc-in [:layers ln] (split-layer screen ln))))
     (when camera (.setView renderer camera))
     (let [^Batch batch (.getSpriteBatch renderer)]
       (.begin batch)

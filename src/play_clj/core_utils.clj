@@ -114,7 +114,7 @@ specified path.
     (some-> u/*timers* (swap! disj old-timer)))
   ; create timer, add to screen map, and return it
   (let [new-timer (timer*)]
-    (update-fn! assoc-in [[:timers id] new-timer])
+    (update-fn! assoc-in [:timers id] new-timer)
     (some-> u/*timers* (swap! conj new-timer))
     new-timer))
 
@@ -147,7 +147,7 @@ found."
   [{:keys [update-fn!] :as screen} id]
   (when-let [timer (get-in screen [:timers id])]
     (.stop timer)
-    (update-fn! update-in [[:timers] dissoc id])
+    (update-fn! update-in [:timers] dissoc id)
     timer))
 
 ; assets

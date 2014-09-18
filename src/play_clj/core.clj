@@ -77,7 +77,7 @@
                                    (update-screen! @screen)))))
         execute-fn-on-gl! (fn [& args]
                             (on-gl (apply execute-fn! args)))
-        update-fn! (fn [func args]
+        update-fn! (fn [func & args]
                      (doto (apply swap! screen func args)
                        update-screen!))]
     {:screen screen
@@ -92,21 +92,20 @@
              (some-> @screen :world :object .dispose)
              ; set the initial values in the screen map
              (update-fn! assoc
-                         [:total-time 0
-                          :execute-fn! execute-fn!
-                          :execute-fn-on-gl! execute-fn-on-gl!
-                          :update-fn! update-fn!
-                          :options options
-                          :on-timer on-timer
-                          :layers nil
-                          :input-listeners (input-listeners options execute-fn!)
-                          :ui-listeners (ui-listeners options execute-fn!)])
+                         :total-time 0
+                         :execute-fn! execute-fn!
+                         :execute-fn-on-gl! execute-fn-on-gl!
+                         :update-fn! update-fn!
+                         :options options
+                         :on-timer on-timer
+                         :layers nil
+                         :input-listeners (input-listeners options execute-fn!)
+                         :ui-listeners (ui-listeners options execute-fn!))
              ; run :on-show
              (execute-fn! on-show)
              ; update the physics contact listener if a :world was created
              (some->> (contact-listener @screen options execute-fn!)
-                      (vector :contact-listener)
-                      (update-fn! assoc)))
+                      (update-fn! assoc :contact-listener)))
      :render (fn [d]
                (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
                (execute-fn! on-render :delta-time d))
@@ -550,7 +549,7 @@ is the atom storing the screen map behind the scenes. Returns the updated
 
     (update! screen :renderer (stage))"
   [screen & args]
-  ((:update-fn! screen) assoc args))
+  (apply (:update-fn! screen) assoc args))
 
 (defn screen!
   "Runs a function defined in another screen. You may optionally pass a series
