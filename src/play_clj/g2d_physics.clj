@@ -178,17 +178,13 @@ such as :on-begin-contact."
   `(u/call! ^ChainShape ~object ~k ~@options))
 
 (defn circle-shape*
-  ([]
-    (CircleShape.))
-  ([radius]
-    (doto ^CircleShape (circle-shape*)
-      (.setRadius radius)
-      (.setPosition (m/vector-2 radius radius)))))
+  []
+  (CircleShape.))
 
 (defmacro circle-shape
   "Returns a [CircleShape](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/CircleShape.html)."
-  [radius & options]
-  `(u/calls! ^CircleShape (circle-shape* ~radius) ~@options))
+  [& options]
+  `(u/calls! ^CircleShape (circle-shape*) ~@options))
 
 (defmacro circle-shape!
   "Calls a single method on a `circle-shape`."
