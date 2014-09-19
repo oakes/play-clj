@@ -69,8 +69,7 @@
              update-in
              [:timeline]
              #(conj (or %1 []) %2)
-             [(:total-time screen) entities])))
-  entities)
+             [(:total-time screen) entities]))))
 
 (defn defscreen*
   [screen entities
@@ -85,8 +84,7 @@
                                      (meta func))
                                    (wrapper screen)
                                    (reset-changed! entities old-entities)
-                                   (update-screen! @screen)))
-                        @entities))
+                                   (update-screen! @screen)))))
         execute-fn-on-gl! (fn [& args]
                             (on-gl (apply execute-fn! args)))
         update-fn! (fn [func & args]
@@ -119,8 +117,8 @@
                       update-screen!))
      :render (fn [d]
                (swap! screen update-in [:total-time] #(+ (or %1 0) %2) d)
-               (->> (execute-fn! on-render :delta-time d)
-                    (add-to-timeline! screen)))
+               (some->> (execute-fn! on-render :delta-time d)
+                        (add-to-timeline! screen)))
      :hide #(execute-fn! on-hide)
      :pause #(execute-fn! on-pause)
      :resize (fn [w h]

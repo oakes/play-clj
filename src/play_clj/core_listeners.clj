@@ -216,4 +216,5 @@ in the `screen`."
   ([{:keys [renderer world] :as screen} entities]
     (when (isa? (type renderer) Stage)
       (update-stage! screen entities))
-    (update-physics! screen entities)))
+    (update-physics! screen entities)
+    entities))
