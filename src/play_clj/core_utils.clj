@@ -78,6 +78,24 @@ specified path.
                            ~name)]
      (u/call! p# ~k ~@options)))
 
+(defn rewind!
+  "Returns the most recent entities vector saved in the timeline after removing
+the last `steps` from it. The timeline is recorded by calling
+`(update! screen :record? true)`.
+
+If there are 100 items saved in the timeline and `(rewind! screen 1)` is called,
+it will remove the last one and return the entities vector from the 99th item.
+If `steps` is invalid, nil is returned.
+
+If you want to do something more complex with the timeline than a simple rewind,
+you can directly access it via `(:timeline screen)`. Each item inside it is a
+vector containing a timestamp (seconds since the screen was first shown) and an
+entities vector."
+  [{:keys [timeline update-fn!] :as screen} steps]
+  (when-let [[total-time entities] (get timeline (- (count timeline) steps 1))]
+    (update-fn! update-in [:timeline] subvec 0 (- (count timeline) steps 1))
+    entities))
+
 ; static fields
 
 (defmacro scaling

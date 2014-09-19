@@ -43,12 +43,6 @@
 (load "core_listeners")
 (load "core_utils")
 
-(defn ^:private reset-changed!
-  [e-atom e-old e-new]
-  (when (and (not= e-old e-new)
-             (compare-and-set! e-atom e-old e-new))
-    e-new))
-
 (defn ^:private normalize
   [entities]
   (some->> entities
@@ -58,8 +52,25 @@
            vec))
 
 (defn ^:private wrapper
-  [screen screen-fn]
+  [screen-atom screen-fn]
   (screen-fn))
+
+(defn ^:private reset-changed!
+  [e-atom e-old e-new]
+  (when (and (not= e-old e-new)
+             (compare-and-set! e-atom e-old e-new))
+    e-new))
+
+(defn ^:private add-to-timeline!
+  [screen-atom entities]
+  (let [screen @screen-atom]
+    (when (:record? screen)
+      (swap! screen-atom
+             update-in
+             [:timeline]
+             #(conj (or %1 []) %2)
+             [(:total-time screen) entities])))
+  entities)
 
 (defn defscreen*
   [screen entities
@@ -74,12 +85,12 @@
                                      (meta func))
                                    (wrapper screen)
                                    (reset-changed! entities old-entities)
-                                   (update-screen! @screen)))))
+                                   (update-screen! @screen)))
+                        @entities))
         execute-fn-on-gl! (fn [& args]
                             (on-gl (apply execute-fn! args)))
         update-fn! (fn [func & args]
-                     (doto (apply swap! screen func args)
-                       update-screen!))]
+                     (apply swap! screen func args))]
     {:screen screen
      :entities entities
      :execute-fn! execute-fn!
@@ -92,7 +103,6 @@
              (some-> @screen :world :object .dispose)
              ; set the initial values in the screen map
              (update-fn! assoc
-                         :total-time 0
                          :execute-fn! execute-fn!
                          :execute-fn-on-gl! execute-fn-on-gl!
                          :update-fn! update-fn!
@@ -105,10 +115,12 @@
              (execute-fn! on-show)
              ; update the physics contact listener if a :world was created
              (some->> (contact-listener @screen options execute-fn!)
-                      (update-fn! assoc :contact-listener)))
+                      (update-fn! assoc :contact-listener)
+                      update-screen!))
      :render (fn [d]
-               (swap! screen #(assoc % :total-time (+ (:total-time %) d)))
-               (execute-fn! on-render :delta-time d))
+               (swap! screen update-in [:total-time] #(+ (or %1 0) %2) d)
+               (->> (execute-fn! on-render :delta-time d)
+                    (add-to-timeline! screen)))
      :hide #(execute-fn! on-hide)
      :pause #(execute-fn! on-pause)
      :resize (fn [w h]
@@ -135,7 +147,7 @@ via the screen map.
       :on-render
       (fn [screen entities]
         (println (:delta-time screen)) ; time (ms) elapsed since last frame
-        (println (:total-time screen)) ; time (ms) elapsed since :on-show
+        (println (:total-time screen)) ; time (ms) elapsed since first :on-show
         entities)
       ; the screen was replaced
       :on-hide
@@ -549,7 +561,8 @@ is the atom storing the screen map behind the scenes. Returns the updated
 
     (update! screen :renderer (stage))"
   [screen & args]
-  (apply (:update-fn! screen) assoc args))
+  (doto (apply (:update-fn! screen) assoc args)
+    update-screen!))
 
 (defn screen!
   "Runs a function defined in another screen. You may optionally pass a series
