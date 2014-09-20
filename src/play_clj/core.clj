@@ -573,8 +573,3 @@ of key-value pairs, which will be given to the function via its screen map.
         screen-fn (-> screen-object :options (get fn-name))]
     (apply execute-fn! screen-fn options)
     nil))
-
-(defn run!
-  "Deprecated. Please use `screen!` instead."
-  [& args]
-  (throw (Exception. "Replace run! with screen!")))
