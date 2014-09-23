@@ -41,9 +41,10 @@ based on the file at `path`.
 
     (skin \"uiskin.json\")"
   [path & options]
-  `(u/calls! ^Skin (Skin. (if (string? ~path)
-                            (.internal ^Files (Gdx/files) ~path)
-                            ~path))
+  `(u/calls! ^Skin (or (u/load-asset ~path Skin)
+                       (Skin. (if (string? ~path)
+                                (.internal ^Files (Gdx/files) ~path)
+                                ~path)))
              ~@options))
 
 (defmacro skin!
