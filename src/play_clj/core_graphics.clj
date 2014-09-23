@@ -466,7 +466,7 @@ with the tiled map file at `path` and `unit` scale.
   (let [^Batch batch (.getSpriteBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
-      (e/draw-entity! entity screen batch))
+      (e/draw! entity screen batch))
     (.end batch))
   entities)
 
@@ -475,7 +475,7 @@ with the tiled map file at `path` and `unit` scale.
   (let [^Batch batch (.getBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
-      (e/draw-entity! entity screen batch))
+      (e/draw! entity screen batch))
     (.end batch))
   entities)
 
@@ -483,7 +483,7 @@ with the tiled map file at `path` and `unit` scale.
   [{:keys [^ModelBatch renderer ^Camera camera] :as screen} entities]
   (.begin renderer camera)
   (doseq [entity entities]
-    (e/draw-entity! entity screen nil))
+    (e/draw! entity screen nil))
   (.end renderer)
   entities)
 
@@ -600,6 +600,6 @@ to overlap correctly with the entities.
                           sort-fn)]
         (if-let [layer (:layer entity)]
           (.renderTileLayer renderer layer)
-          (e/draw-entity! entity screen batch)))
+          (e/draw! entity screen batch)))
       (.end batch))
     entities))

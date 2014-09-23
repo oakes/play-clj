@@ -9,21 +9,21 @@
            [com.badlogic.gdx.scenes.scene2d Actor]))
 
 (defprotocol Entity
-  (draw-entity! [this screen batch] "Draws the entity"))
+  (draw! [this screen batch] "Draws the entity"))
 
 (extend-protocol Entity
   clojure.lang.PersistentArrayMap
-  (draw-entity! [this screen batch])
+  (draw! [this screen batch])
   clojure.lang.PersistentHashMap
-  (draw-entity! [this screen batch])
+  (draw! [this screen batch])
   nil
-  (draw-entity! [this screen batch]))
+  (draw! [this screen batch]))
 
 (defrecord TextureEntity [object] Entity
-  (draw-entity! [{:keys [^TextureRegion object x y width height
-                         scale-x scale-y angle origin-x origin-y]}
-                 _
-                 batch]
+  (draw! [{:keys [^TextureRegion object x y width height
+                  scale-x scale-y angle origin-x origin-y]}
+          _
+          batch]
     (let [x (float (or x 0))
           y (float (or y 0))
           width (float (or width (.getRegionWidth object)))
@@ -39,7 +39,7 @@
         (.draw ^Batch batch object x y width height)))))
 
 (defrecord NinePatchEntity [object] Entity
-  (draw-entity! [{:keys [^NinePatch object x y width height]} _ batch]
+  (draw! [{:keys [^NinePatch object x y width height]} _ batch]
     (let [x (float (or x 0))
           y (float (or y 0))
           width (float (or width (.getTotalWidth object)))
@@ -47,7 +47,7 @@
       (.draw object ^Batch batch x y width height))))
 
 (defrecord ParticleEffectEntity [object] Entity
-  (draw-entity! [{:keys [^ParticleEffect object x y delta-time]} _ batch]
+  (draw! [{:keys [^ParticleEffect object x y delta-time]} _ batch]
     (let [x (float (or x 0))
           y (float (or y 0))
           ^Graphics g (Gdx/graphics)
@@ -56,8 +56,8 @@
       (.draw object ^Batch batch delta-time))))
 
 (defrecord ActorEntity [object] Entity
-  (draw-entity! [{:keys [^Actor object x y width height
-                         scale-x scale-y angle origin-x origin-y]} _ batch]
+  (draw! [{:keys [^Actor object x y width height
+                  scale-x scale-y angle origin-x origin-y]} _ batch]
     (some->> x (.setX object))
     (some->> y (.setY object))
     (some->> width (.setWidth object))
@@ -76,9 +76,9 @@
     (.draw object ^Batch batch 1)))
 
 (defrecord ModelEntity [object] Entity
-  (draw-entity! [{:keys [^ModelInstance object x y z]}
-                 {:keys [^ModelBatch renderer ^Environment attributes]}
-                 _]
+  (draw! [{:keys [^ModelInstance object x y z]}
+          {:keys [^ModelBatch renderer ^Environment attributes]}
+          _]
     (when (or x y z)
       (let [^Matrix4 m (. object transform)
             x (float (or x 0))
@@ -88,10 +88,10 @@
     (.render renderer object attributes)))
 
 (defrecord ShapeEntity [object] Entity
-  (draw-entity! [{:keys [^ShapeRenderer object type draw!
-                         x y scale-x scale-y angle]}
-                 {:keys [^Camera camera]}
-                 batch]
+  (draw! [{:keys [^ShapeRenderer object type draw!
+                  x y scale-x scale-y angle]}
+          {:keys [^Camera camera]}
+          batch]
     (when batch
       (.end ^Batch batch))
     (when camera
@@ -113,6 +113,6 @@
       (.begin ^Batch batch))))
 
 (defrecord BundleEntity [entities] Entity
-  (draw-entity! [{:keys [entities] :as entity} screen batch]
+  (draw! [{:keys [entities] :as entity} screen batch]
     (doseq [e entities]
-      (draw-entity! (merge e (apply dissoc entity (keys e))) screen batch))))
+      (draw! (merge e (apply dissoc entity (keys e))) screen batch))))
