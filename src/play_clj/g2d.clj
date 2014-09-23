@@ -13,12 +13,10 @@
   [path]
   (if (nil? path)
     (BitmapFont.)
-    (let [^Files files (Gdx/files)
-          ^FileHandle fh (if (string? path)
-                           (.internal files path)
-                           path)]
-      (or (u/load-asset (.path fh) BitmapFont)
-          (BitmapFont. fh)))))
+    (or (u/load-asset path BitmapFont)
+        (BitmapFont. (if (string? path)
+                       (.internal (Gdx/files) path)
+                       path)))))
 
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html).
