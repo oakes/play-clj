@@ -58,7 +58,7 @@ based on the file at `path`.
   [k]
   (u/gdx-field :scenes :scene2d :utils :Align (u/key->camel k)))
 
-(defn ^:private cell!
+(defn cell!
   "Calls methods on a [Cell](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Cell.html)."
   [^Cell cell & args]
   (let [method (first args)
