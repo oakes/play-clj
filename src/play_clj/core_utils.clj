@@ -80,8 +80,8 @@ specified path.
 
 (defn rewind!
   "Returns the most recent entities vector saved in the timeline after removing
-the last `steps` from it. The timeline is recorded by calling
-`(update! screen :record? true)`.
+the last `steps` from it. Start recording to the timeline by calling
+`(update! screen :timeline [])`.
 
 If there are 100 items saved in the timeline and `(rewind! screen 1)` is called,
 it will remove the last one and return the entities vector from the 99th item.

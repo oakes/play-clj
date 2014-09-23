@@ -64,11 +64,11 @@
 (defn ^:private add-to-timeline!
   [screen-atom entities]
   (let [screen @screen-atom]
-    (when (:record? screen)
+    (when (:timeline screen)
       (swap! screen-atom
              update-in
              [:timeline]
-             #(conj (or %1 []) %2)
+             conj
              [(:total-time screen) entities]))))
 
 (defn defscreen*
