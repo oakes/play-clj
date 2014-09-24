@@ -157,7 +157,7 @@
 (defn generate!
   [java-docs]
   (let [play-clj-files (file-seq (io/file "../src/"))
-        nightmod-file (io/file "../../nightmod/src/clojure/nightmod/game.clj")
+        nightmod-file (io/file "../../Nightmod/src/clojure/nightmod/game.clj")
         net-file (io/file "../../play-clj.net/src/play_clj/net.clj")]
     (->> play-clj-files
          (parse-clj java-docs)
