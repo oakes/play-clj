@@ -35,17 +35,20 @@
                   (str (u/key->pascal k) "Style."))
      ~@options))
 
+(defn skin*
+  [path]
+  (or (u/load-asset path Skin)
+      (Skin. (if (string? path)
+               (.internal ^Files (Gdx/files) path)
+               path))))
+
 (defmacro skin
   "Returns a [Skin](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Skin.html)
 based on the file at `path`.
 
     (skin \"uiskin.json\")"
   [path & options]
-  `(u/calls! ^Skin (or (u/load-asset ~path Skin)
-                       (Skin. (if (string? ~path)
-                                (.internal ^Files (Gdx/files) ~path)
-                                ~path)))
-             ~@options))
+  `(u/calls! ^Skin (skin* ~path) ~@options))
 
 (defmacro skin!
   "Calls a single method on a `skin`."
