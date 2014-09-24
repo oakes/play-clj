@@ -149,11 +149,10 @@
 
 (defn sound*
   [path]
-  (let [^FileHandle fh (if (string? path)
-                         (files! :internal path)
-                         path)]
-    (or (u/load-asset (.path fh) Sound)
-        (audio! :new-sound fh))))
+  (or (u/load-asset path Sound)
+      (audio! :new-sound (if (string? path)
+                           (files! :internal path)
+                           path))))
 
 (defmacro sound
   "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html).
