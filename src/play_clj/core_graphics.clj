@@ -2,11 +2,8 @@
 
 (defn pixmap*
   [path]
-  (let [^FileHandle fh (if (string? path)
-                         (files! :internal path)
-                         path)]
-    (or (u/load-asset (.path fh) Pixmap)
-        (Pixmap. fh))))
+  (or (u/load-asset path Pixmap)
+      (Pixmap. (files! :internal path))))
 
 (defmacro pixmap
   "Returns a [Pixmap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html).

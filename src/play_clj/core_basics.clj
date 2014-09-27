@@ -148,11 +148,9 @@
     (.removeProcessor multi p)))
 
 (defn sound*
-  [path]
+  [^String path]
   (or (u/load-asset path Sound)
-      (audio! :new-sound (if (string? path)
-                           (files! :internal path)
-                           path))))
+      (audio! :new-sound (files! :internal path))))
 
 (defmacro sound
   "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html).

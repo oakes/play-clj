@@ -36,11 +36,9 @@
      ~@options))
 
 (defn skin*
-  [path]
+  [^String path]
   (or (u/load-asset path Skin)
-      (Skin. (if (string? path)
-               (.internal ^Files (Gdx/files) path)
-               path))))
+      (Skin. (.internal ^Files (Gdx/files) path))))
 
 (defmacro skin
   "Returns a [Skin](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Skin.html)

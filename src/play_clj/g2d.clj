@@ -10,13 +10,11 @@
             ParticleEffectEntity]))
 
 (defn bitmap-font*
-  [path]
+  [^String path]
   (if (nil? path)
     (BitmapFont.)
     (or (u/load-asset path BitmapFont)
-        (BitmapFont. (if (string? path)
-                       (.internal (Gdx/files) path)
-                       path)))))
+        (BitmapFont. (.internal (Gdx/files) path)))))
 
 (defmacro bitmap-font
   "Returns a [BitmapFont](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/BitmapFont.html).
@@ -128,17 +126,13 @@
 ; particle-effect
 
 (defn particle-effect*
-  [path]
+  [^String path]
   (ParticleEffectEntity.
     (if (nil? path)
       (ParticleEffect.)
-      (let [^Files files (Gdx/files)
-            ^FileHandle fh (if (string? path)
-                             (.internal files path)
-                             path)]
-        (or (u/load-asset (.path fh) ParticleEffect)
-            (doto (ParticleEffect.)
-              (.load fh (.parent fh))))))))
+      (or (u/load-asset path ParticleEffect)
+          (let [^FileHandle fh (.internal (Gdx/files) path)]
+            (doto (ParticleEffect.) (.load fh (.parent fh))))))))
 
 (defmacro particle-effect
   "Returns an entity based on [ParticleEffect](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/ParticleEffect.html).
