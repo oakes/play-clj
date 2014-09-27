@@ -1,9 +1,18 @@
 (in-ns 'play-clj.core)
 
+(defmacro pixmap-format
+  "Returns a static field from [Pixmap.Format](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.Format.html).
+
+    (pixmap-format :alpha)"
+  [k]
+  (u/gdx-field :graphics "Pixmap$Format" (u/key->pascal k)))
+
 (defn pixmap*
-  [path]
-  (or (u/load-asset path Pixmap)
-      (Pixmap. (files! :internal path))))
+  ([^String path]
+    (or (u/load-asset path Pixmap)
+        (Pixmap. (files! :internal path))))
+  ([^long width ^long height ^Pixmap$Format fmt]
+    (Pixmap. width height fmt)))
 
 (defmacro pixmap
   "Returns a [Pixmap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html).

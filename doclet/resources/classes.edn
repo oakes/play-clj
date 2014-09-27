@@ -160,6 +160,7 @@
                       "perspective!" :methods}
  "Pixmap" {"pixmap" :methods
            "pixmap!" :methods}
+ "Pixmap.Format" {"pixmap-format" :static-fields}
  "Plane" {"plane" :methods
           "plane!" :methods}
  "Plane.PlaneSide" {"plane-side" :static-fields}
