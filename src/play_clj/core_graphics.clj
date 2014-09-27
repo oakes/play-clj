@@ -94,11 +94,9 @@ complicated shapes. If you use `assoc` to set the overall :x and :y of the
 (defn tiled-map*
   ([]
     (TiledMap.))
-  ([s]
-    (if (string? s)
-      (or (u/load-asset s TiledMap)
-          (.load (TmxMapLoader.) s))
-      s)))
+  ([^String path]
+    (or (u/load-asset path TiledMap)
+        (.load (TmxMapLoader.) path))))
 
 (defmacro tiled-map
   "Returns a [TiledMap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMap.html).
@@ -368,7 +366,10 @@ screen coordinates.
 
 (defn orthogonal-tiled-map*
   [path unit]
-  (OrthogonalTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
+  (OrthogonalTiledMapRenderer. ^TiledMap (if (string? path)
+                                           (tiled-map* path)
+                                           path)
+                               ^double unit))
 
 (defmacro orthogonal-tiled-map
   "Returns an [OrthogonalTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.html)
@@ -387,7 +388,10 @@ with the tiled map file at `path` and `unit` scale.
 
 (defn isometric-tiled-map*
   [path unit]
-  (IsometricTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
+  (IsometricTiledMapRenderer. ^TiledMap (if (string? path)
+                                           (tiled-map* path)
+                                           path)
+                              ^double unit))
 
 (defmacro isometric-tiled-map
   "Returns an [IsometricTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.html)
@@ -406,7 +410,9 @@ with the tiled map file at `path` and `unit` scale.
 
 (defn isometric-staggered-tiled-map*
   [path unit]
-  (IsometricStaggeredTiledMapRenderer. ^TiledMap (tiled-map* path)
+  (IsometricStaggeredTiledMapRenderer. ^TiledMap (if (string? path)
+                                                   (tiled-map* path)
+                                                   path)
                                        ^double unit))
 
 (defmacro isometric-staggered-tiled-map
@@ -428,7 +434,10 @@ with the tiled map file at `path` and `unit` scale.
 
 (defn hexagonal-tiled-map*
   [path unit]
-  (HexagonalTiledMapRenderer. ^TiledMap (tiled-map* path) ^double unit))
+  (HexagonalTiledMapRenderer. ^TiledMap (if (string? path)
+                                          (tiled-map* path)
+                                          path)
+                              ^double unit))
 
 (defmacro hexagonal-tiled-map
   "Returns a [HexagonalTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/HexagonalTiledMapRenderer.html)
