@@ -369,7 +369,7 @@ screen coordinates.
   (OrthogonalTiledMapRenderer. ^TiledMap (if (string? path)
                                            (tiled-map* path)
                                            path)
-                               ^double unit))
+                               (float unit)))
 
 (defmacro orthogonal-tiled-map
   "Returns an [OrthogonalTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/OrthogonalTiledMapRenderer.html)
@@ -389,9 +389,9 @@ with the tiled map file at `path` and `unit` scale.
 (defn isometric-tiled-map*
   [path unit]
   (IsometricTiledMapRenderer. ^TiledMap (if (string? path)
-                                           (tiled-map* path)
-                                           path)
-                              ^double unit))
+                                          (tiled-map* path)
+                                          path)
+                              (float unit)))
 
 (defmacro isometric-tiled-map
   "Returns an [IsometricTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/IsometricTiledMapRenderer.html)
@@ -413,7 +413,7 @@ with the tiled map file at `path` and `unit` scale.
   (IsometricStaggeredTiledMapRenderer. ^TiledMap (if (string? path)
                                                    (tiled-map* path)
                                                    path)
-                                       ^double unit))
+                                       (float unit)))
 
 (defmacro isometric-staggered-tiled-map
   "Returns an [IsometricStaggeredTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/IsometricStaggeredTiledMapRenderer.html)
@@ -437,7 +437,7 @@ with the tiled map file at `path` and `unit` scale.
   (HexagonalTiledMapRenderer. ^TiledMap (if (string? path)
                                           (tiled-map* path)
                                           path)
-                              ^double unit))
+                              (float unit)))
 
 (defmacro hexagonal-tiled-map
   "Returns a [HexagonalTiledMapRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/renderers/HexagonalTiledMapRenderer.html)
