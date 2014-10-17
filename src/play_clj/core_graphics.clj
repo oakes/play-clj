@@ -11,7 +11,7 @@
   ([^String path]
     (or (u/load-asset path Pixmap)
         (Pixmap. (files! :internal path))))
-  ([^long width ^long height ^Pixmap$Format fmt]
+  ([width height fmt]
     (Pixmap. width height fmt)))
 
 (defmacro pixmap
