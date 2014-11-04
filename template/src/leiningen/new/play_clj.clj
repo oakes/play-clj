@@ -58,7 +58,7 @@
                 (render "AndroidLauncher.java" data)]
                "android/src/clojure"
                ["android/AndroidManifest.xml"
-                (lein-droid-render "AndroidManifest.xml" data)]
+                (lein-droid-render "AndroidManifest.template.xml" data)]
                ["android/res/drawable-hdpi/ic_launcher.png"
                 (lein-droid-render "ic_launcher_hdpi.png")]
                ["android/res/drawable-mdpi/ic_launcher.png"

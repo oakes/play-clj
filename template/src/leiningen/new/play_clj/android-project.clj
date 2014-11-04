@@ -9,7 +9,7 @@
                  [org.clojure-android/clojure "1.6.0-RC1" :use-resources true]
                  [play-clj "0.4.1"]]
   :profiles {:dev {:dependencies [[android/tools.nrepl "0.2.0-bigstack"]
-                                  [compliment "0.1.3"]]
+                                  [compliment "0.1.4"]]
                    :android {:aot :all-with-unused}}
              :release {:android
                        {;; Specify the path to your private
