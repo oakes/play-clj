@@ -101,10 +101,10 @@
     :fps (graphics! :get-frames-per-second)
     :fullscreen? (graphics! :is-fullscreen)
     :touched? (input! :is-touched)
-    :x (throw (Exception. "Replace (game :x) with (input! :get-x)"))
-    :y (throw (Exception. "Replace (game :y) with (input! :get-y)"))
-    :point-x (input! :get-x (or arg 0))
-    :point-y (- (graphics! :get-height) (input! :get-y (or arg 0)))
+    :x (input! :get-x (or arg 0))
+    :y (- (graphics! :get-height) (input! :get-y (or arg 0)))
+    :point-x (game :x arg)
+    :point-y (game :y arg)
     (u/throw-key-not-found k)))
 
 (defmacro key-code

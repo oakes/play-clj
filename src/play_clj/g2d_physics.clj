@@ -184,8 +184,6 @@ such as :on-begin-contact."
 (defmacro circle-shape
   "Returns a [CircleShape](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/CircleShape.html)."
   [& options]
-  (when (some-> (first options) keyword? not)
-    (throw (Exception. "Replace (circle-shape radius) with (circle-shape :set-radius radius :set-position (vector-2 radius radius))")))
   `(u/calls! ^CircleShape (circle-shape*) ~@options))
 
 (defmacro circle-shape!
