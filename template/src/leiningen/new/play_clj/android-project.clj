@@ -33,5 +33,5 @@
             :dex-opts ["-JXmx2048M"]}
   
   :source-paths ["src/clojure" "../desktop/src-common"]
-  :java-source-paths ["src/java" "gen"]
+  :java-source-paths ["src/java"]
   :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"])
