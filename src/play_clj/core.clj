@@ -5,7 +5,7 @@
             [play-clj.utils :as u])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Preferences Screen]
-           [com.badlogic.gdx.audio Sound]
+           [com.badlogic.gdx.audio Sound Music]
            [com.badlogic.gdx.assets AssetManager]
            [com.badlogic.gdx.assets.loaders AsynchronousAssetLoader
             ParticleEffectLoader]
