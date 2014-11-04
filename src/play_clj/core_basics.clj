@@ -153,7 +153,7 @@
       (audio! :new-sound (files! :internal path))))
 
 (defmacro sound
-  "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html).
+  "Returns a [Sound](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Sound.html). Supports wav, mp3, and ogg.
 
     (sound \"playerhurt.wav\")
     (sound \"playerhurt.wav\" :play)"
@@ -168,4 +168,27 @@
     (sound! object :dispose)"
   [object k & options]
   `(let [^Sound object# ~object]
+     (u/call! object# ~k ~@options)))
+
+(defn music*
+  [^String path]
+  (or (u/load-asset path Music)
+      (audio! :new-music (files! :internal path))))
+
+(defmacro music
+  "Returns a [Music](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/audio/Music.html). Supports wav, mp3, and ogg.
+
+    (music \"song.wav\")
+    (music \"song.wav\" :play)"
+  [path & options]
+  `(let [^Music object# (music* ~path)]
+     (u/calls! object# ~@options)))
+
+(defmacro music!
+  "Calls a single method on a `music`.
+
+    (music! object :play)
+    (music! object :dispose)"
+  [object k & options]
+  `(let [^Music object# ~object]
      (u/call! object# ~k ~@options)))
