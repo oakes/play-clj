@@ -117,13 +117,13 @@ The [game](http://oakes.github.io/play-clj/core.game.html) function gives you co
   :on-touch-down
   (fn [screen entities]
     (cond
-      (> (game :point-y) (* (game :height) (/ 2 3)))
+      (> (game :y) (* (game :height) (/ 2 3)))
       (println "up")
-      (< (game :point-y) (/ (game :height) 3))
+      (< (game :y) (/ (game :height) 3))
       (println "down")
-      (> (game :point-x) (* (game :width) (/ 2 3)))
+      (> (game :x) (* (game :width) (/ 2 3)))
       (println "right")
-      (< (game :point-x) (/ (game :width) 3))
+      (< (game :x) (/ (game :width) 3))
       (println "left")))
 ```
 
@@ -162,13 +162,13 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
   :on-touch-down
   (fn [screen entities]
     (cond
-      (> (game :point-y) (* (game :height) (/ 2 3)))
+      (> (game :y) (* (game :height) (/ 2 3)))
       (move (first entities) :up)
-      (< (game :point-y) (/ (game :height) 3))
+      (< (game :y) (/ (game :height) 3))
       (move (first entities) :down)
-      (> (game :point-x) (* (game :width) (/ 2 3)))
+      (> (game :x) (* (game :width) (/ 2 3)))
       (move (first entities) :right)
-      (< (game :point-x) (/ (game :width) 3))
+      (< (game :x) (/ (game :width) 3))
       (move (first entities) :left)))
 ```
 
