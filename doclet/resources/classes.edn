@@ -146,6 +146,8 @@
  "ModelInstance" {"model" :constructors
                   "model!" :methods}
  "MouseJointDef" {"joint-def :mouse" :fields}
+ "Music" {"music" :methods
+          "music!" :methods}
  "Net" {"net!" :methods}
  "NinePatch" {"nine-patch" :methods
               "nine-patch!" :methods}
