@@ -7,7 +7,7 @@
                  [com.badlogicgames.gdx/gdx-bullet "1.4.1"]
                  [neko/neko "3.0.2"]
                  [org.clojure-android/clojure "1.6.0-RC1" :use-resources true]
-                 [play-clj "0.4.1"]]
+                 [play-clj "0.4.2"]]
   :profiles {:dev {:dependencies [[android/tools.nrepl "0.2.0-bigstack"]
                                   [compliment "0.1.4"]]
                    :android {:aot :all-with-unused}}
