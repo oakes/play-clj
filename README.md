@@ -14,7 +14,7 @@ There are several different ways to create a project:
 
 The best thing about making a game in Clojure is that you can modify it in a REPL while it's running. By simply reloading a namespace, your code will be injected into the game, uninhibited by the restrictions posed by tools like HotSwap. Additionally, a REPL lets you read and modify the _state_ of your game at runtime, so you can quickly experiment and diagnose problems.
 
-Clojure also brings the benefits of functional programming. This is becoming a big topic of discussion in gamedev circles, including by [John Carmack](http://www.altdevblogaday.com/2012/04/26/functional-programming-in-c/). Part of this is due to the prevalence of multi-core hardware, making concurrency more important. Additionally, there is a general difficulty of maintaining object-oriented game codebases as they grow, due to complicated class hierarchies and state mutations.
+Clojure also brings the benefits of functional programming. This is becoming a big topic of discussion in gamedev circles, including by [John Carmack](http://gamasutra.com/view/news/169296/Indepth_Functional_programming_in_C.php). Part of this is due to the prevalence of multi-core hardware, making concurrency more important. Additionally, there is a general difficulty of maintaining object-oriented game codebases as they grow, due to complicated class hierarchies and state mutations.
 
 ## Documentation
 
