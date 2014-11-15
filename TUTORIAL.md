@@ -278,7 +278,7 @@ You can even call multiple methods in the same expression this way. For example:
     (let [entity (texture "Clojure-icon.gif")]
       (doto ^TextureRegion (:object entity)
         (.flip true false)
-        (.setRegion 0 0 100 100)
+        (.setRegion 0 0 100 100))
       entity)
 ```
 
