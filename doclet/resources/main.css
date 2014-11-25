@@ -8,8 +8,12 @@ body {
 	line-height: 1.4em;
 }
 
+
 a {
-	color: #f2dc77;
+	transition-property: color;
+	transition-duration: 200ms;
+	transition-timing-function: cubic-bezier(.53,.4,.46,.75);
+	color: #f2ecd7;
 	box-shadow: 0 2px 0 0 rgba(255,255,255,0.1);
 	text-decoration: none;
 }
@@ -19,6 +23,9 @@ a:hover {
 }
 
 .sidebar {
+	transition-property: opacity;
+	transition-duration: 200ms;
+	transition-timing-function: cubic-bezier(.53,.4,.46,.75);
 	width: 240px;
 	height: 100%;
 	top: 0px;
@@ -26,15 +33,19 @@ a:hover {
 	position: fixed;
 	overflow: auto;
 	padding: 0px 0px 0px 10px;
+	opacity: 0.6;
+}
+
+.sidebar:hover {
+		opacity: 0.9;
 }
 
 .ns {
 	font-size: 24px;
 	padding: 20px 0 0px 0;
 	margin-bottom: 10px;
-	box-shadow: 0 2px 0 0 rgba(255,255,255,0.1);
 	display: inline-block;
-	color: #88d;
+	color: #ccf;
 }
 
 .name {
@@ -44,7 +55,7 @@ a:hover {
 }
 
 .content {
-	padding-top: 20px;
+	padding: 20px 0px 20px 20px;
 	margin-left: 250px;
 }
 
@@ -71,7 +82,7 @@ a:hover {
 .c-head {
 	font-size: 20px;
 	margin-bottom: 1em;
-	color: #88d;
+	color: #ccf;
 	font-size: 1.5em;
 }
 
@@ -91,34 +102,39 @@ a:hover {
 }
 
 .j-item * {
-	transition: opacity ease-in 300ms;
+	transition-property: opacity;
+	transition-duration: 200ms;
+	transition-timing-function: cubic-bezier(.53,.4,.46,.75);
 }
 
 .j-item {
-	border-left: 4px solid rgba(0,0,0,0.2);
-	border-bottom: 5px solid transparent;
-	border-top: 5px solid transparent;
-	margin-bottom: 20px;
+	margin-bottom: 0px;
+	padding: 0.8em 0 0.8em 0;
 	line-height: 1.4em;
+	background: rgba(0, 0, 0, 0.15);
 }
-
+.j-item:nth-child(2n) {
+	background: rgba(0, 0, 0, 0.25);
+}
 .j-name {
-	color: #D88;
-	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
-	padding: 0 0 0 10px;
-	border-top: 5px solid transparent;
+	color: #69e;
+	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.8);
+	margin: 0 0px 0 20px;
 	display: inline-block;
 	font-size: 1.4em;
 	line-height: 1.4em;
+	border-right: 5px transparent solid;
+	box-shadow: 0 2px 0 0 rgba(150,200,255,0.08);
 }
 
 .j-args {
-	margin-left: 1em;
+	padding-left: 1em;
 	opacity: 0.4;
+	display: inline-block;
 }
 
 .j-item:hover .j-args {
-	opacity: 1;
+	opacity: 0.95;
 }
 
 .j-arg {
@@ -130,9 +146,7 @@ a:hover {
 }
 
 .j-doc {
-	padding: 10px 20px 20px 20px;
-	background: none repeat scroll 0% 0% rgba(0, 0, 0, 0.2);
+	display: block;
+	padding: 17px 20px 0px 20px;
 	text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
-	box-shadow: 0 -2.3em 0 0 rgba(0, 0, 0, 0.2);
-	margin: 0;
 }
