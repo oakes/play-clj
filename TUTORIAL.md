@@ -44,7 +44,7 @@ Right now, you're using the `play-clj.ui` library to display a label. This libra
             [play-clj.g2d :refer :all]))
 ```
 
-Now let's find an image to use as a texture in the game. Find one you'd like to use, such as [this Clojure logo](http://upload.wikimedia.org/wikipedia/commons/c/c5/Clojure-icon.gif), and save it to the `desktop/resources` folder. Next, simply change the line where the label entity is being created, so it creates a texture from that file instead:
+Now let's find an image to use as a texture in the game. Find one you'd like to use, such as [this Clojure logo](http://upload.wikimedia.org/wikipedia/en/1/1d/Clojure_logo.gif), and save it to the `desktop/resources` folder. Next, simply change the line where the label entity is being created, so it creates a texture from that file instead:
 
 ```clojure
     (texture "Clojure-icon.gif")
