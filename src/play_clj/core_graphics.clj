@@ -478,7 +478,7 @@ with the tiled map file at `path` and `unit` scale.
 
 (defmethod draw! BatchTiledMapRenderer
   [{:keys [^BatchTiledMapRenderer renderer] :as screen} entities]
-  (let [^Batch batch (.getSpriteBatch renderer)]
+  (let [^Batch batch (.getBatch renderer)]
     (.begin batch)
     (doseq [entity entities]
       (e/draw! entity screen batch))
@@ -608,7 +608,7 @@ to overlap correctly with the entities.
       (when-not (get-in screen [:layers ln])
         (update-fn! assoc-in [:layers ln] (split-layer screen ln))))
     (when camera (.setView renderer camera))
-    (let [^Batch batch (.getSpriteBatch renderer)]
+    (let [^Batch batch (.getBatch renderer)]
       (.begin batch)
       (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
                           (apply concat entities)
