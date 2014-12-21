@@ -90,7 +90,6 @@
     entities&#41;&#41;
 </pre><pre>
 ; gesture functions
-; Tip: use gesture-detector! to configure these functions
 &#40;defscreen my-screen
   ; the user dragged over the screen and lifted
   :on-fling
@@ -187,20 +186,12 @@
     entities&#41;&#41;
 </pre><pre>
 ; ui input functions &#40;for play-clj.ui&#41;
-; Tip: use click-listener! to configure these functions
 &#40;defscreen my-screen
-  ; the ui entity was changed
+  ; the ui entity was clicked or changed
   :on-ui-changed
   &#40;fn &#91;screen entities&#93;
     &#40;println &#40;:event screen&#41;&#41; ; the ChangeListener.ChangeEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/ChangeListener.ChangeEvent.html
     &#40;println &#40;:actor screen&#41;&#41; ; the Actor - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/Actor.html
-    entities&#41;
-  ; the ui entity was clicked
-  :on-ui-clicked
-  &#40;fn &#91;screen entities&#93;
-    &#40;println &#40;:event screen&#41;&#41; ; the InputEvent - http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/InputEvent.html
-    &#40;println &#40;:input-x screen&#41;&#41; ; the x position of the finger/mouse
-    &#40;println &#40;:input-y screen&#41;&#41; ; the y position of the finger/mouse
     entities&#41;
   ; the finger/mouse moved over the ui entity
   :on-ui-enter
@@ -248,7 +239,6 @@
     entities&#41;&#41;
 </pre><pre>
 ; ui drag functions &#40;for play-clj.ui&#41;
-; Tip: use drag-listener! to configure these functions
 &#40;defscreen my-screen
   :on-ui-drag
   &#40;fn &#91;screen entities&#93;
