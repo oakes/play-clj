@@ -5,7 +5,7 @@
                  [com.badlogicgames.gdx/gdx-box2d "1.5.0"]
                  [com.badlogicgames.gdx/gdx-bullet "1.5.0"]
                  [org.clojure/clojure "1.6.0"]
-                 [play-clj "0.4.3-SNAPSHOT"]]
+                 [play-clj "0.4.3"]]
   :source-paths ["src/clojure" "../desktop/src-common"]
   :java-source-paths ["src/java"]
   :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
