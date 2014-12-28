@@ -13,49 +13,55 @@
 
 (def classes (-> "classes.edn" io/resource slurp edn/read-string))
 
-(defn split-string
-  [s]
-  (if (= s (string/upper-case s))
-    (string/split s #"_")
-    (string/split s #"(?=[A-Z])")))
-
 (defn string->keyword
-  [s]
-  (->> (split-string s)
+  [s case-type]
+  (->> (case case-type
+         :upper #"_"
+         :pascal #"(?<=.)(?=[A-Z])"
+         :camel #"(?=[A-Z])"
+         (throw (Exception. "Unrecognized case type.")))
+       (string/split s)
        (map string/lower-case)
        (string/join "-")
        keyword))
 
 (defn parse-param
   [^Parameter p]
-  [(.typeName p) (-> (.name p) string->keyword name)])
+  [(.typeName p) (-> (.name p) (string->keyword :camel) name)])
+
+(defn after-last-period
+  [^String s]
+  (subs s (+ 1 (.lastIndexOf s "."))))
 
 (defn parse-doc-name
-  [^Doc d]
-  (cond
-    (isa? (type d) ConstructorDoc)
+  [^String doc-name doc-type]
+  (case doc-type
+    :constructors
     nil
-
-    (isa? (type d) ClassDoc)
-    (->> (+ 1 (.lastIndexOf (.name d) "."))
-         (subs (.name d))
-         string->keyword)
-
-    (isa? (type d) FieldDoc)
-    (let [k (string->keyword (.name d))
-          s (name k)]
-      (if (= \- (first s))
-        (keyword (subs s 1))
-        k))
-
-    :else
-    (string->keyword (.name d))))
+    
+    :classes
+    (string->keyword (after-last-period doc-name) :pascal)
+    
+    :static-classes
+    (string->keyword (after-last-period doc-name) :pascal)
+    
+    :static-fields-upper
+    (string->keyword doc-name :upper)
+    
+    :static-fields-pascal
+    (string->keyword doc-name :pascal)
+    
+    :static-fields-camel
+    (string->keyword doc-name :camel)
+    
+    ; else
+    (string->keyword doc-name :camel)))
 
 (defn parse-doc
-  [^Doc d clj-name]
+  [^Doc d clj-name doc-type]
   (merge {}
          {:name (->> [(second (string/split clj-name #" "))
-                      (parse-doc-name d)]
+                      (parse-doc-name (.name d) doc-type)]
                      (remove nil?)
                      (string/join " "))}
          (when (> (count (.commentText d)) 0)
@@ -70,18 +76,20 @@
            {:args [[(-> d .type .typeName) "value"]]})))
 
 (defn parse-class-entry
-  [^ClassDoc c [clj-name type]]
-  (some->> (case type
+  [^ClassDoc c [clj-name doc-type]]
+  (some->> (case doc-type
              :methods (filter #(-> % .isStatic not) (.methods c))
              :static-methods (filter #(.isStatic %) (.methods c))
              :fields (filter #(-> % .isStatic not) (.fields c))
-             :static-fields (filter #(.isStatic %) (.fields c))
+             :static-fields-upper (filter #(.isStatic %) (.fields c))
+             :static-fields-pascal (filter #(.isStatic %) (.fields c))
+             :static-fields-camel (filter #(.isStatic %) (.fields c))
              :classes (filter #(-> % .isStatic not) (.innerClasses c))
              :static-classes (filter #(.isStatic %) (.innerClasses c))
              :constructors (filter #(-> % .isStatic not) (.constructors c))
              nil)
            (filter #(.isPublic %))
-           (map #(parse-doc % clj-name))
+           (map #(parse-doc % clj-name doc-type))
            (concat (when-let [sc (.superclass c)]
                      (when (not= (.typeName sc) "Object")
                        (parse-class-entry sc [clj-name type]))))

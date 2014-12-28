@@ -1,9 +1,9 @@
 {"Actor" {"actor!" :methods}
  "ActorGestureListener" {"actor-gesture-listener!" :methods}
- "Align" {"align" :static-fields}
+ "Align" {"align" :static-fields-camel}
  "com.badlogic.gdx.graphics.g2d.Animation" {"animation" :methods
                                             "animation!" :methods}
- "Animation.PlayMode" {"play-mode" :static-fields}
+ "Animation.PlayMode" {"play-mode" :static-fields-upper}
  "AnimationController" {"animation-controller" :methods
                         "animation-controller!" :methods}
  "Application" {"app!" :methods}
@@ -19,7 +19,7 @@
  "BitmapFont" {"bitmap-font" :methods
                "bitmap-font!" :methods}
  "BlendingAttribute" {"attribute :blending" :constructors
-                      "attribute-type :blending" :static-fields
+                      "attribute-type :blending" :static-fields-pascal
                       "attribute! :blending" :static-methods}
  "Body" {"body!" :methods}
  "BodyDef" {"body-def" :fields}
@@ -37,10 +37,10 @@
  "CircleMapObject" {"map-object :circle" :methods}
  "ChangeListener" {"change-listener!" :methods}
  "ClickListener" {"click-listener!" :methods}
- "Color" {"color" :static-fields
+ "Color" {"color" :static-fields-upper
           "color!" :methods}
  "ColorAttribute" {"attribute :color" :constructors
-                   "attribute-type :color" :static-fields
+                   "attribute-type :color" :static-fields-pascal
                    "attribute! :color" :static-methods}
  "ConvexHull" {"convex-hull" :methods
                "convex-hull!" :methods}
@@ -52,12 +52,12 @@
  "CircleShape" {"circle-shape" :methods
                 "circle-shape!" :methods}
  "CubemapAttribute" {"attribute :cubemap" :constructors
-                     "attribute-type :cubemap" :static-fields
+                     "attribute-type :cubemap" :static-fields-pascal
                      "attribute! :cubemap" :static-methods}
  "DelaunayTriangulator" {"delaunay-triangulator" :methods
                          "delaunay-triangulator!" :methods}
  "DepthTestAttribute" {"attribute :depth-test" :constructors
-                       "attribute-type :depth-test" :static-fields
+                       "attribute-type :depth-test" :static-fields-pascal
                        "attribute! :depth-test" :static-methods}
  "Dialog" {"dialog" :methods
            "dialog!" :methods}
@@ -76,7 +76,7 @@
  "Fixture" {"fixture!" :methods}
  "FixtureDef" {"fixture-def" :fields}
  "FloatAttribute" {"attribute :float" :constructors
-                   "attribute-type :float" :static-fields
+                   "attribute-type :float" :static-fields-pascal
                    "attribute! :float" :static-methods}
  "FloatCounter" {"float-counter" :methods
                  "float-counter!" :methods}
@@ -93,7 +93,7 @@
  "GridPoint3" {"grid-point-3" :methods
                "grid-point-3!" :methods}
  "GL20" {"gl!" :methods
-         "gl" :static-fields}
+         "gl" :static-fields-upper}
  "HexagonalTiledMapRenderer" {"hexagonal-tiled-map" :methods
                               "hexagonal-tiled-map!" :methods}
  "HorizontalGroup" {"horizontal" :methods
@@ -107,15 +107,15 @@
                     "image-text-button!" :methods}
  "ImageTextButton.ImageTextButtonStyle" {"style :image-text-button" :constructors}
  "Input" {"input!" :methods}
- "Input.Keys" {"key-code" :static-fields
-               "key-pressed?" :static-fields}
- "Input.Buttons" {"button-code" :static-fields
-                  "button-pressed?" :static-fields}
+ "Input.Keys" {"key-code" :static-fields-upper
+               "key-pressed?" :static-fields-upper}
+ "Input.Buttons" {"button-code" :static-fields-upper
+                  "button-pressed?" :static-fields-upper}
  "InputProcessor" {"input-processor!" :methods}
  "Interpolation" {"interpolation" :static-classes}
  "Intersector" {"intersector!" :static-methods}
  "IntAttribute" {"attribute :int" :constructors
-                 "attribute-type :int" :static-fields
+                 "attribute-type :int" :static-fields-pascal
                  "attribute! :int" :static-methods}
  "IsometricStaggeredTiledMapRenderer" {"isometric-staggered-tiled-map" :methods
                                        "isometric-staggered-tiled-map!" :methods}
@@ -162,10 +162,10 @@
                       "perspective!" :methods}
  "Pixmap" {"pixmap" :methods
            "pixmap!" :methods}
- "Pixmap.Format" {"pixmap-format" :static-fields}
+ "Pixmap.Format" {"pixmap-format" :static-fields-pascal}
  "Plane" {"plane" :methods
           "plane!" :methods}
- "Plane.PlaneSide" {"plane-side" :static-fields}
+ "Plane.PlaneSide" {"plane-side" :static-fields-pascal}
  "Polygon" {"polygon" :methods
             "polygon!" :methods}
  "PolygonMapObject" {"map-object :polygon" :methods}
@@ -187,7 +187,7 @@
  "RectangleMapObject" {"map-object :rectangle" :methods}
  "RevoluteJointDef" {"joint-def :revolute" :fields}
  "RopeJointDef" {"joint-def :rope" :fields}
- "Scaling" {"scaling" :static-fields}
+ "Scaling" {"scaling" :static-fields-camel}
  "ScrollPane" {"scroll-pane" :methods
                "scroll-pane!" :methods}
  "ScrollPane.ScrollPaneStyle" {"style :scroll-pane" :constructors}
@@ -198,7 +198,7 @@
  "SelectBox.SelectBoxStyle" {"style :select-box" :constructors}
  "ShapeRenderer" {"shape" :methods
                   "shape!" :methods}
- "ShapeRenderer.ShapeType" {"shape-type" :static-fields}
+ "ShapeRenderer.ShapeType" {"shape-type" :static-fields-pascal}
  "Skin" {"skin" :methods
          "skin!" :methods}
  "Slider" {"slider" :methods
@@ -218,7 +218,7 @@
  "TextureAtlas" {"texture-atlas" :methods
                  "texture-atlas!" :methods}
  "TextureAttribute" {"attribute :texture" :constructors
-                     "attribute-type :texture" :static-fields
+                     "attribute-type :texture" :static-fields-pascal
                      "attribute! :texture" :static-methods}
  "TextButton" {"text-button" :methods
                "text-button!" :methods}
@@ -244,7 +244,7 @@
             "vector-2!" :methods}
  "Vector3" {"vector-3" :methods
             "vector-3!" :methods}
- "VertexAttributes.Usage" {"usage" :static-fields}
+ "VertexAttributes.Usage" {"usage" :static-fields-pascal}
  "VerticalGroup" {"vertical" :methods
                   "vertical!" :methods}
  "WeldJointDef" {"joint-def :weld" :fields}
