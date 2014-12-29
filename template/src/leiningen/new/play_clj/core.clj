@@ -7,7 +7,7 @@
   (fn [screen entities]
     (update! screen :renderer (stage))
     (label "Hello world!" (color :white)))
-  
+
   :on-render
   (fn [screen entities]
     (clear!)
