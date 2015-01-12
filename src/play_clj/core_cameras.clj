@@ -165,8 +165,7 @@ of the camera will be set."
   "Sets the position of `object`. If `object` is a screen, the position of the
 camera will be set."
   ([object vec-3]
-    (let [^Camera camera (u/get-obj object :camera)]
-      (set! (. camera position) vec-3)))
+    (position! object (x vec-3) (y vec-3) (z vec-3)))
   ([object x-val y-val]
     (position! object x-val y-val nil))
   ([object x-val y-val z-val]
