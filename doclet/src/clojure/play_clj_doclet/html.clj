@@ -74,7 +74,7 @@
               [:a {:href (str "index.html" (if (not-empty home-link-hash)
                                              (str "#" home-link-hash)
                                              "")) 
-                   :target "_top"} "Home"]])
+                   :target "_top"} "Frames"]])
            content
            [:script {:src "highlight.js"}]
            [:script {:src "main.js"}]]])))
