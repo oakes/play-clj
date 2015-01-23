@@ -20,7 +20,7 @@
      (cons [:div {:class "ns"} ns]
            (for [{:keys [name]} groups]
              [:div {:class "name"}
-              [:a {:href (str->filename ns name)}
+              [:a {:href (str->filename ns name) :target "content-frame"}
                name]])))])
 
 (defn java-param
@@ -61,14 +61,13 @@
      [:pre raw]]]])
 
 (defn create-site-file
-  [name sidebar content]
+  [name content]
   (html [:html
          [:head
           [:title name]
           [:link {:rel "stylesheet" :href "highlight.css"}]
           [:link {:rel "stylesheet" :href "main.css"}]]
          [:body
-          sidebar
           content
           [:script {:src "highlight.js"}]
           [:script {:src "main.js"}]]]))
@@ -82,6 +81,12 @@
   (spit (io/file dir file-name)
         (-> file-name io/resource slurp)))
 
+(defn index-frameset
+  []
+  (html [:frameset
+         [:frame {:src "sidebar.html"}
+          :frame {:name "content-frame"}]]))
+
 (defn create-site!
   [dir parsed-files]
   (.mkdir (io/file dir))
@@ -92,9 +97,11 @@
   (doseq [[ns groups] parsed-files]
     (doseq [{:keys [name] :as group} groups]
       (spit (io/file dir (str->filename ns name))
-            (create-site-file name (sidebar parsed-files) (content group)))))
+            (create-site-file name (content group)))))
+  (spit (io/file dir "sidebar.html")
+        (sidebar parsed-files))
   (spit (io/file dir "index.html")
-        (create-site-file "play-clj docs" (sidebar parsed-files) nil))
+        (create-site-file "play-clj docs" (index-frameset)))
   (println "Created" (str dir "/")))
 
 (defn create-embed!
