@@ -30,7 +30,6 @@ a:hover {
 	height: 100%;
 	top: 0px;
 	left: 0px;
-	position: fixed;
 	overflow: auto;
 	padding: 0px 0px 0px 10px;
 	opacity: 0.6;
@@ -54,9 +53,14 @@ a:hover {
 	text-indent: 10px;
 }
 
+.headbar {
+	padding: 5px 0px 5px 5px;
+	width: 100%;
+	border-bottom: 1px solid black
+}
+
 .content {
 	padding: 20px 0px 20px 20px;
-	margin-left: 250px;
 }
 
 .content code {

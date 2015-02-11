@@ -20,7 +20,7 @@
      (cons [:div {:class "ns"} ns]
            (for [{:keys [name]} groups]
              [:div {:class "name"}
-              [:a {:href (str->filename ns name)}
+              [:a {:href (str->filename ns name) :target "content-frame" :onClick (str "setHash(this)") :newHash (str->filename ns name)}
                name]])))])
 
 (defn java-param
@@ -61,17 +61,23 @@
      [:pre raw]]]])
 
 (defn create-site-file
-  [name sidebar content]
-  (html [:html
-         [:head
-          [:title name]
-          [:link {:rel "stylesheet" :href "highlight.css"}]
-          [:link {:rel "stylesheet" :href "main.css"}]]
-         [:body
-          sidebar
-          content
-          [:script {:src "highlight.js"}]
-          [:script {:src "main.js"}]]]))
+  ([name content home-link-hash]
+   (html [:html
+          [:head
+           [:title name]
+           [:script {:src "nav.js"}]
+           [:link {:rel "stylesheet" :href "highlight.css"}]
+           [:link {:rel "stylesheet" :href "main.css"}]]
+          [:body
+           (when home-link-hash
+             [:div {:class "headbar"}
+              [:a {:href (str "index.html" (if (not-empty home-link-hash)
+                                             (str "#" home-link-hash)
+                                             "")) 
+                   :target "_top"} "Frames"]])
+           content
+           [:script {:src "highlight.js"}]
+           [:script {:src "main.js"}]]])))
 
 (defn create-embed-file
   [content]
@@ -82,19 +88,39 @@
   (spit (io/file dir file-name)
         (-> file-name io/resource slurp)))
 
+(defn index-frameset
+  []
+  (html 
+   [:html
+    [:head
+     [:title "play-clj docs"]
+     [:script {:src "nav.js"}]
+     [:link {:rel "stylesheet" :href "highlight.css"}]
+     [:link {:rel "stylesheet" :href "main.css"}]]
+    [:frameset {:cols "250px,100%" :onLoad "goToHash();"}
+     [:frame {:src "sidebar.html"}]
+     [:frame {:src "blank.html" :name "content-frame" :id "content-frame"}]
+     [:script {:src "highlight.js"}]
+     [:script {:src "main.js"}]]]))
+
 (defn create-site!
   [dir parsed-files]
   (.mkdir (io/file dir))
   (copy-from-res dir "main.css")
   (copy-from-res dir "main.js")
+  (copy-from-res dir "nav.js")
   (copy-from-res dir "highlight.css")
   (copy-from-res dir "highlight.js")
   (doseq [[ns groups] parsed-files]
     (doseq [{:keys [name] :as group} groups]
       (spit (io/file dir (str->filename ns name))
-            (create-site-file name (sidebar parsed-files) (content group)))))
+            (create-site-file name (content group) (str->filename ns name)))))
+  (spit (io/file dir "sidebar.html")
+        (create-site-file "sidebar" (sidebar parsed-files) nil))
+  (spit (io/file dir "blank.html")
+        (create-site-file "blank" nil ""))
   (spit (io/file dir "index.html")
-        (create-site-file "play-clj docs" (sidebar parsed-files) nil))
+        (index-frameset))
   (println "Created" (str dir "/")))
 
 (defn create-embed!
