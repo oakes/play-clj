@@ -41,12 +41,17 @@
      [:div {:class "j-doc"} text])])
 
 (defn content
-  [{:keys [name docstring arglists java raw raw*]}]
+  [{:keys [name docstring arglists java raw raw*]} & [home-link-hash]]
   [:div {:class "content"}
    [:div {:class "item"}
     [:div {:class "clj"}
      (for [args arglists]
-       [:div {:class "c-head"} (pr-str args)])
+       [:div {:class "c-head"}
+        (if home-link-hash
+          [:a {:href (str "index.html" (str "#" home-link-hash))
+               :target "_top"}
+           (pr-str args)]
+          (pr-str args))])
      [:div {:class "c-doc"} docstring]]
     (when (> (count java) 0)
       (list [:div {:class "c-head"} "Options"]
@@ -61,7 +66,7 @@
      [:pre raw]]]])
 
 (defn create-site-file
-  ([name content home-link-hash]
+  ([name content]
    (html [:html
           [:head
            [:title name]
@@ -69,12 +74,6 @@
            [:link {:rel "stylesheet" :href "highlight.css"}]
            [:link {:rel "stylesheet" :href "main.css"}]]
           [:body
-           (when home-link-hash
-             [:div {:class "headbar"}
-              [:a {:href (str "index.html" (if (not-empty home-link-hash)
-                                             (str "#" home-link-hash)
-                                             "")) 
-                   :target "_top"} "Frames"]])
            content
            [:script {:src "highlight.js"}]
            [:script {:src "main.js"}]]])))
@@ -114,11 +113,11 @@
   (doseq [[ns groups] parsed-files]
     (doseq [{:keys [name] :as group} groups]
       (spit (io/file dir (str->filename ns name))
-            (create-site-file name (content group) (str->filename ns name)))))
+            (create-site-file name (content group (str->filename ns name))))))
   (spit (io/file dir "sidebar.html")
-        (create-site-file "sidebar" (sidebar parsed-files) nil))
+        (create-site-file "sidebar" (sidebar parsed-files)))
   (spit (io/file dir "blank.html")
-        (create-site-file "blank" nil ""))
+        (create-site-file "blank" nil))
   (spit (io/file dir "index.html")
         (index-frameset))
   (println "Created" (str dir "/")))
