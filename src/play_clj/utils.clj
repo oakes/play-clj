@@ -153,7 +153,7 @@ new object to be created each time a field is set).
 
 (defn gdx-array*
   [clj-arr]
-  (Array. true (into-array clj-arr) 0 (count clj-arr)))
+  (Array. (into-array clj-arr)))
 
 (defmacro gdx-array
   "Returns an [Array](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Array.html).
