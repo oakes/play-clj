@@ -508,8 +508,6 @@ keywords and functions in pairs."
 
     (set-screen! my-game main-screen text-screen)"
   [^Game game-object & screen-objects]
-  (assert (isa? (type game-object) Game)
-          "Attempted to set screen with an invalid game object.")
   (doseq [screen screen-objects]
     (assert (every? #(fn? (get screen %))
                     [:show :render :hide :pause :resize :resume])
