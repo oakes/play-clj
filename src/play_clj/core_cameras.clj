@@ -186,6 +186,11 @@ camera will be set."
     (.lookAt camera x y z)
     (.update camera)))
 
+(defn up [screen]
+  "Returns the up vector of the camera in `screen`."
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera up)))
+
 (defn near
   "Returns the near clipping plane distance of the camera in `screen`."
   [screen]
