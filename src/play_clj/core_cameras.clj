@@ -169,9 +169,9 @@ camera will be set."
   ([object x-val y-val]
     (position! object x-val y-val nil))
   ([object x-val y-val z-val]
-    (when x-val (x! object x-val))
-    (when y-val (y! object y-val))
-    (when z-val (z! object z-val))))
+    (some->> x-val (x! object))
+    (some->> y-val (y! object))
+    (some->> z-val (z! object))))
 
 (defn direction
   "Returns the direction of the camera in `screen`."
@@ -181,9 +181,24 @@ camera will be set."
 
 (defn direction!
   "Sets the direction of the camera in `screen`."
-  [screen x y z]
+  [screen x-val y-val z-val]
   (let [^Camera camera (u/get-obj screen :camera)]
-    (.lookAt camera x y z)
+    (.lookAt camera x-val y-val z-val)
+    (.update camera)))
+
+(defn up [screen]
+  "Returns the up vector of the camera in `screen`."
+  (let [^Camera camera (u/get-obj screen :camera)]
+    (. camera up)))
+
+(defn up!
+  "Sets the up vector of the camera in `screen`."
+  [screen x-val y-val z-val]
+  (let [^Camera camera (u/get-obj screen :camera)
+        ^Vector3 up-vec (up screen)]
+    (some->> x-val (x! up-vec))
+    (some->> y-val (y! up-vec))
+    (some->> z-val (z! up-vec))
     (.update camera)))
 
 (defn near
