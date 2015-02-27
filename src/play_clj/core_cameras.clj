@@ -162,16 +162,15 @@ of the camera will be set."
     (. camera position)))
 
 (defn position!
-  "Sets the position of `object`. If `object` is a screen, the position of the
-camera will be set."
-  ([object vec-3]
-    (position! object (x vec-3) (y vec-3) (z vec-3)))
-  ([object x-val y-val]
-    (position! object x-val y-val nil))
-  ([object x-val y-val z-val]
-    (some->> x-val (x! object))
-    (some->> y-val (y! object))
-    (some->> z-val (z! object))))
+  "Sets the position of the camera in `screen`."
+  ([screen vec-3]
+    (position! screen (x vec-3) (y vec-3) (z vec-3)))
+  ([screen x-val y-val]
+    (position! screen x-val y-val nil))
+  ([screen x-val y-val z-val]
+    (some->> x-val (x! screen))
+    (some->> y-val (y! screen))
+    (some->> z-val (z! screen))))
 
 (defn direction
   "Returns the direction of the camera in `screen`."
@@ -181,10 +180,17 @@ camera will be set."
 
 (defn direction!
   "Sets the direction of the camera in `screen`."
-  [screen x-val y-val z-val]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (.lookAt camera x-val y-val z-val)
-    (.update camera)))
+  ([screen x-val y-val z-val]
+    (direction! screen x-val y-val z-val true))
+  ([screen x-val y-val z-val look-at?]
+    (let [^Camera camera (u/get-obj screen :camera)]
+      (if look-at?
+        (.lookAt camera x-val y-val z-val)
+        (let [^Vector3 dir-vec (direction screen)]
+          (some->> x-val (x! dir-vec))
+          (some->> y-val (y! dir-vec))
+          (some->> z-val (z! dir-vec))))
+      (.update camera))))
 
 (defn up [screen]
   "Returns the up vector of the camera in `screen`."
