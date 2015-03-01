@@ -11,7 +11,7 @@ public class {{android-class-name}} extends AndroidApplication {
 		super.onCreate(savedInstanceState);
           RT.var("clojure.core", "require").invoke(Symbol.intern("{{namespace}}"));
 		try {
-			Game game = (Game) RT.var("{{namespace}}", "{{app-name}}").deref();
+			Game game = (Game) RT.var("{{namespace}}", "{{game-name}}").deref();
 			initialize(game);
 		} catch (Exception e) {
 			e.printStackTrace();

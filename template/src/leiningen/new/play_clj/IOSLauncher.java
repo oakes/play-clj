@@ -14,7 +14,7 @@ public class {{ios-class-name}} extends IOSApplication.Delegate {
 		IOSApplicationConfiguration config = new IOSApplicationConfiguration();
 		RT.var("clojure.core", "require").invoke(Symbol.intern("{{namespace}}"));
 		try {
-			Game game = (Game) RT.var("{{namespace}}", "{{app-name}}").deref();
+			Game game = (Game) RT.var("{{namespace}}", "{{game-name}}").deref();
 			return new IOSApplication(game, config);
 		} catch (Exception e) {
 			e.printStackTrace();

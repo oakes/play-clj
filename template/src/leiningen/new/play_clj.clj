@@ -6,8 +6,6 @@
 
 (defn play-clj
   [name & [package-name]]
-  (when (contains? #{"game" "main-screen"} name)
-    (main/abort "Choose a more creative name than that, silly!"))
   (let [render (t/renderer "play-clj")
         lein-droid-render (droid-new/renderer "templates")
         desktop-class-name "desktop-launcher"
@@ -21,6 +19,7 @@
         android-ns (str package-name "." android-class-name)
         ios-ns (str package-name "." ios-class-name)
         data {:app-name name
+              :game-name (str name "-game")
               :name (t/project-name name)
               :package package-name
               :package-sanitized package-name
