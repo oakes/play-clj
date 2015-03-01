@@ -58,22 +58,23 @@
 (defrecord ActorEntity [object] Entity
   (draw! [{:keys [^Actor object x y width height
                   scale-x scale-y angle origin-x origin-y]} _ batch]
-    (some->> x (.setX object))
-    (some->> y (.setY object))
-    (some->> width (.setWidth object))
-    (some->> height (.setHeight object))
-    (when (or scale-x scale-y angle)
-      (let [scale-x (float (or scale-x 1))
-            scale-y (float (or scale-y 1))
-            origin-x (float (or origin-x (/ (.getWidth object) 2)))
-            origin-y (float (or origin-y (/ (.getHeight object) 2)))
-            angle (float (or angle 0))]
-        (.setScaleX object scale-x)
-        (.setScaleY object scale-y)
-        (.setOriginX object origin-x)
-        (.setOriginY object origin-y)
-        (.setRotation object angle)))
-    (.draw object ^Batch batch 1)))
+    (when (.getStage object)
+      (some->> x (.setX object))
+      (some->> y (.setY object))
+      (some->> width (.setWidth object))
+      (some->> height (.setHeight object))
+      (when (or scale-x scale-y angle)
+        (let [scale-x (float (or scale-x 1))
+              scale-y (float (or scale-y 1))
+              origin-x (float (or origin-x (/ (.getWidth object) 2)))
+              origin-y (float (or origin-y (/ (.getHeight object) 2)))
+              angle (float (or angle 0))]
+          (.setScaleX object scale-x)
+          (.setScaleY object scale-y)
+          (.setOriginX object origin-x)
+          (.setOriginY object origin-y)
+          (.setRotation object angle)))
+      (.draw object ^Batch batch 1))))
 
 (defrecord ModelEntity [object] Entity
   (draw! [{:keys [^ModelInstance object x y z]}
