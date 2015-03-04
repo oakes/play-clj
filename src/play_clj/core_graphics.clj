@@ -526,6 +526,7 @@ specify which layers to render with or without.
                                               (set layer-names))
              (u/throw-key-not-found k))
            (map #(.indexOf ^java.util.List all-layer-names %))
+           (sort)
            int-array
            (.render renderer)))
     (.render renderer))
