@@ -515,20 +515,24 @@ keywords and functions in pairs."
   (let [run-fn! (fn [k & args]
                   (doseq [screen screen-objects]
                     (apply (get screen k) args)))]
-    (.setScreen game-object
-      (reify Screen
-        (show [this]
-          (input! :set-input-processor (InputMultiplexer.))
-          (run-fn! :show)
-          (doseq [{:keys [screen]} screen-objects]
-            (doseq [[_ listener] (:input-listeners @screen)]
-              (add-input! listener))))
-        (render [this d] (run-fn! :render d))
-        (hide [this] (run-fn! :hide))
-        (pause [this] (run-fn! :pause))
-        (resize [this w h] (run-fn! :resize w h))
-        (resume [this] (run-fn! :resume))
-        (dispose [this])))))
+    (when-let [old-screen (.getScreen game-object)]
+      (.dispose old-screen))
+    (on-gl
+     (.setScreen game-object
+                 (reify Screen
+                   (show [this]
+                     (input! :set-input-processor (InputMultiplexer.))
+                     (run-fn! :show)
+                     
+                     (doseq [{:keys [screen]} screen-objects]
+                       (doseq [[_ listener] (:input-listeners @screen)]
+                         (add-input! listener))))
+                   (render [this d] (run-fn! :render d))
+                   (hide [this] (run-fn! :hide))
+                   (pause [this] (run-fn! :pause))
+                   (resize [this w h] (run-fn! :resize w h))
+                   (resume [this] (run-fn! :resume))
+                   (dispose [this]))))))
 
 (defn set-screen-wrapper!
   "Sets a function that wraps around all screen functions, allowing you to
