@@ -199,8 +199,7 @@ in the `screen`."
         (.addActor renderer object)
         (doseq [[_ listener] ui-listeners]
           (.addListener ^Actor object listener))))
-    (when-not (has-input? renderer)
-      (add-input! renderer))))
+    (add-input! renderer)))
 
 (defmulti update-physics!
   (fn [screen & [entities]] (some-> screen :world class .getName))
