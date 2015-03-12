@@ -147,6 +147,11 @@
   (when-let [^InputMultiplexer multi (input! :get-input-processor)]
     (.removeProcessor multi p)))
 
+(defn ^:private has-input?
+  [^InputProcessor p]
+  (when-let [^InputMultiplexer multi (input! :get-input-processor)]
+    (.contains (.getProcessors multi) p true)))
+
 (defn sound*
   [^String path]
   (or (u/load-asset path Sound)
