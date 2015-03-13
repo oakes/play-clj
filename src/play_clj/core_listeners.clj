@@ -199,6 +199,7 @@ in the `screen`."
         (.addActor renderer object)
         (doseq [[_ listener] ui-listeners]
           (.addListener ^Actor object listener))))
+    (remove-input! renderer)
     (add-input! renderer)))
 
 (defmulti update-physics!
