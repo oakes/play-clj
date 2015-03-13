@@ -192,15 +192,17 @@ in the `screen`."
         (.setWorldSize (. camera viewportWidth) (. camera viewportHeight))
         (.update (game :width) (game :height) true))))
   ([{:keys [^Stage renderer ui-listeners]} entities]
-    (doseq [^Actor a (.getActors renderer)]
-      (.remove a))
-    (doseq [{:keys [object]} entities]
-      (when (isa? (type object) Actor)
-        (.addActor renderer object)
-        (doseq [[_ listener] ui-listeners]
-          (.addListener ^Actor object listener))))
-    (remove-input! renderer)
-    (add-input! renderer)))
+     (let [current (->> (map :object entities)
+                        (filter #(isa? (type %) Actor))
+                        (into #{}))
+           new-actors (apply disj current (.getActors renderer))]
+       (doseq [^Actor a (.getActors renderer)
+               :when (not (current a))]
+         (.remove a))
+       (doseq [^Actor a new-actors]
+         (.addActor renderer a)
+         (doseq [[_ listener] ui-listeners]
+           (.addListener a listener))))))
 
 (defmulti update-physics!
   (fn [screen & [entities]] (some-> screen :world class .getName))

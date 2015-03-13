@@ -522,7 +522,10 @@ keywords and functions in pairs."
                            (run-fn! :show)
                            (doseq [{:keys [screen]} screen-objects]
                              (doseq [[_ listener] (:input-listeners @screen)]
-                               (add-input! listener))))
+                               (add-input! listener))
+                             (when-let [renderer (:renderer @screen)]
+                               (when (isa? (type renderer) Stage)
+                                 (add-input! renderer)))))
                          (render [this d] (run-fn! :render d))
                          (hide [this] (run-fn! :hide))
                          (pause [this] (run-fn! :pause))
