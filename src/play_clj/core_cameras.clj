@@ -94,8 +94,8 @@ remains in tact.
 of the camera will be returned."
   [object]
   (cond
-    (isa? (type object) Vector2) (. ^Vector2 object x)
-    (isa? (type object) Vector3) (. ^Vector3 object x)
+    (instance? Vector2 object) (. ^Vector2 object x)
+    (instance? Vector3 object) (. ^Vector3 object x)
     :else (let [^Camera camera (u/get-obj object :camera)]
             (. (. camera position) x))))
 
@@ -104,9 +104,9 @@ of the camera will be returned."
 of the camera will be set."
   [object x-val]
   (cond
-    (isa? (type object) Vector2) (let [^Vector2 v object]
+    (instance? Vector2 object) (let [^Vector2 v object]
                                    (.set v x-val (. v y)))
-    (isa? (type object) Vector3) (let [^Vector3 v object]
+    (instance? Vector3 object) (let [^Vector3 v object]
                                    (.set v x-val (. v y) (. v z)))
     :else (let [^Camera camera (u/get-obj object :camera)]
             (set! (. (. camera position) x) x-val)
@@ -117,8 +117,8 @@ of the camera will be set."
 of the camera will be returned."
   [object]
   (cond
-    (isa? (type object) Vector2) (. ^Vector2 object y)
-    (isa? (type object) Vector3) (. ^Vector3 object y)
+    (instance? Vector2 object) (. ^Vector2 object y)
+    (instance? Vector3 object) (. ^Vector3 object y)
     :else (let [^Camera camera (u/get-obj object :camera)]
             (. (. camera position) y))))
 
@@ -127,9 +127,9 @@ of the camera will be returned."
 of the camera will be set."
   [object y-val]
   (cond
-    (isa? (type object) Vector2) (let [^Vector2 v object]
+    (instance? Vector2 object) (let [^Vector2 v object]
                                    (.set v (. v x) y-val))
-    (isa? (type object) Vector3) (let [^Vector3 v object]
+    (instance? Vector3 object) (let [^Vector3 v object]
                                    (.set v (. v x) y-val (. v z)))
     :else (let [^Camera camera (u/get-obj object :camera)]
             (set! (. (. camera position) y) y-val)
@@ -140,7 +140,7 @@ of the camera will be set."
 of the camera will be returned."
   [object]
   (cond
-    (isa? (type object) Vector3) (. ^Vector3 object z)
+    (instance? Vector3 object) (. ^Vector3 object z)
     :else (let [^Camera camera (u/get-obj object :camera)]
             (. (. camera position) z))))
 
@@ -149,7 +149,7 @@ of the camera will be returned."
 of the camera will be set."
   [object z-val]
   (cond
-    (isa? (type object) Vector3) (let [^Vector3 v object]
+    (instance? Vector3 object) (let [^Vector3 v object]
                                    (.set v (. v x) (. v y) z-val))
     :else (let [^Camera camera (u/get-obj object :camera)]
             (set! (. (. camera position) z) z-val)

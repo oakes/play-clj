@@ -87,7 +87,7 @@ complicated shapes. If you use `assoc` to set the overall :x and :y of the
 (defn shape?
   "Returns true if `entity` is a `shape`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) ShapeRenderer))
+  (instance? ShapeRenderer (u/get-obj entity :object)))
 
 ; tiled maps
 
@@ -116,7 +116,7 @@ Normally, you don't need to use this directly."
   ([width height tile-width tile-height]
     (TiledMapTileLayer. width height tile-width tile-height))
   ([screen layer]
-    (if (isa? (type layer) MapLayer)
+    (if (instance? MapLayer layer)
         layer
         (-> ^BatchTiledMapRenderer (u/get-obj screen :renderer)
             .getMap
@@ -545,9 +545,9 @@ specify which layers to render with or without.
     (render! screen entities)"
   ([{:keys [renderer] :as screen}]
     (cond
-      (isa? (type renderer) BatchTiledMapRenderer)
+      (instance? BatchTiledMapRenderer renderer)
       (render-map! screen)
-      (isa? (type renderer) Stage)
+      (instance? Stage renderer)
       (render-stage! screen)))
   ([screen entities]
     (render! screen)
@@ -562,8 +562,8 @@ specify which layers to render with or without.
 
 (defn ^:private isometric?
   [{:keys [renderer] :as screen}]
-  (or (isa? (type renderer) IsometricTiledMapRenderer)
-      (isa? (type renderer) IsometricStaggeredTiledMapRenderer)))
+  (or (instance? IsometricTiledMapRenderer renderer)
+      (instance? IsometricStaggeredTiledMapRenderer renderer)))
 
 (defn ^:private split-layer
   [screen layer-name]

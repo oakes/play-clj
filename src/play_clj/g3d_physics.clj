@@ -130,9 +130,9 @@
     (add-body! screen (rigid-body info))"
   [screen body]
   (cond
-    (isa? (type (:object body)) btRigidBody)
+    (instance? btRigidBody (:object body))
     (bullet-3d! screen :add-rigid-body (:object body))
-    (isa? (type (:object body)) btSoftBody)
+    (instance? btSoftBody (:object body))
     (bullet-3d! screen :add-soft-body (:object body)))
   body)
 
@@ -290,7 +290,7 @@ such as :on-begin-contact."
   (doseq [e entities]
     (let [object (u/get-obj e :object)
           body (u/get-obj e :body)]
-      (when (and object (isa? (type (:object body)) btRigidBody))
+      (when (and object (instance? btRigidBody (:object body)))
         (when-not (rigid-body! e :get-motion-state)
           (->> (proxy [btMotionState] []
                  (getWorldTransform [world-t])
@@ -302,9 +302,9 @@ such as :on-begin-contact."
     (doseq [^btCollisionObject body (get-bodies screen)]
       (when-not (some #(= body (-> % :body :object)) entities)
         (cond
-          (isa? (type body) btRigidBody)
+          (instance? btRigidBody body)
           (bullet-3d! screen :remove-rigid-body body)
-          (isa? (type body) btSoftBody)
+          (instance? btSoftBody body)
           (bullet-3d! screen :remove-soft-body body))
         (.dispose body)))))
 
