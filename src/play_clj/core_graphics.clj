@@ -121,7 +121,7 @@ Normally, you don't need to use this directly."
         (-> ^BatchTiledMapRenderer (u/get-obj screen :renderer)
             .getMap
             .getLayers
-            (.get layer)))))
+            (.get (str layer))))))
 
 (defmacro tiled-map-layer
   "Returns a [TiledMapTileLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
