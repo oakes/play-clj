@@ -118,10 +118,12 @@ Normally, you don't need to use this directly."
   ([screen layer]
     (if (instance? MapLayer layer)
         layer
-        (-> ^BatchTiledMapRenderer (u/get-obj screen :renderer)
-            .getMap
-            .getLayers
-            (.get layer)))))
+        (let [layers (-> ^BatchTiledMapRenderer (u/get-obj screen :renderer)
+                         .getMap
+                         .getLayers)]
+          (if (number? layer)
+            (.get layers (int layer))
+            (.get layers (str layer)))))))
 
 (defmacro tiled-map-layer
   "Returns a [TiledMapTileLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
