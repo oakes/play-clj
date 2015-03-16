@@ -30,7 +30,7 @@ be passed down to all the internal entities unless they already have those keys.
 (defn bundle?
   "Returns true if `entity` is a `bundle`."
   [entity]
-  (isa? (type entity) BundleEntity))
+  (instance? BundleEntity entity))
 
 (defn screenshot!
   "Captures a screenshot and either returns it as a `pixmap` or saves it to the

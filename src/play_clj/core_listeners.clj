@@ -193,7 +193,7 @@ in the `screen`."
         (.update (game :width) (game :height) true))))
   ([{:keys [^Stage renderer ui-listeners]} entities]
      (let [current (->> (map :object entities)
-                        (filter #(isa? (type %) Actor))
+                        (filter #(instance? Actor %))
                         (into #{}))
            new-actors (apply disj current (.getActors renderer))]
        (doseq [^Actor a (.getActors renderer)
@@ -212,11 +212,11 @@ in the `screen`."
 
 (defn ^:private update-screen!
   ([{:keys [renderer world] :as screen}]
-    (when (isa? (type renderer) Stage)
+    (when (instance? Stage renderer)
       (update-stage! screen))
     (update-physics! screen))
   ([{:keys [renderer world] :as screen} entities]
-    (when (isa? (type renderer) Stage)
+    (when (instance? Stage renderer)
       (update-stage! screen entities))
     (update-physics! screen entities)
     entities))

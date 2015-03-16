@@ -179,7 +179,7 @@ based on the file at `path`.
 (defn actor?
   "Returns true if `entity` is an actor."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Actor))
+  (instance? Actor (u/get-obj entity :object)))
 
 ; check-box
 
@@ -206,7 +206,7 @@ based on the file at `path`.
 (defn check-box?
   "Returns true if `entity` is a `check-box`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) CheckBox))
+  (instance? CheckBox (u/get-obj entity :object)))
 
 ; container
 
@@ -231,7 +231,7 @@ based on the file at `path`.
 (defn container?
   "Returns true if `entity` is a `container`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Container))
+  (instance? Container (u/get-obj entity :object)))
 
 ; dialog
 
@@ -258,7 +258,7 @@ based on the file at `path`.
 (defn dialog?
   "Returns true if `entity` is a `dialog`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Dialog))
+  (instance? Dialog (u/get-obj entity :object)))
 
 ; horizontal
 
@@ -283,7 +283,7 @@ based on the file at `path`.
 (defn horizontal?
   "Returns true if `entity` is a `horizontal`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) HorizontalGroup))
+  (instance? HorizontalGroup (u/get-obj entity :object)))
 
 ; image
 
@@ -316,7 +316,7 @@ based on the file at `path`.
 (defn image?
   "Returns true if `entity` is an `image`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Image))
+  (instance? Image (u/get-obj entity :object)))
 
 ; image-button
 
@@ -343,7 +343,7 @@ based on the file at `path`.
 (defn image-button?
   "Returns true if `entity` is an `image-button`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) ImageButton))
+  (instance? ImageButton (u/get-obj entity :object)))
 
 ; image-text-button
 
@@ -372,14 +372,14 @@ based on the file at `path`.
 (defn image-text-button?
   "Returns true if `entity` is a `image-text-button`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) ImageTextButton))
+  (instance? ImageTextButton (u/get-obj entity :object)))
 
 ; label
 
 (defn label*
   [^String text arg]
   (ActorEntity.
-    (if (isa? (type arg) Color)
+    (if (instance? Color arg)
       (Label. text (style :label (g2d/bitmap-font) arg))
       (Label. text arg))))
 
@@ -402,7 +402,7 @@ based on the file at `path`.
 (defn label?
   "Returns true if `entity` is a `label`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Label))
+  (instance? Label (u/get-obj entity :object)))
 
 ; scroll-pane
 
@@ -429,7 +429,7 @@ based on the file at `path`.
 (defn scroll-pane?
   "Returns true if `entity` is a `scroll-pane`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) ScrollPane))
+  (instance? ScrollPane (u/get-obj entity :object)))
 
 ; select-box
 
@@ -461,7 +461,7 @@ based on the file at `path`.
 (defn select-box?
   "Returns true if `entity` is a `select-box`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) SelectBox))
+  (instance? SelectBox (u/get-obj entity :object)))
 
 ; slider
 
@@ -491,7 +491,7 @@ based on the file at `path`.
 (defn slider?
   "Returns true if `entity` is a `slider`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Slider))
+  (instance? Slider (u/get-obj entity :object)))
 
 ; stack
 
@@ -516,7 +516,7 @@ based on the file at `path`.
 (defn stack?
   "Returns true if `entity` is a `stack`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Stack))
+  (instance? Stack (u/get-obj entity :object)))
 
 ; table
 
@@ -541,7 +541,7 @@ based on the file at `path`.
 (defn table?
   "Returns true if `entity` is a `table`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Table))
+  (instance? Table (u/get-obj entity :object)))
 
 ; text-button
 
@@ -568,7 +568,7 @@ based on the file at `path`.
 (defn text-button?
   "Returns true if `entity` is a `text-button`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) TextButton))
+  (instance? TextButton (u/get-obj entity :object)))
 
 ; text-field
 
@@ -595,7 +595,7 @@ based on the file at `path`.
 (defn text-field?
   "Returns true if `entity` is a `text-field`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) TextField))
+  (instance? TextField (u/get-obj entity :object)))
 
 ; tree
 
@@ -622,7 +622,7 @@ based on the file at `path`.
 (defn tree?
   "Returns true if `entity` is a `tree`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Tree))
+  (instance? Tree (u/get-obj entity :object)))
 
 ; vertical
 
@@ -647,7 +647,7 @@ based on the file at `path`.
 (defn vertical?
   "Returns true if `entity` is a `vertical`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) VerticalGroup))
+  (instance? VerticalGroup (u/get-obj entity :object)))
 
 ; window
 
@@ -674,7 +674,7 @@ based on the file at `path`.
 (defn window?
   "Returns true if `entity` is a `window`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) Window))
+  (instance? Window (u/get-obj entity :object)))
 
 ; listeners
 

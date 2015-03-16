@@ -1,6 +1,6 @@
 (ns play-clj.entities
   (:import [com.badlogic.gdx Gdx Graphics]
-           [com.badlogic.gdx.graphics Camera]
+           [com.badlogic.gdx.graphics Camera Color]
            [com.badlogic.gdx.graphics.g2d Batch NinePatch ParticleEffect
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
@@ -21,13 +21,15 @@
 
 (defrecord TextureEntity [object] Entity
   (draw! [{:keys [^TextureRegion object x y width height
-                  scale-x scale-y angle origin-x origin-y]}
+                  scale-x scale-y angle origin-x origin-y color]}
           _
           batch]
     (let [x (float (or x 0))
           y (float (or y 0))
           width (float (or width (.getRegionWidth object)))
           height (float (or height (.getRegionHeight object)))]
+      (when-let [[r g b a] color]
+        (.setColor ^Batch batch r g b a))
       (if (or scale-x scale-y angle)
         (let [scale-x (float (or scale-x 1))
               scale-y (float (or scale-y 1))
@@ -36,7 +38,9 @@
               angle (float (or angle 0))]
           (.draw ^Batch batch object x y origin-x origin-y width height
             scale-x scale-y angle))
-        (.draw ^Batch batch object x y width height)))))
+        (.draw ^Batch batch object x y width height))
+      (when color
+        (.setColor ^Batch batch Color/WHITE)))))
 
 (defrecord NinePatchEntity [object] Entity
   (draw! [{:keys [^NinePatch object x y width height]} _ batch]

@@ -524,7 +524,7 @@ keywords and functions in pairs."
                              (doseq [[_ listener] (:input-listeners @screen)]
                                (add-input! listener))
                              (when-let [renderer (:renderer @screen)]
-                               (when (isa? (type renderer) Stage)
+                               (when (instance? Stage renderer)
                                  (add-input! renderer)))))
                          (render [this d] (run-fn! :render d))
                          (hide [this] (run-fn! :hide))

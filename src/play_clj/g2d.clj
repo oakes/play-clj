@@ -40,11 +40,11 @@
       (-> (or (u/load-asset arg Texture)
               (Texture. ^String arg))
           TextureRegion.)
-      (isa? (type arg) Pixmap)
+      (instance? Pixmap arg)
       (-> ^Pixmap arg Texture. TextureRegion.)
-      (isa? (type arg) Texture)
+      (instance? Texture arg)
       (-> ^Texture arg TextureRegion.)
-      (isa? (type arg) TextureEntity)
+      (instance? TextureEntity arg)
       (-> ^TextureRegion (:object arg) TextureRegion.)
       :else
       arg)))
@@ -79,7 +79,7 @@
 (defn texture?
   "Returns true if `entity` is a `texture`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) TextureRegion))
+  (instance? TextureRegion (u/get-obj entity :object)))
 
 ; nine-patch
 
@@ -92,7 +92,7 @@
               (Texture. ^String arg))
           TextureRegion.
           NinePatch.)
-      (isa? (type arg) NinePatchEntity)
+      (instance? NinePatchEntity arg)
       (NinePatch. (:object arg))
       (map? arg)
       (let [{:keys [region left right top bottom]} arg]
@@ -121,7 +121,7 @@
 (defn nine-patch?
   "Returns true if `entity` is a `nine-patch`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) NinePatch))
+  (instance? NinePatch (u/get-obj entity :object)))
 
 ; particle-effect
 
@@ -154,7 +154,7 @@
 (defn particle-effect?
   "Returns true if `entity` is a `particle-effect`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) ParticleEffect))
+  (instance? ParticleEffect (u/get-obj entity :object)))
 
 ; texture-atlas
 

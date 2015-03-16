@@ -96,9 +96,9 @@ object created by an external application.
        (cond
          (string? arg1#)
          (ModelInstance. (model* arg1#))
-         (isa? (type arg1#) ModelEntity)
+         (instance? ModelEntity arg1#)
          (ModelInstance. (. ^ModelInstance (:object arg1#) model) ~@(rest args))
-         (isa? (type arg1#) ModelData)
+         (instance? ModelData arg1#)
          (ModelInstance. ^Model (Model. arg1# ~@(rest args)))
          :else
          (ModelInstance. arg1# ~@(rest args))))))
@@ -112,7 +112,7 @@ object created by an external application.
 (defn model?
   "Returns true if `entity` is a `model`."
   [entity]
-  (isa? (type (u/get-obj entity :object)) ModelInstance))
+  (instance? ModelInstance (u/get-obj entity :object)))
 
 ; model-builder
 
