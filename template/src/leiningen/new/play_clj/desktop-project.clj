@@ -11,7 +11,7 @@
                   :classifier "natives-desktop"]
                  [com.badlogicgames.gdx/gdx-platform "1.5.3"
                   :classifier "natives-desktop"]
-                 [org.clojure/clojure "1.6.0"]
+                 [org.clojure/clojure "1.7.0-alpha5"]
                  [play-clj "0.4.4"]]
   
   :source-paths ["src" "src-common"]

@@ -4,7 +4,7 @@
                  [com.badlogicgames.gdx/gdx-backend-robovm "1.5.3"]
                  [com.badlogicgames.gdx/gdx-box2d "1.5.3"]
                  [com.badlogicgames.gdx/gdx-bullet "1.5.3"]
-                 [org.clojure/clojure "1.6.0"]
+                 [org.clojure/clojure "1.7.0-alpha5"]
                  [play-clj "0.4.4"]]
   :source-paths ["src/clojure" "../desktop/src-common"]
   :java-source-paths ["src/java"]

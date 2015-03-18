@@ -5,10 +5,10 @@
                  [com.badlogicgames.gdx/gdx-backend-android "1.5.3"]
                  [com.badlogicgames.gdx/gdx-box2d "1.5.3"]
                  [com.badlogicgames.gdx/gdx-bullet "1.5.3"]
-                 [neko/neko "3.1.1"]
-                 [org.clojure-android/clojure "1.6.0-RC1" :use-resources true]
+                 [neko/neko "3.2.0-preview3"]
+                 [org.clojure-android/clojure "1.7.0-alpha5" :use-resources true]
                  [play-clj "0.4.4"]]
-  :profiles {:dev {:dependencies [[org.clojure-android/tools.nrepl "0.2.6"]]
+  :profiles {:dev {:dependencies [[org.clojure-android/tools.nrepl "0.2.6-lollipop"]]
                    :android {:aot :all-with-unused}}
              :release {:android
                        {;; Specify the path to your private
@@ -28,8 +28,11 @@
             :assets-paths ["../desktop/resources"]
             :native-libraries-paths ["libs"]
             :target-version "{{target-sdk}}"
-            :aot-exclude-ns ["clojure.parallel" "clojure.core.reducers"]
-            :dex-opts ["-JXmx2048M"]}
+            :aot-exclude-ns ["clojure.parallel" "clojure.core.reducers"
+                             "cljs-tooling.complete" "cljs-tooling.info"
+                             "cljs-tooling.util.analysis" "cljs-tooling.util.misc"
+                             "cider.nrepl" "cider-nrepl.plugin"]
+            :dex-opts ["-JXmx4096M"]}
   
   :source-paths ["src/clojure" "../desktop/src-common"]
   :java-source-paths ["src/java"]
