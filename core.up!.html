@@ -1,0 +1,8 @@
+<html><head><title>up!</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#core.up!.html" target="_top">(up! screen x-val y-val z-val)</a></div><div class="c-doc"><p>Sets the up vector of the camera in <code>screen</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn up!
+  [screen x-val y-val z-val]
+  (let [^Camera camera (u/get-obj screen :camera)
+        ^Vector3 up-vec (up screen)]
+    (some->> x-val (x! up-vec))
+    (some->> y-val (y! up-vec))
+    (some->> z-val (z! up-vec))
+    (.update camera)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

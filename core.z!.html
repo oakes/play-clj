@@ -1,7 +1,7 @@
 <html><head><title>z!</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#core.z!.html" target="_top">(z! object z-val)</a></div><div class="c-doc"><p>Sets only the z position of <code>object</code>. If <code>object</code> is a screen, the z position of the camera will be set.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn z!
   [object z-val]
   (cond
-    (isa? (type object) Vector3) (let [^Vector3 v object]
+    (instance? Vector3 object) (let [^Vector3 v object]
                                    (.set v (. v x) (. v y) z-val))
     :else (let [^Camera camera (u/get-obj object :camera)]
             (set! (. (. camera position) z) z-val)

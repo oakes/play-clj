@@ -1,3 +1,3 @@
 <html><head><title>scroll-pane?</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#ui.scroll-pane_q.html" target="_top">(scroll-pane? entity)</a></div><div class="c-doc"><p>Returns true if <code>entity</code> is a <code>scroll-pane</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn scroll-pane?
   [entity]
-  (isa? (type (u/get-obj entity :object)) ScrollPane))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+  (instance? ScrollPane (u/get-obj entity :object)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

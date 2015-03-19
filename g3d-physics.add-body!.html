@@ -3,8 +3,8 @@
 </pre></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn add-body!
   [screen body]
   (cond
-    (isa? (type (:object body)) btRigidBody)
+    (instance? btRigidBody (:object body))
     (bullet-3d! screen :add-rigid-body (:object body))
-    (isa? (type (:object body)) btSoftBody)
+    (instance? btSoftBody (:object body))
     (bullet-3d! screen :add-soft-body (:object body)))
   body)</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

@@ -1,5 +1,12 @@
-<html><head><title>direction!</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#core.direction!.html" target="_top">(direction! screen x y z)</a></div><div class="c-doc"><p>Sets the direction of the camera in <code>screen</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn direction!
-  [screen x y z]
-  (let [^Camera camera (u/get-obj screen :camera)]
-    (.lookAt camera x y z)
-    (.update camera)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+<html><head><title>direction!</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#core.direction!.html" target="_top">(direction! screen x-val y-val z-val)</a></div><div class="c-head"><a href="index.html#core.direction!.html" target="_top">(direction! screen x-val y-val z-val look-at?)</a></div><div class="c-doc"><p>Sets the direction of the camera in <code>screen</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn direction!
+  ([screen x-val y-val z-val]
+    (direction! screen x-val y-val z-val true))
+  ([screen x-val y-val z-val look-at?]
+    (let [^Camera camera (u/get-obj screen :camera)]
+      (if look-at?
+        (.lookAt camera x-val y-val z-val)
+        (let [^Vector3 dir-vec (direction screen)]
+          (some->> x-val (x! dir-vec))
+          (some->> y-val (y! dir-vec))
+          (some->> z-val (z! dir-vec))))
+      (.update camera))))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

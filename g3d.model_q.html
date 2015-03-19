@@ -1,3 +1,3 @@
 <html><head><title>model?</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#g3d.model_q.html" target="_top">(model? entity)</a></div><div class="c-doc"><p>Returns true if <code>entity</code> is a <code>model</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn model?
   [entity]
-  (isa? (type (u/get-obj entity :object)) ModelInstance))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+  (instance? ModelInstance (u/get-obj entity :object)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

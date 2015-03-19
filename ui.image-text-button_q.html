@@ -1,3 +1,3 @@
 <html><head><title>image-text-button?</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#ui.image-text-button_q.html" target="_top">(image-text-button? entity)</a></div><div class="c-doc"><p>Returns true if <code>entity</code> is a <code>image-text-button</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn image-text-button?
   [entity]
-  (isa? (type (u/get-obj entity :object)) ImageTextButton))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+  (instance? ImageTextButton (u/get-obj entity :object)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

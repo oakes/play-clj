@@ -3,7 +3,8 @@
 &#40;slider {:min 0 :max 10 :step 1 :vertical? false} &#40;style :slider nil nil&#41;&#41;
 &#40;slider {:min 0 :max 10 :step 1 :vertical? false} &#40;skin &quot;uiskin.json&quot;&#41;&#41;
 </pre></div></div><div class="c-head">Options</div><div class="java"><div class="j-item"><span class="j-name">:get-style</span><span class="j-args"></span><div class="j-doc">Returns the slider's style. Modifying the returned style may not have an effect until {@link #setStyle(SliderStyle)} is
- called.</div></div><div class="j-item"><span class="j-name">:is-dragging</span><span class="j-args"></span><div class="j-doc">Returns true if the slider is being dragged.</div></div><div class="j-item"><span class="j-name">:set-style</span><span class="j-args"><span class="j-arg"><span class="j-type">^Slider.SliderStyle</span> style</span></span></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn slider*
+ called.</div></div><div class="j-item"><span class="j-name">:is-dragging</span><span class="j-args"></span><div class="j-doc">Returns true if the slider is being dragged.</div></div><div class="j-item"><span class="j-name">:set-style</span><span class="j-args"><span class="j-arg"><span class="j-type">^Slider.SliderStyle</span> style</span></span></div><div class="j-item"><span class="j-name">:set-visual-interpolation-inverse</span><span class="j-args"><span class="j-arg"><span class="j-type">^Interpolation</span> interpolation</span></span><div class="j-doc">Sets the inverse interpolation to use for display. This should perform the inverse of the
+ {@link #setVisualInterpolation(Interpolation) visual interpolation}.</div></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn slider*
   [{:keys [min max step vertical?]
     :or {min 0 max 10 step 1 vertical? false}}
    arg]

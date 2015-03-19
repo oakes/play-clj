@@ -1,3 +1,3 @@
 <html><head><title>dialog?</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#ui.dialog_q.html" target="_top">(dialog? entity)</a></div><div class="c-doc"><p>Returns true if <code>entity</code> is a <code>dialog</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn dialog?
   [entity]
-  (isa? (type (u/get-obj entity :object)) Dialog))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+  (instance? Dialog (u/get-obj entity :object)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

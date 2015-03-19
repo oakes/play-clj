@@ -1,3 +1,3 @@
 <html><head><title>bundle?</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#core.bundle_q.html" target="_top">(bundle? entity)</a></div><div class="c-doc"><p>Returns true if <code>entity</code> is a <code>bundle</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn bundle?
   [entity]
-  (isa? (type entity) BundleEntity))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+  (instance? BundleEntity entity))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

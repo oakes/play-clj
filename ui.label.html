@@ -13,7 +13,7 @@
  height.</div></div><div class="j-item"><span class="j-name">:text-equals</span><span class="j-args"><span class="j-arg"><span class="j-type">^CharSequence</span> other</span></span></div><div class="j-item"><span class="j-name">:to-string</span><span class="j-args"></span></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn label*
   [^String text arg]
   (ActorEntity.
-    (if (isa? (type arg) Color)
+    (if (instance? Color arg)
       (Label. text (style :label (g2d/bitmap-font) arg))
       (Label. text arg))))</pre><pre>(defmacro label
   [text arg & options]

@@ -1,6 +1,6 @@
 <html><head><title>z</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#core.z.html" target="_top">(z object)</a></div><div class="c-doc"><p>Returns the z position of <code>object</code>. If <code>object</code> is a screen, the z position of the camera will be returned.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn z
   [object]
   (cond
-    (isa? (type object) Vector3) (. ^Vector3 object z)
+    (instance? Vector3 object) (. ^Vector3 object z)
     :else (let [^Camera camera (u/get-obj object :camera)]
             (. (. camera position) z))))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

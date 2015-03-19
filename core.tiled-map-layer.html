@@ -4,12 +4,14 @@
   ([width height tile-width tile-height]
     (TiledMapTileLayer. width height tile-width tile-height))
   ([screen layer]
-    (if (isa? (type layer) MapLayer)
+    (if (instance? MapLayer layer)
         layer
-        (-> ^BatchTiledMapRenderer (u/get-obj screen :renderer)
-            .getMap
-            .getLayers
-            (.get layer)))))</pre><pre>(defmacro tiled-map-layer
+        (let [layers (-> ^BatchTiledMapRenderer (u/get-obj screen :renderer)
+                         .getMap
+                         .getLayers)]
+          (if (number? layer)
+            (.get layers (int layer))
+            (.get layers (str layer)))))))</pre><pre>(defmacro tiled-map-layer
   [screen layer & options]
   `(let [^TiledMapTileLayer object# (tiled-map-layer* ~screen ~layer)]
      (u/calls! object# ~@options)))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>

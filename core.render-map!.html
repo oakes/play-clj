@@ -18,6 +18,7 @@
                                               (set layer-names))
              (u/throw-key-not-found k))
            (map #(.indexOf ^java.util.List all-layer-names %))
+           (sort)
            int-array
            (.render renderer)))
     (.render renderer))

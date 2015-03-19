@@ -1,9 +1,9 @@
-<html><head><title>position!</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#core.position!.html" target="_top">(position! object vec-3)</a></div><div class="c-head"><a href="index.html#core.position!.html" target="_top">(position! object x-val y-val)</a></div><div class="c-head"><a href="index.html#core.position!.html" target="_top">(position! object x-val y-val z-val)</a></div><div class="c-doc"><p>Sets the position of <code>object</code>. If <code>object</code> is a screen, the position of the camera will be set.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn position!
-  ([object vec-3]
-    (position! object (x vec-3) (y vec-3) (z vec-3)))
-  ([object x-val y-val]
-    (position! object x-val y-val nil))
-  ([object x-val y-val z-val]
-    (when x-val (x! object x-val))
-    (when y-val (y! object y-val))
-    (when z-val (z! object z-val))))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
+<html><head><title>position!</title><script src="nav.js"></script><link href="highlight.css" rel="stylesheet" /><link href="main.css" rel="stylesheet" /></head><body><div class="content"><div class="item"><div class="clj"><div class="c-head"><a href="index.html#core.position!.html" target="_top">(position! screen vec-3)</a></div><div class="c-head"><a href="index.html#core.position!.html" target="_top">(position! screen x-val y-val)</a></div><div class="c-head"><a href="index.html#core.position!.html" target="_top">(position! screen x-val y-val z-val)</a></div><div class="c-doc"><p>Sets the position of the camera in <code>screen</code>.</p></div></div><div class="c-head">Source</div><div class="c-src"><pre>(defn position!
+  ([screen vec-3]
+    (position! screen (x vec-3) (y vec-3) (z vec-3)))
+  ([screen x-val y-val]
+    (position! screen x-val y-val nil))
+  ([screen x-val y-val z-val]
+    (some->> x-val (x! screen))
+    (some->> y-val (y! screen))
+    (some->> z-val (z! screen))))</pre></div></div></div><script src="highlight.js"></script><script src="main.js"></script></body></html>
