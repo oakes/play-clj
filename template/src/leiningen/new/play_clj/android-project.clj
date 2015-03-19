@@ -1,13 +1,13 @@
 (defproject {{app-name}} "0.0.1-SNAPSHOT"
   :description "FIXME: write description"
   
-  :dependencies [[com.badlogicgames.gdx/gdx "1.5.3" :use-resources true]
-                 [com.badlogicgames.gdx/gdx-backend-android "1.5.3"]
-                 [com.badlogicgames.gdx/gdx-box2d "1.5.3"]
-                 [com.badlogicgames.gdx/gdx-bullet "1.5.3"]
+  :dependencies [[com.badlogicgames.gdx/gdx "1.5.5" :use-resources true]
+                 [com.badlogicgames.gdx/gdx-backend-android "1.5.5"]
+                 [com.badlogicgames.gdx/gdx-box2d "1.5.5"]
+                 [com.badlogicgames.gdx/gdx-bullet "1.5.5"]
                  [neko/neko "3.2.0-preview3"]
                  [org.clojure-android/clojure "1.7.0-alpha5" :use-resources true]
-                 [play-clj "0.4.4"]]
+                 [play-clj "0.4.5-SNAPSHOT"]]
   :profiles {:dev {:dependencies [[org.clojure-android/tools.nrepl "0.2.6-lollipop"]]
                    :android {:aot :all-with-unused}}
              :release {:android
