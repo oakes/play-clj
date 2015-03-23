@@ -192,14 +192,19 @@ in the `screen`."
         (.setWorldSize (. camera viewportWidth) (. camera viewportHeight))
         (.update (game :width) (game :height) true))))
   ([{:keys [^Stage renderer ui-listeners]} entities]
-     (let [current (->> (map :object entities)
+     (let [bundle? #(instance? BundleEntity %)
+           current (->> entities
+                        (mapcat #(tree-seq bundle? :entities %))
+                        (map :object)
                         (filter #(instance? Actor %))
                         (into #{}))
-           new-actors (apply disj current (.getActors renderer))]
-       (doseq [^Actor a (.getActors renderer)
-               :when (not (current a))]
+           ;; realize this before removing from it, since mutable
+           previous (set (.getActors renderer))
+           entering (clojure.set/difference current previous)
+           exiting (clojure.set/difference previous current)]
+       (doseq [^Actor a exiting]
          (.remove a))
-       (doseq [^Actor a new-actors]
+       (doseq [^Actor a entering]
          (.addActor renderer a)
          (doseq [[_ listener] ui-listeners]
            (.addListener a listener))))))
