@@ -370,9 +370,9 @@ Now save the file and hit _Reload_ in the build pane. Now try it out! The key bi
 
 Keep in mind that the `:on-show` function only runs when the screen first shows. Therefore, if you want to modify something there and see the result, after you hit _Reload_ you'll need to restart the screen.
 
-First, switch the REPL into the right namespace by typing `(in-ns 'hello-world.core)` and hitting enter. Then, type the following, which will restart `main-screen`:
+First, switch the REPL into the right namespace by typing `(in-ns 'hello-world.core)` and hitting enter. Then, type the following command, which runs the `set-screen!` function on the GL thread in order to restart `main-screen`:
 
-`(set-screen! hello-world main-screen)`
+`(on-gl (set-screen! hello-world main-screen))`
 
 The next thing to try is reading and modifying state. We'll be using some REPL-specific functions, so type `(use 'play-clj.repl)` to bring them in. Let's peek into the entities vector by typing the following into the REPL:
 
