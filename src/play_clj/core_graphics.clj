@@ -559,8 +559,7 @@ specify which layers to render with or without.
       (render-stage! screen)))
   ([screen entities]
     (render! screen)
-    (binding [e/*skip-draw?* true]
-      (draw! screen entities))))
+    (draw! screen entities)))
 
 (defn ^:private create-layer
   [^TiledMapTileLayer layer]

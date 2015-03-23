@@ -8,8 +8,6 @@
            [com.badlogic.gdx.math Matrix4]
            [com.badlogic.gdx.scenes.scene2d Actor]))
 
-(def ^:dynamic *skip-draw?* false)
-
 (defprotocol Entity
   (draw! [this screen batch] "Draws the entity"))
 
@@ -80,8 +78,7 @@
           (.setOriginX object origin-x)
           (.setOriginY object origin-y)
           (.setRotation object angle)))
-      (when-not *skip-draw?*
-        (.draw object ^Batch batch 1)))))
+      (.draw object ^Batch batch 1))))
 
 (defrecord ModelEntity [object] Entity
   (draw! [{:keys [^ModelInstance object x y z]}
