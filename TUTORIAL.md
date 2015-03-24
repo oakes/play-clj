@@ -1,6 +1,6 @@
 ## Getting Started
 
-You can easily get started with play-clj by creating a new project with [Nightcode](https://nightcode.info/) and choosing the Clojure game option. You may also create a project on the command line with [Leiningen](https://github.com/technomancy/leiningen):
+You can easily get started with play-clj by creating a new project with [Nightcode](https://sekao.net/nightcode/) and choosing the Clojure game option. You may also create a project on the command line with [Leiningen](https://github.com/technomancy/leiningen):
 
     lein new play-clj hello-world
 

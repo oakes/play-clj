@@ -7,8 +7,8 @@ A Clojure library that provides a wrapper for [libGDX](http://libgdx.badlogicgam
 There are several different ways to create a project:
 
 * [Leiningen](https://github.com/technomancy/leiningen): `lein new play-clj hello-world`
-* [Nightcode](https://nightcode.info/): Click "New Project", provide a name, and choose the "Game" option
-* [Nightmod](https://nightmod.net/): Easiest option for beginners
+* [Nightcode](https://sekao.net/nightcode/): Click "New Project", provide a name, and choose the "Game" option
+* [Nightmod](https://sekao.net/nightmod/): Easiest option for beginners
 
 ## Justification
 
