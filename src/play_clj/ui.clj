@@ -54,11 +54,11 @@ based on the file at `path`.
   `(u/call! ^Skin ~object ~k ~@options))
 
 (defmacro align
-  "Returns a static field from [Align](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/utils/Align.html).
+  "Returns a static field from [Align](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/utils/Align.html).
 
     (align :center)"
   [k]
-  (u/gdx-field :scenes :scene2d :utils :Align (u/key->camel k)))
+  (u/gdx-field :utils :Align (u/key->camel k)))
 
 (defn cell!
   "Calls methods on a [Cell](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/scenes/scene2d/ui/Cell.html)."
