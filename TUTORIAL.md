@@ -337,7 +337,7 @@ You may want to display two different screens at once. This is useful in situati
 Then, in `defgame`, set the screens in the order in which you'd like them to appear:
 
 ```clojure
-(defgame hello-world
+(defgame hello-world-game
   :on-create
   (fn [this]
     (set-screen! this main-screen text-screen)))
@@ -372,7 +372,7 @@ Keep in mind that the `:on-show` function only runs when the screen first shows.
 
 First, switch the REPL into the right namespace by typing `(in-ns 'hello-world.core)` and hitting enter. Then, type the following command, which runs the `set-screen!` function on the GL thread in order to restart `main-screen`:
 
-`(on-gl (set-screen! hello-world main-screen))`
+`(on-gl (set-screen! hello-world-game main-screen))`
 
 The next thing to try is reading and modifying state. We'll be using some REPL-specific functions, so type `(use 'play-clj.repl)` to bring them in. Let's peek into the entities vector by typing the following into the REPL:
 
@@ -394,10 +394,10 @@ Lastly, one common issue people have with play-clj in a REPL is that it if you m
                        (try (screen-fn)
                          (catch Exception e
                            (.printStackTrace e)
-                           (set-screen! hello-world blank-screen)))))
+                           (set-screen! hello-world-game blank-screen)))))
 ```
 
-Note that this will only catch runtime errors, not compile errors such as misspelled symbols (which don't affect your game when they occur). After fixing the issue, you can switch back to `main-screen` from your REPL with `(on-gl (set-screen! hello-world main-screen))`.
+Note that this will only catch runtime errors, not compile errors such as misspelled symbols (which don't affect your game when they occur). After fixing the issue, you can switch back to `main-screen` from your REPL with `(on-gl (set-screen! hello-world-game main-screen))`.
 
 ## Building for Android
 
