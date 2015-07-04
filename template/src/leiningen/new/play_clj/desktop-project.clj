@@ -11,8 +11,8 @@
                   :classifier "natives-desktop"]
                  [com.badlogicgames.gdx/gdx-platform "1.6.0"
                   :classifier "natives-desktop"]
-                 [org.clojure/clojure "1.7.0-alpha6"]
-                 [play-clj "0.4.7-SNAPSHOT"]]
+                 [org.clojure/clojure "1.7.0"]
+                 [play-clj "0.4.7"]]
   
   :source-paths ["src" "src-common"]
   :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]

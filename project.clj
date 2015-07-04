@@ -1,4 +1,4 @@
-(defproject play-clj "0.4.7-SNAPSHOT"
+(defproject play-clj "0.4.7"
   :description "A libGDX wrapper for easy cross-platform game development"
   :url "https://github.com/oakes/play-clj"
   :license {:name "Public Domain"
@@ -6,7 +6,7 @@
   :dependencies [[com.badlogicgames.gdx/gdx "1.6.0"]
                  [com.badlogicgames.gdx/gdx-box2d "1.6.0"]
                  [com.badlogicgames.gdx/gdx-bullet "1.6.0"]
-                 [org.clojure/clojure "1.6.0"]]
+                 [org.clojure/clojure "1.7.0"]]
   :repositories [["sonatype"
                   "https://oss.sonatype.org/content/repositories/releases/"]]
   :source-paths ["src"]

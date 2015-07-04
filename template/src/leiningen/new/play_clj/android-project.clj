@@ -6,8 +6,8 @@
                  [com.badlogicgames.gdx/gdx-box2d "1.6.0"]
                  [com.badlogicgames.gdx/gdx-bullet "1.6.0"]
                  [neko/neko "3.2.0"]
-                 [org.clojure-android/clojure "1.7.0-alpha6" :use-resources true]
-                 [play-clj "0.4.7-SNAPSHOT"]]
+                 [org.clojure-android/clojure "1.7.0-RC1" :use-resources true]
+                 [play-clj "0.4.7"]]
   :profiles {:dev {:dependencies [[org.clojure-android/tools.nrepl "0.2.6-lollipop"]]
                    :android {:aot :all-with-unused}}
              :release {:android
