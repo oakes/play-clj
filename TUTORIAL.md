@@ -137,10 +137,10 @@ We already know how to change an entity's position, so let's leverage that to ma
 (defn move
   [entity direction]
   (case direction
-    :down (assoc entity :y (dec (:y entity)))
-    :up (assoc entity :y (inc (:y entity)))
-    :right (assoc entity :x (inc (:x entity)))
-    :left (assoc entity :x (dec (:x entity)))
+    :down (update entity :y dec)
+    :up (update entity :y inc)
+    :left (update entity :x dec)
+    :right (update entity :x inc)
     nil))
 ```
 
