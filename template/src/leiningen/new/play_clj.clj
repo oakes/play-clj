@@ -10,14 +10,12 @@
         lein-droid-render (droid-new/renderer "templates")
         desktop-class-name "desktop-launcher"
         android-class-name "AndroidLauncher"
-        ios-class-name "IOSLauncher"
         package-name (t/sanitize (t/multi-segment (or package-name name)))
         package-prefix (->> (.lastIndexOf package-name ".")
                             (subs package-name 0))
         main-ns (t/sanitize-ns package-name)
         desktop-ns (str main-ns "." desktop-class-name)
         android-ns (str package-name "." android-class-name)
-        ios-ns (str package-name "." ios-class-name)
         data {:app-name name
               :game-name (str name "-game")
               :name (t/project-name name)
@@ -26,16 +24,13 @@
               :package-prefix package-prefix
               :desktop-class-name desktop-class-name
               :android-class-name android-class-name
-              :ios-class-name ios-class-name
               :activity android-class-name
               :namespace main-ns
               :desktop-namespace desktop-ns
               :android-namespace android-ns
-              :ios-namespace ios-ns
               :path (t/name-to-path main-ns)
               :desktop-path (t/name-to-path desktop-ns)
               :android-path (t/name-to-path android-ns)
-              :ios-path (t/name-to-path ios-ns)
               :year (t/year)
               :target-sdk "15"}]
     (t/->files data
@@ -62,8 +57,6 @@
                 (lein-droid-render "ic_launcher_hdpi.png")]
                ["android/res/drawable-mdpi/ic_launcher.png"
                 (lein-droid-render "ic_launcher_mdpi.png")]
-               ["android/res/drawable-ldpi/ic_launcher.png"
-                (lein-droid-render "ic_launcher_ldpi.png")]
                ["android/res/values/strings.xml"
                 (lein-droid-render "strings.xml" data)]
                ["android/res/drawable-hdpi/splash_circle.png"
@@ -79,7 +72,7 @@
                ["android/res/layout/splashscreen.xml"
                 (lein-droid-render "splashscreen.xml")]
                ["android/src/java/{{path}}/SplashActivity.java"
-                (lein-droid-render "SplashActivity.java" data)]
+                (render "SplashActivity.java" data)]
                ; android libgdx.so
                ["android/libs/armeabi/libgdx.so"
                 (io/input-stream (io/resource "armeabi/libgdx.so"))]
@@ -100,21 +93,4 @@
                ["android/libs/armeabi-v7a/libgdx-bullet.so"
                 (io/input-stream (io/resource "armeabi-v7a/libgdx-bullet.so"))]
                ["android/libs/x86/libgdx-bullet.so"
-                (io/input-stream (io/resource "x86/libgdx-bullet.so"))]
-               ; ios
-               ["ios/project.clj" (render "ios-project.clj" data)]
-               ["ios/Info.plist.xml" (render "Info.plist.xml" data)]
-               "ios/src/clojure"
-               ["ios/src/java/{{ios-path}}.java"
-                (render "IOSLauncher.java" data)]
-               ; ios libObjectAL.a and libgdx.a
-               ["ios/libs/libObjectAL.a"
-                (io/input-stream (io/resource "ios/libObjectAL.a"))]
-               ["ios/libs/libgdx.a"
-                (io/input-stream (io/resource "ios/libgdx.a"))]
-               ; ios libgdx-box2d.a
-               ["ios/libs/libgdx-box2d.a"
-                (io/input-stream (io/resource "ios/libgdx-box2d.a"))]
-               ; ios libgdx-bullet.a
-               ["ios/libs/libgdx-bullet.a"
-                (io/input-stream (io/resource "ios/libgdx-bullet.a"))])))
+                (io/input-stream (io/resource "x86/libgdx-bullet.so"))])))

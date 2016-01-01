@@ -4,13 +4,13 @@ You can easily get started with play-clj by creating a new project with [Nightco
 
     lein new play-clj hello-world
 
-Either way, you'll get three separate projects for desktop, Android, and iOS, all pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
+Either way, you'll get separate projects for desktop and Android, both pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
 
 ## Project Structure
 
-After making a game called _hello-world_, you'll see three sub-folders: `android`, `desktop`, and `ios`. You'll be spending most of your time in the `desktop` folder, because it's easier to develop your game on your computer and build it for mobile devices later.
+After making a game called _hello-world_, you'll see two sub-folders: `android` and `desktop`. You'll be spending most of your time in the `desktop` folder, because it's easier to develop your game on your computer and build it for mobile devices later.
 
-Your actual game code will be in the `desktop/src-common` folder, and all the images and sound files will be in the `desktop/resources` folder. When you're ready to build an Android and iOS version, they will read from both of these folders, so you don't have to duplicate any files.
+Your actual game code will be in the `desktop/src-common` folder, and all the images and sound files will be in the `desktop/resources` folder. When you're ready to build an Android version, it will read from both of these folders, so you don't have to duplicate any files.
 
 ## Your First Run
 
@@ -408,12 +408,3 @@ Note that this will only catch runtime errors, not compile errors such as misspe
 5. In Nightcode, click on the `android` folder for your project in the sidebar. You should see a red-colored button called _Android SDK_. Click that, and find the folder you extracted the SDK to.
 6. Connect your Android device to your computer and make sure USB debugging is enabled.
 7. Click _Run_ and wait for the app to be built and installed on your device (the _Build_ button will build an apk, but you need to edit `android/project.clj` to pass the keystore path and alias so it can be digitally signed).
-
-## Building for iOS
-
-1. Get a computer running OS X.
-2. Make sure you have JDK 7 installed (you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)).
-3. Install Xcode from the Mac App Store.
-4. Download and extract [the latest RoboVM](http://download.robovm.org/).
-5. In Nightcode, click on the `ios` folder for your project in the sidebar. You should see a red-colored button called _RoboVM_. Click that, and find the folder you extracted the SDK to.
-6. Click _Run_ and wait for the app to be built and run in the iOS simulator (the _Build_ button will build an ipa, but you need edit `ios/project.clj` to pass the appropriate info to RoboVM so it can be digitally signed).
