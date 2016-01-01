@@ -51,7 +51,7 @@
                ["android/src/java/{{android-path}}.java"
                 (render "AndroidLauncher.java" data)]
                "android/src/clojure"
-               ["android/AndroidManifest.xml"
+               ["android/AndroidManifest.template.xml"
                 (render "AndroidManifest.xml" data)]
                ["android/res/drawable-hdpi/ic_launcher.png"
                 (lein-droid-render "ic_launcher_hdpi.png")]
