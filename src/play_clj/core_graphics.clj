@@ -492,14 +492,13 @@ with the tiled map file at `path` and `unit` scale.
   (let [^Batch batch (.getBatch renderer)]
     (.begin batch)
     (doseq [{:keys [additive? opacity] :as entity} entities]
-      (when-not (instance? Actor (:object entity))
-        (when additive?
-          (.setBlendFunction ^Batch batch (gl :gl-src-alpha) (gl :gl-one)))
-        (.setColor batch (color 1 1 1 (or opacity 1.0)))
-        (e/draw! entity screen batch)
-        (.setColor batch (color 1 1 1 1))
-        (when additive?
-          (.setBlendFunction ^Batch batch (gl :gl-src-alpha) (gl :gl-one-minus-src-alpha)))))
+      (when additive?
+        (.setBlendFunction ^Batch batch (gl :gl-src-alpha) (gl :gl-one)))
+      (.setColor batch (color 1 1 1 (or opacity 1.0)))
+      (e/draw! entity screen batch)
+      (.setColor batch (color 1 1 1 1))
+      (when additive?
+        (.setBlendFunction ^Batch batch (gl :gl-src-alpha) (gl :gl-one-minus-src-alpha))))
     (.end batch))
   entities)
 
