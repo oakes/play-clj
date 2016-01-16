@@ -84,7 +84,7 @@
 (defmacro net!
   "Calls a single method on [Gdx.net](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Net.html).
 
-    (net! :open-uri \"https://sekao.net/\")"
+    (net! :open-u-r-i \"https://sekao.net/\")"
   [k & options]
   `(u/call! ^Net (Gdx/net) ~k ~@options))
 
