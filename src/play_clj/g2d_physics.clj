@@ -107,7 +107,10 @@
 
 (defn ^:private find-body
   [body entities]
-  (some #(if (= body (u/get-obj % :body)) %) entities))
+  (some #(try
+           (when (= body (u/get-obj % :body)) %)
+           (catch Exception _))
+        entities))
 
 (defn first-entity
   "Returns the first entity in a contact. May only be used in contact functions
