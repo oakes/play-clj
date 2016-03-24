@@ -1,6 +1,6 @@
 (ns play-clj.entities
   (:import [com.badlogic.gdx Gdx Graphics]
-           [com.badlogic.gdx.graphics Camera Color]
+           [com.badlogic.gdx.graphics Camera Color GL20]
            [com.badlogic.gdx.graphics.g2d Batch NinePatch ParticleEffect
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
@@ -102,6 +102,8 @@
     (when camera
       (.setProjectionMatrix object (. camera combined)))
     (.begin object type)
+    (.glEnable Gdx/gl GL20/GL_BLEND)
+    (.glBlendFunc Gdx/gl GL20/GL_SRC_ALPHA GL20/GL_ONE_MINUS_SRC_ALPHA)
     (when (or x y scale-x scale-y angle)
       (let [x (float (or x 0))
             y (float (or y 0))
