@@ -520,7 +520,7 @@ keywords and functions in pairs."
                   (show [this]
                     (input! :set-input-processor (InputMultiplexer.))
                     (run-fn! :show)
-                    (doseq [{:keys [screen]} screen-objects]
+                    (doseq [{:keys [screen]} (reverse screen-objects)]
                       (doseq [[_ listener] (:input-listeners @screen)]
                         (add-input! listener))
                       (when-let [renderer (:renderer @screen)]
