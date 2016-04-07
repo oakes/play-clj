@@ -104,6 +104,8 @@
     (.glEnable Gdx/gl GL20/GL_BLEND)
     (.glBlendFunc Gdx/gl GL20/GL_SRC_ALPHA GL20/GL_ONE_MINUS_SRC_ALPHA)
     (.begin object type)
+    (.glEnable Gdx/gl GL20/GL_BLEND)
+    (.glBlendFunc Gdx/gl GL20/GL_SRC_ALPHA GL20/GL_ONE_MINUS_SRC_ALPHA)
     (when (or x y scale-x scale-y angle)
       (let [x (float (or x 0))
             y (float (or y 0))
