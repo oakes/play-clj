@@ -1,10 +1,8 @@
 ## Getting Started
 
-You can easily get started with play-clj by creating a new project with [Nightcode](https://sekao.net/nightcode/) and choosing the Clojure game option. You may also create a project on the command line with [Leiningen](https://github.com/technomancy/leiningen):
+You can easily get started with play-clj by creating a new project with [Leiningen](https://github.com/technomancy/leiningen):
 
     lein new play-clj hello-world
-
-Either way, you'll get separate projects for desktop and Android, both pointing to the same directories for source code and resources. You can build the projects using Nightcode or Leiningen.
 
 ## Project Structure
 
@@ -14,13 +12,11 @@ Your actual game code will be in the `desktop/src-common` folder, and all the im
 
 ## Your First Run
 
-This tutorial will assume that you are using Nightcode, but it should be easy to follow without it as well. To kick things off, navigate to the main file at `desktop/src-common/hello_world/core.clj` by double-clicking each folder in the sidebar on the left. Once you click on `core.clj`, you should see its contents appear in the editor pane on the right.
-
-As long as the selection in the sidebar is somewhere inside the `desktop` folder, the build pane at the bottom will apply to that version of your game. So, try clicking _Run_ and wait for your game to appear. If all goes well, you should see a window with nothing but a small label on the bottom left that says "Hello world!".
+In your terminal, go to the `desktop` directory and do `lein run`. If all goes well, you should see a window with nothing but a small label on the bottom left that says "Hello world!".
 
 ## Game Structure
 
-Let's look at the basic structure of your game. It starts out with a call to `defgame`, which should only be used once as it initializes the game for you. It contains a single function called `:on-create` that runs when your game starts. The only thing it needs to do is hand off to your screen, where all the action takes place.
+Open the main file at `desktop/src-common/hello_world/core.clj` in your editor of choice. Let's look at the basic structure of your game. It starts out with a call to `defgame`, which should only be used once as it initializes the game for you. It contains a single function called `:on-create` that runs when your game starts. The only thing it needs to do is hand off to your screen, where all the action takes place.
 
 In `defscreen`, you'll find that a few simple functions are defined: `:on-show` and `:on-render`. The first only runs when the screen is first shown, and the second is run every single time your game wants to draw on the screen (which is ideally 60 times per second).
 
@@ -398,13 +394,3 @@ Lastly, one common issue people have with play-clj in a REPL is that it if you m
 ```
 
 Note that this will only catch runtime errors, not compile errors such as misspelled symbols (which don't affect your game when they occur). After fixing the issue, you can switch back to `main-screen` from your REPL with `(on-gl (set-screen! hello-world-game main-screen))`.
-
-## Building for Android
-
-1. Make sure you have JDK 7 installed (for Windows/OSX, you can get it from [Oracle](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html), and for Linux you can get it from [apt-get](http://openjdk.java.net/install/)).
-2. Download [the Android SDK](http://developer.android.com/sdk/index.html). However, don't bother getting the "ADT Bundle", which includes a full IDE, because you'll be using Nightcode. Instead, click "Use an Existing IDE" click the button that appears.
-3. Extract the file anywhere you want.
-4. Run the executable called `android` which is located in the `tools` folder of that archive. This executable will display the SDK Manager with several things checked by default. We want to at least support Ice Cream Sandwich, so check the box next to _Android 4.0.3 (API 15)_ and click _Install_.
-5. In Nightcode, click on the `android` folder for your project in the sidebar. You should see a red-colored button called _Android SDK_. Click that, and find the folder you extracted the SDK to.
-6. Connect your Android device to your computer and make sure USB debugging is enabled.
-7. Click _Run_ and wait for the app to be built and installed on your device (the _Build_ button will build an apk, but you need to edit `android/project.clj` to pass the keystore path and alias so it can be digitally signed).
