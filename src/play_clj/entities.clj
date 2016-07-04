@@ -21,11 +21,13 @@
 
 (defrecord TextureEntity [object] Entity
   (draw! [{:keys [^TextureRegion object x y width height
-                  scale-x scale-y angle origin-x origin-y color]}
+                  scale-x scale-y angle color translate-x translate-y]}
           _
           batch]
     (let [x (float (or x 0))
           y (float (or y 0))
+          translate-x (float (or translate-x 0))
+          translate-y (float (or translate-y 0))
           width (float (or width (.getRegionWidth object)))
           height (float (or height (.getRegionHeight object)))]
       (when-let [[r g b a] color]
@@ -33,14 +35,13 @@
       (if (or scale-x scale-y angle)
         (let [scale-x (float (or scale-x 1))
               scale-y (float (or scale-y 1))
-              origin-x (float (or origin-x (/ width 2)))
-              origin-y (float (or origin-y (/ height 2)))
               angle (float (or angle 0))]
-          (.draw ^Batch batch object x y origin-x origin-y width height
+          (.draw ^Batch batch object (+ x translate-x) (+ y translate-y) 0 0 width height
             scale-x scale-y angle))
-        (.draw ^Batch batch object x y width height))
+        (.draw ^Batch batch object (+ x translate-x) (+ y translate-y) width height))
       (when color
         (.setColor ^Batch batch Color/WHITE)))))
+
 
 (defrecord NinePatchEntity [object] Entity
   (draw! [{:keys [^NinePatch object x y width height]} _ batch]
