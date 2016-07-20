@@ -1,7 +1,7 @@
 (ns play-clj.entities
   (:import [com.badlogic.gdx Gdx Graphics]
            [com.badlogic.gdx.graphics Camera Color GL20]
-           [com.badlogic.gdx.graphics.g2d Batch NinePatch ParticleEffect
+           [com.badlogic.gdx.graphics.g2d Batch NinePatch ParticleEffect Sprite
             TextureRegion]
            [com.badlogic.gdx.graphics.g3d Environment ModelBatch ModelInstance]
            [com.badlogic.gdx.graphics.glutils ShapeRenderer]
@@ -41,6 +41,43 @@
         (.draw ^Batch batch object x y width height))
       (when color
         (.setColor ^Batch batch Color/WHITE)))))
+
+(defrecord SpriteEntity [object] Entity
+  (draw! [{:keys [^Sprite object
+                          alpha
+                          x y width height scale-x scale-y origin-x origin-y
+                          alpha angle color]
+           :or {x (.getX object)
+                y (.getY object)
+                width (.getWidth object)
+                height (.getHeight object)
+                scale-x (.getScaleX object)
+                scale-y (.getScaleY object)
+                origin-x (.getOriginX object)
+                origin-y (.getOriginY object)
+                angle (.getRotation object)
+                color (.getColor object)}}
+          _
+          batch]
+    (.setBounds object
+                (float x)
+                (float y)
+                (float width)
+                (float height))
+    (.setOrigin object
+                (float origin-x)
+                (float origin-y))
+    (.setScale object
+               (float scale-x)
+               (float scale-y))
+    (.setRotation object angle)
+    (if (instance? Color color)
+      (.setColor object color)
+      (let [[r g b a] color]
+        (.setColor object r g b a)))
+    (if alpha
+      (.draw object ^Batch batch alpha)
+      (.draw object ^Batch batch))))
 
 (defrecord NinePatchEntity [object] Entity
   (draw! [{:keys [^NinePatch object x y width height]} _ batch]

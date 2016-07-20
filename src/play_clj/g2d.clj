@@ -4,9 +4,9 @@
   (:import [com.badlogic.gdx Files Gdx]
            [com.badlogic.gdx.files FileHandle]
            [com.badlogic.gdx.graphics Pixmap Texture]
-           [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch
+           [com.badlogic.gdx.graphics.g2d Animation BitmapFont NinePatch Sprite
             ParticleEffect TextureAtlas TextureRegion]
-           [play_clj.entities TextureEntity NinePatchEntity
+           [play_clj.entities TextureEntity NinePatchEntity SpriteEntity
             ParticleEffectEntity]))
 
 (defn bitmap-font*
@@ -80,6 +80,44 @@
   "Returns true if `entity` is a `texture`."
   [entity]
   (instance? TextureRegion (u/get-obj entity :object)))
+
+; sprite
+
+(defn sprite*
+  [arg]
+  (SpriteEntity.
+    (cond
+      (string? arg)
+      (-> (or (u/load-asset arg Texture)
+              (Texture. ^String arg))
+          Sprite.)
+      (instance? Pixmap arg)
+      (-> ^Pixmap arg Texture. Sprite.)
+      (instance? Texture arg)
+      (-> ^Texture arg Sprite.)
+      (instance? SpriteEntity arg)
+      (-> ^Sprite (:object arg) Sprite.)
+      :else
+      arg)))
+
+(defmacro sprite
+  [arg & options]
+  `(let [entity# (sprite* ~arg)]
+     (u/calls! ^Sprite (u/get-obj entity# :object) ~@options)
+     entity#))
+
+(defmacro sprite!
+  "Calls a single method on a `sprite`.
+
+    (sprite! entity :flip true false)
+    (sprite! entity :set-alpha 0.5)"
+  [entity k & options]
+  `(u/call! ^Sprite (u/get-obj ~entity :object) ~k ~@options))
+
+(defn sprite?
+  "Returns true if `entity` is a `sprite`."
+  [entity]
+  (instance? Sprite (u/get-obj entity :object)))
 
 ; nine-patch
 
