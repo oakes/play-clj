@@ -245,7 +245,7 @@ in the `layer`.
 
 (defn ^:private map-object-init
   [k]
-  (u/gdx :maps :object (str (u/key->pascal k) "MapObject.")))
+  (u/gdx :maps :objects (str (u/key->pascal k) "MapObject.")))
 
 (defn map-object*
   []
