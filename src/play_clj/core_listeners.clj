@@ -186,28 +186,28 @@ in the `screen`."
 
 (defn ^:private update-stage!
   ([{:keys [^Stage renderer ^Camera camera] :as screen}]
-    (when camera
-      (doto (.getViewport renderer)
-        (.setCamera camera)
-        (.setWorldSize (. camera viewportWidth) (. camera viewportHeight))
-        (.update (game :width) (game :height) true))))
+   (when camera
+     (doto (.getViewport renderer)
+       (.setCamera camera)
+       (.setWorldSize (. camera viewportWidth) (. camera viewportHeight))
+       (.update (game :width) (game :height) true))))
   ([{:keys [^Stage renderer ui-listeners]} entities]
-     (let [bundle? #(instance? BundleEntity %)
-           current (->> entities
-                        (mapcat #(tree-seq bundle? :entities %))
-                        (map :object)
-                        (filter #(instance? Actor %))
-                        (into #{}))
+   (let [bundle? #(instance? BundleEntity %)
+         current (->> entities
+                      (mapcat #(tree-seq bundle? :entities %))
+                      (map :object)
+                      (filter #(instance? Actor %))
+                      (into #{}))
            ;; realize this before removing from it, since mutable
-           previous (set (.getActors renderer))
-           entering (clojure.set/difference current previous)
-           exiting (clojure.set/difference previous current)]
-       (doseq [^Actor a exiting]
-         (.remove a))
-       (doseq [^Actor a entering]
-         (.addActor renderer a)
-         (doseq [[_ listener] ui-listeners]
-           (.addListener a listener))))))
+         previous (set (.getActors renderer))
+         entering (clojure.set/difference current previous)
+         exiting (clojure.set/difference previous current)]
+     (doseq [^Actor a exiting]
+       (.remove a))
+     (doseq [^Actor a entering]
+       (.addActor renderer a)
+       (doseq [[_ listener] ui-listeners]
+         (.addListener a listener))))))
 
 (defmulti update-physics!
   (fn [screen & [entities]] (some-> screen :world class .getName))
@@ -217,11 +217,11 @@ in the `screen`."
 
 (defn ^:private update-screen!
   ([{:keys [renderer world] :as screen}]
-    (when (instance? Stage renderer)
-      (update-stage! screen))
-    (update-physics! screen))
+   (when (instance? Stage renderer)
+     (update-stage! screen))
+   (update-physics! screen))
   ([{:keys [renderer world] :as screen} entities]
-    (when (instance? Stage renderer)
-      (update-stage! screen entities))
-    (update-physics! screen entities)
-    entities))
+   (when (instance? Stage renderer)
+     (update-stage! screen entities))
+   (update-physics! screen entities)
+   entities))

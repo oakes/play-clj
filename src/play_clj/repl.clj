@@ -23,9 +23,9 @@ function.
     (e :player? main-screen)
     (e texture? main-screen)"
   ([screen-object]
-    (-> screen-object :entities deref))
+   (-> screen-object :entities deref))
   ([filter-fn screen-object]
-    (vec (filter filter-fn (e screen-object)))))
+   (vec (filter filter-fn (e screen-object)))))
 
 (defn e!
   "Associates values to the entities in `screen-object` that match the supplied

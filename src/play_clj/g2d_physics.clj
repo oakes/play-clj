@@ -11,17 +11,17 @@
 
 (defn box-2d*
   ([]
-    (box-2d* 0 0 true))
+   (box-2d* 0 0 true))
   ([gravity-x gravity-y]
-    (box-2d* gravity-x gravity-y true))
+   (box-2d* gravity-x gravity-y true))
   ([gravity-x gravity-y sleep?]
-    ; use reflection to instantiate in order to avoid the static initializer
-    (some-> (try (Class/forName "com.badlogic.gdx.physics.box2d.World")
-              (catch Exception _))
-            .getDeclaredConstructors
-            first
-            (.newInstance
-              (object-array [(m/vector-2 gravity-x gravity-y) sleep?])))))
+   ; use reflection to instantiate in order to avoid the static initializer
+   (some-> (try (Class/forName "com.badlogic.gdx.physics.box2d.World")
+             (catch Exception _))
+           .getDeclaredConstructors
+           first
+           (.newInstance
+             (object-array [(m/vector-2 gravity-x gravity-y) sleep?])))))
 
 (defmacro box-2d
   "Returns a [World](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/physics/box2d/World.html).
@@ -263,16 +263,16 @@ such as :on-begin-contact."
   ([{:keys [world time-step velocity-iterations position-iterations]
      :or {time-step (/ 1 60) velocity-iterations 10 position-iterations 10}
      :as screen}]
-    (.step world time-step velocity-iterations position-iterations))
+   (.step world time-step velocity-iterations position-iterations))
   ([screen entities]
-    (step! screen)
-    (map (fn [e]
-           (if (:body e)
-             (assoc e
-                    :x (body-x e)
-                    :y (body-y e)
-                    :angle (body-angle e)
-                    :origin-x (body-origin-x e)
-                    :origin-y (body-origin-y e))
-             e))
-         entities)))
+   (step! screen)
+   (map (fn [e]
+          (if (:body e)
+            (assoc e
+                   :x (body-x e)
+                   :y (body-y e)
+                   :angle (body-angle e)
+                   :origin-x (body-origin-x e)
+                   :origin-y (body-origin-y e))
+            e))
+        entities)))

@@ -8,11 +8,11 @@
     (clear!)
     (clear! 0.5 0.5 1 1)"
   ([]
-    (clear! 0 0 0 0))
+   (clear! 0 0 0 0))
   ([r g b a]
-    (doto (Gdx/gl)
-      (.glClearColor (float r) (float g) (float b) (float a))
-      (.glClear (bit-or GL20/GL_COLOR_BUFFER_BIT GL20/GL_DEPTH_BUFFER_BIT)))))
+   (doto (Gdx/gl)
+     (.glClearColor (float r) (float g) (float b) (float a))
+     (.glClear (bit-or GL20/GL_COLOR_BUFFER_BIT GL20/GL_DEPTH_BUFFER_BIT)))))
 
 (defmacro color
   "Returns a [Color](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Color.html).

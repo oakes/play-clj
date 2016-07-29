@@ -317,14 +317,14 @@ such as :on-begin-contact."
   ([{:keys [delta-time max-sub-steps time-step]
      :or {max-sub-steps 5 time-step (/ 1 60)}
      :as screen}]
-    (bullet-3d! screen :step-simulation delta-time max-sub-steps time-step))
+   (bullet-3d! screen :step-simulation delta-time max-sub-steps time-step))
   ([screen entities]
-    (step! screen)
-    (map (fn [e]
-           (if (:body e)
-             (assoc e
-                    :x (body-x e)
-                    :y (body-y e)
-                    :z (body-z e))
-             e))
-         entities)))
+   (step! screen)
+   (map (fn [e]
+          (if (:body e)
+            (assoc e
+                   :x (body-x e)
+                   :y (body-y e)
+                   :z (body-z e))
+            e))
+        entities)))

@@ -40,22 +40,22 @@ specified path.
     (screenshot! \"out.png\")
     (screenshot! (files! :external \"out.png\"))"
   ([]
-    (let [^Pixmap$Format pic-f (Pixmap$Format/RGBA8888)
-          ^Pixmap pic (Pixmap. ^long (game :width) ^long (game :height) pic-f)
-          pixel-data (ScreenUtils/getFrameBufferPixels true)
-          pixels (.getPixels pic)]
-      (doto pixels
-        (.clear)
-        (.put pixel-data)
-        (.position 0))
-      pic))
+   (let [^Pixmap$Format pic-f (Pixmap$Format/RGBA8888)
+         ^Pixmap pic (Pixmap. ^long (game :width) ^long (game :height) pic-f)
+         pixel-data (ScreenUtils/getFrameBufferPixels true)
+         pixels (.getPixels pic)]
+     (doto pixels
+       (.clear)
+       (.put pixel-data)
+       (.position 0))
+     pic))
   ([path]
-    (let [pic (screenshot!)
-          handle (if (string? path)
-                   (files! :local path)
-                   path)]
-      (PixmapIO/writePNG handle pic)
-      (pixmap! pic :dispose))))
+   (let [pic (screenshot!)
+         handle (if (string? path)
+                  (files! :local path)
+                  path)]
+     (PixmapIO/writePNG handle pic)
+     (pixmap! pic :dispose))))
 
 (defmacro pref!
   "Retrieves and stores preferences. The `name` should be a unique string.
@@ -150,14 +150,14 @@ replaced with a new timer.
     ; wait 2 seconds, run once, and then run 3 more times at 10 second intervals
     (add-timer! screen :spawn-enemy 2 10 3)"
   ([screen id delay]
-    (doto (create-and-add-timer! screen id)
-      (.scheduleTask (task* screen id) delay)))
+   (doto (create-and-add-timer! screen id)
+     (.scheduleTask (task* screen id) delay)))
   ([screen id delay interval]
-    (doto (create-and-add-timer! screen id)
-      (.scheduleTask (task* screen id) delay interval)))
+   (doto (create-and-add-timer! screen id)
+     (.scheduleTask (task* screen id) delay interval)))
   ([screen id delay interval repeat]
-    (doto (create-and-add-timer! screen id)
-      (.scheduleTask (task* screen id) delay interval repeat))))
+   (doto (create-and-add-timer! screen id)
+     (.scheduleTask (task* screen id) delay interval repeat))))
 
 (defn remove-timer!
   "Stops and removes the timer associated with `id`, returning it or nil if not
@@ -172,19 +172,19 @@ found."
 
 (defn ^:private set-loaders!
   ([am]
-    (set-loaders! am (InternalFileHandleResolver.)))
+   (set-loaders! am (InternalFileHandleResolver.)))
   ([^AssetManager am res]
-    (.setLoader am TiledMap (TmxMapLoader. res))
-    (.setLoader am ParticleEffect (proxy [ParticleEffectLoader] [res]
-                                    (load [am file-name fh param]
-                                      (doto (ParticleEffect.)
-                                        (.load fh (.parent fh))))))))
+   (.setLoader am TiledMap (TmxMapLoader. res))
+   (.setLoader am ParticleEffect (proxy [ParticleEffectLoader] [res]
+                                   (load [am file-name fh param]
+                                     (doto (ParticleEffect.)
+                                       (.load fh (.parent fh))))))))
 
 (defn asset-manager*
   ([]
-    (doto (AssetManager.) set-loaders!))
+   (doto (AssetManager.) set-loaders!))
   ([resolver]
-    (doto (AssetManager. resolver) (set-loaders! resolver))))
+   (doto (AssetManager. resolver) (set-loaders! resolver))))
 
 (defmacro asset-manager
   "Returns an [AssetManager](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/assets/AssetManager.html).

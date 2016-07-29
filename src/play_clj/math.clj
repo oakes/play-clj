@@ -46,9 +46,9 @@
 
 (defn bezier*
   ([]
-    (Bezier.))
+   (Bezier.))
   ([points]
-    (Bezier. (into-array points) 0 (count points))))
+   (Bezier. (into-array points) 0 (count points))))
 
 (defmacro bezier
   "Returns a [Bezier](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Bezier.html)."
@@ -80,9 +80,9 @@
 
 (defn b-spline*
   ([]
-    (BSpline.))
+   (BSpline.))
   ([points degree cont?]
-    (BSpline. (into-array points) degree cont?)))
+   (BSpline. (into-array points) degree cont?)))
 
 (defmacro b-spline
   "Returns a [BSpline](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/BSpline.html)."
@@ -98,9 +98,9 @@
 
 (defn catmull-rom-spline*
   ([]
-    (CatmullRomSpline.))
+   (CatmullRomSpline.))
   ([points cont?]
-    (CatmullRomSpline. (into-array points) cont?)))
+   (CatmullRomSpline. (into-array points) cont?)))
 
 (defmacro catmull-rom-spline
   "Returns a [CatmullRomSpline](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/CatmullRomSpline.html)."
@@ -116,9 +116,9 @@
 
 (defn circle*
   ([]
-    (Circle.))
+   (Circle.))
   ([x y radius]
-    (Circle. x y radius)))
+   (Circle. x y radius)))
 
 (defmacro circle
   "Returns a [Circle](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Circle.html)."
@@ -182,9 +182,9 @@
 
 (defn ellipse*
   ([]
-    (Ellipse.))
+   (Ellipse.))
   ([x y width height]
-    (Ellipse. x y width height)))
+   (Ellipse. x y width height)))
 
 (defmacro ellipse
   "Returns an [Ellipse](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Ellipse.html)."
@@ -264,9 +264,9 @@
 
 (defn matrix-3*
   ([]
-    (Matrix3.))
+   (Matrix3.))
   ([values]
-    (Matrix3. values)))
+   (Matrix3. values)))
 
 (defmacro matrix-3
   "Returns a [Matrix3](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Matrix3.html)."
@@ -282,9 +282,9 @@
 
 (defn matrix-4*
   ([]
-    (Matrix4.))
+   (Matrix4.))
   ([^floats values]
-    (Matrix4. values)))
+   (Matrix4. values)))
 
 (defmacro matrix-4
   "Returns a [Matrix4](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Matrix4.html)."
@@ -300,9 +300,9 @@
 
 (defn plane*
   ([arg1 arg2]
-    (Plane. arg1 arg2))
+   (Plane. arg1 arg2))
   ([^Vector3 p1 ^Vector3 p2 ^Vector3 p3]
-    (Plane. p1 p2 p3)))
+   (Plane. p1 p2 p3)))
 
 (defmacro plane
   "Returns a [Plane](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Plane.html)."
@@ -318,9 +318,9 @@
 
 (defn polygon*
   ([]
-    (Polygon.))
+   (Polygon.))
   ([vertices]
-    (Polygon. vertices)))
+   (Polygon. vertices)))
 
 (defmacro polygon
   "Returns a [Polygon](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Polygon.html)."
@@ -336,9 +336,9 @@
 
 (defn polyline*
   ([]
-    (Polyline.))
+   (Polyline.))
   ([vertices]
-    (Polyline. vertices)))
+   (Polyline. vertices)))
 
 (defmacro polyline
   "Returns a [Polyline](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Polyline.html)."
@@ -354,9 +354,9 @@
 
 (defn quaternion*
   ([]
-    (Quaternion.))
+   (Quaternion.))
   ([w x y z]
-    (Quaternion. w x y z)))
+   (Quaternion. w x y z)))
 
 (defmacro quaternion
   "Returns a [Quaternion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Quaternion.html)."
@@ -372,9 +372,9 @@
 
 (defn rectangle*
   ([]
-    (Rectangle.))
+   (Rectangle.))
   ([x y width height]
-    (Rectangle. x y width height)))
+   (Rectangle. x y width height)))
 
 (defmacro rectangle
   "Returns a [Rectangle](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Rectangle.html)."
@@ -390,9 +390,9 @@
 
 (defn vector-2*
   ([]
-    (Vector2.))
+   (Vector2.))
   ([x y]
-    (Vector2. x y)))
+   (Vector2. x y)))
 
 (defmacro vector-2
   "Returns a [Vector2](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Vector2.html).
@@ -410,9 +410,9 @@ see `x!` and `y!`."
 
 (defn vector-3*
   ([]
-    (Vector3.))
+   (Vector3.))
   ([x y z]
-    (Vector3. x y z)))
+   (Vector3. x y z)))
 
 (defmacro vector-3
   "Returns a [Vector3](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/Vector3.html).
@@ -447,11 +447,11 @@ see `x!`, `y!`, and `z!`."
 
 (defn bounding-box*
   ([]
-    (BoundingBox.))
+   (BoundingBox.))
   ([box]
-    (BoundingBox. box))
+   (BoundingBox. box))
   ([min max]
-    (BoundingBox. min max)))
+   (BoundingBox. min max)))
 
 (defmacro bounding-box
   "Returns a [BoundingBox](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/collision/BoundingBox.html)."
@@ -483,9 +483,9 @@ see `x!`, `y!`, and `z!`."
 
 (defn segment*
   ([a-x a-y a-z b-x b-y b-z]
-    (Segment. a-x a-y a-z b-x b-y b-z))
+   (Segment. a-x a-y a-z b-x b-y b-z))
   ([a b]
-    (Segment. a b)))
+   (Segment. a b)))
 
 (defmacro segment
   "Returns a [Segment](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/math/collision/Segment.html)."

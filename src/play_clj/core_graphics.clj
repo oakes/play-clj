@@ -9,10 +9,10 @@
 
 (defn pixmap*
   ([^String path]
-    (or (u/load-asset path Pixmap)
-        (Pixmap. (files! :internal path))))
+   (or (u/load-asset path Pixmap)
+       (Pixmap. (files! :internal path))))
   ([width height fmt]
-    (Pixmap. width height fmt)))
+   (Pixmap. width height fmt)))
 
 (defmacro pixmap
   "Returns a [Pixmap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Pixmap.html).
@@ -39,9 +39,9 @@
 
 (defn shape*
   ([]
-    (ShapeEntity. (ShapeRenderer.)))
+   (ShapeEntity. (ShapeRenderer.)))
   ([max-vertices]
-    (ShapeEntity. (ShapeRenderer. max-vertices))))
+   (ShapeEntity. (ShapeRenderer. max-vertices))))
 
 (defmacro shape
   "Returns an entity based on [ShapeRenderer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/glutils/ShapeRenderer.html).
@@ -93,10 +93,10 @@ complicated shapes. If you use `assoc` to set the overall :x and :y of the
 
 (defn tiled-map*
   ([]
-    (TiledMap.))
+   (TiledMap.))
   ([^String path]
-    (or (u/load-asset path TiledMap)
-        (.load (TmxMapLoader.) path))))
+   (or (u/load-asset path TiledMap)
+       (.load (TmxMapLoader.) path))))
 
 (defmacro tiled-map
   "Returns a [TiledMap](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMap.html).
@@ -114,16 +114,16 @@ Normally, you don't need to use this directly."
 
 (defn tiled-map-layer*
   ([width height tile-width tile-height]
-    (TiledMapTileLayer. width height tile-width tile-height))
+   (TiledMapTileLayer. width height tile-width tile-height))
   ([screen layer]
-    (if (instance? MapLayer layer)
-        layer
-        (let [layers (-> ^BatchTiledMapRenderer (u/get-obj screen :renderer)
-                         .getMap
-                         .getLayers)]
-          (if (number? layer)
-            (.get layers (int layer))
-            (.get layers (str layer)))))))
+   (if (instance? MapLayer layer)
+       layer
+       (let [layers (-> ^BatchTiledMapRenderer (u/get-obj screen :renderer)
+                        .getMap
+                        .getLayers)]
+         (if (number? layer)
+           (.get layers (int layer))
+           (.get layers (str layer)))))))
 
 (defmacro tiled-map-layer
   "Returns a [TiledMapTileLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.html)
@@ -144,9 +144,9 @@ from the tiled map in `screen` that matches `layer`.
 
 (defn tiled-map-cell*
   ([]
-    (TiledMapTileLayer$Cell.))
+   (TiledMapTileLayer$Cell.))
   ([^TiledMapTileLayer layer x y]
-    (.getCell layer x y)))
+   (.getCell layer x y)))
 
 (defmacro tiled-map-cell
   "Returns a [TiledMapTileLayer.Cell](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/tiled/TiledMapTileLayer.Cell.html)
@@ -168,10 +168,10 @@ from the `layer` at position `x` and `y`.
 
 (defn map-layers*
   ([]
-    (MapLayers.))
+   (MapLayers.))
   ([screen]
-    (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)]
-      (-> renderer .getMap .getLayers))))
+   (let [^BatchTiledMapRenderer renderer (u/get-obj screen :renderer)]
+     (-> renderer .getMap .getLayers))))
 
 (defmacro map-layers
   "Returns the [MapLayers](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapLayers.html)
@@ -191,9 +191,9 @@ in the tiled map in `screen`.
 
 (defn map-layer*
   ([]
-    (MapLayer.))
+   (MapLayer.))
   ([screen layer]
-    (tiled-map-layer* screen layer)))
+   (tiled-map-layer* screen layer)))
 
 (defmacro map-layer
   "Returns a [MapLayer](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapLayer.html)
@@ -223,9 +223,9 @@ tiled map in `screen`."
 
 (defn map-objects*
   ([]
-    (MapObjects.))
+   (MapObjects.))
   ([^MapLayer layer]
-    (.getObjects layer)))
+   (.getObjects layer)))
 
 (defmacro map-objects
   "Returns the [MapObjects](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/maps/MapObjects.html)
@@ -276,21 +276,21 @@ coordinates.
     (screen->input screen 10 10)
     (screen->input screen 10 10 0)"
   ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
-    (try
-      (let [^Camera camera (u/get-obj screen :camera)
-            coords (m/vector-3 x y z)]
-        (.project camera coords)
-        (assoc entity
-               :x (. coords x)
-               :y (. coords y)
-               :z (. coords z)))
+   (try
+     (let [^Camera camera (u/get-obj screen :camera)
+           coords (m/vector-3 x y z)]
+       (.project camera coords)
+       (assoc entity
+              :x (. coords x)
+              :y (. coords y)
+              :z (. coords z)))
       ; if there's no camera, just flip the y axis
-      (catch Exception _
-        (assoc entity :y (- (game :height) y)))))
+     (catch Exception _
+       (assoc entity :y (- (game :height) y)))))
   ([screen x y]
-    (screen->input screen {:x x :y y}))
+   (screen->input screen {:x x :y y}))
   ([screen x y z]
-    (screen->input screen {:x x :y y :z z})))
+   (screen->input screen {:x x :y y :z z})))
 
 (defn input->screen
   "Returns a map with the provided x,y,z values converted from input to screen
@@ -300,21 +300,21 @@ coordinates.
     (input->screen screen 10 10)
     (input->screen screen 10 10 0)"
   ([screen {:keys [x y z] :or {x 0 y 0 z 0} :as entity}]
-    (try
-      (let [^Camera camera (u/get-obj screen :camera)
-            coords (m/vector-3 x y z)]
-        (.unproject camera coords)
-        (assoc entity
-               :x (. coords x)
-               :y (. coords y)
-               :z (. coords z)))
+   (try
+     (let [^Camera camera (u/get-obj screen :camera)
+           coords (m/vector-3 x y z)]
+       (.unproject camera coords)
+       (assoc entity
+              :x (. coords x)
+              :y (. coords y)
+              :z (. coords z)))
       ; if there's no camera, just flip the y axis
-      (catch Exception _
-        (assoc entity :y (- (game :height) y)))))
+     (catch Exception _
+       (assoc entity :y (- (game :height) y)))))
   ([screen x y]
-    (input->screen screen {:x x :y y}))
+   (input->screen screen {:x x :y y}))
   ([screen x y z]
-    (input->screen screen {:x x :y y :z z})))
+   (input->screen screen {:x x :y y :z z})))
 
 (defn ^:private tiled-map-prop
   [screen]
@@ -333,18 +333,18 @@ map coordinates.
     (screen->isometric screen {:x 64 :y 32})
     (screen->isometric screen 64 32)"
   ([screen {:keys [x y] :or {x 0 y 0} :as entity}]
-    (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
-          half-tile-width (/ (* tile-width unit-scale) 2)
-          half-tile-height (/ (* tile-height unit-scale) 2)]
-      (assoc entity
-             :x (/ (- (/ x half-tile-width)
-                      (/ y half-tile-height))
-                   2)
-             :y (/ (+ (/ y half-tile-height)
-                      (/ x half-tile-width))
-                   2))))
+   (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
+         half-tile-width (/ (* tile-width unit-scale) 2)
+         half-tile-height (/ (* tile-height unit-scale) 2)]
+     (assoc entity
+            :x (/ (- (/ x half-tile-width)
+                     (/ y half-tile-height))
+                  2)
+            :y (/ (+ (/ y half-tile-height)
+                     (/ x half-tile-width))
+                  2))))
   ([screen x y]
-    (screen->isometric screen {:x x :y y})))
+   (screen->isometric screen {:x x :y y})))
 
 (defn isometric->screen
   "Returns a map with the provided x,y values converted from isometric map to
@@ -353,16 +353,16 @@ screen coordinates.
     (isometric->screen screen {:x 2 :y 1})
     (isometric->screen screen 2 1)"
   ([screen {:keys [x y] :as entity}]
-    (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
-          half-tile-width (/ (* tile-width unit-scale) 2)
-          half-tile-height (/ (* tile-height unit-scale) 2)]
-      (assoc entity
-             :x (+ (* x half-tile-width)
-                   (* y half-tile-width))
-             :y (+ (* -1 x half-tile-height)
-                   (* y half-tile-height)))))
+   (let [{:keys [unit-scale tile-width tile-height]} (tiled-map-prop screen)
+         half-tile-width (/ (* tile-width unit-scale) 2)
+         half-tile-height (/ (* tile-height unit-scale) 2)]
+     (assoc entity
+            :x (+ (* x half-tile-width)
+                  (* y half-tile-width))
+            :y (+ (* -1 x half-tile-height)
+                  (* y half-tile-height)))))
   ([screen x y]
-    (isometric->screen screen {:x x :y y})))
+   (isometric->screen screen {:x x :y y})))
 
 ; renderers
 
@@ -552,14 +552,14 @@ specify which layers to render with or without.
 
     (render! screen entities)"
   ([{:keys [renderer] :as screen}]
-    (cond
-      (instance? BatchTiledMapRenderer renderer)
-      (render-map! screen)
-      (instance? Stage renderer)
-      (render-stage! screen)))
+   (cond
+     (instance? BatchTiledMapRenderer renderer)
+     (render-map! screen)
+     (instance? Stage renderer)
+     (render-stage! screen)))
   ([screen entities]
-    (render! screen)
-    (draw! screen entities)))
+   (render! screen)
+   (draw! screen entities)))
 
 (defn ^:private create-layer
   [^TiledMapTileLayer layer]
@@ -607,23 +607,23 @@ to overlap correctly with the entities.
     (render-sorted! screen [\"walls\"] entities)
     (render-sorted! screen #(sort-by :y %) [\"walls\"] entities)"
   ([screen layer-names entities]
-    (render-sorted! screen sort-by-y layer-names entities))
+   (render-sorted! screen sort-by-y layer-names entities))
   ([{:keys [^BatchTiledMapRenderer renderer
             ^Camera camera
             update-fn!]
      :as screen}
     sort-fn layer-names entities]
-    (doseq [ln layer-names]
-      (when-not (get-in screen [:layers ln])
-        (update-fn! assoc-in [:layers ln] (split-layer screen ln))))
-    (when camera (.setView renderer camera))
-    (let [^Batch batch (.getBatch renderer)]
-      (.begin batch)
-      (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
-                          (apply concat entities)
-                          sort-fn)]
-        (if-let [layer (:layer entity)]
-          (.renderTileLayer renderer layer)
-          (e/draw! entity screen batch)))
-      (.end batch))
-    entities))
+   (doseq [ln layer-names]
+     (when-not (get-in screen [:layers ln])
+       (update-fn! assoc-in [:layers ln] (split-layer screen ln))))
+   (when camera (.setView renderer camera))
+   (let [^Batch batch (.getBatch renderer)]
+     (.begin batch)
+     (doseq [entity (->> (map #(get-in screen [:layers %]) layer-names)
+                         (apply concat entities)
+                         sort-fn)]
+       (if-let [layer (:layer entity)]
+         (.renderTileLayer renderer layer)
+         (e/draw! entity screen batch)))
+     (.end batch))
+   entities))
