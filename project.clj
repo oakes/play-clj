@@ -1,4 +1,4 @@
-(defproject play-clj "1.1.1"
+(defproject play-clj "1.2.0-SNAPSHOT"
   :description "A libGDX wrapper for easy cross-platform game development"
   :url "https://github.com/oakes/play-clj"
   :license {:name "Public Domain"
