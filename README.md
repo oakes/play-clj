@@ -1,3 +1,5 @@
+## Note: I am focusing my efforts on [play-cljs](https://github.com/oakes/play-cljs), a ClojureScript game library. Check it out if you are interested in making browser-based games.
+
 ## Introduction
 
 A Clojure library that provides a wrapper for [libGDX](http://libgdx.badlogicgames.com/), allowing you to write 2D and 3D games that run on desktop OSes (Windows, OS X, and Linux) and Android with the same Clojure codebase.
