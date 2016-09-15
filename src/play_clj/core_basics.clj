@@ -113,7 +113,7 @@
     (key-code :a)
     (key-code :page-down)"
   [k]
-  (u/gdx-field "Input$Keys" (u/key->upper k)))
+  (eval (u/gdx-field "Input$Keys" (u/key->upper k))))
 
 (defmacro key-pressed?
   "Returns a boolean indicating if the key cooresponding to `k` is being pressed.
@@ -128,7 +128,7 @@
 
     (button-code :left)"
   [k]
-  (u/gdx-field "Input$Buttons" (u/key->upper k)))
+  (eval (u/gdx-field "Input$Buttons" (u/key->upper k))))
 
 (defmacro button-pressed?
   "Returns a boolean indicating if the button cooresponding to `k` is being pressed.
