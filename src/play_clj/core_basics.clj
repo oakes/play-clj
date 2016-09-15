@@ -123,7 +123,7 @@
   [k]
   `(input! :is-key-pressed (key-code ~k)))
 
-(defmacro button-code
+(defn button-code
   "Returns a static field from [Input.Buttons](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Buttons.html).
 
     (button-code :left)"
