@@ -107,7 +107,7 @@
     :point-y (game :y arg)
     (u/throw-key-not-found k)))
 
-(defmacro key-code
+(defn key-code
   "Returns a static field from [Input.Keys](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html).
 
     (key-code :a)
