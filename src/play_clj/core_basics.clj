@@ -107,35 +107,35 @@
     :point-y (game :y arg)
     (u/throw-key-not-found k)))
 
-(defmacro key-code
+(defn key-code
   "Returns a static field from [Input.Keys](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Keys.html).
 
     (key-code :a)
     (key-code :page-down)"
   [k]
-  (u/gdx-field "Input$Keys" (u/key->upper k)))
+  (eval (u/gdx-field "Input$Keys" (u/key->upper k))))
 
-(defmacro key-pressed?
+(defn key-pressed?
   "Returns a boolean indicating if the key cooresponding to `k` is being pressed.
 
     (key-pressed? :a)
     (key-pressed? :page-down)"
   [k]
-  `(input! :is-key-pressed (key-code ~k)))
+  (input! :is-key-pressed (key-code k)))
 
-(defmacro button-code
+(defn button-code
   "Returns a static field from [Input.Buttons](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/Input.Buttons.html).
 
     (button-code :left)"
   [k]
-  (u/gdx-field "Input$Buttons" (u/key->upper k)))
+  (eval (u/gdx-field "Input$Buttons" (u/key->upper k))))
 
-(defmacro button-pressed?
+(defn button-pressed?
   "Returns a boolean indicating if the button cooresponding to `k` is being pressed.
 
     (button-pressed? :left)"
   [k]
-  `(input! :is-button-pressed (button-code ~k)))
+  (input! :is-button-pressed (button-code k)))
 
 (defn ^:private add-input!
   [^InputProcessor p]
