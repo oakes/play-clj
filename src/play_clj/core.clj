@@ -2,7 +2,10 @@
   (:require [clojure.set]
             [play-clj.entities :as e]
             [play-clj.math :as m]
-            [play-clj.utils :as u])
+            [play-clj.utils :as u]
+            [clojure.spec :as s]
+            [clojure.spec.test :as ts :refer  [check]]
+            [clojure.spec.gen :as gen])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Preferences Screen]
            [com.badlogic.gdx.audio Sound Music]
@@ -42,6 +45,189 @@
 (load "core_graphics")
 (load "core_listeners")
 (load "core_utils")
+
+(s/def ::defscrn-main-fns #{:on-show :on-render :on-hide :on-resize :on-resume :on-pause
+                            :on-timer})
+
+(s/def ::defscrn-input-fns #{:on-key-down :on-key-typed :on-key-up :on-mouse-moved
+                             :on-scrolled :on-touch-down :on-touch-dragged :on-touch-up})
+
+(s/def ::defscrn-gesture-fns #{:on-fling :on-long-press :on-pan :on-pan-stop :on-pinch
+                               :on-tap :on-zoom})
+
+(s/def ::defscrn-2dcontact-fns #{:on-begin-contact :on-end-contact :on-pre-solve
+                                 :on-post-solve})
+
+(s/def ::defscrn-3dcontact-fns #{:on-begin-contact :on-end-contact})
+
+(s/def ::defscrn-uiinput-fns #{:on-ui-changed :on-ui-enter :on-ui-exit :on-ui-touch-down
+                               :on-ui-touch-dragged :on-ui-touch-up})
+
+(s/def ::defscrn-uidrag-fns #{:on-ui-drag :on-ui-drag-start :on-ui-drag-stop})
+
+(s/def ::defscrn-uifocus-fns #{:on-ui-keyboard-focus-changed :on-ui-scroll-focus-changed})
+
+(s/def ::defscrn-uigesture-fns #{:on-ui-fling :on-ui-long-press :on-ui-pan :on-ui-pan-stop
+                                 :on-ui-pinch :on-ui-tap :on-ui-zoom})
+
+(s/def ::defscrn-all-fns (s/or :main ::defscrn-main-fns
+                               :input ::defscrn-input-fns
+                               :gesture ::defscrn-gesture-fns
+                               :2dcontact ::defscrn-2dcontact-fns
+                               :3dcontact ::defscrn-3dcontact-fns
+                               :uiinput ::defscrn-uiinput-fns
+                               :uidrag ::defscrn-uidrag-fns
+                               :uifocus ::defscrn-uifocus-fns
+                               :uigesture ::defscrn-uigesture-fns))
+
+(s/def ::defscrn-opts (s/* (s/cat :api-fn ::defscrn-all-fns :impl-fn fn?)))
+
+(defn test-fn [n & opts]
+ (println opts)
+ (println (type opts))
+  )
+
+(comment
+
+  (s/def ::port number?)
+  (s/def ::host string?)
+  (s/def ::id keyword?)
+  (s/def ::server (s/keys* :req [::id ::host] :opt [::port]))
+  (s/conform ::server [::id :s1 ::host "example.com" ::port "hi"])
+  (s/conform ::server [::id :s1 ::host "example.com" ::port 555])
+  (s/conform ::server [::id :s1 ::host "example.com" ::portz 5555])
+
+  (ts/unstrument)
+  (ts/instrument)
+
+  (s/def ::uifocus fn?)
+  (s/def ::uigesture fn?)
+  (s/def ::a #{::uifocus ::uigesture}})
+  (s/fdef test-fn :args (s/cat :n symbol? :opts
+                               (s/&
+                                 (s/keys* :opt-un [::uigesture])
+                                 (fn [x]
+                                  (println "hi"
+                                           (map s/valid? (keys x))
+                                           )
+                                   true)
+                                 )
+                               ))
+
+  (s/and
+    (fn [x]
+      (println "Inside and" x)
+      true
+      )
+    )
+
+  (test-fn 'hello :uigesture (fn [x]) :b 1)
+  (test-fn 'hello :uigesture (fn [x]))
+  (test-fn 'hello :uigesture 1)
+  (test-fn 'hello :b 1)
+
+  (test-fn 1 :a (fn [x]))
+
+
+  (s/fdef test-fn :args (s/cat :opts ::defscrn-opts))
+  (s/fdef test-fn :args (s/cat :opts (s/keys* :req-un #{})))
+
+  (test-fn 'hello :a (fn [x]))
+  (test-fn :a 1)
+  (test-fn :on-ui-fling (fn [x]))
+  (test-fn 'bla :hi (fn [x]))
+
+
+  (s/describe ::input)
+  (s/sample ::input)
+
+  (s/def ::input (s/cat :name symbol?
+                        :opts (s/spec ::defscrn-opts)))
+
+  (s/valid? ::input ['hi '(:on-ui-tap (fn [x]))])
+  (s/valid? ::input ['hi :on-ui-tap (fn [x])])
+  (s/explain ::input ['hi '(:on-ui-tap (fn [x]))])
+
+  (use 'play-clj.core :reload-all)
+
+  (s/fdef defscreen :args ::input)
+
+  (s/fdef defscreen :args (s/cat :name symbol?
+                                 :opts (s/* (s/cat :api-fn ::defscrn-all-fns
+                                                   :impl-fn (s/fspec :args
+                                                                     (s/cat :a any?
+                                                                            :b any?)
+                                                                     ) ))))
+  (s/fdef defscreen :args (s/cat :name symbol?
+                                 :opts (s/spec (s/* (s/cat :api-fn ::defscrn-all-fns
+                                                   :impl-fn (s/fspec
+                                                              :args
+                                                              (s/cat :a
+                                                             (fn [x]
+                                                              (do
+                                                                (println x)
+                                                                (println (type x))
+                                                                true
+                                                                )
+                                                              )
+                                                                     )
+
+                                                              )  )))  ))
+
+
+(s/fdef defscreen :args (s/cat :name symbol?
+                                 :opts (s/spec (s/* (s/cat :api-fn ::defscrn-all-fns
+                                                   :impl-fn (s/fspec
+                                                              :args
+                                                              (s/cat :a
+                                                             (fn [x]
+                                                              (do
+                                                                (println x)
+                                                                (println (type x))
+                                                                true
+                                                                )
+                                                              )
+                                                                     )
+
+                                                              )  )))  ))
+
+
+  (s/exercise-fn 'defscreen)
+
+  (s/valid? fn? (fn [screen entities]))
+  (s/valid? (s/* (s/cat :api-fn ::defscrn-all-fns :impl-fn fn?))
+            [
+            :on-ui-fling
+            (fn [screen entities])
+            :on-ui-fling
+            (fn [screen entities])
+             ]
+
+            )
+
+  (defn x [] 1)
+
+  (defscreen hi :on-ui-fling (fn [screen entities]) )
+  (defscreen hi :on-ui-fling x)
+
+  (fn? (fn [screen entities]))
+  (ifn? (fn [screen entities]))
+
+  (s/fdef title-handler
+          :args  (s/cat :title string?)
+          :ret string?)
+
+  (fn? (fn [x]))
+
+  (s/valid? ::defscrn-all-fns :on-ui-fling)
+  (s/explain ::defscrn-all-fns :on-ui-fling)
+  (s/valid? ::input '(:on-ui-fling (fn [s])))
+  (s/valid? ::input :on-ui-fling (fn [s]))
+  (s/explain ::inputz [:on-ui-fling (fn [x])])
+
+  (s/conform ::input [:on-ui-fling (fn [x])])
+
+  )
 
 (defn ^:private normalize
   [entities]
@@ -125,6 +311,14 @@
                (execute-fn! on-resize :width w :height h)
                (update-screen! @screen))
      :resume #(execute-fn! on-resume)}))
+
+
+(comment
+
+
+
+
+  )
 
 (defmacro defscreen
   "Defines a screen, and creates vars for all the functions inside of it. All
@@ -508,6 +702,7 @@ keywords and functions in pairs."
 
     (set-screen! my-game main-screen text-screen)"
   [^Game game-object & screen-objects]
+  (println "Set screen lol")
   (doseq [screen screen-objects]
     (assert (every? #(fn? (get screen %))
                     [:show :render :hide :pause :resize :resume])
