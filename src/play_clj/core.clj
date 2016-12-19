@@ -102,12 +102,12 @@
 
 (s/def ::Game #(instance? com.badlogic.gdx.Game %))
 
-(s/def ::show (fn [_] true))
-(s/def ::render (fn [_] true))
-(s/def ::hide (fn [_] true))
-(s/def ::pause (fn [_] true))
-(s/def ::resize (fn [_] true))
-(s/def ::resume (fn [_] true))
+(s/def ::show fn?)
+(s/def ::render (s/fspec :args (s/cat :delta number?)))
+(s/def ::hide fn?)
+(s/def ::pause fn?)
+(s/def ::resize (s/fspec :args (s/cat :width number? :height number?)))
+(s/def ::resume fn?)
 
 (s/def ::screen (s/keys :req-un #{::show ::render ::hide ::pause ::resize ::resume}))
 
