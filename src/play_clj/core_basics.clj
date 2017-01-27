@@ -14,16 +14,15 @@
      (.glClearColor (float r) (float g) (float b) (float a))
      (.glClear (bit-or GL20/GL_COLOR_BUFFER_BIT GL20/GL_DEPTH_BUFFER_BIT)))))
 
-(defmacro color
+(defn color
   "Returns a [Color](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/Color.html).
 
     (color :white)
     (color 1 1 1 1)"
-  [& args]
-  (if (keyword? (first args))
-    `(Color. ^Color ~(u/gdx-field :graphics :Color
-                                  (u/key->upper (first args))))
-    `(Color. ~@args)))
+  ([k]
+   (Color. (eval (u/gdx-field :graphics :Color (u/key->upper k)))))
+  ([r g b a]
+   (Color. r g b a)))
 
 (defmacro color!
   "Calls a single method on a `color`."
