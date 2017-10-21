@@ -40,10 +40,10 @@ Right now, you're using the `play-clj.ui` library to display a label. This libra
             [play-clj.g2d :refer :all]))
 ```
 
-Now let's find an image to use as a texture in the game. Find one you'd like to use, such as [this Clojure logo](http://upload.wikimedia.org/wikipedia/en/1/1d/Clojure_logo.gif), and save it to the `desktop/resources` folder. Next, simply change the line where the label entity is being created, so it creates a texture from that file instead:
+Now let's find an image to use as a texture in the game. Find one you'd like to use, such as [this Clojure logo](https://upload.wikimedia.org/wikipedia/commons/8/85/Clojure-icon.png), and save it to the `desktop/resources` folder. Next, simply change the line where the label entity is being created, so it creates a texture from that file instead:
 
 ```clojure
-    (texture "Clojure_logo.gif")
+    (texture "Clojure-icon.png")
 ```
 
 ## Size and Position
@@ -57,14 +57,14 @@ If you run the code now, you'll see the image in the bottom-left corner. As ment
 A `texture` contains the underlying Java object. By default, it will be drawn at the bottom-left corner with the size of the image itself. You can change the position and size by simply using `assoc`:
 
 ```clojure
-    (assoc (texture "Clojure_logo.gif")
+    (assoc (texture "Clojure-icon.png")
            :x 50 :y 50 :width 100 :height 100)
 ```
 
 You can also set scaling and rotation on a texture using :scale-x, :scale-y, and :angle, which all use (:origin-x, :origin-y) as the center. For example, here we rotate it 45 degrees counter-clockwise around the bottom-left corner:
 
 ```clojure
-    (assoc (texture "Clojure_logo.gif")
+    (assoc (texture "Clojure-icon.png")
            :x 50 :y 50 :width 100 :height 100
            :angle 45 :origin-x 0 :origin-y 0)
 ```
@@ -154,7 +154,7 @@ Now we can update our `:on-key-down` and `:on-touch-down` functions to move the 
       (move (first entities) :right)
       (= (:key screen) (key-code :dpad-left))
       (move (first entities) :left)))
-      
+
   :on-touch-down
   (fn [screen entities]
     (cond
@@ -248,13 +248,13 @@ At some point, you will need to do more than simple positioning and sizing. For 
 In play-clj, many different calls, such as `texture`, are actually macros that allow you to call the underlying Java methods after the required argument(s). In this case, the underlying class is called [TextureRegion](http://libgdx.badlogicgames.com/nightlies/docs/api/com/badlogic/gdx/graphics/g2d/TextureRegion.html). Consider this:
 
 ```clojure
-    (texture "Clojure_logo.gif" :flip true false)
+    (texture "Clojure-icon.png" :flip true false)
 ```
 
 ...which is transformed into:
 
 ```clojure
-    (let [entity (texture "Clojure_logo.gif")]
+    (let [entity (texture "Clojure-icon.png")]
       (doto ^TextureRegion (:object entity)
         (.flip true false))
       entity)
@@ -263,7 +263,7 @@ In play-clj, many different calls, such as `texture`, are actually macros that a
 You can even call multiple methods in the same expression this way. For example:
 
 ```clojure
-    (texture "Clojure_logo.gif"
+    (texture "Clojure-icon.png"
              :flip true false
              :set-region 0 0 100 100)
 ```
@@ -271,7 +271,7 @@ You can even call multiple methods in the same expression this way. For example:
 ...which is transformed into:
 
 ```clojure
-    (let [entity (texture "Clojure_logo.gif")]
+    (let [entity (texture "Clojure-icon.png")]
       (doto ^TextureRegion (:object entity)
         (.flip true false)
         (.setRegion 0 0 100 100))
@@ -316,7 +316,7 @@ You may want to display two different screens at once. This is useful in situati
     (assoc (label "0" (color :white))
            :id :fps
            :x 5))
-           
+
   :on-render
   (fn [screen entities]
     (->> (for [entity entities]
@@ -324,7 +324,7 @@ You may want to display two different screens at once. This is useful in situati
              :fps (doto entity (label! :set-text (str (game :fps))))
              entity))
          (render! screen)))
-         
+
   :on-resize
   (fn [screen entities]
     (height! screen 300)))
