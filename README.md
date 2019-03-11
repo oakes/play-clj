@@ -1,4 +1,4 @@
-# Note: I am focusing my efforts on [play-cljs](https://github.com/oakes/play-cljs), a ClojureScript game library. Check it out if you are interested in making browser-based games.
+## Note: I am focusing my efforts on [play-cljc](https://github.com/oakes/play-cljc), a library for games that run on both the desktop and the web.
 
 ## Introduction
 
