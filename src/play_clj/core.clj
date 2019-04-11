@@ -2,7 +2,8 @@
   (:require [clojure.set]
             [play-clj.entities :as e]
             [play-clj.math :as m]
-            [play-clj.utils :as u])
+            [play-clj.utils :as u]
+            [clojure.spec :as s])
   (:import [com.badlogic.gdx Application Audio Files Game Gdx Graphics Input
             InputMultiplexer InputProcessor Net Preferences Screen]
            [com.badlogic.gdx.audio Sound Music]
@@ -43,6 +44,78 @@
 (load "core_listeners")
 (load "core_utils")
 
+(s/def ::macro-fn (fn [x] (fn? (eval x))))
+
+(s/def ::map-atom #(map? @%))
+(s/def ::vector-atom #(vector? @%))
+
+(s/def ::all-defscrn-fns #{:on-show
+                            :on-render
+                            :on-hide
+                            :on-resize
+                            :on-resume
+                            :on-pause
+                            :on-timer
+
+                            :on-key-down
+                            :on-key-typed
+                            :on-key-up
+                            :on-mouse-moved
+                            :on-scrolled
+                            :on-touch-down
+                            :on-touch-dragged
+                            :on-touch-up
+
+                            :on-fling
+                            :on-long-press
+                            :on-pan
+                            :on-pan-stop
+                            :on-pinch
+                            :on-tap
+                            :on-zoom
+
+                            :on-begin-contact
+                            :on-end-contact
+                            :on-pre-solve
+                            :on-post-solve
+
+                            :on-ui-changed
+                            :on-ui-enter
+                            :on-ui-exit
+                            :on-ui-touch-down
+                            :on-ui-touch-dragged
+                            :on-ui-touch-up
+
+                            :on-ui-drag
+                            :on-ui-drag-start
+                            :on-ui-drag-stop
+
+                            :on-ui-keyboard-focus-changed
+                            :on-ui-scroll-focus-changed
+
+                            :on-ui-fling
+                            :on-ui-long-press
+                            :on-ui-pan
+                            :on-ui-pan-stop
+                            :on-ui-pinch
+                            :on-ui-tap
+                            :on-ui-zoom})
+
+(s/def ::on-create ::macro-fn)
+
+(s/def ::Game #(instance? com.badlogic.gdx.Game %))
+
+(s/def ::show fn?)
+(s/def ::render (s/fspec :args (s/cat :delta number?)))
+(s/def ::hide fn?)
+(s/def ::pause fn?)
+(s/def ::resize (s/fspec :args (s/cat :width number? :height number?)))
+(s/def ::resume fn?)
+
+(s/def ::screen (s/keys :req-un #{::show ::render ::hide ::pause ::resize ::resume}))
+
+(s/def ::general-opts (s/* (s/cat :opt keyword? :val (fn [_] true))))
+
 (defn ^:private normalize
   [entities]
   (some->> entities
@@ -70,6 +143,10 @@
              [:timeline]
              conj
              [(:total-time screen) entities]))))
+
+(s/fdef defscreen*
+        :args (s/cat :screen ::map-atom :entities ::vector-atom :opts map?)
+        :ret map?)
 
 (defn defscreen*
   [screen entities
@@ -125,6 +202,11 @@
                (execute-fn! on-resize :width w :height h)
                (update-screen! @screen))
      :resume #(execute-fn! on-resume)}))
+
+(s/fdef defscreen
+        :args (s/cat :name symbol?
+                     :opts (s/* (s/cat :defscrn-fn ::all-defscrn-fns :fn ::macro-fn)))
+        :ret ::screen)
 
 (defmacro defscreen
   "Defines a screen, and creates vars for all the functions inside of it. All
@@ -490,6 +572,10 @@ keywords and functions in pairs."
                               (intern *ns* entities-sym# (atom []))))]
      (def ~n (defscreen* screen# entities# fn-syms#))))
 
+(s/fdef defgame*
+        :args (s/cat :opts (s/keys :opt-un [::on-create]))
+        :ret ::Game)
+
 (defn defgame*
   [{:keys [on-create]}]
   (proxy [Game] []
@@ -497,10 +583,17 @@ keywords and functions in pairs."
       (when on-create
         (on-create this)))))
 
+(s/fdef defgame
+        :args (s/cat :name symbol? :opts (s/keys* :opt-un [::on-create]))
+        :ret ::Game)
+
 (defmacro defgame
   "Defines a game. This should only be called once."
   [n & {:keys [] :as options}]
   `(defonce ~n (defgame* ~options)))
+
+(s/fdef set-screen!
+        :args (s/cat :game ::Game :screens (s/* ::screen)))
 
 (defn set-screen!
   "Creates and displays a screen for the `game-object`, using one or more
@@ -533,6 +626,10 @@ keywords and functions in pairs."
                   (resume [this] (run-fn! :resume))
                   (dispose [this])))))
 
+(s/fdef set-screen-wrapper!
+        :args (s/cat :wrapper-fn fn?)
+        :ret var?)
+
 (defn set-screen-wrapper!
   "Sets a function that wraps around all screen functions, allowing you to
 handle errors and perform other custom actions each time they run.
@@ -550,6 +647,10 @@ handle errors and perform other custom actions each time they run.
   [wrapper-fn]
   (intern 'play-clj.core 'wrapper wrapper-fn))
 
+(s/fdef update!
+        :args (s/cat :screen map? :opts ::general-opts)
+        :ret map?)
+
 (defn update!
   "Runs the equivalent of `(swap! screen-atom assoc ...)`, where `screen-atom`
 is the atom storing the screen map behind the scenes. Returns the updated
@@ -559,6 +660,10 @@ is the atom storing the screen map behind the scenes. Returns the updated
   [screen & args]
   (doto (apply (:update-fn! screen) assoc args)
     update-screen!))
+
+(s/fdef screen!
+        :args (s/cat :screen map? :fn-name keyword? :opts ::general-opts)
+        :ret nil?)
 
 (defn screen!
   "Runs a function defined in another screen. You may optionally pass a series
